@@ -24,7 +24,7 @@ DATA_PATH = pathlib.Path(__file__).parent.joinpath("data").resolve()
 app.layout = html.Div(
     [
         html.Div(
-            [html.Img(src=app.get_asset_url("dash-logo.pngs"))], className="app__banner"
+            [html.Img(src=app.get_asset_url("dash-logo.png"))], className="app__banner"
             # html.Img(src=app.get_asset_url("SIMAGRI_CO_logo.gif"))], className="app__banner"
         ),
         html.Div(
