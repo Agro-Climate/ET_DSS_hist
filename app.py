@@ -1,83 +1,61 @@
 import dash
-import pandas as pd
-import pathlib
-import dash_html_components as html
 import dash_core_components as dcc
-
+import dash_html_components as html
 from dash.dependencies import Input, Output, State
-from dash.exceptions import PreventUpdate
-from helpers import make_dash_table, create_plot
-
+import plotly.express as px
 from os import path # path
 import os
 import subprocess  #to run executable
+import pandas as pd
 
-app = dash.Dash(
-    __name__,
-    meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}],
-)
+df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/gapminderDataFiveYear.csv')
 
-server = app.server
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-DATA_PATH = pathlib.Path(__file__).parent.joinpath("data").resolve()
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
-app.layout = html.Div(
-    [
-        html.Div(
-            [html.Img(src=app.get_asset_url("ethioagroclimate.png"))], className="app__banner"
-            # html.Img(src=app.get_asset_url("SIMAGRI_CO_logo.gif"))], className="app__banner"
-        ),
-        html.Div(
-            [
-                html.Div(
-                    [
-                        html.Div(
-                            [
-                                html.H3(
-                                    "Climate-Agriculture Modeling Decision Support Tool for Ethiopia (Historical Analysis)",
-                                    className="uppercase title",
-                                ),
-                                html.Span("CAMDT  ", className="uppercase bold"),
-                                html.Span(
-                                    "is a tool designed to guide decision-makers in adopting appropriate crop and management practices that can improve crop yields given a seasonal climatic condition."
-                                ),
-                                html.Br(),
-                                html.Div(children='''
-                                    Smart planning of annual crop production requires consideration of possible scenarios.
-                                    The CAMDT tool adopts crop simulation models included in the DSSAT package (Decision Support System for Agrotechnology Transfer). 
-                                    The methodology was developed by the IRI (International Research Institute for Climate and Society / Columbia University) 
-                                    in collaboration with the Ethiopian Institute of Agricultural Research (EIAR). 
-                                    The purpose of this tool is to support decision-making of the producer or technical advisor, which facilitates discussion of optimal production strategies, risks of technology adoption, 
-                                    and evaluation of long-term effects, considering interactions of various factors.
-                                '''),
-                                html.Br(),
-                                html.Span("Select ", className="uppercase bold"),
-                                html.Span(
-                                    "a station name for analysis."
-                                ),
-                            ]
-                        )
-                    ],
-                    className="app__header",
-                ),
-        html.Div([
-            html.Div(["Weather station: ",
-                    dcc.Dropdown(id='mystation', options=[{'label': 'Bambey', 'value': 'CNRA'},{'label': 'Nioro', 'value': 'NRIP'},{'label': 'Sinthio', 'value': 'SNTH'}],
-                    value='SNTH')]),
-        html.H2(children='Period considered for the simulation:'),
-            html.Div(["First year to simulate: ",
-                    dcc.Input(id='year1', placeholder='Enter a value ...', value=' ', type='text')]),
-            html.Div(["Last year to simulate: ",
-                    dcc.Input(id='year2', placeholder='Enter a value ...', value=' ', type='text')]),
-            html.Br(),
+app.layout = html.Div(children=[
+    html.H1(children='Climate-Agriculture Modeling Decision Tool for Ethiopia (Historical Analysis)',
+            style={'textAlign': 'center','color': 'black'}),
 
-            html.Button(id='submit-button-state', n_clicks=0, children='Run DSSAT'),
-            html.Div(id='output-state'),
-            dcc.Graph(id='yield_boxplot'),
-        ],style={'columnCount': 2}),
-        # html.Div(id="number-output"),
-    ]),
+    html.Div(children='''
+        The CAMDT is a tool designed to guide decision-makers in adopting appropriate crop and management practices 
+        that can improve crop yields given a seasonal climatic condition.
+    ''', style={'textAlign': 'left','color': 'black'}),
+    html.Br(),
+    html.Div(children='''
+        Smart planning of annual crop production requires consideration of possible scenarios.
+        The CAMDT tool adopts crop simulation models included in the DSSAT package (Decision Support System for Agrotechnology Transfer). 
+        The methodology was developed by the IRI (International Research Institute for Climate and Society / Columbia University) 
+        in collaboration with the Ethiopian Institute of Agricultural Research (EIAR). 
+        The purpose of this tool is to support decision-making of the producer or technical advisor, which facilitates discussion of optimal production strategies, risks of technology adoption, 
+        and evaluation of long-term effects, considering interactions of various factors.
+    ''', style={'textAlign': 'left','color': 'black'}),
+    html.Br(),
+    html.Div(children='''
+        To start your "what-if" scenario analysis, please select appropirate inputs and click the "run" butten at the end.
+    ''', style={'textAlign': 'left','color': 'black'}),
+            
+    html.Br(),
+    html.H2(children='Climate'),
+    html.Div([
+        html.Div(["Weather station: ",
+                dcc.Dropdown(id='mystation', options=[{'label': 'Bambey', 'value': 'CNRA'},{'label': 'Nioro', 'value': 'NRIP'},{'label': 'Sinthio', 'value': 'SNTH'}],
+                value='SNTH')]),
+    html.H2(children='Period considered for the simulation:'),
+        html.Div(["First year to simulate: ",
+                dcc.Input(id='year1', placeholder='Enter a value ...', value=' ', type='text')]),
+        html.Div(["Last year to simulate: ",
+                dcc.Input(id='year2', placeholder='Enter a value ...', value=' ', type='text')]),
+        html.Br(),
+
+        html.Button(id='submit-button-state', n_clicks=0, children='Run DSSAT'),
+        html.Div(id='output-state'),
+        dcc.Graph(id='yield_boxplot'),
+    ],style={'columnCount': 2}),
+    # html.Div(id="number-output"),
 ])
+
 # @app.callback(Output('yield_boxplot', 'figure'),
 @app.callback(Output('output-state', 'children'),
               [Input('submit-button-state', 'n_clicks')],
@@ -116,5 +94,5 @@ def update_figure(n_clicks, input1):
     # return fig
     return u'Selected statoin is  "{}" '.format(input1)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run_server(debug=True)
