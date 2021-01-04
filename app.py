@@ -53,7 +53,7 @@ app.layout = html.Div(
                                 html.Br(),
                                 html.Span("Select ", className="uppercase bold"),
                                 html.Span(
-                                    "a station name for analysis."
+                                    "a station name for analysis.."
                                 ),
                             ]
                         )
