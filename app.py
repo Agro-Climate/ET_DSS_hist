@@ -15,13 +15,12 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 app.layout = html.Div(children=[
-    html.H1(children='Climate-Agriculture Modeling Decision Tool for Ethiopia (Historical Analysis)',
-            style={'textAlign': 'center','color': 'black'}),
+    html.H1(children='Climate-Agriculture Modeling Decision Tool for Ethiopia (Historical Analysis)'),
 
     html.Div(children='''
         The CAMDT is a tool designed to guide decision-makers in adopting appropriate crop and management practices 
         that can improve crop yields given a seasonal climatic condition.
-    ''', style={'textAlign': 'left','color': 'black'}),
+    '''),
     html.Br(),
     html.Div(children='''
         Smart planning of annual crop production requires consideration of possible scenarios.
@@ -30,11 +29,11 @@ app.layout = html.Div(children=[
         in collaboration with the Ethiopian Institute of Agricultural Research (EIAR). 
         The purpose of this tool is to support decision-making of the producer or technical advisor, which facilitates discussion of optimal production strategies, risks of technology adoption, 
         and evaluation of long-term effects, considering interactions of various factors.
-    ''', style={'textAlign': 'left','color': 'black'}),
+    '''),
     html.Br(),
     html.Div(children='''
         To start your "what-if" scenario analysis, please select appropirate inputs and click the "run" butten at the end.
-    ''', style={'textAlign': 'left','color': 'black'}),
+    '''),
             
     html.Br(),
     html.H2(children='Climate'),
