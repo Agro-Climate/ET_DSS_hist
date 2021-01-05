@@ -37,15 +37,18 @@ app.layout = html.Div(
                                     "Climate-Agriculture Modeling Decision Support Tool for Ethiopia (Historical Analysis)",
                                     className="uppercase title"
                                 ),
-                                html.Br(),
-                                html.Span("CAMDT  ", className="uppercase bold", style={'textAlign': 'left'}),
-                                html.Span(
-                                    "is a tool designed to guide decision-makers in adopting appropriate crop and management practices that can improve crop yields given a seasonal climatic condition."
-                                    , style={'textAlign': 'left'}
-                                ),
                             ],
                             className="app__header",
                             ),
+                        html.Br(),
+                        html.Div(children='''
+                            CAMDT is a tool designed to guide decision-makers in adopting appropriate crop and management practices that can improve crop yields given a seasonal climatic condition.
+                        ''', style={'textAlign': 'left'}),
+                        # html.Span("CAMDT  ", className="uppercase bold", style={'textAlign': 'left'}),
+                        # html.Span(
+                        #     "is a tool designed to guide decision-makers in adopting appropriate crop and management practices that can improve crop yields given a seasonal climatic condition."
+                        #     , style={'textAlign': 'left'}
+                        # ),
                         html.Br(),
                         html.Div(children='''
                             Smart planning of annual crop production requires consideration of possible scenarios.
