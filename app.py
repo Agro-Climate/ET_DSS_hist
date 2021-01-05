@@ -37,9 +37,10 @@ app.layout = html.Div(
                                     "Climate-Agriculture Modeling Decision Support Tool for Ethiopia (Historical Analysis)",
                                     className="uppercase title"
                                 ),
-                                html.Span("CAMDT  ", className="uppercase bold"),
+                                html.Span("CAMDT  ", className="uppercase bold", style={'textAlign': 'left'}),
                                 html.Span(
                                     "is a tool designed to guide decision-makers in adopting appropriate crop and management practices that can improve crop yields given a seasonal climatic condition."
+                                    , style={'textAlign': 'left'}
                                 ),
                                 html.Br(),
                                 html.Div(children='''
@@ -51,9 +52,9 @@ app.layout = html.Div(
                                     and evaluation of long-term effects, considering interactions of various factors.
                                 ''', style={'textAlign': 'left'}),
                                 html.Br(),
-                                html.Span("Select ", className="uppercase bold"),
+                                html.Span("Select ", className="uppercase bold", style={'textAlign': 'left'}),
                                 html.Span(
-                                    "a station name for analysis.."
+                                    "a station name for analysis..", style={'textAlign': 'left'}
                                 ),
                             ]
                         )
