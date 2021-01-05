@@ -11,6 +11,7 @@ from helpers import make_dash_table, create_plot
 from os import path # path
 import os
 import subprocess  #to run executable
+from datetime import date
 
 app = dash.Dash(
     __name__,
@@ -68,13 +69,41 @@ app.layout = html.Div(
                     dcc.Dropdown(id='mystation', options=[{'label': 'Melkasa', 'value': 'MELK'},{'label': 'Awassa', 'value': 'AWAS'},{'label': 'Bako', 'value': 'BAKO'},{'label': 'Mahoni', 'value': 'MAHO'}],
                     value='MELK')]),
             # html.H2(children='Period considered for the simulation:'),
+            html.Br(),
             html.Span("2) Period considered for the simulation", className="uppercase bold", style={'textAlign': 'left'}),
             html.Div(["First year to simulate: ",
                     dcc.Input(id='year1', placeholder='Enter a value ...', value='1981', type='text')]),
             html.Div(["Last year to simulate: ",
                     dcc.Input(id='year2', placeholder='Enter a value ...', value='2018', type='text')]),
             html.Br(),
-
+            html.Span("3) Select Planting Date", className="uppercase bold", style={'textAlign': 'left'}),
+            html.Div([
+                dcc.DatePickerSingle(
+                    id='my-date-picker-single',
+                    min_date_allowed=date(2021, 1, 1),
+                    max_date_allowed=date(2021, 12, 31),
+                    initial_visible_month=date(2021, 6, 5),
+                    date=date(2021, 6, 15)
+                    )]),
+            html.Br(),
+            html.Span("4) Select Soil type to simulate", className="uppercase bold", style={'textAlign': 'left'}),
+            html.Div(["Soil: ",
+                    dcc.Dropdown(id='mystation', options=[{'label': 'ETET000010(AWAS,L)', 'value': 'ETET000010'},
+                                                            {'label': 'ETET000_10(AWAS,L, shallow)', 'value': 'ETET000_10'},
+                                                            {'label': 'ETET000011(BAKO,C)', 'value': 'ETET000011'},
+                                                            {'label': 'ETET001_11(BAKO,C,shallow)', 'value': 'ETET001_11'},
+                                                            {'label': 'ETET000018(MELK,L)', 'value': 'ETET000018'},
+                                                            {'label': 'ETET001_18(MELK,L,shallow)', 'value': 'ETET001_18'},
+                                                            {'label': 'ETET000015(KULU,C)', 'value': 'ETET000015'},
+                                                            {'label': 'ETET001_15(KULU,C,shallow)', 'value': 'ETET001_15'},
+                                                            {'label': 'ET00990066(MAHO,C)', 'value': 'ET00990066'},
+                                                            {'label': 'ET00990_66(MAHO,C,shallow)', 'value': 'ET00990_66'},
+                                                            {'label': 'ET00920067(KOBO,CL)', 'value': 'ET00920067'},
+                                                            {'label': 'ET00920_67(KOBO,CL,shallow)', 'value': 'ET00920_67'},
+                                                            {'label': 'ETET000022(MIES, C)', 'value': 'ETET000022'},
+                                                            {'label': 'ETET001_22(MIES, C, shallow', 'value': 'ETET001_22'},
+                                                            ], value='ETET001_18')]),
+            html.Br(),
             html.Button(id='submit-button-state', n_clicks=0, children='Run DSSAT'),
             html.Div(id='output-state'),
             dcc.Graph(id='yield_boxplot'),
