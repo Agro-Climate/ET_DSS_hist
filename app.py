@@ -58,20 +58,21 @@ app.layout = html.Div(
                             The purpose of this tool is to support decision-making of the producer or technical advisor, which facilitates discussion of optimal production strategies, risks of technology adoption, 
                             and evaluation of long-term effects, considering interactions of various factors.
                         ''', style={'textAlign': 'Center'}),
-                        html.Br(),
-                        html.Span("Select ", className="uppercase bold", style={'textAlign': 'left'}),
-                        html.Span("a station name for analysis..", style={'textAlign': 'left'}),
-                    ]
-                ),
+                    ]),
+            ]),
         html.Div([
+            html.Br(),
+            html.Span("1) Select a station name for analysis", className="uppercase bold", style={'textAlign': 'left'}),
+            # html.Span("a station name for analysis.", style={'textAlign': 'left'}),
             html.Div(["Weather station: ",
-                    dcc.Dropdown(id='mystation', options=[{'label': 'Bambey', 'value': 'CNRA'},{'label': 'Nioro', 'value': 'NRIP'},{'label': 'Sinthio', 'value': 'SNTH'}],
-                    value='SNTH')]),
-        html.H2(children='Period considered for the simulation:'),
+                    dcc.Dropdown(id='mystation', options=[{'label': 'Melkasa', 'value': 'MELK'},{'label': 'Awassa', 'value': 'AWAS'},{'label': 'Bako', 'value': 'BAKO'},{'label': 'Mahoni', 'value': 'MAHO'}],
+                    value='MELK')]),
+            # html.H2(children='Period considered for the simulation:'),
+            html.Span("2) Period considered for the simulation", className="uppercase bold", style={'textAlign': 'left'}),
             html.Div(["First year to simulate: ",
-                    dcc.Input(id='year1', placeholder='Enter a value ...', value=' ', type='text')]),
+                    dcc.Input(id='year1', placeholder='Enter a value ...', value='1981', type='text')]),
             html.Div(["Last year to simulate: ",
-                    dcc.Input(id='year2', placeholder='Enter a value ...', value=' ', type='text')]),
+                    dcc.Input(id='year2', placeholder='Enter a value ...', value='2018', type='text')]),
             html.Br(),
 
             html.Button(id='submit-button-state', n_clicks=0, children='Run DSSAT'),
@@ -79,8 +80,8 @@ app.layout = html.Div(
             dcc.Graph(id='yield_boxplot'),
         ],style={'columnCount': 2}),
         # html.Div(id="number-output"),
-    ]),
-])
+    ])
+
 # @app.callback(Output('yield_boxplot', 'figure'),
 @app.callback(Output('output-state', 'children'),
               [Input('submit-button-state', 'n_clicks')],
