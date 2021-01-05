@@ -35,7 +35,7 @@ app.layout = html.Div(
                             [
                                 html.H3(
                                     "Climate-Agriculture Modeling Decision Support Tool for Ethiopia (Historical Analysis)",
-                                    className="uppercase title",
+                                    className="uppercase title"
                                 ),
                                 html.Span("CAMDT  ", className="uppercase bold"),
                                 html.Span(
@@ -49,7 +49,7 @@ app.layout = html.Div(
                                     in collaboration with the Ethiopian Institute of Agricultural Research (EIAR). 
                                     The purpose of this tool is to support decision-making of the producer or technical advisor, which facilitates discussion of optimal production strategies, risks of technology adoption, 
                                     and evaluation of long-term effects, considering interactions of various factors.
-                                '''),
+                                ''', style={'textAlign': 'center'}),
                                 html.Br(),
                                 html.Span("Select ", className="uppercase bold"),
                                 html.Span(
