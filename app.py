@@ -77,14 +77,14 @@ app.layout = html.Div(
                     dcc.Input(id='year2', placeholder='Enter a value ...', value='2018', type='text')]),
             html.Br(),
             html.Span("3) Select Planting Date", className="uppercase bold", style={'textAlign': 'left'}),
-            html.Div([
-                dcc.DatePickerSingle(
-                    id='my-date-picker-single',
-                    min_date_allowed=date(2021, 1, 1),
-                    max_date_allowed=date(2021, 12, 31),
-                    initial_visible_month=date(2021, 6, 5),
-                    date=date(2021, 6, 15)
-                    )]),
+            # html.Div([
+            #     dcc.DatePickerSingle(
+            #         id='my-date-picker-single',
+            #         min_date_allowed=date(2021, 1, 1),
+            #         max_date_allowed=date(2021, 12, 31),
+            #         initial_visible_month=date(2021, 6, 5),
+            #         date=date(2021, 6, 15)
+            #         )]),
             html.Br(),
             html.Span("4) Select Soil type to simulate", className="uppercase bold", style={'textAlign': 'left'}),
             html.Div(["Soil: ",
@@ -102,7 +102,8 @@ app.layout = html.Div(
                                                             {'label': 'ET00920_67(KOBO,CL,shallow)', 'value': 'ET00920_67'},
                                                             {'label': 'ETET000022(MIES, C)', 'value': 'ETET000022'},
                                                             {'label': 'ETET001_22(MIES, C, shallow', 'value': 'ETET001_22'},
-                                                            ], value='ETET001_18')]),
+                                                            ], 
+                                value='ETET001_18')]),
             html.Br(),
             html.Button(id='submit-button-state', n_clicks=0, children='Run DSSAT'),
             html.Div(id='output-state'),
