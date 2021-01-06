@@ -72,9 +72,9 @@ app.layout = html.Div(
             html.Br(),
             html.Span("2) Period considered for the simulation", className="uppercase bold", style={'textAlign': 'left'}),
             html.Div(["First year to simulate: ",
-                    dcc.Input(id='year1', placeholder='Enter a value ...', value='1981', type='text')]),
+                    dcc.Input(id='year1', placeholder='Enter a value ...', value='1981', type='text')], style={'textAlign': 'left'}
             html.Div(["Last year to simulate: ",
-                    dcc.Input(id='year2', placeholder='Enter a value ...', value='2018', type='text')]),
+                    dcc.Input(id='year2', placeholder='Enter a value ...', value='2018', type='text')], style={'textAlign': 'left'}),
             html.Br(),
             html.Span("3) Select Planting Date", className="uppercase bold", style={'textAlign': 'left'}),
             html.Div([
@@ -84,7 +84,7 @@ app.layout = html.Div(
                     max_date_allowed=date(2021, 12, 31),
                     initial_visible_month=date(2021, 6, 5),
                     date=date(2021, 6, 15)
-                    )]),
+                    )], style={'textAlign': 'left'}),
             html.Br(),    
             ],style={'columnCount': 2}),
         html.Div([
@@ -137,9 +137,9 @@ app.layout = html.Div(
 def update_figure(n_clicks, input1):
     print(input1)
     #1) make SNX
-    temp_snx = path.join("C:\\IRI\\Dash_test\\Senegal\\", "SESGTEMP.SNX")
-    snx_name = 'SESG'+input1+'.SNX'
-    SNX_fname = path.join("C:\\IRI\\Dash_test\\Senegal\\", snx_name)
+    temp_snx = path.join("C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\", "ETMZTEMP.SNX")
+    snx_name = 'ETMZ'+input1+'.SNX'
+    SNX_fname = path.join("C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\\", snx_name)
     fr = open(temp_snx, "r")  # opens temp SNX file to read
     fw = open(SNX_fname, "w")  # opens SNX file to write
     for i in range(20):
@@ -153,9 +153,9 @@ def update_figure(n_clicks, input1):
         fw.write(temp_str)
     fw.close()
     #2) Run DSSAT executable
-    Wdir_path = 'C:\\IRI\\Dash_test\\Senegal\\'
+    Wdir_path = 'C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\'
     os.chdir(Wdir_path)  #change directory  #check if needed o rnot
-    args = "DSCSM047.EXE SGCER047 B DSSBatch.v47"
+    args = "DSCSM047.EXE MZCER047 B DSSBatch.v47"
     subprocess.call(args) ##Run executable with argument  , stdout=FNULL, stderr=FNULL, shell=False)
 
     #3) read DSSAT output
