@@ -72,7 +72,7 @@ app.layout = html.Div(
             html.Br(),
             html.Span("2) Period considered for the simulation", className="uppercase bold", style={'textAlign': 'left'}),
             html.Div(["First year to simulate: ",
-                    dcc.Input(id='year1', placeholder='Enter a value ...', value='1981', type='text')], style={'textAlign': 'left'}
+                    dcc.Input(id='year1', placeholder='Enter a value ...', value='1981', type='text')], style={'textAlign': 'left'}),
             html.Div(["Last year to simulate: ",
                     dcc.Input(id='year2', placeholder='Enter a value ...', value='2018', type='text')], style={'textAlign': 'left'}),
             html.Br(),
