@@ -70,21 +70,23 @@ app.layout = html.Div(
                     value='MELK')]),
             # html.H2(children='Period considered for the simulation:'),
             html.Br(),
-            html.Span("2) Period considered for the simulation", className="uppercase bold", style={'textAlign': 'left'}),
-            html.Div(["First year to simulate: ",
-                    dcc.Input(id='year1', placeholder='Enter a value ...', value='1981', type='text')], style={'textAlign': 'left'}),
-            html.Div(["Last year to simulate: ",
-                    dcc.Input(id='year2', placeholder='Enter a value ...', value='2018', type='text')], style={'textAlign': 'left'}),
+            html.Span("2) Period considered for the simulation (first and last year [YYYY])", className="uppercase bold", style={'textAlign': 'left'}),
+            # html.Div(["First year to simulate: ",
+            #         dcc.Input(id='year1', placeholder='Enter a value ...', value='1981', type='text')]),
+            # html.Div(["Last year to simulate: ",
+            #         dcc.Input(id='year2', placeholder='Enter a value ...', value='2018', type='text')]),
+            html.Br(),
+            dcc.Input(id="year1", type="text", placeholder="Enter the first year to simulate ..."),
+            dcc.Input(id="year2", type="text", placeholder="Enter the last year to simulate ..."),
             html.Br(),
             html.Span("3) Select Planting Date", className="uppercase bold", style={'textAlign': 'left'}),
-            html.Div([
-                dcc.DatePickerSingle(
+            dcc.DatePickerSingle(
                     id='my-date-picker-single',
                     min_date_allowed=date(2021, 1, 1),
                     max_date_allowed=date(2021, 12, 31),
                     initial_visible_month=date(2021, 6, 5),
                     date=date(2021, 6, 15)
-                    )], style={'textAlign': 'left'}),
+                    ),
             html.Br(),    
             ],style={'columnCount': 2}),
         html.Div([
