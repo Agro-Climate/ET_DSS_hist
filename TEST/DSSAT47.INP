@@ -1,18 +1,18 @@
-*MODEL INPUT FILE            B    35     1     1   999     0
+*MODEL INPUT FILE            B    36     1     1   999     0
 *FILES              
 MODEL          MZCER047
-FILEX          ETMZawas.SNX C:\IRI\Python_Dash\ET_DSS_hist\TEST\                                            
-FILEA          ETMZawas.SNA C:\IRI\Python_Dash\ET_DSS_hist\TEST\                                            
-FILET          ETMZawas.SNT C:\IRI\Python_Dash\ET_DSS_hist\TEST\                                            
+FILEX          ETMZbako.SNX C:\IRI\Python_Dash\ET_DSS_hist\TEST\                                            
+FILEA          ETMZbako.SNA C:\IRI\Python_Dash\ET_DSS_hist\TEST\                                            
+FILET          ETMZbako.SNT C:\IRI\Python_Dash\ET_DSS_hist\TEST\                                            
 SPECIES        MZCER047.SPE                                                                                 
 ECOTYPE        MZCER047.ECO                                                                                 
 CULTIVAR       MZCER047.CUL                                                                                 
 PESTS          MZCER047.PST C:\DSSAT47\PEST\                                                                
 SOILS          ET.SOL                                                                                       
-WEATHER        AWAS8101.WTH                                                                                 
+WEATHER        BAKO8101.WTH                                                                                 
 OUTPUT         OVERVIEW
 *SIMULATION CONTROL 
-                  34     1     S 1981165  2150 15102000                 
+                  35     1     S 1981165  2150 15102000                 
                    Y     Y     N     N     N     N     N     N     D
                    M     M     E     R     S     C     R     1     G     S     2     D     0
                    R     N     D     N     M
@@ -24,13 +24,13 @@ OUTPUT         OVERVIEW
                 100.     1   20.
                      0 2000289  100.    0.
 *EXP.DETAILS        
-  1ETMZawas SN MELKSSAL                                                    
+  1ETMZbako SN MELKSSAL                                                    
 *TREATMENTS         
   1 1 0 0 ERiMA DCC1               
 *CULTIVARS          
    MZ CIMT01 BH540-Kassie    
 *FIELDS             
-   AWAS0001 AWAS8101   0.0  -99.   -99  -99. 100.0   -99 L      200. ETET001_18
+   BAKO0001 BAKO8101   0.0  -99.   -99  -99. 100.0   -99 L      200. ETET001_18
          -99.00000       -99.00000    -99.00               1.0  100.   1.0 -99.0   -99   -99
 *INITIAL CONDITIONS 
    MZ    1981165     0     0  1.00  1.00   0.0     0  0.00  0.00  100.    0.
@@ -47,7 +47,7 @@ OUTPUT         OVERVIEW
     170. 0.298 0.100   0.0
     200. 0.314 0.100   0.0
 *PLANTING DETAILS   
-   1981166     -99   6.0   6.0     S     R   75.  -99.   2.5  -99.  -99. -99.0 -99.0 -99.0
+   1981166     -99   6.5   6.5     S     R   75.  -99.   2.5  -99.  -99. -99.0 -99.0 -99.0
 *IRRIGATION         
    1.000    0.    0.    0. GS000 IR001   0.0
 *FERTILIZERS        

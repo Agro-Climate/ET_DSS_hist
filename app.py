@@ -32,10 +32,8 @@ params = ['Scenario-name', 'Cultivar', 'Station', 'Plt-date']  #for a table
 app.layout = html.Div(
     [
         html.Div(
-            # dbc.Row(html.Img(src=app.get_asset_url("ethioagroclimate.png")))
             dbc.Row([html.Img(src=app.get_asset_url("ethioagroclimate.png"))], className="app__banner")
             # [html.Img(src=app.get_asset_url("ethioagroclimate.png"))], className="app__banner"
-            # html.Img(src=app.get_asset_url("SIMAGRI_CO_logo.gif"))], className="app__banner"
         ),
         html.Div(
             [

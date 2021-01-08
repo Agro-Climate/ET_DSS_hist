@@ -1,8 +1,8 @@
-*EXP.DETAILS: ETMZawasSN MELKSSAL                                                    
+*EXP.DETAILS: ETMZbakoSN MELKSSAL                                                    
 
 *FILES
 @N  EXP.DATA    AFILE        ADIR
-  1 EXP         ETMZawas.SNA C:\IRI\Python_Dash\ET_DSS_hist\TEST\                                            
+  1 EXP         ETMZbako.SNA C:\IRI\Python_Dash\ET_DSS_hist\TEST\                                            
 @N  SPECIES     SPFILE       SPDIR
   1 SPE         MZCER047.SPE                                                                                 
 @N  ECOTYPE     EFILE        EDIR
@@ -12,11 +12,11 @@
 @N  SOIL        SFILE        SDIR
   1 SOIL        ET.SOL                                                                                       
 @N  WEATHER     WFILE        WDIR
-  1 WEATH       AWAS8101.WTH                                                                                 
+  1 WEATH       BAKO8101.WTH                                                                                 
 
 *SIMULATION CONTROL
 @N  GENERAL     NYERS NREPS START   SDATE RSEED SNAME.................... MODEL...
-  1 GE             34     1     S 1981165  2150 15102000                  MZCER047
+  1 GE             35     1     S 1981165  2150 15102000                  MZCER047
 @N  OPTIONS     WATER NITRO SYMBI PHOSP POTAS DISES  CHEM  TILL   CO2
   1 OP              Y     Y     N     N     N     N     N     N     D
 @N  METHODS     WTHER INCON LIGHT EVAPO INFIL PHOTO HYDRO NSWIT SOMDY MESEV MESOL METMP MEGHG
@@ -48,7 +48,7 @@
 
 *FIELDS
 @L  ID_FIELD WSTA....  FLSA  FLOB  FLDT  FLDD  FLDS  FLST SLTX   SLDP ID_SOIL
-  1 AWAS0001 AWAS8101   0.0  -99.   -99  -99.  100.   -99 L      200. ETET001_18
+  1 BAKO0001 BAKO8101   0.0  -99.   -99  -99.  100.   -99 L      200. ETET001_18
 @L             XCRD            YCRD      ELEV              AREA  SLEN  FLWR  SLAS PRMGT
   1       -99.00000       -99.00000    -99.00               1.0  100.   1.0 -99.0   -99   -99
 
@@ -71,7 +71,7 @@
 
 *PLANTING DETAILS
 @P    PDATE   EDATE  PPOP  PPOE  PLME  PLDS  PLRS  PLRD  PLDP  PLWT  PAGE  PENV  PLPH  SPRL
-  1 1981166     -99   6.0   6.0     S     R   75.  -99.   2.5  -99.  -99. -99.0 -99.0 -99.0
+  1 1981166     -99   6.5   6.5     S     R   75.  -99.   2.5  -99.  -99. -99.0 -99.0 -99.0
 
 *IRRIGATION
 @I   IEFF  IDEP  ITHR  IEPT  IOFF  IAME  IAMT
