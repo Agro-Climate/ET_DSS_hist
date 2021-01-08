@@ -1,9 +1,12 @@
 import dash
 import pandas as pd
+import numpy as np
 import pathlib
 import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
+import dash_table
+import plotly.express as px
 
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
@@ -23,14 +26,14 @@ app = dash.Dash(
 server = app.server
 
 DATA_PATH = pathlib.Path(__file__).parent.joinpath("data").resolve()
+params = ['Scenario-name', 'Cultivar', 'Station', 'Plt-date']  #for a table
+
 
 app.layout = html.Div(
     [
         html.Div(
-            # dbc.Row(html.Img(src=app.get_asset_url("ethioagroclimate.png")))
             dbc.Row([html.Img(src=app.get_asset_url("ethioagroclimate.png"))], className="app__banner")
             # [html.Img(src=app.get_asset_url("ethioagroclimate.png"))], className="app__banner"
-            # html.Img(src=app.get_asset_url("SIMAGRI_CO_logo.gif"))], className="app__banner"
         ),
         html.Div(
             [
@@ -97,7 +100,7 @@ app.layout = html.Div(
             dbc.Row([
                 dbc.Col(
                     dcc.DatePickerSingle(
-                    id='my-date-picker',
+                    id='plt-date-picker',
                     min_date_allowed=date(2021, 1, 1),
                     max_date_allowed=date(2021, 12, 31),
                     initial_visible_month=date(2021, 6, 5),
@@ -181,7 +184,7 @@ app.layout = html.Div(
         html.Br(),
         html.Div([
             dbc.Row([
-                html.Span("8) Enter Planting Density", className="uppercase bold", style={'textAlign': 'Center'}),
+                html.Span("8) Enter Planting Density", className="uppercase bold"),
                 ],align="start",
                 ),
             dbc.Row([
@@ -195,30 +198,70 @@ app.layout = html.Div(
             ],style={"width": "80%"},),
         html.Br(),
         html.Div([
-            html.Button(id='submit-button-state', n_clicks=0, children='Run DSSAT'),
-        ],style={'columnCount': 2}),
-        html.Div(id='output-state'),
-        # dcc.Graph(id='yield_boxplot'),
+            dbc.Row([
+                html.Span("9) Enter Scenario name ", className="uppercase bold"),
+                ],align="start",
+                ),
+            dbc.Row([
+                dcc.Input(id="sce-name", type="text", placeholder="Enter scenario name.."),
+                html.Span("(only 4 characters)"),
+                ],align="start",
+                ),
+            ],style={"width": "60%"},),
+        html.Br(),
+        html.Div([
+            dbc.Row([
+                html.Span("10) Target year to compare with ", className="uppercase bold"),
+                ],align="start",
+                ),
+            dbc.Row([
+                dcc.Input(id="target-year", type="text", placeholder="Enter a specific year.."),
+                html.Span("[YYYY]"),
+                ],align="start",
+                ),
+            ],style={"width": "40%"},),
+        html.Br(),
+        html.Div([
+            html.Button(id='write-button-state', n_clicks=0, children='Create or Add a new Scenario', 
+                style={'background-color': '#4CAF50'}),  #https://www.w3schools.com/css/css3_buttons.asp
+        ],),
+        # html.Div(id='output-state'),
+        html.Br(),
+        html.Div(id="table-summary",style={"width": "50%"}),
+        html.Br(),
+
+        # Hidden div inside the app that stores the intermediate value
+        html.Div(id='intermediate-value', style={'display': 'none'}),
+
         # html.Div(id="number-output"),
+        html.Br(),
+        html.Div([
+            html.Button(id='simulate-button-state', n_clicks=0, children='Simulate all scenarios (Run DSSAT)',style={'background-color': '#008CBA'}), #blue
+        ],),
+        html.Br(),
+        # dbc.Progress("25%", value=25),
+        # dbc.Progress(id="progress"),
+        dbc.Spinner(children=[dcc.Graph(id = 'yield_boxplot')],size='lg',color='primary',type='border'),
+        # dcc.Graph(id='yield_boxplot'),
     ])
 
-# @app.callback(Output('yield_boxplot', 'figure'),
-# @app.callback(Output('output-state', 'children'),
-#               [Input('submit-button-state', 'n_clicks')],
-#               [State('ETstation', 'value')])
-@app.callback(Output('output-state', 'children'),
-              Input('submit-button-state', 'n_clicks'),
-              State('ETstation', 'value'),  #input 1
-              State('year1', 'value'),      #input 2
-              State('year2', 'value'),      #input 3
-              State('my-date-picker', 'date'),  #input 4
-              State('ETMZcultivar', 'value'),   #input 5
-              State('ETsoil', 'value'),         #input 6
-              State('ini-H2O', 'value'),        #input 7           
-              State('ini-NO3', 'value'),        #input 8
-              State('plt-density', 'value'),    #input 9
+@app.callback(Output('table-summary', 'children'),
+                Output('intermediate-value', 'children'),
+                Input('write-button-state', 'n_clicks'),
+                State('ETstation', 'value'),  #input 1
+                State('year1', 'value'),      #input 2
+                State('year2', 'value'),      #input 3
+                State('plt-date-picker', 'date'),  #input 4
+                State('ETMZcultivar', 'value'),   #input 5
+                State('ETsoil', 'value'),         #input 6
+                State('ini-H2O', 'value'),        #input 7           
+                State('ini-NO3', 'value'),        #input 8
+                State('plt-density', 'value'),    #input 9
+                State('sce-name', 'value'),       #input 10
+                State('intermediate-value', 'children')  #scenario summary table
+                # State('table-summary', 'columns'),  #scenario summary table
               )
-def update_figure(n_clicks, input1,input2,input3,input4,input5,input6,input7,input8,input9):
+def make_sce_table(n_clicks, input1,input2,input3,input4,input5,input6,input7,input8,input9,input10,intermediate):
     print(input1)  #MELK
     print(input2)  #1981
     print(input3)  #2014
@@ -228,35 +271,134 @@ def update_figure(n_clicks, input1,input2,input3,input4,input5,input6,input7,inp
     print(input7)  #0.7
     print(input8)  #H
     print(input9)  #6
+    print(input10)  #scenario name
+
+    if n_clicks:  
+        #Make a new dataframe
+        df = pd.DataFrame(
+            [[n_clicks, input10, input5[7:], input1, input4[5:],input2, input3, input6]],
+            columns=["count", "sce_name", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil"],)
+        data = df.to_dict('rows')
+        columns =  [{"name": i, "id": i,} for i in (df.columns)]
+
+    if n_clicks == 1:
+        dff = df.copy()
+        data = dff.to_dict('rows')
+    elif n_clicks > 1:
+        # Read previously saved scenario summaries  https://dash.plotly.com/sharing-data-between-callbacks
+        dff = pd.read_json(intermediate, orient='split')
+        dff = dff.append(df, ignore_index=True)
+        data = dff.to_dict('rows')
+
+    print(n_clicks)
+
 
     #=====================================================================
     Wdir_path = 'C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\'
     #1) Write SNX file
-    writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input7,input8,input9)
+    writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input7,input8,input9,input10)
 
-    #2) Write V47 file
-    snx_name = 'ETMZ'+input1+'.SNX'
-    SNX_fname = path.join(Wdir_path, snx_name)
-    crop = 'MZ'
-    writeV47_main_hist(Wdir_path,SNX_fname,crop)
+    return dash_table.DataTable(data=data, columns=columns), dff.to_json(date_format='iso', orient='split')
+
+#===============================
+#2nd callback to run ALL scenarios
+@app.callback(Output('yield_boxplot', 'figure'),
+                Input('simulate-button-state', 'n_clicks'),
+                State('target-year', 'value'),       #input 11
+                State('intermediate-value', 'children')  #scenario summary table
+              )
+def run_create_figure(n_clicks, tyear, intermediate):
+    # 1) Read saved scenario summaries and get a list of scenarios to run
+    dff = pd.read_json(intermediate, orient='split')
+    sce_numbers = len(dff.sce_name.values)
+
+    # 2) Write V47 file
+    Wdir_path = 'C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\'
+    temp_dv7 = path.join(Wdir_path, "DSSBatch_template_MZ.V47")
+    dv7_fname = path.join(Wdir_path, "DSSBatch.V47")
+    fr = open(temp_dv7, "r")  # opens temp DV4 file to read
+    fw = open(dv7_fname, "w")
+    # read template and write lines
+    for line in range(0, 10):
+        temp_str = fr.readline()
+        fw.write(temp_str)
+
+    temp_str = fr.readline()
+    for i in range(sce_numbers):
+        sname = dff.sce_name.values[i]
+        SNX_fname = path.join(Wdir_path, "ETMZ"+sname+".SNX")
+        SNX_fname = SNX_fname.replace("/", "\\")
+        new_str2 = '{0:<95}{1:4s}'.format(SNX_fname, repr(1).rjust(4)) + temp_str[99:]
+        fw.write(new_str2)
+
+    fr.close()
+    fw.close()
     #=====================================================================
     #3) Run DSSAT executable
     os.chdir(Wdir_path)  #change directory  #check if needed o rnot
     args = "DSCSM047.EXE MZCER047 B DSSBatch.v47"
     subprocess.call(args) ##Run executable with argument  , stdout=FNULL, stderr=FNULL, shell=False)
 
-    #4) read DSSAT output
+    #4) read DSSAT output => Read Summary.out from all scenario output
+    fout_name = path.join(Wdir_path, "SUMMARY.OUT")
+    df_OUT=pd.read_csv(fout_name,delim_whitespace=True ,skiprows=3)
+    HWAM = df_OUT.iloc[:,21].values  #read 21th column only
+    EXPERIMENT = df_OUT.iloc[:,7].values  #read 4th column only
+    PDAT = df_OUT.iloc[:,14].values  #read 14th column only
+    ADAT = df_OUT.iloc[:,16].values  #read 14th column only
+    MDAT = df_OUT.iloc[:,17].values  #read 14th column only    
+    TG_yield = []
+    for i in range(sce_numbers):
+        # year1 = dff.FirstYear[i]
+        # year2 = dff.LastYear[i]
+        # nyear = int(year2) - int(year1) +1
+        # exp_id = dff.sce_name.values[i]
+        # exp_index = np.argwhere(EXPERIMENT == exp_id)
+        # yield_hist[:nyear,i] = HWAM[exp_index[0][0]]
+
+        #Extract yield from a distinctive year to compare  => EJ(11/30/2020)
+        # PDAT = df_OUT.iloc[:,14].values  #read 14th column only
+        doy = repr(PDAT[0])[4:]
+        # target = repr(tyear) + doy
+        target = tyear + doy
+        yr_index = np.argwhere(PDAT == int(target))
+        TG_yield.append(HWAM[yr_index[0][0]])
+
+    # Make a new dataframe for plotting
+    # Make a new dataframe for plotting
+    df1 = pd.DataFrame({'EXPERIMENT':EXPERIMENT})
+    df2 = pd.DataFrame({'PDAT':PDAT})
+    df3 = pd.DataFrame({'ADAT':ADAT})
+    df4 = pd.DataFrame({'HWAM':HWAM})
+    df = pd.concat([df1.EXPERIMENT, df2.PDAT, df3.ADAT, df4.HWAM], axis=1)
+    x_val = np.unique(df.EXPERIMENT.values)
+
     #4) Make a boxplot
     # df = px.data.tips()
     # fig = px.box(df, x="time", y="total_bill")
     # fig.show()s
     # fig.update_layout(transition_duration=500)
-
-    # return fig
-    return u'Selected statoin is  "{}" '.format(input1)
+    # df = px.data.tips()
+    # fig = px.box(df, x="Scenario Name", y="Yield [kg/ha]")
+    fig = px.box(df, x="EXPERIMENT", y="HWAM")
+    fig.add_scatter(x=x_val,y=TG_yield, mode='lines')
+    fig.update_xaxes(title= 'Scenario Name')
+    fig.update_yaxes(title= 'Yield [kg/ha]')
+    return fig
 
 # =============================================
-def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input7,input8,input9):
+def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input7,input8,input9,input10):
+    # print('check writeSNX_main')
+    # print(input1)  #MELK
+    # print(input2)  #1981
+    # print(input3)  #2014
+    # print(input4)  #2021-06-15
+    # print(input5)  #CIMT01 BH540-Kassie
+    # print(input6)  #ETET001_18
+    # print(input7)  #0.7
+    # print(input8)  #H
+    # print(input9)  #6
+    # print(input10)  #scenario name
     WSTA = input1
     NYERS = repr(int(input3) - int(input2) + 1)
     plt_year = input2
@@ -264,8 +406,8 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input
         date_object = date.fromisoformat(input4)
         date_string = date_object.strftime('%B %d, %Y')
         plt_doy = date_object.timetuple().tm_yday
-        print(date_string)  #June 15, 2021 
-        print(plt_doy)  #166
+        # print(date_string)  #June 15, 2021 
+        # print(plt_doy)  #166
     PDATE = plt_year[2:] + repr(plt_doy).zfill(3)
         #   IC_date = first_year * 1000 + (plt_doy - 1)
         #   PDATE = repr(first_year)[2:] + repr(plt_doy).zfill(3)
@@ -282,7 +424,7 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input
 
     #1) make SNX
     temp_snx = path.join(Wdir_path, "ETMZTEMP.SNX")
-    snx_name = 'ETMZ'+input1+'.SNX'
+    snx_name = 'ETMZ'+input10[:4]+'.SNX'
     SNX_fname = path.join(Wdir_path, snx_name)
     fr = open(temp_snx, "r")  # opens temp SNX file to read
     fw = open(SNX_fname, "w")  # opens SNX file to write
@@ -327,7 +469,7 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input
         fw.write(temp_str)
     # ================write *FIELDS
     # Get soil info from *.SOL
-    SOL_file = path.join("C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\", "ET.SOL")
+    SOL_file = path.join(Wdir_path, "ET.SOL")
     # soil_depth, wp, fc, nlayer = get_soil_IC(SOL_file, ID_SOIL)
     soil_depth, wp, fc, nlayer, SLTX = get_soil_IC(SOL_file, ID_SOIL)
     SLDP = repr(soil_depth[-1])
@@ -383,7 +525,7 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input
     fw.write("  \n")
     # print('ICDAT= {0}'.format(ICDAT))  #test here
     # print('fc[0]= {0}'.format(fc[0] ))  #test here
-    print('test after writing init')  #test here
+    # print('test after writing init')  #test here
     for nline in range(0, 10):
         temp_str = fr.readline()
         # print temp_str
@@ -399,12 +541,13 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input
     new_str = temp_str[0:3] + PDATE + '   -99' + PPOP.rjust(6) + PPOE.rjust(6) + temp_str[26:]
     fw.write(new_str)
     fw.write("  \n")
-    print('PPOE = {0}'.format(PPOE))  #test here
+    # print('PPOE = {0}'.format(PPOE))  #test here
     # write *IRRIGATION AND WATER MANAGEMENT, if irrigation on reported dates
     # skip irrigation for now   #EJ(1/6/2021) temporary
 
     # write *FERTILIZERS (INORGANIC)
     #get fertilizer info using dash_table.DataTable(https://dash.plotly.com/datatable/callbacks
+    #use editable datatable https://dash.plotly.com/datatable/editable
     for nline in range(0, 20):
         temp_str = fr.readline()
         # print temp_str
@@ -449,7 +592,7 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input
     fw.write(temp_str)
     temp_str = fr.readline()  # 1 OU
     fw.write(temp_str)
-    print('test 5')
+
     # read lines from temp file
     for line in range(0, 5):
         temp_str = fr.readline()
@@ -475,29 +618,29 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input
     fw.close()
     return
 # =============================================
-def writeV47_main_hist(Wdir_path,sname,crop):  # sname includes full path
-    sname = sname.replace("/", "\\")
-    if crop == 'WH':
-        temp_dv7 = path.join(Wdir_path, "DSSBatch_template_WH.V47")
-    elif crop == 'MZ':
-        temp_dv7 = path.join(Wdir_path, "DSSBatch_template_MZ.V47")
-    else:  ##'SG':
-        temp_dv7 = path.join(Wdir_path, "DSSBatch_template_SG.V47")
+# def writeV47_main_hist(Wdir_path,sname,crop):  # sname includes full path
+#     sname = sname.replace("/", "\\")
+#     if crop == 'WH':
+#         temp_dv7 = path.join(Wdir_path, "DSSBatch_template_WH.V47")
+#     elif crop == 'MZ':
+#         temp_dv7 = path.join(Wdir_path, "DSSBatch_template_MZ.V47")
+#     else:  ##'SG':
+#         temp_dv7 = path.join(Wdir_path, "DSSBatch_template_SG.V47")
 
-    dv7_fname = path.join(Wdir_path, "DSSBatch.V47")
-    fr = open(temp_dv7, "r")  # opens temp DV4 file to read
-    fw = open(dv7_fname, "w")
-    # read template and write lines
-    for line in range(0, 10):
-        temp_str = fr.readline()
-        fw.write(temp_str)
+#     dv7_fname = path.join(Wdir_path, "DSSBatch.V47")
+#     fr = open(temp_dv7, "r")  # opens temp DV4 file to read
+#     fw = open(dv7_fname, "w")
+#     # read template and write lines
+#     for line in range(0, 10):
+#         temp_str = fr.readline()
+#         fw.write(temp_str)
 
-    temp_str = fr.readline()
-    new_str2 = '{0:<95}{1:4s}'.format(sname, repr(1).rjust(4)) + temp_str[99:]
-    fw.write(new_str2)
+#     temp_str = fr.readline()
+#     new_str2 = '{0:<95}{1:4s}'.format(sname, repr(1).rjust(4)) + temp_str[99:]
+#     fw.write(new_str2)
 
-    fr.close()
-    fw.close()
+#     fr.close()
+#     fw.close()
 
 #===============================================================
 def get_soil_IC(SOL_file, ID_SOIL):
@@ -523,14 +666,6 @@ def get_soil_IC(SOL_file, ID_SOIL):
                 ul_layer.append(float(line[19:24]))
                 n_layer = n_layer + 1
                 if line[3:6].strip() == soil_depth.strip():
-                    # print(depth_layer)
-                    # print(line[3:6])
-                    # print(s_class)
-                    # yield depth_layer
-                    # yield ll_layer
-                    # yield ul_layer
-                    # yield n_layer
-                    # yield s_class
                     fname.close()
                     break
     return depth_layer, ll_layer, ul_layer, n_layer, s_class
