@@ -289,18 +289,11 @@ def make_sce_table(n_clicks, input1,input2,input3,input4,input5,input6,input7,in
     elif n_clicks > 1:
         # Read previously saved scenario summaries  https://dash.plotly.com/sharing-data-between-callbacks
         dff = pd.read_json(intermediate, orient='split')
-        # print('previous dataframe')
-        # print(dff)
         dff = dff.append(df, ignore_index=True)
         data = dff.to_dict('rows')
-        # print('new aggregated dataframe')
-        # print(dff)
-        # print('newly added dataframe')
-        # print(df)
-        # print(data)
 
     print(n_clicks)
-    # print(data)
+
 
     #=====================================================================
     Wdir_path = 'C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\'
@@ -372,10 +365,6 @@ def run_create_figure(n_clicks, tyear, intermediate):
         target = tyear + doy
         yr_index = np.argwhere(PDAT == int(target))
         TG_yield.append(HWAM[yr_index[0][0]])
-    # print("check simulated yields")
-    # print(yield_hist)    
-    print("check yields from target year")
-    print(TG_yield)
 
     # Make a new dataframe for plotting
     # Make a new dataframe for plotting
@@ -386,7 +375,6 @@ def run_create_figure(n_clicks, tyear, intermediate):
     df = pd.concat([df1.EXPERIMENT, df2.PDAT, df3.ADAT, df4.HWAM], axis=1)
     x_val = np.unique(df.EXPERIMENT.values)
 
-    print(df['HWAM'])
     #4) Make a boxplot
     # df = px.data.tips()
     # fig = px.box(df, x="time", y="total_bill")
@@ -402,17 +390,17 @@ def run_create_figure(n_clicks, tyear, intermediate):
 
 # =============================================
 def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input7,input8,input9,input10):
-    print('check writeSNX_main')
-    print(input1)  #MELK
-    print(input2)  #1981
-    print(input3)  #2014
-    print(input4)  #2021-06-15
-    print(input5)  #CIMT01 BH540-Kassie
-    print(input6)  #ETET001_18
-    print(input7)  #0.7
-    print(input8)  #H
-    print(input9)  #6
-    print(input10)  #scenario name
+    # print('check writeSNX_main')
+    # print(input1)  #MELK
+    # print(input2)  #1981
+    # print(input3)  #2014
+    # print(input4)  #2021-06-15
+    # print(input5)  #CIMT01 BH540-Kassie
+    # print(input6)  #ETET001_18
+    # print(input7)  #0.7
+    # print(input8)  #H
+    # print(input9)  #6
+    # print(input10)  #scenario name
     WSTA = input1
     NYERS = repr(int(input3) - int(input2) + 1)
     plt_year = input2
@@ -539,7 +527,7 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input
     fw.write("  \n")
     # print('ICDAT= {0}'.format(ICDAT))  #test here
     # print('fc[0]= {0}'.format(fc[0] ))  #test here
-    print('test after writing init')  #test here
+    # print('test after writing init')  #test here
     for nline in range(0, 10):
         temp_str = fr.readline()
         # print temp_str
@@ -555,7 +543,7 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input
     new_str = temp_str[0:3] + PDATE + '   -99' + PPOP.rjust(6) + PPOE.rjust(6) + temp_str[26:]
     fw.write(new_str)
     fw.write("  \n")
-    print('PPOE = {0}'.format(PPOE))  #test here
+    # print('PPOE = {0}'.format(PPOE))  #test here
     # write *IRRIGATION AND WATER MANAGEMENT, if irrigation on reported dates
     # skip irrigation for now   #EJ(1/6/2021) temporary
 
@@ -606,7 +594,7 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input
     fw.write(temp_str)
     temp_str = fr.readline()  # 1 OU
     fw.write(temp_str)
-    print('test 5')
+
     # read lines from temp file
     for line in range(0, 5):
         temp_str = fr.readline()
@@ -680,14 +668,6 @@ def get_soil_IC(SOL_file, ID_SOIL):
                 ul_layer.append(float(line[19:24]))
                 n_layer = n_layer + 1
                 if line[3:6].strip() == soil_depth.strip():
-                    # print(depth_layer)
-                    # print(line[3:6])
-                    # print(s_class)
-                    # yield depth_layer
-                    # yield ll_layer
-                    # yield ul_layer
-                    # yield n_layer
-                    # yield s_class
                     fname.close()
                     break
     return depth_layer, ll_layer, ul_layer, n_layer, s_class
