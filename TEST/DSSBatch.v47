@@ -1,0 +1,12 @@
+$BATCH(MAIZE)
+!
+! Directory    : C:\DSSAT47\Maize
+! Command Line : C:\DSSAT47\DSCSM047.EXE MZCER047 B DSSBatch.v47
+! Crop         : Maize           
+! Experiment   : ET870614.MZX
+! ExpNo        : 3
+! Debug        : C:\DSSAT47\DSCSM047.EXE MZCER047 " B DSSBatch.v47"
+!
+@FILEX                                                                                        TRTNO     RP     SQ     OP     CO
+C:\IRI\Python_Dash\ET_DSS_hist\TEST\ETMZmelk.SNX                                                  1      1      0      0      0
+C:\IRI\Python_Dash\ET_DSS_hist\TEST\ETMZawas.SNX                                                  1      1      0      0      0

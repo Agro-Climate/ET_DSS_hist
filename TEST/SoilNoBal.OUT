@@ -1,0 +1,2039 @@
+*SOIL ORGANIC N BALANCE
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN   1        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1981/165            1981/305
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18773.63
+!   Soil Litter N                                    0.00                4.14
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     5.23
+!   N immobilized                                    0.00
+!   N mineralized                                                      130.63
+
+!   Total N balance                              18908.40            18908.40
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN   2        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1982/165            1982/305
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18779.89
+!   Soil Litter N                                    0.00                4.06
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.85
+!   N immobilized                                    0.00
+!   N mineralized                                                      124.07
+
+!   Total N balance                              18908.02            18908.02
+!   Balance                                                            -0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN   3        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1983/165            1983/302
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18777.42
+!   Soil Litter N                                    0.00                4.06
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     5.21
+!   N immobilized                                    0.00
+!   N mineralized                                                      126.90
+
+!   Total N balance                              18908.38            18908.38
+!   Balance                                                             0.004
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN   4        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1984/165            1984/296
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18791.88
+!   Soil Litter N                                    0.00                3.98
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.75
+!   N immobilized                                    0.00
+!   N mineralized                                                      112.07
+
+!   Total N balance                              18907.92            18907.93
+!   Balance                                                             0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN   5        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1985/165            1985/311
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18776.46
+!   Soil Litter N                                    0.00                4.61
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     5.52
+!   N immobilized                                    0.00
+!   N mineralized                                                      127.63
+
+!   Total N balance                              18908.69            18908.69
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN   6        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1986/165            1986/293
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18793.28
+!   Soil Litter N                                    0.00                3.16
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     3.81
+!   N immobilized                                    0.00
+!   N mineralized                                                      110.54
+
+!   Total N balance                              18906.98            18906.98
+!   Balance                                                             0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN   7        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1987/165            1987/292
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18792.46
+!   Soil Litter N                                    0.00                1.14
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     1.59
+!   N immobilized                                    0.00
+!   N mineralized                                                      111.17
+
+!   Total N balance                              18904.77            18904.77
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN   8        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1988/165            1988/304
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18777.97
+!   Soil Litter N                                    0.00                3.11
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     3.69
+!   N immobilized                                    0.00
+!   N mineralized                                                      125.78
+
+!   Total N balance                              18906.86            18906.86
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN   9        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1989/165            1989/301
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18777.21
+!   Soil Litter N                                    0.00                3.74
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.66
+!   N immobilized                                    0.00
+!   N mineralized                                                      126.88
+
+!   Total N balance                              18907.83            18907.83
+!   Balance                                                            -0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  10        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1990/165            1990/300
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18775.70
+!   Soil Litter N                                    0.00                4.09
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     5.17
+!   N immobilized                                    0.00
+!   N mineralized                                                      128.56
+
+!   Total N balance                              18908.34            18908.35
+!   Balance                                                             0.004
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  11        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1991/165            1991/292
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18786.83
+!   Soil Litter N                                    0.00                3.41
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.26
+!   N immobilized                                    0.00
+!   N mineralized                                                      117.19
+
+!   Total N balance                              18907.43            18907.43
+!   Balance                                                            -0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  12        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1992/165            1992/305
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18774.73
+!   Soil Litter N                                    0.00                3.77
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.92
+!   N immobilized                                    0.00
+!   N mineralized                                                      129.59
+
+!   Total N balance                              18908.09            18908.09
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  13        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1993/165            1993/301
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18774.65
+!   Soil Litter N                                    0.00                3.86
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.98
+!   N immobilized                                    0.00
+!   N mineralized                                                      129.65
+
+!   Total N balance                              18908.15            18908.16
+!   Balance                                                             0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  14        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1994/165            1994/299
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18784.35
+!   Soil Litter N                                    0.00                3.49
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.22
+!   N immobilized                                    0.00
+!   N mineralized                                                      119.55
+
+!   Total N balance                              18907.39            18907.39
+!   Balance                                                             0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  15        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1995/165            1995/295
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18780.44
+!   Soil Litter N                                    0.00                3.48
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.40
+!   N immobilized                                    0.00
+!   N mineralized                                                      123.65
+
+!   Total N balance                              18907.57            18907.58
+!   Balance                                                             0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  16        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1996/165            1996/302
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18781.80
+!   Soil Litter N                                    0.00                3.65
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.27
+!   N immobilized                                    0.00
+!   N mineralized                                                      121.99
+
+!   Total N balance                              18907.45            18907.45
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  17        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1997/165            1997/290
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18787.63
+!   Soil Litter N                                    0.00                2.70
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     3.17
+!   N immobilized                                    0.00
+!   N mineralized                                                      116.01
+
+!   Total N balance                              18906.34            18906.34
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  18        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1998/165            1998/300
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18770.75
+!   Soil Litter N                                    0.00                3.12
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.48
+!   N immobilized                                    0.00
+!   N mineralized                                                      133.78
+
+!   Total N balance                              18907.65            18907.65
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  19        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1999/165            1999/308
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18781.02
+!   Soil Litter N                                    0.00                3.67
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.05
+!   N immobilized                                    0.00
+!   N mineralized                                                      122.53
+
+!   Total N balance                              18907.22            18907.23
+!   Balance                                                             0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  20        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2000/165            2000/306
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18772.98
+!   Soil Litter N                                    0.00                3.67
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.71
+!   N immobilized                                    0.00
+!   N mineralized                                                      131.22
+
+!   Total N balance                              18907.88            18907.88
+!   Balance                                                            -0.004
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  21        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2001/165            2001/300
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18780.35
+!   Soil Litter N                                    0.00                3.69
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.51
+!   N immobilized                                    0.00
+!   N mineralized                                                      123.64
+
+!   Total N balance                              18907.68            18907.68
+!   Balance                                                            -0.004
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  22        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2002/165            2002/291
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18787.61
+!   Soil Litter N                                    0.00                1.97
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     2.40
+!   N immobilized                                    0.00
+!   N mineralized                                                      115.99
+
+!   Total N balance                              18905.57            18905.57
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  23        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2003/165            2003/297
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18779.82
+!   Soil Litter N                                    0.00                3.40
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.43
+!   N immobilized                                    0.00
+!   N mineralized                                                      124.38
+
+!   Total N balance                              18907.60            18907.60
+!   Balance                                                             0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  24        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2004/165            2004/303
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18778.98
+!   Soil Litter N                                    0.00                3.63
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.33
+!   N immobilized                                    0.00
+!   N mineralized                                                      124.88
+
+!   Total N balance                              18907.50            18907.50
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  25        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2005/165            2005/296
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18784.15
+!   Soil Litter N                                    0.00                3.70
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.41
+!   N immobilized                                    0.00
+!   N mineralized                                                      119.73
+
+!   Total N balance                              18907.58            18907.59
+!   Balance                                                             0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  26        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2006/165            2006/296
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18780.47
+!   Soil Litter N                                    0.00                3.69
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.92
+!   N immobilized                                    0.00
+!   N mineralized                                                      123.94
+
+!   Total N balance                              18908.10            18908.10
+!   Balance                                                             0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  27        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2007/165            2007/302
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18778.99
+!   Soil Litter N                                    0.00                3.58
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.49
+!   N immobilized                                    0.00
+!   N mineralized                                                      125.09
+
+!   Total N balance                              18907.66            18907.66
+!   Balance                                                             0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  28        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2008/165            2008/299
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18776.81
+!   Soil Litter N                                    0.00                3.47
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.31
+!   N immobilized                                    0.00
+!   N mineralized                                                      127.20
+
+!   Total N balance                              18907.48            18907.48
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  29        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2009/165            2009/296
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18779.99
+!   Soil Litter N                                    0.00                3.33
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.09
+!   N immobilized                                    0.00
+!   N mineralized                                                      123.94
+
+!   Total N balance                              18907.26            18907.26
+!   Balance                                                            -0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  30        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2010/165            2010/285
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18782.40
+!   Soil Litter N                                    0.00                2.84
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.15
+!   N immobilized                                    0.00
+!   N mineralized                                                      122.08
+
+!   Total N balance                              18907.33            18907.33
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  31        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2011/165            2011/319
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18774.92
+!   Soil Litter N                                    0.00                4.45
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     5.34
+!   N immobilized                                    0.00
+!   N mineralized                                                      129.14
+
+!   Total N balance                              18908.51            18908.51
+!   Balance                                                             0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  32        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2012/165            2012/312
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18778.36
+!   Soil Litter N                                    0.00                4.45
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     5.54
+!   N immobilized                                    0.00
+!   N mineralized                                                      125.90
+
+!   Total N balance                              18908.71            18908.71
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  33        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2013/165            2013/305
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18784.28
+!   Soil Litter N                                    0.00                4.05
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     5.13
+!   N immobilized                                    0.00
+!   N mineralized                                                      119.98
+
+!   Total N balance                              18908.31            18908.31
+!   Balance                                                             0.004
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:37
+
+*RUN  34        : ERiMA DCC1                MZCER047 ETMZmelk    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZmelk SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2014/165            2014/317
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18775.37
+!   Soil Litter N                                    0.00                4.67
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     5.72
+!   N immobilized                                    0.00
+!   N mineralized                                                      128.86
+
+!   Total N balance                              18908.89            18908.89
+!   Balance                                                             0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  35        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1981/165            1981/316
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18774.23
+!   Soil Litter N                                    0.00                4.89
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     5.99
+!   N immobilized                                    0.00
+!   N mineralized                                                      130.04
+
+!   Total N balance                              18909.16            18909.16
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  36        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1982/165            1982/317
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18771.97
+!   Soil Litter N                                    0.00                5.08
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     6.56
+!   N immobilized                                    0.00
+!   N mineralized                                                      132.68
+
+!   Total N balance                              18909.73            18909.73
+!   Balance                                                             0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  37        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1983/165            1983/316
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18767.44
+!   Soil Litter N                                    0.00                4.65
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     7.14
+!   N immobilized                                    0.00
+!   N mineralized                                                      138.21
+
+!   Total N balance                              18910.31            18910.31
+!   Balance                                                            -0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  38        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1984/165            1984/300
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18786.92
+!   Soil Litter N                                    0.00                4.02
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     5.05
+!   N immobilized                                    0.00
+!   N mineralized                                                      117.28
+
+!   Total N balance                              18908.22            18908.23
+!   Balance                                                             0.004
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  39        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1985/165            1985/310
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18787.64
+!   Soil Litter N                                    0.00                4.02
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.67
+!   N immobilized                                    0.00
+!   N mineralized                                                      116.19
+
+!   Total N balance                              18907.84            18907.85
+!   Balance                                                             0.004
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  40        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1986/165            1986/313
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18785.95
+!   Soil Litter N                                    0.00                5.04
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     5.90
+!   N immobilized                                    0.00
+!   N mineralized                                                      118.08
+
+!   Total N balance                              18909.07            18909.07
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  41        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1987/165            1987/314
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18779.76
+!   Soil Litter N                                    0.00                5.68
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     6.81
+!   N immobilized                                    0.00
+!   N mineralized                                                      124.55
+
+!   Total N balance                              18909.99            18909.99
+!   Balance                                                             0.004
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  42        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1988/165            1988/320
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18766.50
+!   Soil Litter N                                    0.00                4.11
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     5.61
+!   N immobilized                                    0.00
+!   N mineralized                                                      138.18
+
+!   Total N balance                              18908.78            18908.78
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  43        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1989/165            1989/319
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18774.44
+!   Soil Litter N                                    0.00                4.73
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     6.10
+!   N immobilized                                    0.00
+!   N mineralized                                                      130.10
+
+!   Total N balance                              18909.27            18909.27
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  44        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1990/165            1990/305
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18785.87
+!   Soil Litter N                                    0.00                3.89
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.76
+!   N immobilized                                    0.00
+!   N mineralized                                                      118.17
+
+!   Total N balance                              18907.93            18907.93
+!   Balance                                                            -0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  45        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1991/165            1991/312
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18778.42
+!   Soil Litter N                                    0.00                4.53
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     5.46
+!   N immobilized                                    0.00
+!   N mineralized                                                      125.68
+
+!   Total N balance                              18908.63            18908.63
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  46        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1992/165            1992/316
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18769.15
+!   Soil Litter N                                    0.00                4.36
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     5.99
+!   N immobilized                                    0.00
+!   N mineralized                                                      135.65
+
+!   Total N balance                              18909.16            18909.16
+!   Balance                                                            -0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  47        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1993/165            1993/319
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18763.01
+!   Soil Litter N                                    0.00                4.96
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     7.15
+!   N immobilized                                    0.00
+!   N mineralized                                                      142.35
+
+!   Total N balance                              18910.32            18910.32
+!   Balance                                                            -0.004
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  48        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1994/165            1994/314
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18777.02
+!   Soil Litter N                                    0.00                3.80
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.49
+!   N immobilized                                    0.00
+!   N mineralized                                                      126.84
+
+!   Total N balance                              18907.66            18907.66
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  49        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1995/165            1995/306
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18779.77
+!   Soil Litter N                                    0.00                3.84
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.69
+!   N immobilized                                    0.00
+!   N mineralized                                                      124.25
+
+!   Total N balance                              18907.86            18907.86
+!   Balance                                                            -0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  50        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1996/165            1996/314
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18769.60
+!   Soil Litter N                                    0.00                3.76
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.91
+!   N immobilized                                    0.00
+!   N mineralized                                                      134.73
+
+!   Total N balance                              18908.08            18908.08
+!   Balance                                                             0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  51        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1997/165            1997/307
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18772.18
+!   Soil Litter N                                    0.00                4.29
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     6.09
+!   N immobilized                                    0.00
+!   N mineralized                                                      132.79
+
+!   Total N balance                              18909.26            18909.26
+!   Balance                                                            -0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  52        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1998/165            1998/311
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18768.88
+!   Soil Litter N                                    0.00                3.18
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.37
+!   N immobilized                                    0.00
+!   N mineralized                                                      135.50
+
+!   Total N balance                              18907.54            18907.55
+!   Balance                                                             0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  53        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                1999/165            1999/314
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18773.26
+!   Soil Litter N                                    0.00                4.33
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     5.36
+!   N immobilized                                    0.00
+!   N mineralized                                                      130.94
+
+!   Total N balance                              18908.53            18908.53
+!   Balance                                                            -0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  54        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2000/165            2000/315
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18766.83
+!   Soil Litter N                                    0.00                3.90
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     6.23
+!   N immobilized                                    0.00
+!   N mineralized                                                      138.67
+
+!   Total N balance                              18909.40            18909.40
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  55        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2001/165            2001/306
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18777.15
+!   Soil Litter N                                    0.00                3.81
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.98
+!   N immobilized                                    0.00
+!   N mineralized                                                      127.19
+
+!   Total N balance                              18908.15            18908.15
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  56        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2002/165            2002/304
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18781.75
+!   Soil Litter N                                    0.00                3.98
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.78
+!   N immobilized                                    0.00
+!   N mineralized                                                      122.22
+
+!   Total N balance                              18907.95            18907.95
+!   Balance                                                            -0.004
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  57        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2003/165            2003/306
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18773.62
+!   Soil Litter N                                    0.00                3.43
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.51
+!   N immobilized                                    0.00
+!   N mineralized                                                      130.63
+
+!   Total N balance                              18907.68            18907.68
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  58        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2004/165            2004/308
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18771.54
+!   Soil Litter N                                    0.00                4.12
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     5.82
+!   N immobilized                                    0.00
+!   N mineralized                                                      133.33
+
+!   Total N balance                              18908.99            18909.00
+!   Balance                                                             0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  59        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2005/165            2005/304
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18780.42
+!   Soil Litter N                                    0.00                3.56
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.57
+!   N immobilized                                    0.00
+!   N mineralized                                                      123.77
+
+!   Total N balance                              18907.74            18907.74
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  60        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2006/165            2006/304
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18773.74
+!   Soil Litter N                                    0.00                3.17
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.77
+!   N immobilized                                    0.00
+!   N mineralized                                                      131.03
+
+!   Total N balance                              18907.94            18907.94
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  61        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2007/165            2007/313
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18769.82
+!   Soil Litter N                                    0.00                4.18
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     5.73
+!   N immobilized                                    0.00
+!   N mineralized                                                      134.91
+
+!   Total N balance                              18908.91            18908.91
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  62        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2008/165            2008/309
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18774.63
+!   Soil Litter N                                    0.00                4.35
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     5.71
+!   N immobilized                                    0.00
+!   N mineralized                                                      129.89
+
+!   Total N balance                              18908.88            18908.88
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  63        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2009/165            2009/300
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18787.38
+!   Soil Litter N                                    0.00                4.03
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.88
+!   N immobilized                                    0.00
+!   N mineralized                                                      116.64
+
+!   Total N balance                              18908.05            18908.05
+!   Balance                                                            -0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  64        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2010/165            2010/306
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18774.16
+!   Soil Litter N                                    0.00                4.51
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     6.35
+!   N immobilized                                    0.00
+!   N mineralized                                                      130.84
+
+!   Total N balance                              18909.52            18909.52
+!   Balance                                                            -0.004
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  65        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2011/165            2011/305
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18773.89
+!   Soil Litter N                                    0.00                4.14
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     5.57
+!   N immobilized                                    0.00
+!   N mineralized                                                      130.71
+
+!   Total N balance                              18908.74            18908.74
+!   Balance                                                            -0.002
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  66        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2012/165            2012/303
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18776.14
+!   Soil Litter N                                    0.00                3.85
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     5.27
+!   N immobilized                                    0.00
+!   N mineralized                                                      128.45
+
+!   Total N balance                              18908.44            18908.44
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  67        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2013/165            2013/304
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18776.51
+!   Soil Litter N                                    0.00                3.53
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.76
+!   N immobilized                                    0.00
+!   N mineralized                                                      127.89
+
+!   Total N balance                              18907.94            18907.94
+!   Balance                                                             0.000
+
+!===============================================================================
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  JAN 07, 2021 20:14:52
+
+*RUN  68        : ERiMA DCC1                MZCER047 ETMZawas    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZawas SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ERiMA DCC1                MZCER047
+  
+
+
+!                                        INITIAL Year/Doy      FINAL Year/Doy
+!                                                2014/165            2014/297
+!SOIL N BALANCE                                 -----------kg N/ha-----------
+
+!   Soil Humus N                                 18903.17            18777.18
+!   Soil Litter N                                    0.00                2.55
+!   N in Surface Residue                             0.00                0.00
+
+!   Added to / Removed from Soil:
+!   N in Harvest Residues from Previous Crop         0.00
+!   N from Organic Applications                      0.00
+!   N from senesced plant matter                     4.16
+!   N immobilized                                    0.00
+!   N mineralized                                                      127.61
+
+!   Total N balance                              18907.34            18907.34
+!   Balance                                                             0.000
