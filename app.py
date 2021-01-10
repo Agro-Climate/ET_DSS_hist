@@ -235,8 +235,11 @@ app.layout = html.Div(
 
         # html.Div(id="number-output"),
         html.Br(),
+        # html.Div([
+        #     html.Button(id='simulate-button-state', n_clicks=0, children='Simulate all scenarios (Run DSSAT)',style={'background-color': '#008CBA'}), #blue
+        # ],),
         html.Div([
-            html.Button(id='simulate-button-state', n_clicks=0, children='Simulate all scenarios (Run DSSAT)',style={'background-color': '#008CBA'}), #blue
+            html.Button(id='simulate-button-state', children='Simulate all scenarios (Run DSSAT)',style={'background-color': '#008CBA'}), #blue
         ],),
         html.Br(),
         # dbc.Progress("25%", value=25),
@@ -259,8 +262,7 @@ app.layout = html.Div(
                 State('plt-density', 'value'),    #input 9
                 State('sce-name', 'value'),       #input 10
                 State('intermediate-value', 'children')  #scenario summary table
-                # State('table-summary', 'columns'),  #scenario summary table
-              )
+            )
 def make_sce_table(n_clicks, input1,input2,input3,input4,input5,input6,input7,input8,input9,input10,intermediate):
     print(input1)  #MELK
     print(input2)  #1981
@@ -273,7 +275,21 @@ def make_sce_table(n_clicks, input1,input2,input3,input4,input5,input6,input7,in
     print(input9)  #6
     print(input10)  #scenario name
 
+    #Make a new dataframe
+    df = pd.DataFrame(
+        [[n_clicks, input10, input5[7:], input1, input4[5:],input2, input3, input6]],
+        columns=["count", "sce_name", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil"],)
+    # data = df.to_dict('rows')
+    data = [{'count': None, 'sce_name': None, 'Cultivar': None, 'stn_name': None, 'Plt-date': None, 'FirstYear': None, 'LastYear': None, 'soil': None}] 
+    columns =  [{"name": i, "id": i,} for i in (df.columns)]
+    dff = df.copy()
+
     if n_clicks:  
+        #=====================================================================
+        Wdir_path = 'C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\'
+        #1) Write SNX file
+        writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input7,input8,input9,input10)
+        #=====================================================================
         #Make a new dataframe
         df = pd.DataFrame(
             [[n_clicks, input10, input5[7:], input1, input4[5:],input2, input3, input6]],
@@ -290,14 +306,6 @@ def make_sce_table(n_clicks, input1,input2,input3,input4,input5,input6,input7,in
         dff = dff.append(df, ignore_index=True)
         data = dff.to_dict('rows')
 
-    print(n_clicks)
-
-
-    #=====================================================================
-    Wdir_path = 'C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\'
-    #1) Write SNX file
-    writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input7,input8,input9,input10)
-
     return dash_table.DataTable(data=data, columns=columns), dff.to_json(date_format='iso', orient='split')
 
 #===============================
@@ -308,83 +316,87 @@ def make_sce_table(n_clicks, input1,input2,input3,input4,input5,input6,input7,in
                 State('intermediate-value', 'children')  #scenario summary table
               )
 def run_create_figure(n_clicks, tyear, intermediate):
-    # 1) Read saved scenario summaries and get a list of scenarios to run
-    dff = pd.read_json(intermediate, orient='split')
-    sce_numbers = len(dff.sce_name.values)
+    if n_clicks is None:
+        raise PreventUpdate
+    else: 
+        # 1) Read saved scenario summaries and get a list of scenarios to run
+        dff = pd.read_json(intermediate, orient='split')
+        sce_numbers = len(dff.sce_name.values)
 
-    # 2) Write V47 file
-    Wdir_path = 'C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\'
-    temp_dv7 = path.join(Wdir_path, "DSSBatch_template_MZ.V47")
-    dv7_fname = path.join(Wdir_path, "DSSBatch.V47")
-    fr = open(temp_dv7, "r")  # opens temp DV4 file to read
-    fw = open(dv7_fname, "w")
-    # read template and write lines
-    for line in range(0, 10):
+        # 2) Write V47 file
+        Wdir_path = 'C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\'
+        temp_dv7 = path.join(Wdir_path, "DSSBatch_template_MZ.V47")
+        dv7_fname = path.join(Wdir_path, "DSSBatch.V47")
+        fr = open(temp_dv7, "r")  # opens temp DV4 file to read
+        fw = open(dv7_fname, "w")
+        # read template and write lines
+        for line in range(0, 10):
+            temp_str = fr.readline()
+            fw.write(temp_str)
+
         temp_str = fr.readline()
-        fw.write(temp_str)
+        for i in range(sce_numbers):
+            sname = dff.sce_name.values[i]
+            SNX_fname = path.join(Wdir_path, "ETMZ"+sname+".SNX")
+            SNX_fname = SNX_fname.replace("/", "\\")
+            new_str2 = '{0:<95}{1:4s}'.format(SNX_fname, repr(1).rjust(4)) + temp_str[99:]
+            fw.write(new_str2)
 
-    temp_str = fr.readline()
-    for i in range(sce_numbers):
-        sname = dff.sce_name.values[i]
-        SNX_fname = path.join(Wdir_path, "ETMZ"+sname+".SNX")
-        SNX_fname = SNX_fname.replace("/", "\\")
-        new_str2 = '{0:<95}{1:4s}'.format(SNX_fname, repr(1).rjust(4)) + temp_str[99:]
-        fw.write(new_str2)
+        fr.close()
+        fw.close()
+        #=====================================================================
+        #3) Run DSSAT executable
+        os.chdir(Wdir_path)  #change directory  #check if needed o rnot
+        args = "DSCSM047.EXE MZCER047 B DSSBatch.v47"
+        subprocess.call(args) ##Run executable with argument  , stdout=FNULL, stderr=FNULL, shell=False)
 
-    fr.close()
-    fw.close()
-    #=====================================================================
-    #3) Run DSSAT executable
-    os.chdir(Wdir_path)  #change directory  #check if needed o rnot
-    args = "DSCSM047.EXE MZCER047 B DSSBatch.v47"
-    subprocess.call(args) ##Run executable with argument  , stdout=FNULL, stderr=FNULL, shell=False)
+        #4) read DSSAT output => Read Summary.out from all scenario output
+        fout_name = path.join(Wdir_path, "SUMMARY.OUT")
+        df_OUT=pd.read_csv(fout_name,delim_whitespace=True ,skiprows=3)
+        HWAM = df_OUT.iloc[:,21].values  #read 21th column only
+        EXPERIMENT = df_OUT.iloc[:,7].values  #read 4th column only
+        PDAT = df_OUT.iloc[:,14].values  #read 14th column only
+        ADAT = df_OUT.iloc[:,16].values  #read 14th column only
+        MDAT = df_OUT.iloc[:,17].values  #read 14th column only    
+        TG_yield = []
+        for i in range(sce_numbers):
+            # year1 = dff.FirstYear[i]
+            # year2 = dff.LastYear[i]
+            # nyear = int(year2) - int(year1) +1
+            # exp_id = dff.sce_name.values[i]
+            # exp_index = np.argwhere(EXPERIMENT == exp_id)
+            # yield_hist[:nyear,i] = HWAM[exp_index[0][0]]
 
-    #4) read DSSAT output => Read Summary.out from all scenario output
-    fout_name = path.join(Wdir_path, "SUMMARY.OUT")
-    df_OUT=pd.read_csv(fout_name,delim_whitespace=True ,skiprows=3)
-    HWAM = df_OUT.iloc[:,21].values  #read 21th column only
-    EXPERIMENT = df_OUT.iloc[:,7].values  #read 4th column only
-    PDAT = df_OUT.iloc[:,14].values  #read 14th column only
-    ADAT = df_OUT.iloc[:,16].values  #read 14th column only
-    MDAT = df_OUT.iloc[:,17].values  #read 14th column only    
-    TG_yield = []
-    for i in range(sce_numbers):
-        # year1 = dff.FirstYear[i]
-        # year2 = dff.LastYear[i]
-        # nyear = int(year2) - int(year1) +1
-        # exp_id = dff.sce_name.values[i]
-        # exp_index = np.argwhere(EXPERIMENT == exp_id)
-        # yield_hist[:nyear,i] = HWAM[exp_index[0][0]]
+            #Extract yield from a distinctive year to compare  => EJ(11/30/2020)
+            # PDAT = df_OUT.iloc[:,14].values  #read 14th column only
+            doy = repr(PDAT[0])[4:]
+            # target = repr(tyear) + doy
+            target = tyear + doy
+            yr_index = np.argwhere(PDAT == int(target))
+            TG_yield.append(HWAM[yr_index[0][0]])
 
-        #Extract yield from a distinctive year to compare  => EJ(11/30/2020)
-        # PDAT = df_OUT.iloc[:,14].values  #read 14th column only
-        doy = repr(PDAT[0])[4:]
-        # target = repr(tyear) + doy
-        target = tyear + doy
-        yr_index = np.argwhere(PDAT == int(target))
-        TG_yield.append(HWAM[yr_index[0][0]])
+        # Make a new dataframe for plotting
+        # Make a new dataframe for plotting
+        df1 = pd.DataFrame({'EXPERIMENT':EXPERIMENT})
+        df2 = pd.DataFrame({'PDAT':PDAT})
+        df3 = pd.DataFrame({'ADAT':ADAT})
+        df4 = pd.DataFrame({'HWAM':HWAM})
+        df = pd.concat([df1.EXPERIMENT, df2.PDAT, df3.ADAT, df4.HWAM], axis=1)
+        x_val = np.unique(df.EXPERIMENT.values)
 
-    # Make a new dataframe for plotting
-    # Make a new dataframe for plotting
-    df1 = pd.DataFrame({'EXPERIMENT':EXPERIMENT})
-    df2 = pd.DataFrame({'PDAT':PDAT})
-    df3 = pd.DataFrame({'ADAT':ADAT})
-    df4 = pd.DataFrame({'HWAM':HWAM})
-    df = pd.concat([df1.EXPERIMENT, df2.PDAT, df3.ADAT, df4.HWAM], axis=1)
-    x_val = np.unique(df.EXPERIMENT.values)
-
-    #4) Make a boxplot
-    # df = px.data.tips()
-    # fig = px.box(df, x="time", y="total_bill")
-    # fig.show()s
-    # fig.update_layout(transition_duration=500)
-    # df = px.data.tips()
-    # fig = px.box(df, x="Scenario Name", y="Yield [kg/ha]")
-    fig = px.box(df, x="EXPERIMENT", y="HWAM")
-    fig.add_scatter(x=x_val,y=TG_yield, mode='lines')
-    fig.update_xaxes(title= 'Scenario Name')
-    fig.update_yaxes(title= 'Yield [kg/ha]')
-    return fig
+        #4) Make a boxplot
+        # df = px.data.tips()
+        # fig = px.box(df, x="time", y="total_bill")
+        # fig.show()s
+        # fig.update_layout(transition_duration=500)
+        # df = px.data.tips()
+        # fig = px.box(df, x="Scenario Name", y="Yield [kg/ha]")
+        fig = px.box(df, x="EXPERIMENT", y="HWAM")
+        fig.add_scatter(x=x_val,y=TG_yield, mode='lines')
+        fig.update_xaxes(title= 'Scenario Name')
+        fig.update_yaxes(title= 'Yield [kg/ha]')
+        return fig
+    return
 
 # =============================================
 def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input7,input8,input9,input10):
@@ -673,4 +685,3 @@ def get_soil_IC(SOL_file, ID_SOIL):
 
 if __name__ == "__main__":
     app.run_server(debug=True)
-

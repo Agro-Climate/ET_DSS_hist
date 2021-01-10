@@ -8,5 +8,4 @@ $BATCH(MAIZE)
 ! Debug        : C:\DSSAT47\DSCSM047.EXE MZCER047 " B DSSBatch.v47"
 !
 @FILEX                                                                                        TRTNO     RP     SQ     OP     CO
-C:\IRI\Python_Dash\ET_DSS_hist\TEST\ETMZmelk.SNX                                                  1      1      0      0      0
-C:\IRI\Python_Dash\ET_DSS_hist\TEST\ETMZbako.SNX                                                  1      1      0      0      0
+C:\IRI\Python_Dash\ET_DSS_hist\TEST\ETMZabcd.SNX                                                  1      1      0      0      0
