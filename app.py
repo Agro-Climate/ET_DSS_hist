@@ -26,8 +26,6 @@ app = dash.Dash(
 server = app.server
 
 DATA_PATH = pathlib.Path(__file__).parent.joinpath("data").resolve()
-params = ['Scenario-name', 'Cultivar', 'Station', 'Plt-date']  #for a table
-
 
 app.layout = html.Div(
     [
@@ -264,16 +262,16 @@ app.layout = html.Div(
                 State('intermediate-value', 'children')  #scenario summary table
             )
 def make_sce_table(n_clicks, input1,input2,input3,input4,input5,input6,input7,input8,input9,input10,intermediate):
-    print(input1)  #MELK
-    print(input2)  #1981
-    print(input3)  #2014
-    print(input4)  #2021-06-15
-    print(input5)  #CIMT01 BH540-Kassie
-    print(input6)  #ETET001_18
-    print(input7)  #0.7
-    print(input8)  #H
-    print(input9)  #6
-    print(input10)  #scenario name
+    # print(input1)  #MELK
+    # print(input2)  #1981
+    # print(input3)  #2014
+    # print(input4)  #2021-06-15
+    # print(input5)  #CIMT01 BH540-Kassie
+    # print(input6)  #ETET001_18
+    # print(input7)  #0.7
+    # print(input8)  #H
+    # print(input9)  #6
+    # print(input10)  #scenario name
 
     #Make a new dataframe
     df = pd.DataFrame(
