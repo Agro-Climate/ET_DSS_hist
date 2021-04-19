@@ -42,8 +42,8 @@
 
 *FERTILIZERS (INORGANIC)                                                                                                                                                                                
 @F FDATE  FMCD  FACD  FDEP  FAMN  FAMP  FAMK  FAMC  FAMO  FOCD FERNAME                                                                                                                                  
- 1     0 FE005 AP002     5    30   -99   -99   -99   -99   -99   -99
- 1    45 FE005 AP002     5    30   -99   -99   -99   -99   -99   -99
+ 1     0 FE005 AP001     5    30   -99   -99   -99   -99   -99   -99
+ 1    45 FE005 AP001     5    30   -99   -99   -99   -99   -99   -99
  
 *SIMULATION CONTROLS                                                                                                                                                                                    
 @N GENERAL     NYERS NREPS START SDATE RSEED SNAME.................... SMODEL                                                                                                                           
