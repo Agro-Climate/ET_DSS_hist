@@ -105,7 +105,7 @@ app.layout = html.Div(
         html.Br(),
         html.Div([
             dbc.Row([
-                html.Span("3) Select Planting Date", className="uppercase bold", style={'textAlign': 'Center'}),
+                html.Span("4) Select Planting Date", className="uppercase bold", style={'textAlign': 'Center'}),
                 ],align="start",
                 ),
             dbc.Row([
@@ -128,7 +128,7 @@ app.layout = html.Div(
         html.Br(),
         html.Div([
             dbc.Row([
-                html.Span("4) Select Cultivar to simulate", className="uppercase bold"), #, style={'textAlign': 'Center'}),
+                html.Span("5) Select Cultivar to simulate", className="uppercase bold"), #, style={'textAlign': 'Center'}),
                 ]),
             dbc.Row([
                 dcc.Dropdown(id='ETMZcultivar', options=[{'label': 'CIMT01 BH540-Kassie', 'value': 'CIMT01 BH540-Kassie'},
@@ -144,7 +144,7 @@ app.layout = html.Div(
         html.Br(),
         html.Div([
             dbc.Row([
-                html.Span("5) Select Soil type to simulate", className="uppercase bold"),
+                html.Span("6) Select Soil type to simulate", className="uppercase bold"),
                 ],align="start",
                 ),
             dbc.Row([
@@ -171,7 +171,7 @@ app.layout = html.Div(
         html.Br(),
         html.Div([
             dbc.Row([
-                html.Span("6) Select initial soil water condition", className="uppercase bold"),
+                html.Span("7) Select initial soil water condition", className="uppercase bold"),
                 ],align="start",
                 ),
             dbc.Row([
@@ -186,7 +186,7 @@ app.layout = html.Div(
         html.Br(),
         html.Div([
             dbc.Row([
-                html.Span("7) Select initial NO3 condition", className="uppercase bold"),
+                html.Span("8) Select initial NO3 condition", className="uppercase bold"),
                 ],align="start",
                 ),
             dbc.Row([
@@ -199,7 +199,7 @@ app.layout = html.Div(
         html.Br(),
         html.Div([
             dbc.Row([
-                html.Span("8) Enter Planting Density", className="uppercase bold"),
+                html.Span("9) Enter Planting Density", className="uppercase bold"),
                 ],align="start",
                 ),
             dbc.Row([
@@ -214,7 +214,7 @@ app.layout = html.Div(
         html.Br(),
         html.Div([
             dbc.Row([
-                html.Span("9) Fertilizer Application", className="uppercase bold"),
+                html.Span("10) Fertilizer Application", className="uppercase bold"),
                 ],align="start",
                 ),
             dbc.Row([
@@ -254,7 +254,7 @@ app.layout = html.Div(
 
         html.Div([
             dbc.Row([
-                html.Span("9) Enter Scenario name ", className="uppercase bold"),
+                html.Span("11) Enter Scenario name ", className="uppercase bold"),
                 ],align="start",
                 ),
             dbc.Row([
@@ -266,7 +266,7 @@ app.layout = html.Div(
         html.Br(),
         html.Div([
             dbc.Row([
-                html.Span("10) Target year to compare with ", className="uppercase bold"),
+                html.Span("12) Target year to compare with ", className="uppercase bold"),
                 ],align="start",
                 ),
             dbc.Row([
@@ -303,7 +303,7 @@ app.layout = html.Div(
        # dbc.Spinner(children=[dcc.Graph(id = 'yield_boxplot')],size='lg',color='primary',type='border'),
         #dcc.Graph(id='yield_boxplot'),
         #EJ(4/17/2021)example:https://github.com/Coding-with-Adam/Dash-by-Plotly/blob/master/DataTable/datatable_intro_and_sort.py
-        dbc.Spinner(children=[html.Div(id='yieldbox-container')], size="lg", color="primary", type="border", fullscreen=False,),
+        dbc.Spinner(children=[html.Div(id='yieldbox-container')], size="lg", color="primary", type="border", fullscreen=True,),
         # html.Div(id='yieldbox-container'),  #boxplot
         html.Div(id='yieldcdf-container'),  #exceedance curve
         html.Div(id='yieldtimeseries-container'),  #time-series
