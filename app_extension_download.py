@@ -22,8 +22,7 @@ import datetime    #to convert date to doy or vice versa
 
 app = dash.Dash(
     __name__,
-  #  meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}],
-    prevent_initial_callbacks=True,  #to prevent "Callback failed: the server did not respond." message thttps://community.plotly.com/t/callback-error-when-the-app-is-started/46345/2
+    meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}],
 )
 
 server = app.server
@@ -311,7 +310,7 @@ app.layout = html.Div(
         html.Div(id='yieldtimeseries-container'),  #time-series
         html.Br(),
         html.Button("Download CSV", id="btn_csv"),
-        # dcc.Download(id="download-dataframe-csv"),
+        ##dcc.Download(id="download-dataframe-csv"),
         Download(id="download-dataframe-csv"),
         html.Div(id='yieldtables-container'),  #yield simulated output
         html.Br()
@@ -544,8 +543,8 @@ def run_create_figure(n_clicks, tyear, intermediate):
         df = pd.concat([df1.EXPERIMENT,df5.YEAR, df2.PDAT, df3.ADAT, df4.HWAM], axis=1)
         x_val = np.unique(df.EXPERIMENT.values)
 
-        # print(df)
-        # print('x_val={}'.format(x_val))
+        print(df)
+        print('x_val={}'.format(x_val))
         #4) Make a boxplot
         # df = px.data.tips()
         # fig = px.box(df, x="time", y="total_bill")
@@ -929,5 +928,4 @@ def get_soil_IC(SOL_file, ID_SOIL):
 
 
 if __name__ == "__main__":
-    # app.run_server(debug=True)
-    app.run_server(debug=False)  #https://github.com/plotly/dash/issues/108
+    app.run_server(debug=True)

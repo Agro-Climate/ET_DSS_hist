@@ -7,10 +7,8 @@ import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 import dash_table
 import plotly.express as px
-import plotly.graph_objects as go
 
 from dash.dependencies import Input, Output, State
-from dash_extensions import Download
 from dash.exceptions import PreventUpdate
 from helpers import make_dash_table, create_plot
 
@@ -22,23 +20,19 @@ import datetime    #to convert date to doy or vice versa
 
 app = dash.Dash(
     __name__,
-  #  meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}],
-    prevent_initial_callbacks=True,  #to prevent "Callback failed: the server did not respond." message thttps://community.plotly.com/t/callback-error-when-the-app-is-started/46345/2
+    meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}],
 )
 
 server = app.server
 
 DATA_PATH = pathlib.Path(__file__).parent.joinpath("data").resolve()
 
-#https://community.plotly.com/t/loading-when-opening-localhost/7284
-#I suspect that this is related to the JS assets from the CDN not loading properly - perhaps because they are blocked by your firewall or some other reason.
-#You can load the assets locally by setting:
-app.scripts.config.serve_locally = True
-app.css.config.serve_locally = True
+DSSAT_FILES_DIR_SHORT = "/dssat_files_dir/"
+
+DSSAT_FILES_DIR = os.getcwd() + DSSAT_FILES_DIR_SHORT
 
 app.layout = html.Div(
     [
-        dcc.Store(id='memory-yield-table'),  #to save fertilizer application table
         html.Div(
             dbc.Row([html.Img(src=app.get_asset_url("ethioagroclimate.png"))], className="app__banner")
             # [html.Img(src=app.get_asset_url("ethioagroclimate.png"))], className="app__banner"
@@ -74,26 +68,17 @@ app.layout = html.Div(
                 # ''', style={'textAlign': 'Center'}),
 
             ]),
-        html.Div(children = [
-            dbc.Row([
-                dbc.Col(html.Span("1) Select a crop to simulate:", className="uppercase bold"),width="auto"),
-                ]),
-            dcc.Dropdown(id='CropType', options=[{'label': 'Maize', 'value': 'MZ'}], #,{'label': 'Wheat', 'value': 'WH'},{'label': 'Sorghum', 'value': 'SG'}],
-                    value='MZ'),
-            ], style={"width": "30%"},),
-            
-        html.Br(),
         html.Div([
             dbc.Row([
-                dbc.Col(html.Span("2) Select a station name for analysis", className="uppercase bold"),width="auto"),
+                dbc.Col(html.Span("1) Select a station name for analysis", className="uppercase bold"),width="auto"),
                 ]),
             dcc.Dropdown(id='ETstation', options=[{'label': 'Melkasa', 'value': 'MELK'},{'label': 'Awassa', 'value': 'AWAS'},{'label': 'Bako', 'value': 'BAKO'},{'label': 'Mahoni', 'value': 'MAHO'}],
-                    value='MELK')
+                    value='MELK'),
             ],style={"width": "40%"},),
         html.Br(),
         html.Div([
             dbc.Row([
-                dbc.Col(html.Span("3) Type years to simulate", className="uppercase bold")),
+                dbc.Col(html.Span("2) Type years to simulate", className="uppercase bold")),
                 ]),
             dbc.Row([
                 dbc.Col(html.Span("*Note: Available years are from 1981 to 2018")),
@@ -107,7 +92,7 @@ app.layout = html.Div(
         html.Br(),
         html.Div([
             dbc.Row([
-                html.Span("4) Select Planting Date", className="uppercase bold", style={'textAlign': 'Center'}),
+                html.Span("3) Select Planting Date", className="uppercase bold", style={'textAlign': 'Center'}),
                 ],align="start",
                 ),
             dbc.Row([
@@ -130,14 +115,15 @@ app.layout = html.Div(
         html.Br(),
         html.Div([
             dbc.Row([
-                html.Span("5) Select Cultivar to simulate", className="uppercase bold"), #, style={'textAlign': 'Center'}),
+                html.Span("4) Select Cultivar to simulate", className="uppercase bold"), #, style={'textAlign': 'Center'}),
                 ]),
             dbc.Row([
                 dcc.Dropdown(id='ETMZcultivar', options=[{'label': 'CIMT01 BH540-Kassie', 'value': 'CIMT01 BH540-Kassie'},
                                                         {'label': 'CIMT02 MELKASA-Kassi', 'value': 'CIMT02 MELKASA-Kassi'},
                                                         {'label': 'CIMT17 BH660-FAW-40%', 'value': 'CIMT17 BH660-FAW-40%'},
                                                         {'label': 'CIMT19 MELKASA2-FAW-40%', 'value': 'CIMT19 MELKASA2-FAW-40%'},
-                                                        {'label': 'CIMT21 MELKASA-LowY', 'value': 'CIMT21 MELKASA-LowY'},], 
+                                                        {'label': 'CIMT21 MELKASA-LowY', 'value': 'CIMT21 MELKASA-LowY'},
+                                                        ], 
                             value='CIMT01 BH540-Kassie'),
                 ],align="start",
                 ),
@@ -146,7 +132,7 @@ app.layout = html.Div(
         html.Br(),
         html.Div([
             dbc.Row([
-                html.Span("6) Select Soil type to simulate", className="uppercase bold"),
+                html.Span("5) Select Soil type to simulate", className="uppercase bold"),
                 ],align="start",
                 ),
             dbc.Row([
@@ -173,7 +159,7 @@ app.layout = html.Div(
         html.Br(),
         html.Div([
             dbc.Row([
-                html.Span("7) Select initial soil water condition", className="uppercase bold"),
+                html.Span("6) Select initial soil water condition", className="uppercase bold"),
                 ],align="start",
                 ),
             dbc.Row([
@@ -188,7 +174,7 @@ app.layout = html.Div(
         html.Br(),
         html.Div([
             dbc.Row([
-                html.Span("8) Select initial NO3 condition", className="uppercase bold"),
+                html.Span("7) Select initial NO3 condition", className="uppercase bold"),
                 ],align="start",
                 ),
             dbc.Row([
@@ -201,7 +187,7 @@ app.layout = html.Div(
         html.Br(),
         html.Div([
             dbc.Row([
-                html.Span("9) Enter Planting Density", className="uppercase bold"),
+                html.Span("8) Enter Planting Density", className="uppercase bold"),
                 ],align="start",
                 ),
             dbc.Row([
@@ -216,47 +202,7 @@ app.layout = html.Div(
         html.Br(),
         html.Div([
             dbc.Row([
-                html.Span("10) Fertilizer Application", className="uppercase bold"),
-                ],align="start",
-                ),
-            dbc.Row([
-                html.Span("*Note: DAP(days after planting), Amount (N kg/ha)"),
-                ],align="start",
-                ),
-            dbc.Row([
-                dcc.RadioItems(id="fert_input",
-                    options=[
-                        {'label': 'Fertilizer', 'value': 'Fert'},
-                        {'label': 'No Fertilizer', 'value': 'No_fert'},],
-                    value='No_fert'),
-                    ],align="start",
-                ),
-            ],style={"width": "80%"},),
-        html.Br(),
-        # html.Div(id="fert-table",style={"width": "40%"}),
-        html.Div([
-            dash_table.DataTable(id='fert-table',
-                style_cell = {
-                'font_family': 'sans-serif', #'cursive',
-                'minWidth': '120px', 'width': '120px', 'maxWidth': '120px',
-                'whiteSpace': 'normal',
-                'font_size': '16px',
-                'text_align': 'center'},
-                columns=(
-                    [{'id': p, 'name': p} for p in ['DAP', 'NAmount']]
-                ),
-                data=[
-                    dict(**{param: -99 for param in ['DAP', 'NAmount']}) for i in range(1, 5)
-                    # dict(**{param: 0 for param in params}) for i in range(1, 5)
-                ],
-                editable=True) 
-                # fill_width=False, editable=True)
-                ],id='fert-table-Comp', style={"width": "20%",'display': 'none'},), # 'display': 'block'
-        html.Br(),
-
-        html.Div([
-            dbc.Row([
-                html.Span("11) Enter Scenario name ", className="uppercase bold"),
+                html.Span("9) Enter Scenario name ", className="uppercase bold"),
                 ],align="start",
                 ),
             dbc.Row([
@@ -268,7 +214,7 @@ app.layout = html.Div(
         html.Br(),
         html.Div([
             dbc.Row([
-                html.Span("12) Target year to compare with ", className="uppercase bold"),
+                html.Span("10) Target year to compare with ", className="uppercase bold"),
                 ],align="start",
                 ),
             dbc.Row([
@@ -297,71 +243,13 @@ app.layout = html.Div(
         # ],),
         html.Div([
             html.Button(id='simulate-button-state', children='Simulate all scenarios (Run DSSAT)',style={'background-color': '#008CBA'}), #blue
-
         ],),
         html.Br(),
         # dbc.Progress("25%", value=25),
         # dbc.Progress(id="progress"),
-       # dbc.Spinner(children=[dcc.Graph(id = 'yield_boxplot')],size='lg',color='primary',type='border'),
-        #dcc.Graph(id='yield_boxplot'),
-        #EJ(4/17/2021)example:https://github.com/Coding-with-Adam/Dash-by-Plotly/blob/master/DataTable/datatable_intro_and_sort.py
-        dbc.Spinner(children=[html.Div(id='yieldbox-container')], size="lg", color="primary", type="border", fullscreen=True,),
-        # html.Div(id='yieldbox-container'),  #boxplot
-        html.Div(id='yieldcdf-container'),  #exceedance curve
-        html.Div(id='yieldtimeseries-container'),  #time-series
-        html.Br(),
-        html.Button("Download CSV", id="btn_csv"),
-        # dcc.Download(id="download-dataframe-csv"),
-        Download(id="download-dataframe-csv"),
-        html.Div(id='yieldtables-container'),  #yield simulated output
-        html.Br()
+        dbc.Spinner(children=[dcc.Graph(id = 'yield_boxplot')],size='lg',color='primary',type='border'),
+        # dcc.Graph(id='yield_boxplot'),
     ])
-#==============================================================
-#call back to save df into a csv file
-@app.callback(
-    Output("download-dataframe-csv", "data"),
-    Input("btn_csv", "n_clicks"),
-    State('memory-yield-table', 'data'),
-    prevent_initial_call=True,
-)
-def func(n_clicks, yield_data):
-    print(yield_data)
-    df =pd.DataFrame(yield_data)
-    return dcc.send_data_frame(df.to_csv, "simulated_yield.csv")
-#=================================================    
-#call back to "show/hide" fertilizer input table
-@app.callback(Output('fert-table-Comp', component_property='style'),
-              Input('fert_input', component_property='value'))
-def show_hide_table(visibility_state):
-    if visibility_state == 'Fert':
-        return {'display': 'block'}
-    if visibility_state == 'No_fert':
-        return {'display': 'none'}
-#==============================================================
-# #call back to get fertilzier input
-# @app.callback(Output('fert-table', 'children'),
-#             [Input(component_id='fert_input', component_property='value')]
-#             )
-# def fert_table(value):
-#     if value == 'Fert':
-#         # #Make a new dataframe
-#         # df = pd.DataFrame(
-#         #     [[n_clicks, input10]],
-#         #     columns=["Days after Planting", "Amount (N kg/ha)"],)
-#         # data = df.to_dict('rows')
-#         # columns =  [{"name": i, "id": i,} for i in (df.columns)]
-
-#         params = ['DAP', 'NAmount']
-
-#         return dash_table.DataTable(id='fert_table_created',
-#             columns=(
-#                 [{'id': p, 'name': p} for p in params]
-#             ),
-#             data=[
-#                 dict(**{param: -99 for param in params}) for i in range(1, 5)
-#                 # dict(**{param: 0 for param in params}) for i in range(1, 5)
-#             ],
-#             editable=True)
 
 @app.callback(Output('table-summary', 'children'),
                 Output('intermediate-value', 'children'),
@@ -376,80 +264,43 @@ def show_hide_table(visibility_state):
                 State('ini-NO3', 'value'),        #input 8
                 State('plt-density', 'value'),    #input 9
                 State('sce-name', 'value'),       #input 10
-                State('target-year', 'value'),    #input 11
-                State('intermediate-value', 'children'),  #input 12 scenario summary table
-                State('fert_input', 'value'),     ##input 13 fertilizer yes or no
-                State('fert-table','data') ###input 14 fert input table
+                State('intermediate-value', 'children')  #scenario summary table
             )
-def make_sce_table(n_clicks, input1,input2,input3,input4,input5,input6,input7,input8,input9,input10,
-                  input11,intermediate, fert_app, fert_in_table):
-    # print(input1)  #MELK
-    # print(input2)  #1981
-    # print(input3)  #2014
-    # print(input4)  #2021-06-15
-    # print(input5)  #CIMT01 BH540-Kassie
-    # print(input6)  #ETET001_18
-    # print(input7)  #0.7
-    # print(input8)  #H
-    # print(input9)  #6
-    # print(input10)  #scenario name
-    # print(input11)  #target year as a benchmark
-    # print(input12)  #scenario summary
-    # print(input13)  #fertilizler or no-fertilizer
-    # print(input14)  #fertilizler summary
-    
-    # 2) Read fertilizer application information
-    if fert_app == 'Fert':
-        print('fert-table in callback make_sce_table= {}'.format(fert_in_table))
-        df_fert =pd.DataFrame(fert_in_table)
-        print('fert-table in callback make_sce_table= {}'.format(df_fert))
-    else: #if no fertilizer, then an empty df with an arbitrary column
-        df_fert = pd.DataFrame(columns=["DAP", "NAmount"]) 
+def make_sce_table(n_clicks, input1,input2,input3,input4,input5,input6,input7,input8,input9,input10,intermediate):
+    print(input1)  #MELK
+    print(input2)  #1981
+    print(input3)  #2014
+    print(input4)  #2021-06-15
+    print(input5)  #CIMT01 BH540-Kassie
+    print(input6)  #ETET001_18
+    print(input7)  #0.7
+    print(input8)  #H
+    print(input9)  #6
+    print(input10)  #scenario name
 
     #Make a new dataframe
     df = pd.DataFrame(
-        [[n_clicks, input10, input5[7:], input1, input4[5:],input2, input3, input6, input7, input8, input11,
-            '-99', '-99', '-99', '-99','-99', '-99','-99', '-99']],
-        columns=["count", "sce_name", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","TargetYr",
-                 "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)"],)
+        [[n_clicks, input10, input5[7:], input1, input4[5:],input2, input3, input6]],
+        columns=["count", "sce_name", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil"],)
     # data = df.to_dict('rows')
-    data = [{'count': None, 'sce_name': None, 'Cultivar': None, 'stn_name': None, 'Plt-date': None, 'FirstYear': None, 'LastYear': None, 'soil': None,
-             'iH2O': None, 'iNO3': None, 'TargetYr': None,
-             '1_Fert(DOY)': None,'1_Fert(Kg/ha)': None,'2_Fert(DOY)': None,'2_Fert(Kg/ha)': None,
-             '3_Fert(DOY)': None,'3_Fert(Kg/ha)': None}] 
+    data = [{'count': None, 'sce_name': None, 'Cultivar': None, 'stn_name': None, 'Plt-date': None, 'FirstYear': None, 'LastYear': None, 'soil': None}] 
     columns =  [{"name": i, "id": i,} for i in (df.columns)]
     dff = df.copy()
 
     if n_clicks:  
         #=====================================================================
-        Wdir_path = 'C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\'
+        Wdir_path = DSSAT_FILES_DIR
+        # Wdir_path = 'TEST\\'
         #1) Write SNX file
-        #writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input7,input8,input9,input10)
-        writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input7,input8,
-                           input9,input10,fert_app, df_fert)
+        writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input7,input8,input9,input10)
         #=====================================================================
-        # #Make a new dataframe
-        # df = pd.DataFrame(
-        #     [[n_clicks, input10, input5[7:], input1, input4[5:],input2, input3, input6, input7, input8, input11]],
-        #     columns=["count", "sce_name", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","TargetYr"],)
-        # data = df.to_dict('rows')
-        # columns =  [{"name": i, "id": i,} for i in (df.columns)]
-        if fert_app == 'Fert':
-            #Make a new dataframe
-            df = pd.DataFrame(
-                [[n_clicks, input10, input5[7:], input1, input4[5:],input2, input3, input6, input7, input8, input11, 
-                df_fert.DAP.values[0], df_fert.NAmount.values[0], df_fert.DAP.values[1], df_fert.NAmount.values[1],
-                df_fert.DAP.values[2], df_fert.NAmount.values[2],df_fert.DAP.values[3], df_fert.NAmount.values[3]]],
-                columns=["count", "sce_name", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","TargetYr",
-                        "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)"],)
-        else:  #no fertilizer applied
-            df = pd.DataFrame(
-                [[n_clicks, input10, input5[7:], input1, input4[5:],input2, input3, input6, input7, input8, input11, 
-                 '-99', '-99', '-99', '-99','-99', '-99','-99', '-99']],
-                columns=["count", "sce_name", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","TargetYr",
-                        "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)"],)            
+        #Make a new dataframe
+        df = pd.DataFrame(
+            [[n_clicks, input10, input5[7:], input1, input4[5:],input2, input3, input6]],
+            columns=["count", "sce_name", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil"],)
         data = df.to_dict('rows')
         columns =  [{"name": i, "id": i,} for i in (df.columns)]
+
     if n_clicks == 1:
         dff = df.copy()
         data = dff.to_dict('rows')
@@ -463,27 +314,27 @@ def make_sce_table(n_clicks, input1,input2,input3,input4,input5,input6,input7,in
 
 #===============================
 #2nd callback to run ALL scenarios
-@app.callback(Output(component_id='yieldbox-container', component_property='children'),
-               Output(component_id='yieldcdf-container', component_property='children'),
-               Output(component_id='yieldtimeseries-container', component_property='children'),
-               Output(component_id='yieldtables-container', component_property='children'),
-               Output('memory-yield-table', 'data'),
+@app.callback(Output('yield_boxplot', 'figure'),
                 Input('simulate-button-state', 'n_clicks'),
                 State('target-year', 'value'),       #input 11
-                State('intermediate-value', 'children') #scenario summary table
+                State('intermediate-value', 'children')  #scenario summary table
               )
-
 def run_create_figure(n_clicks, tyear, intermediate):
     if n_clicks is None:
         raise PreventUpdate
-        return 
     else: 
+        # Testing
+        # Wdir_path = DSSAT_FILES_DIR
+        # os.chdir(Wdir_path)
+        # args = "./DSCSM047.EXE MZCER047 B DSSBatch.V46"
+        # os.system(args) 
+
         # 1) Read saved scenario summaries and get a list of scenarios to run
         dff = pd.read_json(intermediate, orient='split')
         sce_numbers = len(dff.sce_name.values)
 
         # 2) Write V47 file
-        Wdir_path = 'C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\'
+        Wdir_path = DSSAT_FILES_DIR
         temp_dv7 = path.join(Wdir_path, "DSSBatch_template_MZ.V47")
         dv7_fname = path.join(Wdir_path, "DSSBatch.V47")
         fr = open(temp_dv7, "r")  # opens temp DV4 file to read
@@ -497,7 +348,7 @@ def run_create_figure(n_clicks, tyear, intermediate):
         for i in range(sce_numbers):
             sname = dff.sce_name.values[i]
             SNX_fname = path.join(Wdir_path, "ETMZ"+sname+".SNX")
-            SNX_fname = SNX_fname.replace("/", "\\")
+            # SNX_fname = SNX_fname.replace("/", "\\")
             new_str2 = '{0:<95}{1:4s}'.format(SNX_fname, repr(1).rjust(4)) + temp_str[99:]
             fw.write(new_str2)
 
@@ -506,18 +357,23 @@ def run_create_figure(n_clicks, tyear, intermediate):
         #=====================================================================
         #3) Run DSSAT executable
         os.chdir(Wdir_path)  #change directory  #check if needed o rnot
-        args = "DSCSM047.EXE MZCER047 B DSSBatch.v47"
-        subprocess.call(args) ##Run executable with argument  , stdout=FNULL, stderr=FNULL, shell=False)
+        ## Windows:
+        # args = "DSCSM047.EXE MZCER047 B DSSBatch.v47"
+        # subprocess.call(args) ##Run executable with argument  , stdout=FNULL, stderr=FNULL, shell=False)
+
+        ## Linux:
+        args = "./DSCSM047.EXE MZCER047 B DSSBatch.V47"
+        os.system(args) 
 
         #4) read DSSAT output => Read Summary.out from all scenario output
-        fout_name = path.join(Wdir_path, "SUMMARY.OUT")
-        df_OUT=pd.read_csv(fout_name,delim_whitespace=True ,skiprows=3)
+        # fout_name = path.join(Wdir_path, "SUMMARY.OUT")
+        fout_name = path.join(Wdir_path, "Summary.OUT")
+        df_OUT=pd.read_csv(fout_name, delim_whitespace=True ,skiprows=3)
         HWAM = df_OUT.iloc[:,21].values  #read 21th column only
         EXPERIMENT = df_OUT.iloc[:,7].values  #read 4th column only
         PDAT = df_OUT.iloc[:,14].values  #read 14th column only
         ADAT = df_OUT.iloc[:,16].values  #read 14th column only
         MDAT = df_OUT.iloc[:,17].values  #read 14th column only    
-        YEAR = df_OUT.iloc[:,14].values//1000
         TG_yield = []
         for i in range(sce_numbers):
             # year1 = dff.FirstYear[i]
@@ -536,16 +392,14 @@ def run_create_figure(n_clicks, tyear, intermediate):
             TG_yield.append(HWAM[yr_index[0][0]])
 
         # Make a new dataframe for plotting
+        # Make a new dataframe for plotting
         df1 = pd.DataFrame({'EXPERIMENT':EXPERIMENT})
         df2 = pd.DataFrame({'PDAT':PDAT})
         df3 = pd.DataFrame({'ADAT':ADAT})
         df4 = pd.DataFrame({'HWAM':HWAM})
-        df5 = pd.DataFrame({'YEAR':YEAR})
-        df = pd.concat([df1.EXPERIMENT,df5.YEAR, df2.PDAT, df3.ADAT, df4.HWAM], axis=1)
+        df = pd.concat([df1.EXPERIMENT, df2.PDAT, df3.ADAT, df4.HWAM], axis=1)
         x_val = np.unique(df.EXPERIMENT.values)
 
-        # print(df)
-        # print('x_val={}'.format(x_val))
         #4) Make a boxplot
         # df = px.data.tips()
         # fig = px.box(df, x="time", y="total_bill")
@@ -553,72 +407,15 @@ def run_create_figure(n_clicks, tyear, intermediate):
         # fig.update_layout(transition_duration=500)
         # df = px.data.tips()
         # fig = px.box(df, x="Scenario Name", y="Yield [kg/ha]")
-        fig = px.box(df, x="EXPERIMENT", y="HWAM", title='Yield Boxplot')
-        fig.add_scatter(x=x_val,y=TG_yield, mode='lines+markers') #'lines')
+        fig = px.box(df, x="EXPERIMENT", y="HWAM")
+        fig.add_scatter(x=x_val,y=TG_yield, mode='lines')
         fig.update_xaxes(title= 'Scenario Name')
         fig.update_yaxes(title= 'Yield [kg/ha]')
-        # # return fig
-
-        fig2 = go.Figure()
-        for i in x_val:
-            x_data = df.HWAM[df['EXPERIMENT']==i].values
-            x_data = np.sort(x_data)
-            fx_scf = [1.0/len(x_data)] * len(x_data) #pdf
-            Fx_scf= 1.0-np.cumsum(fx_scf)  #for exceedance curve
-
-            fig2.add_trace(go.Scatter(x=x_data, y=Fx_scf,
-                        mode='lines+markers',
-                        name=i))
-        # Edit the layout
-        fig2.update_layout(title='Yield Exceedance Curve',
-                        xaxis_title='Yield [kg/ha]',
-                        yaxis_title='Probability of Exceedance [-]')
-        # fig3.update_yaxes(title= 'Probability of Exceedance [-]')
-        # fig3.update_xaxes(title= 'Yield [kg/ha]')
-
-        # fig3 = px.line(df, x="YEAR", y="HWAM", color='EXPERIMENT', title='Yield Time-series')
-        # fig3.update_xaxes(title= 'Year')
-        # fig3.update_yaxes(title= 'Yield [kg/ha]')
-
-        #make a new dataframe to save into CSV
-        yr_val = np.unique(df.YEAR.values)
-        df_out = pd.DataFrame({'YEAR':yr_val})
-
-        fig3 = go.Figure()
-        for i in x_val:
-            x_data = df.YEAR[df['EXPERIMENT']==i].values
-            y_data = df.HWAM[df['EXPERIMENT']==i].values
-
-            ##make a new dataframe to save into CSV
-            df_temp = pd.DataFrame({i:y_data})
-            df_out = pd.concat([df_out, df_temp], axis=1)
-
-            fig3.add_trace(go.Scatter(x=x_data, y=y_data,
-                        mode='lines+markers',
-                        name=i))
-        # Edit the layout
-        fig3.update_layout(title='Yield Time-Series',
-                        xaxis_title='Year',
-                        yaxis_title='Yield [kg/ha]')
-        #save simulated yield outputs into a csv file <<<<<<=======================
-        fname = path.join(Wdir_path, "simulated_yield.csv")
-        df_out.to_csv(fname, index=False)
-
-
-        return [
-            dcc.Graph(id='yield-boxplot',figure=fig), 
-            dcc.Graph(id='yield-exceedance',figure=fig2),
-            dcc.Graph(id='yield-ts',figure=fig3),
-            dash_table.DataTable(columns=[{"name": i, "id": i} for i in df_out.columns],data=df_out.to_dict('records'),),
-            df_out.to_dict('records')
-            ]
-
-    # return
+        return fig
+    return
 
 # =============================================
-# def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input7,input8,input9,input10):
-def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input7,input8,
-                       input9,input10,fert_app, df_fert):    
+def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input7,input8,input9,input10):
     # print('check writeSNX_main')
     # print(input1)  #MELK
     # print(input2)  #1981
@@ -665,11 +462,7 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input
         fw.write(temp_str)
 
     MI = '0' 
-    if fert_app == 'Fert':
-        MF = '1'
-    else: 
-        MF = '0'
-    # MF = '1'
+    MF = '1'
     SA = '0'
     IC = '1'
     MP = '1'
@@ -711,7 +504,7 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input
     ID_FIELD = WSTA + '0001'
     WSTA_ID =  WSTA
     fw.write(
-        '{0:3s}{1:8s}{2:5s}{3:3s}{4:6s}{5:4s}  {6:10s}{7:4s}'.format(FL.rjust(3), ID_FIELD, WSTA_ID.rjust(5),
+        '{0:2s} {1:8s}{2:5s}{3:3s}{4:6s}{5:4s}  {6:10s}{7:4s}'.format(FL.rjust(2), ID_FIELD, WSTA_ID.rjust(5),
                                                                         '       -99   -99   -99   -99   -99   -99 ',
                                                                         SLTX.ljust(6), SLDP.rjust(4), ID_SOIL,
                                                                         ' -99'))
@@ -721,7 +514,7 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input
     fw.write(temp_str)
     temp_str = fr.readline()  # 1             -99             -99       -99   ==> skip
     # ================write *FIELDS - second section
-    fw.write('{0:3s}{1:89s}'.format(FL.rjust(3),
+    fw.write('{0:2s} {1:89s}'.format(FL.rjust(2),
                                     '            -99             -99       -99               -99   -99   -99   -99   -99   -99'))
     fw.write(" \n")
     fw.write(" \n")
@@ -791,32 +584,10 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input
     fw.write(temp_str)  # *FERTILIZERS (INORGANIC)
     temp_str = fr.readline()  # @F FDATE  FMCD  FACD 
     fw.write(temp_str)
-    temp_str = fr.readline()  #1     0 FE005 AP001     5    30   -99   -99   -99   -99   -99   -99
-#-0------------        # write *FERTILIZERS (INORGANIC)
-    if fert_app == 'Fert':
-        print(df_fert)
-        df_fert = df_fert.astype(float)
-        df_filtered = df_fert[(df_fert["DAP"] >= 0) & (df_fert["NAmount"] >= 0)]
-        fert_count = len(df_filtered)  #Get the number of rows: len(df)  => May need more error-checking
-        FDATE = df_filtered.DAP.values
-        FMCD = 'FE005'  #Urea
-        FACD = 'AP001'  #Broadcast, not incorporated    
-        FDEP = '5'   #5cm depth
-        FAMN = df_filtered.NAmount.values
-        FAMP = '-99'
-        FAMK = '-99'
-
-        if fert_count > 0:   # fertilizer applied
-            for i in range(fert_count):
-                new_str = temp_str[0:5] + repr(int(FDATE[i])).rjust(3) + ' ' + FMCD.rjust(5) + ' ' + FACD.rjust(5) + ' ' + FDEP.rjust(5) + ' ' + repr(FAMN[i]).rjust(5) + ' ' + FAMP.rjust(5) + ' ' + FAMK.rjust(5) + temp_str[44:]
-                fw.write(new_str)
-            fw.write(" \n")
-#-------------------------------------------
-    # else: #if no fertilzier applied
-    #     temp_str = fr.readline()  #  1     0 FE005 AP002 
-    #     fw.write(temp_str)
-    #     temp_str = fr.readline()  #  1    45 FE005 AP002
-    #     fw.write(temp_str)
+    temp_str = fr.readline()  #  1     0 FE005 AP002 
+    fw.write(temp_str)
+    temp_str = fr.readline()  #  1    45 FE005 AP002
+    fw.write(temp_str)
 
     fw.write("  \n")
     for nline in range(0, 20):
@@ -928,6 +699,13 @@ def get_soil_IC(SOL_file, ID_SOIL):
     return depth_layer, ll_layer, ul_layer, n_layer, s_class
 
 
+# if __name__ == "__main__":
+#     app.run_server(debug=True)
+
+port = int(os.environ.get("PORT", 5000))
+
 if __name__ == "__main__":
     # app.run_server(debug=True)
-    app.run_server(debug=False)  #https://github.com/plotly/dash/issues/108
+    app.run_server(debug=False,
+                   host="0.0.0.0",
+                   port=port)

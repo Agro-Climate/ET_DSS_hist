@@ -10,7 +10,6 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 from dash.dependencies import Input, Output, State
-from dash_extensions import Download
 from dash.exceptions import PreventUpdate
 from helpers import make_dash_table, create_plot
 
@@ -22,8 +21,7 @@ import datetime    #to convert date to doy or vice versa
 
 app = dash.Dash(
     __name__,
-  #  meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}],
-    prevent_initial_callbacks=True,  #to prevent "Callback failed: the server did not respond." message thttps://community.plotly.com/t/callback-error-when-the-app-is-started/46345/2
+    meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}],
 )
 
 server = app.server
@@ -305,15 +303,14 @@ app.layout = html.Div(
        # dbc.Spinner(children=[dcc.Graph(id = 'yield_boxplot')],size='lg',color='primary',type='border'),
         #dcc.Graph(id='yield_boxplot'),
         #EJ(4/17/2021)example:https://github.com/Coding-with-Adam/Dash-by-Plotly/blob/master/DataTable/datatable_intro_and_sort.py
-        dbc.Spinner(children=[html.Div(id='yieldbox-container')], size="lg", color="primary", type="border", fullscreen=True,),
+       # dbc.Spinner(children=[html.Div(id='yieldbox-container')], size="lg", color="primary", type="border", fullscreen=True,),
         # html.Div(id='yieldbox-container'),  #boxplot
-        html.Div(id='yieldcdf-container'),  #exceedance curve
-        html.Div(id='yieldtimeseries-container'),  #time-series
+       # html.Div(id='yieldcdf-container'),  #exceedance curve
+       #html.Div(id='yieldtimeseries-container'),  #time-series
         html.Br(),
         html.Button("Download CSV", id="btn_csv"),
-        # dcc.Download(id="download-dataframe-csv"),
-        Download(id="download-dataframe-csv"),
-        html.Div(id='yieldtables-container'),  #yield simulated output
+        dcc.Download(id="download-dataframe-csv"),
+     #   html.Div(id='yieldtables-container'),  #yield simulated output
         html.Br()
     ])
 #==============================================================
@@ -463,10 +460,10 @@ def make_sce_table(n_clicks, input1,input2,input3,input4,input5,input6,input7,in
 
 #===============================
 #2nd callback to run ALL scenarios
-@app.callback(Output(component_id='yieldbox-container', component_property='children'),
-               Output(component_id='yieldcdf-container', component_property='children'),
-               Output(component_id='yieldtimeseries-container', component_property='children'),
-               Output(component_id='yieldtables-container', component_property='children'),
+@app.callback(#Output(component_id='yieldbox-container', component_property='children'),
+              # Output(component_id='yieldcdf-container', component_property='children'),
+              # Output(component_id='yieldtimeseries-container', component_property='children'),
+              # Output(component_id='yieldtables-container', component_property='children'),
                Output('memory-yield-table', 'data'),
                 Input('simulate-button-state', 'n_clicks'),
                 State('target-year', 'value'),       #input 11
@@ -544,8 +541,8 @@ def run_create_figure(n_clicks, tyear, intermediate):
         df = pd.concat([df1.EXPERIMENT,df5.YEAR, df2.PDAT, df3.ADAT, df4.HWAM], axis=1)
         x_val = np.unique(df.EXPERIMENT.values)
 
-        # print(df)
-        # print('x_val={}'.format(x_val))
+        print(df)
+        print('x_val={}'.format(x_val))
         #4) Make a boxplot
         # df = px.data.tips()
         # fig = px.box(df, x="time", y="total_bill")
@@ -929,5 +926,4 @@ def get_soil_IC(SOL_file, ID_SOIL):
 
 
 if __name__ == "__main__":
-    # app.run_server(debug=True)
-    app.run_server(debug=False)  #https://github.com/plotly/dash/issues/108
+    app.run_server(debug=True)
