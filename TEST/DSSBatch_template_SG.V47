@@ -1,0 +1,12 @@
+$BATCH(GRAIN SORGHUM)
+!
+! Directory    : C:\DSSAT47\Sorghum
+! Command Line : C:\DSSAT47\DSCSM047.EXE SGCER047 B DSSBatch.v47
+! Crop         : Grain Sorghum   
+! Experiment   : SNSI1501.SGX
+! ExpNo        : 1
+! Debug        : C:\DSSAT47\DSCSM047.EXE SGCER047 " B DSSBatch.v47"
+!
+@FILEX                                                                                        TRTNO     RP     SQ     OP     CO
+C:\DSSAT47\Sorghum\SNSI1501.SGX                                                                   1      1      0      0      0
+

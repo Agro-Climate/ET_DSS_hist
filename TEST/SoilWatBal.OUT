@@ -1,0 +1,962 @@
+*WATER BALANCE OUTPUT FILE
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN   1        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 1981/165    586.18
+!     Soil H20 (final) on Year/day 1981/305    491.04
+!     Effective Irrigation                       0.00
+!     Precipitation                            496.40
+!     Water added with new mulch                 0.00
+!     Drainage                                  73.31
+!     Tiledrain flow                             0.00
+!     Runoff                                    32.49
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         176.35
+!     Transpiration                            309.38
+!     Potential ET                             681.67
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.011
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN   2        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 1982/165    586.18
+!     Soil H20 (final) on Year/day 1982/305    481.92
+!     Effective Irrigation                       0.00
+!     Precipitation                            437.70
+!     Water added with new mulch                 0.00
+!     Drainage                                  40.86
+!     Tiledrain flow                             0.00
+!     Runoff                                    31.94
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         169.99
+!     Transpiration                            299.16
+!     Potential ET                             693.42
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.002
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN   3        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 1983/165    586.18
+!     Soil H20 (final) on Year/day 1983/302    499.05
+!     Effective Irrigation                       0.00
+!     Precipitation                            462.30
+!     Water added with new mulch                 0.00
+!     Drainage                                  45.47
+!     Tiledrain flow                             0.00
+!     Runoff                                    21.00
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         183.56
+!     Transpiration                            299.40
+!     Potential ET                             644.05
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.009
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN   4        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 1984/165    586.18
+!     Soil H20 (final) on Year/day 1984/308    481.18
+!     Effective Irrigation                       0.00
+!     Precipitation                            340.20
+!     Water added with new mulch                 0.00
+!     Drainage                                  18.12
+!     Tiledrain flow                             0.00
+!     Runoff                                     6.91
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         154.17
+!     Transpiration                            265.98
+!     Potential ET                             723.55
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.009
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN   5        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 1985/165    586.18
+!     Soil H20 (final) on Year/day 1985/311    478.03
+!     Effective Irrigation                       0.00
+!     Precipitation                            610.30
+!     Water added with new mulch                 0.00
+!     Drainage                                 162.06
+!     Tiledrain flow                             0.00
+!     Runoff                                    53.77
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         227.59
+!     Transpiration                            275.03
+!     Potential ET                             709.39
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                            -0.001
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN   6        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 1986/165    586.18
+!     Soil H20 (final) on Year/day 1986/307    479.98
+!     Effective Irrigation                       0.00
+!     Precipitation                            383.60
+!     Water added with new mulch                 0.00
+!     Drainage                                  13.39
+!     Tiledrain flow                             0.00
+!     Runoff                                    20.04
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         201.44
+!     Transpiration                            254.91
+!     Potential ET                             664.47
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.012
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN   7        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 1987/165    586.18
+!     Soil H20 (final) on Year/day 1987/294    479.61
+!     Effective Irrigation                       0.00
+!     Precipitation                            288.50
+!     Water added with new mulch                 0.00
+!     Drainage                                   6.61
+!     Tiledrain flow                             0.00
+!     Runoff                                    30.76
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         118.06
+!     Transpiration                            239.62
+!     Potential ET                             640.92
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.013
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN   8        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 1988/165    586.18
+!     Soil H20 (final) on Year/day 1988/304    522.79
+!     Effective Irrigation                       0.00
+!     Precipitation                            570.90
+!     Water added with new mulch                 0.00
+!     Drainage                                 137.27
+!     Tiledrain flow                             0.00
+!     Runoff                                    48.56
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         182.47
+!     Transpiration                            265.97
+!     Potential ET                             620.21
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.015
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN   9        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 1989/165    586.18
+!     Soil H20 (final) on Year/day 1989/301    505.25
+!     Effective Irrigation                       0.00
+!     Precipitation                            556.40
+!     Water added with new mulch                 0.00
+!     Drainage                                 107.14
+!     Tiledrain flow                             0.00
+!     Runoff                                    40.75
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         188.41
+!     Transpiration                            301.01
+!     Potential ET                             659.72
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.013
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN  10        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 1990/165    586.18
+!     Soil H20 (final) on Year/day 1990/300    495.14
+!     Effective Irrigation                       0.00
+!     Precipitation                            457.40
+!     Water added with new mulch                 0.00
+!     Drainage                                  20.79
+!     Tiledrain flow                             0.00
+!     Runoff                                    58.97
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         159.72
+!     Transpiration                            308.95
+!     Potential ET                             663.03
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.010
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN  11        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 1991/165    586.18
+!     Soil H20 (final) on Year/day 1991/300    491.03
+!     Effective Irrigation                       0.00
+!     Precipitation                            406.20
+!     Water added with new mulch                 0.00
+!     Drainage                                  31.23
+!     Tiledrain flow                             0.00
+!     Runoff                                    34.35
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         147.71
+!     Transpiration                            288.05
+!     Potential ET                             682.03
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.011
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN  12        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 1992/165    586.18
+!     Soil H20 (final) on Year/day 1992/305    530.04
+!     Effective Irrigation                       0.00
+!     Precipitation                            655.00
+!     Water added with new mulch                 0.00
+!     Drainage                                 131.38
+!     Tiledrain flow                             0.00
+!     Runoff                                    74.14
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         212.12
+!     Transpiration                            293.47
+!     Potential ET                             662.52
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.016
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN  13        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 1993/165    586.18
+!     Soil H20 (final) on Year/day 1993/301    522.54
+!     Effective Irrigation                       0.00
+!     Precipitation                            582.20
+!     Water added with new mulch                 0.00
+!     Drainage                                  88.67
+!     Tiledrain flow                             0.00
+!     Runoff                                    66.63
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         192.99
+!     Transpiration                            297.54
+!     Potential ET                             659.22
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.013
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN  14        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 1994/165    586.18
+!     Soil H20 (final) on Year/day 1994/303    496.22
+!     Effective Irrigation                       0.00
+!     Precipitation                            490.60
+!     Water added with new mulch                 0.00
+!     Drainage                                  74.57
+!     Tiledrain flow                             0.00
+!     Runoff                                    40.69
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         185.02
+!     Transpiration                            280.25
+!     Potential ET                             677.04
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.019
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN  15        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 1995/165    586.18
+!     Soil H20 (final) on Year/day 1995/295    497.50
+!     Effective Irrigation                       0.00
+!     Precipitation                            481.90
+!     Water added with new mulch                 0.00
+!     Drainage                                  70.02
+!     Tiledrain flow                             0.00
+!     Runoff                                    37.18
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         176.96
+!     Transpiration                            286.40
+!     Potential ET                             616.45
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.006
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN  16        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 1996/165    586.18
+!     Soil H20 (final) on Year/day 1996/302    485.21
+!     Effective Irrigation                       0.00
+!     Precipitation                            462.70
+!     Water added with new mulch                 0.00
+!     Drainage                                  76.19
+!     Tiledrain flow                             0.00
+!     Runoff                                    36.86
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         173.53
+!     Transpiration                            277.07
+!     Potential ET                             641.11
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.020
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN  17        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 1997/165    586.18
+!     Soil H20 (final) on Year/day 1997/295    516.00
+!     Effective Irrigation                       0.00
+!     Precipitation                            597.90
+!     Water added with new mulch                 0.00
+!     Drainage                                  79.04
+!     Tiledrain flow                             0.00
+!     Runoff                                    69.96
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         248.43
+!     Transpiration                            270.65
+!     Potential ET                             643.77
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.003
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN  18        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 1998/165    586.18
+!     Soil H20 (final) on Year/day 1998/300    559.65
+!     Effective Irrigation                       0.00
+!     Precipitation                            756.80
+!     Water added with new mulch                 0.00
+!     Drainage                                 210.75
+!     Tiledrain flow                             0.00
+!     Runoff                                   101.04
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         198.01
+!     Transpiration                            273.52
+!     Potential ET                             602.76
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.014
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN  19        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 1999/165    586.18
+!     Soil H20 (final) on Year/day 1999/308    505.10
+!     Effective Irrigation                       0.00
+!     Precipitation                            627.80
+!     Water added with new mulch                 0.00
+!     Drainage                                 147.31
+!     Tiledrain flow                             0.00
+!     Runoff                                   102.21
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         210.41
+!     Transpiration                            248.94
+!     Potential ET                             656.62
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.012
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN  20        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 2000/165    586.18
+!     Soil H20 (final) on Year/day 2000/306    541.18
+!     Effective Irrigation                       0.00
+!     Precipitation                            617.50
+!     Water added with new mulch                 0.00
+!     Drainage                                 125.77
+!     Tiledrain flow                             0.00
+!     Runoff                                    75.71
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         196.16
+!     Transpiration                            264.83
+!     Potential ET                             634.08
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.022
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN  21        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 2001/165    586.18
+!     Soil H20 (final) on Year/day 2001/300    493.70
+!     Effective Irrigation                       0.00
+!     Precipitation                            582.30
+!     Water added with new mulch                 0.00
+!     Drainage                                 148.34
+!     Tiledrain flow                             0.00
+!     Runoff                                    74.09
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         183.96
+!     Transpiration                            268.37
+!     Potential ET                             637.85
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.018
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN  22        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 2002/165    586.18
+!     Soil H20 (final) on Year/day 2002/298    493.06
+!     Effective Irrigation                       0.00
+!     Precipitation                            354.80
+!     Water added with new mulch                 0.00
+!     Drainage                                  47.03
+!     Tiledrain flow                             0.00
+!     Runoff                                    34.75
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         131.70
+!     Transpiration                            234.44
+!     Potential ET                             657.51
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.010
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN  23        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 2003/165    586.18
+!     Soil H20 (final) on Year/day 2003/297    503.88
+!     Effective Irrigation                       0.00
+!     Precipitation                            548.90
+!     Water added with new mulch                 0.00
+!     Drainage                                 125.42
+!     Tiledrain flow                             0.00
+!     Runoff                                    43.03
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         193.34
+!     Transpiration                            269.39
+!     Potential ET                             595.96
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.016
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN  24        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 2004/165    586.18
+!     Soil H20 (final) on Year/day 2004/303    495.89
+!     Effective Irrigation                       0.00
+!     Precipitation                            561.20
+!     Water added with new mulch                 0.00
+!     Drainage                                 101.16
+!     Tiledrain flow                             0.00
+!     Runoff                                    84.16
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         176.91
+!     Transpiration                            289.25
+!     Potential ET                             646.88
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.017
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN  25        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 2005/165    586.18
+!     Soil H20 (final) on Year/day 2005/296    485.92
+!     Effective Irrigation                       0.00
+!     Precipitation                            454.70
+!     Water added with new mulch                 0.00
+!     Drainage                                  56.55
+!     Tiledrain flow                             0.00
+!     Runoff                                    46.19
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         175.83
+!     Transpiration                            276.38
+!     Potential ET                             611.06
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.012
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN  26        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 2006/165    586.18
+!     Soil H20 (final) on Year/day 2006/296    495.15
+!     Effective Irrigation                       0.00
+!     Precipitation                            490.20
+!     Water added with new mulch                 0.00
+!     Drainage                                  80.17
+!     Tiledrain flow                             0.00
+!     Runoff                                    44.07
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         181.06
+!     Transpiration                            275.92
+!     Potential ET                             598.22
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.003
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN  27        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 2007/165    586.18
+!     Soil H20 (final) on Year/day 2007/302    492.99
+!     Effective Irrigation                       0.00
+!     Precipitation                            503.60
+!     Water added with new mulch                 0.00
+!     Drainage                                 105.25
+!     Tiledrain flow                             0.00
+!     Runoff                                    21.06
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         200.94
+!     Transpiration                            269.54
+!     Potential ET                             595.88
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.003
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN  28        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 2008/165    586.18
+!     Soil H20 (final) on Year/day 2008/299    511.53
+!     Effective Irrigation                       0.00
+!     Precipitation                            606.50
+!     Water added with new mulch                 0.00
+!     Drainage                                 134.29
+!     Tiledrain flow                             0.00
+!     Runoff                                    65.97
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         191.77
+!     Transpiration                            289.12
+!     Potential ET                             657.77
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.010
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN  29        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 2009/165    586.18
+!     Soil H20 (final) on Year/day 2009/296    518.81
+!     Effective Irrigation                       0.00
+!     Precipitation                            505.30
+!     Water added with new mulch                 0.00
+!     Drainage                                  42.32
+!     Tiledrain flow                             0.00
+!     Runoff                                    52.96
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         187.24
+!     Transpiration                            290.15
+!     Potential ET                             622.26
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.006
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN  30        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 2010/165    586.18
+!     Soil H20 (final) on Year/day 2010/285    530.95
+!     Effective Irrigation                       0.00
+!     Precipitation                            525.20
+!     Water added with new mulch                 0.00
+!     Drainage                                  70.74
+!     Tiledrain flow                             0.00
+!     Runoff                                    44.77
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         173.05
+!     Transpiration                            291.86
+!     Potential ET                             583.88
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.015
+
+
+*DSSAT Cropping System Model Ver. 4.7.5.008 -release  MAY 04, 2021 17:13:31
+
+*RUN  31        : ET-SIMAGRI                MZCER047 ETMZdddd    1
+ MODEL          : MZCER047 - Maize
+ EXPERIMENT     : ETMZdddd SN MELKSSAL
+ DATA PATH      : C:\IRI\Python_Dash\ET_DSS_hist\TEST\
+ TREATMENT  1   : ET-SIMAGRI                MZCER047
+  
+
+!     WATER BALANCE PARAMETERS
+!     ========================                 --mm--
+
+!     Soil H20 (start) on Year/day 2011/165    586.18
+!     Soil H20 (final) on Year/day 2011/319    494.02
+!     Effective Irrigation                       0.00
+!     Precipitation                            537.70
+!     Water added with new mulch                 0.00
+!     Drainage                                 128.58
+!     Tiledrain flow                             0.00
+!     Runoff                                    34.97
+!     Mulch evaporation                          0.00
+!     Soil Evaporation                         196.36
+!     Transpiration                            269.92
+!     Potential ET                             720.62
+
+!     Initial mulch water content                0.00
+!     Final mulch water content                  0.00
+
+!     Final Balance                             0.024
+

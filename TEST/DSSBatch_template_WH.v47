@@ -1,0 +1,11 @@
+$BATCH(WHEAT)
+!
+! Directory    : C:\DSSAT47\Wheat
+! Command Line : C:\DSSAT47\DSCSM047.EXE CSCER047 B DSSBatch.v47
+! Crop         : Wheat           
+! Experiment   : KSAS8101.WHX
+! ExpNo        : 1
+! Debug        : C:\DSSAT47\DSCSM047.EXE CSCER047 " B DSSBatch.v47"
+!
+@FILEX                                                                                        TRTNO     RP     SQ     OP     CO
+C:\DSSAT47\Wheat\KSAS8101.WHX                                                                     1      1      0      0      0

@@ -98,6 +98,46 @@ p {
     border-radius: 0.75rem;
 }
 
+.table__container {
+    /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); */
+    margin-top: 25px;
+    border-radius: 0.75rem;
+   /* width: 100%;  */
+}
+
+.table__container td {
+    text-align: center;
+}
+
+.table__container t {
+    background: #F4F6F8;
+}
+
+.table__container tr:nth-child(even) {
+    background: #DFE3E8;
+}
+
+.table__container tr:nth-child(odd) {
+    background: #FFF;
+}
+
+.table__container img {
+    height: 70%;
+    width: auto;
+}
+
+.table__container a {
+    padding: 10px 15px;
+    background-color: #007ACE;
+    color: #F9FAFB;
+    text-decoration: none;
+    border-radius: 0.35rem;
+}
+
+.table__container a:hover {
+    opacity: 0.6;
+}
+
 @media only screen and (max-width: 600px) {
 
     .app__header span {
