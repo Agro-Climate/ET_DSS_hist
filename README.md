@@ -7,9 +7,6 @@ This is a wrapper to run DSSAT Crop simulation models (Maize, sorghum and wheat)
 
 ## How users can get started with the project
 Visit the website https://ethiopia-dss-docker.herokuapp.com/
-Why the project is useful
-How users can get started with the project
-Where users can get help with your project
 
 ## Who maintains and contributes to the project
 - Main developer: Eunjin Han (https://iri.columbia.edu/contact/staff-directory/eunjin-han/)
