@@ -30,6 +30,15 @@ server = app.server
 
 DATA_PATH = pathlib.Path(__file__).parent.joinpath("data").resolve()
 
+DSSAT_FILES_DIR_SHORT = "/dssat_files_dir/"
+
+DSSAT_FILES_DIR = os.getcwd() + DSSAT_FILES_DIR_SHORT
+
+# # Testing
+# os.chdir(DSSAT_FILES_DIR)
+# args = "./DSCSM047.EXE CSCER047 B DSSBatch.V47"
+# os.system(args) 
+
 #https://community.plotly.com/t/loading-when-opening-localhost/7284
 #I suspect that this is related to the JS assets from the CDN not loading properly - perhaps because they are blocked by your firewall or some other reason.
 #You can load the assets locally by setting:
@@ -46,7 +55,7 @@ cultivar_options = {
     'WH': ["CI2021 KT-KUB", "CI2022 RMSI", "CI2023 Meda wolabu", "CI2024 Sofumer", "CI2025 Hollandi"],
     'SG': ["IB0020 ESH-1","IB0020 ESH-2","IB0027 Dekeba","IB0027 Melkam","IB0027 Teshale"]
 }
-Wdir_path = 'C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\'
+Wdir_path = DSSAT_FILES_DIR
 app.layout = html.Div(
     [
         dcc.Store(id='memory-yield-table'),  #to save fertilizer application table
@@ -652,7 +661,7 @@ def run_create_figure(n_clicks, sce_in_table):
         dff = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
         print(dff)
         sce_numbers = len(dff.sce_name.values)
-        Wdir_path = 'C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\'
+        Wdir_path = DSSAT_FILES_DIR
         TG_yield = []
 
         #EJ(5/3/2021) run DSSAT for each scenarios with individual V47
@@ -683,7 +692,6 @@ def run_create_figure(n_clicks, sce_in_table):
             else:  # SG
                 SNX_fname = path.join(Wdir_path, "ETSG"+sname+".SNX")
 
-            SNX_fname = SNX_fname.replace("/", "\\")
             new_str2 = '{0:<95}{1:4s}'.format(SNX_fname, repr(1).rjust(4)) + temp_str[99:]
             fw.write(new_str2)
             fr.close()
@@ -692,15 +700,26 @@ def run_create_figure(n_clicks, sce_in_table):
             #3) Run DSSAT executable
             os.chdir(Wdir_path)  #change directory  #check if needed or not
             if dff.Crop[i] == 'WH':
-                args = "DSCSM047.EXE CSCER047 B DSSBatch.v47"
-                fout_name = path.join(Wdir_path, "ETWH"+sname+".OSU")
+                # args = "./DSCSM047.EXE CSCER047 B DSSBatch.V47"
+                args = "./DSCSM047.EXE B DSSBatch.V47"
+                fout_name = "ETWH"+sname+".OSU"
+                arg_mv = "cp Summary.OUT "+ "ETWH"+sname+".OSU" #"cp Summary.OUT $fout_name"
+                # fout_name = path.join(Wdir_path, "ETWH"+sname+".OSU")
             elif dff.Crop[i] == 'MZ':
-                args = "DSCSM047.EXE MZCER047 B DSSBatch.v47"
-                fout_name = path.join(Wdir_path, "ETMZ"+sname+".OSU")
+                args = "./DSCSM047.EXE MZCER047 B DSSBatch.V47"
+                fout_name = "ETMZ"+sname+".OSU"
+                arg_mv = "cp Summary.OUT "+ "ETMZ"+sname+".OSU" #"cp Summary.OUT $fout_name"
+                # fout_name = path.join(Wdir_path, "ETMZ"+sname+".OSU")
             else:  # SG
-                args = "DSCSM047.EXE SGCER047 B DSSBatch.v47"
-                fout_name = path.join(Wdir_path, "ETSG"+sname+".OSU")
-            subprocess.call(args) ##Run executable with argument  , stdout=FNULL, stderr=FNULL, shell=False)
+                args = "./DSCSM047.EXE SGCER047 B DSSBatch.V47"
+                fout_name = "ETSG"+sname+".OSU"
+                arg_mv = "cp Summary.OUT "+ "ETSG"+sname+".OSU"# "cp Summary.OUT $fout_name"
+                # fout_name = path.join(Wdir_path, "ETSG"+sname+".OSU")
+
+            os.system(args) 
+            os.system(arg_mv) 
+
+
 
             #4) read DSSAT output => Read Summary.out from all scenario output
             # fout_name = path.join(Wdir_path, "SUMMARY.OUT")
@@ -836,7 +855,7 @@ def EB_figure(n_clicks, sce_in_table):
         print('Callback EB_figure:', dff)
         print('Callback EB_figure:', sce_in_table)
         sce_numbers = len(dff.sce_name.values)
-        Wdir_path = 'C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\'
+        Wdir_path = DSSAT_FILES_DIR
         os.chdir(Wdir_path)  #change directory  #check if needed or not
         TG_GMargin = []
 
@@ -1051,7 +1070,7 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,crop,input5,input6,
     ID_FIELD = WSTA + '0001'
     WSTA_ID =  WSTA
     fw.write(
-        '{0:3s}{1:8s}{2:5s}{3:3s}{4:6s}{5:4s}  {6:10s}{7:4s}'.format(FL.rjust(3), ID_FIELD, WSTA_ID.rjust(5),
+        '{0:2s} {1:8s}{2:5s}{3:3s}{4:6s}{5:4s}  {6:10s}{7:4s}'.format(FL.rjust(2), ID_FIELD, WSTA_ID.rjust(5),
                                                                         '       -99   -99   -99   -99   -99   -99 ',
                                                                         SLTX.ljust(6), SLDP.rjust(4), ID_SOIL,
                                                                         ' -99'))
@@ -1061,7 +1080,7 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,crop,input5,input6,
     fw.write(temp_str)
     temp_str = fr.readline()  # 1             -99             -99       -99   ==> skip
     # ================write *FIELDS - second section
-    fw.write('{0:3s}{1:89s}'.format(FL.rjust(3),
+    fw.write('{0:2s} {1:89s}'.format(FL.rjust(2),
                                     '            -99             -99       -99               -99   -99   -99   -99   -99   -99'))
     fw.write(" \n")
     fw.write(" \n")
@@ -1267,7 +1286,9 @@ def get_soil_IC(SOL_file, ID_SOIL):
                     break
     return depth_layer, ll_layer, ul_layer, n_layer, s_class
 
+port = int(os.environ.get("PORT", 5000))
 
 if __name__ == "__main__":
-    # app.run_server(debug=True)
-    app.run_server(debug=False)  #https://github.com/plotly/dash/issues/108
+    app.run_server(debug=False,
+                   host="0.0.0.0",
+                   port=port)
