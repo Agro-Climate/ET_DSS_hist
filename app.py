@@ -463,7 +463,7 @@ app.layout = html.Div(
        # dbc.Spinner(children=[dcc.Graph(id = 'yield_boxplot')],size='lg',color='primary',type='border'),
         #dcc.Graph(id='yield_boxplot'),
         #EJ(4/17/2021)example:https://github.com/Coding-with-Adam/Dash-by-Plotly/blob/master/DataTable/datatable_intro_and_sort.py
-        dbc.Spinner(children=[html.Div(id='yieldbox-container')], size="lg", color="primary", type="border", fullscreen=False,),
+        dbc.Spinner(children=[html.Div(id='yieldbox-container')], size="lg", color="primary", type="border", fullscreen=True,),
 
         # html.Div(id='yieldbox-container'),  #boxplot
         html.Div(id='yieldcdf-container'),  #exceedance curve
