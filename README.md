@@ -25,9 +25,9 @@ Steps `4` and `5` are not necessary if the Heroku app is connected to the Github
 
 2. Clone this repo: 
 
-> `git clone https://github.com/eusojk/etdss-demo-heroku`
+> `git clone https://github.com/Agro-Climate/ET_DSS_hist`
 > 
-> `cd etdss-demo-heroku`
+> `cd ET_DSS_hist`
 
 3. From within the local repo, build the Dockerfile:
 
