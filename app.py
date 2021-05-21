@@ -835,7 +835,8 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             else:  # SG
                 SNX_fname = path.join(Wdir_path, "ETSG"+sname+".SNX")
 
-            SNX_fname = SNX_fname.replace("/", "\\")
+            # On Linux system, we don't need to do this:
+            # SNX_fname = SNX_fname.replace("/", "\\")
             new_str2 = '{0:<95}{1:4s}'.format(SNX_fname, repr(1).rjust(4)) + temp_str[99:]
             fw.write(new_str2)
             fr.close()
@@ -1295,8 +1296,9 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,crop,input5,input6,
     SLDP = repr(soil_depth[-1])
     ID_FIELD = WSTA + '0001'
     WSTA_ID =  WSTA
+    # This line must not be changed for Linux version - DSSAt seems to be sensitive to spacing
     fw.write(
-        '{0:3s}{1:8s}{2:5s}{3:3s}{4:6s}{5:4s}  {6:10s}{7:4s}'.format(FL.rjust(3), ID_FIELD, WSTA_ID.rjust(5),
+        '{0:2s} {1:8s}{2:5s}{3:3s}{4:6s}{5:4s}  {6:10s}{7:4s}'.format(FL.rjust(2), ID_FIELD, WSTA_ID.rjust(5),
                                                                         '       -99   -99   -99   -99   -99   -99 ',
                                                                         SLTX.ljust(6), SLDP.rjust(4), ID_SOIL,
                                                                         ' -99'))
@@ -1306,7 +1308,8 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,crop,input5,input6,
     fw.write(temp_str)
     temp_str = fr.readline()  # 1             -99             -99       -99   ==> skip
     # ================write *FIELDS - second section
-    fw.write('{0:3s}{1:89s}'.format(FL.rjust(3),
+    # This line must not be changed for Linux version - DSSAt seems to be sensitive to spacing
+    fw.write('{0:2s} {1:89s}'.format(FL.rjust(2),
                                     '            -99             -99       -99               -99   -99   -99   -99   -99   -99'))
     fw.write(" \n")
     fw.write(" \n")
