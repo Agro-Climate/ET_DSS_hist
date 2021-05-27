@@ -116,7 +116,7 @@ app.layout = html.Div(
                               'Simulation Input',
                             className='card-header--title'
                             ),
-                          className='card-header ', style={'justifyContent': 'space-between'}
+                          className='card-header ', # style={'justifyContent': 'space-between'}
                           ),
                           html.Div(
                             html.Div([
@@ -498,7 +498,7 @@ app.layout = html.Div(
                             ], 
                             id='intro-table', className='dash-table-container', style={'position': 'relative'}
                             ),
-                          style={'height': '70vh', 'overflow': 'scroll'}
+                          style={'height': '70vh', 'overflow-y': 'scroll'}
                           ),
                           html.Br(),
                           html.Div([
@@ -524,7 +524,7 @@ app.layout = html.Div(
                           html.Br(),
                           html.Div([
                             dbc.Row([
-                              dbc.Col(html.Span("14) Approximate growing season", className="uppercase bold"),md="auto"),
+                              dbc.Col(html.Span("14) Approximate growing season", className="uppercase bold"),md="12"),
                             ]),
                             dbc.Row([
                               dbc.Col(html.Span("*Note: This growing season is used to sort drier/wetter years based on the seasonal total rainfall", className="uppercase bold"),md="auto"),
@@ -536,7 +536,7 @@ app.layout = html.Div(
                                     marks={1: 'Jan', 2: 'Feb',3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'},
                                     value=[6, 9]
                                 ),
-                              width='100%'
+                              md='12'
                               ),
                             ],align="start",
                             ),
@@ -548,10 +548,9 @@ app.layout = html.Div(
                             style={"width": "100%",'background-color': '#008CBA'}), #blue
                           ) # RUN SIMULATIONS BUTTON
                         ], 
-                        className='card--content', style={'padding': '5px'}
+                        # className='card--content'
                         ),
-                      # data-user-style='{&quot;width&quot;:&quot;calc(100% - 30px)&quot}', 
-                      className='block card ', id='info-card', style={'width': '100%'}
+                      # className='block card ', id='info-card'
                       ),
                     ], 
                     md=5, # style={'padding': '5px', 'margin': '0px'}
@@ -581,30 +580,30 @@ app.layout = html.Div(
                                     html.Div(id='yield-NN-container', style={"width": "33%", 'display': 'inline-block'}),
                                     html.Div(id='yield-AN-container', style={"width": "33%", 'display': 'inline-block'}),
                                     # html.Br(),
-                                    # html.Div([
-                                    #   dbc.Row(
-                                    #     dbc.Col(
-                                    #       html.Span("====================================================================", style={'color': 'black', 'font-style': 'italic', 'font-weight': 'bold'
-                                    #       }),
-                                    #       width={"size": 6, "offset": 3},
-                                    #     ),
-                                    #   ),
-                                    #   dbc.Row(
-                                    #     dbc.Col(
-                                    #       html.Span("----------------------------- Post-Simulation Analysis --------------------------------", style={'color': 'black', 'font-style': 'italic', 'font-weight': 'bold'}),
-                                    #       width={"size": 10, "offset": 3},
-                                    #     ),
-                                    #   ),
-                                    #   dbc.Row([
-                                    #     html.Span("====================================================================",style={'color': 'black', 'font-style': 'italic', 'font-weight': 'bold'}),
-                                    #   ],justify="center",),
-                                    # ],style={"width": "100%"},)
+                                      # html.Div([
+                                      #   dbc.Row(
+                                      #     dbc.Col(
+                                      #       html.Span("====================================================================", style={'color': 'black', 'font-style': 'italic', 'font-weight': 'bold'
+                                      #       }),
+                                      #       width={"size": 6, "offset": 3},
+                                      #     ),
+                                      #   ),
+                                      #   dbc.Row(
+                                      #     dbc.Col(
+                                      #       html.Span("----------------------------- Post-Simulation Analysis --------------------------------", style={'color': 'black', 'font-style': 'italic', 'font-weight': 'bold'}),
+                                      #       width={"size": 10, "offset": 3},
+                                      #     ),
+                                      #   ),
+                                      #   dbc.Row([
+                                      #     html.Span("====================================================================",style={'color': 'black', 'font-style': 'italic', 'font-weight': 'bold'}),
+                                      #   ],justify="center",),
+                                      # ],style={"width": "100%"},)
                                   ], 
                                   className='plot-container plotly'),
                                 className='js-plotly-plot', style={'height': '100%', 'width': '100%'}
                                 )
                               ], 
-                              id='simulation-graphs', className='dash-graph ddk-graph', style={'height': '20vh'}
+                              id='simulation-graphs', className='dash-graph ddk-graph', style={'height': '70vh', 'overflow-y': 'scroll'}
                               ),
                             ),
                           ], 
@@ -686,229 +685,6 @@ app.layout = html.Div(
                                       html.Div(id='yieldtables-container2', style = {'width': '100%'}),  #sorted yield simulated output
                                     ], style={"width": "100%"}),
                                   ],className='dash-spreadsheet-menu'),
-                                  html.Div(
-                                    html.Div([
-                                      html.Div([
-                                        html.Div(
-                                          '',
-                                        className='cell cell-0-0 '
-                                        ),
-                                        html.Div(
-                                          '',
-                                        className='cell cell-0-1', style={'marginRight': '10px', 'marginLeft': '0px'}
-                                        ),
-                                      ], 
-                                      className='dt-table-container__row dt-table-container__row-0'
-                                      ),
-                                      html.Div([
-                                        html.Div(
-                                          '',
-                                        className='cell cell-1-0 '
-                                        ),
-                                        html.Div(
-                                          html.Table(
-                                            html.Tbody([
-                                              html.Tr([
-                                                html.Th(
-                                                  html.Div(
-                                                    html.Span(
-                                                      'Days',
-                                                    className='column-header-name'
-                                                    ),
-                                                  ),
-                                                # data-dash-column='Days', colspan='1', 
-                                                className='dash-header column-0 ', style={'backgroundColor': 'rgb(234, 234, 234)', 'fontWeight': 'bold', 'borderBottom': '1px solid rgb(209, 209, 209)', 'borderTop': '1px solid rgb(209, 209, 209)'}
-                                                ),
-                                                html.Th(
-                                                  html.Div(
-                                                    html.Span(
-                                                      '0',
-                                                    className='column-header-name'
-                                                    ),
-                                                  ),
-                                                # data-dash-column='0', colspan='1', 
-                                                className='dash-header column-1 ', style={'backgroundColor': 'rgb(234, 234, 234)', 'fontWeight': 'bold', 'borderBottom': '1px solid rgb(209, 209, 209)', 'borderTop': '1px solid rgb(209, 209, 209)'}
-                                                ),
-                                                html.Th(
-                                                  html.Div(
-                                                    html.Span(
-                                                      '1000',
-                                                    className='column-header-name'
-                                                    ),
-                                                  ),
-                                                # data-dash-column='1000', colspan='1', 
-                                                className='dash-header column-2 ', style={'backgroundColor': 'rgb(234, 234, 234)', 'fontWeight': 'bold', 'borderBottom': '1px solid rgb(209, 209, 209)', 'borderTop': '1px solid rgb(209, 209, 209)'}
-                                                ),
-                                                html.Th(
-                                                  html.Div(
-                                                    html.Span(
-                                                      '2000',
-                                                    className='column-header-name'
-                                                    ),
-                                                  ),
-                                                # data-dash-column='2000', colspan='1', 
-                                                className='dash-header column-3 ', style={'backgroundColor': 'rgb(234, 234, 234)', 'fontWeight': 'bold', 'borderBottom': '1px solid rgb(209, 209, 209)', 'borderTop': '1px solid rgb(209, 209, 209)'}
-                                                ),
-                                                html.Th(
-                                                  html.Div(
-                                                    html.Span(
-                                                      '3000',
-                                                    className='column-header-name'
-                                                    ),
-                                                  ),
-                                                # data-dash-column='3000', colspan='1', 
-                                                className='dash-header column-4 ', style={'backgroundColor': 'rgb(234, 234, 234)', 'fontWeight': 'bold', 'borderBottom': '1px solid rgb(209, 209, 209)', 'borderTop': '1px solid rgb(209, 209, 209)'}
-                                                ),
-                                                html.Th(
-                                                  html.Div(
-                                                    html.Span(
-                                                      '4000',
-                                                    className='column-header-name'
-                                                    ),
-                                                  ),
-                                                # data-dash-column='4000', colspan='1', 
-                                                className='dash-header column-5 ', style={'backgroundColor': 'rgb(234, 234, 234)', 'fontWeight': 'bold', 'borderBottom': '1px solid rgb(209, 209, 209)', 'borderTop': '1px solid rgb(209, 209, 209)'}
-                                                ),
-                                                html.Th(
-                                                  html.Div(
-                                                    html.Span(
-                                                      '4550',
-                                                    className='column-header-name'
-                                                    ),
-                                                  ),
-                                                # data-dash-column='4550', colspan='1' 
-                                                className='dash-header column-6 cell--right-last ', style={'backgroundColor': 'rgb(234, 234, 234)', 'fontWeight': 'bold', 'borderBottom': '1px solid rgb(209, 209, 209)', 'borderTop': '1px solid rgb(209, 209, 209)'}
-                                                ),
-                                              ]),
-                                              html.Tr([
-                                                html.Td(
-                                                  html.Div(
-                                                    'Placebo',
-                                                  className='unfocused dash-cell-value' #, tabindex='-1'
-                                                  ),
-                                                # tabindex='-1',  data-dash-column='Days' data-dash-row='0'
-                                                className='dash-cell column-0', style={'backgroundColor': 'rgb(247, 249, 249)', 'color': 'var(--colorway-1)', 'borderBottom': '1px solid rgb(209, 209, 209)', 'borderTop': '1px solid rgb(209, 209, 209)'}
-                                                ),
-                                                html.Td(
-                                                  html.Div(
-                                                    '139',
-                                                  className='unfocused dash-cell-value' #, tabindex='-1'
-                                                  ),
-                                                # tabindex='-1',  data-dash-column='0' data-dash-row='0'
-                                                className='dash-cell column-1', style={'backgroundColor': 'rgb(247, 249, 249)', 'color': 'var(--colorway-1)', 'borderBottom': '1px solid rgb(209, 209, 209)', 'borderTop': '1px solid rgb(209, 209, 209)'}
-                                                ),
-                                                html.Td(
-                                                  html.Div(
-                                                    '109',
-                                                  className='unfocused dash-cell-value' #, tabindex='-1'
-                                                  ),
-                                                # tabindex='-1',  data-dash-column='1000' data-dash-row='0'
-                                                className='dash-cell column-2', style={'backgroundColor': 'rgb(247, 249, 249)', 'color': 'var(--colorway-1)', 'borderBottom': '1px solid rgb(209, 209, 209)', 'borderTop': '1px solid rgb(209, 209, 209)'}
-                                                ),
-                                                html.Td(
-                                                  html.Div(
-                                                    '63',
-                                                  className='unfocused dash-cell-value' #, tabindex='-1'
-                                                  ),
-                                                # tabindex='-1',  data-dash-column='2000' data-dash-row='0'
-                                                className='dash-cell column-3', style={'backgroundColor': 'rgb(247, 249, 249)', 'color': 'var(--colorway-1)', 'borderBottom': '1px solid rgb(209, 209, 209)', 'borderTop': '1px solid rgb(209, 209, 209)'}
-                                                ),
-                                                html.Td(
-                                                  html.Div(
-                                                    '27',
-                                                  className='unfocused dash-cell-value' #, tabindex='-1'
-                                                  ),
-                                                # tabindex='-1',  data-dash-column='3000' data-dash-row='0'
-                                                className='dash-cell column-4', style={'backgroundColor': 'rgb(247, 249, 249)', 'color': 'var(--colorway-1)', 'borderBottom': '1px solid rgb(209, 209, 209)', 'borderTop': '1px solid rgb(209, 209, 209)'}
-                                                ),
-                                                html.Td(
-                                                  html.Div(
-                                                    '9',
-                                                  className='unfocused dash-cell-value' #, tabindex='-1'
-                                                  ),
-                                                # tabindex='-1',  data-dash-column='4000' data-dash-row='0'
-                                                className='dash-cell column-5', style={'backgroundColor': 'rgb(247, 249, 249)', 'color': 'var(--colorway-1)', 'borderBottom': '1px solid rgb(209, 209, 209)', 'borderTop': '1px solid rgb(209, 209, 209)'}
-                                                ),
-                                                html.Td(
-                                                  html.Div(
-                                                    '0',
-                                                  className='unfocused dash-cell-value' #, tabindex='-1'
-                                                  ),
-                                                # tabindex='-1',  data-dash-column='4550' data-dash-row='0'
-                                                className='dash-cell column-6', style={'backgroundColor': 'rgb(247, 249, 249)', 'color': 'var(--colorway-1)', 'borderBottom': '1px solid rgb(209, 209, 209)', 'borderTop': '1px solid rgb(209, 209, 209)'}
-                                                ),
-                                              ]),
-                                              html.Tr([
-                                                html.Td(
-                                                  html.Div(
-                                                    'Treated',
-                                                  className='unfocused dash-cell-value' #, tabindex='-1'
-                                                  ),
-                                                # tabindex='-1',  data-dash-column='Days' data-dash-row='1'
-                                                className='dash-cell column-0', style={'backgroundColor': 'rgb(247, 249, 249)', 'color': 'var(--colorway-0)', 'borderBottom': '1px solid rgb(209, 209, 209)', 'borderTop': '1px solid rgb(209, 209, 209)'}
-                                                ),
-                                                html.Td(
-                                                  html.Div(
-                                                    '137',
-                                                  className='unfocused dash-cell-value' #, tabindex='-1'
-                                                  ),
-                                                # tabindex='-1',  data-dash-column='0' data-dash-row='1'
-                                                className='dash-cell column-1', style={'backgroundColor': 'rgb(247, 249, 249)', 'color': 'var(--colorway-0)', 'borderBottom': '1px solid rgb(209, 209, 209)', 'borderTop': '1px solid rgb(209, 209, 209)'}
-                                                ),
-                                                html.Td(
-                                                  html.Div(
-                                                    '114',
-                                                  className='unfocused dash-cell-value' #, tabindex='-1'
-                                                  ),
-                                                # tabindex='-1',  data-dash-column='1000' data-dash-row='1'
-                                                className='dash-cell column-2', style={'backgroundColor': 'rgb(247, 249, 249)', 'color': 'var(--colorway-0)', 'borderBottom': '1px solid rgb(209, 209, 209)', 'borderTop': '1px solid rgb(209, 209, 209)'}
-                                                ),
-                                                html.Td(
-                                                  html.Div(
-                                                    '67',
-                                                  className='unfocused dash-cell-value' #, tabindex='-1'
-                                                  ),
-                                                # tabindex='-1',  data-dash-column='2000' data-dash-row='1'
-                                                className='dash-cell column-3', style={'backgroundColor': 'rgb(247, 249, 249)', 'color': 'var(--colorway-0)', 'borderBottom': '1px solid rgb(209, 209, 209)', 'borderTop': '1px solid rgb(209, 209, 209)'}
-                                                ),
-                                                html.Td(
-                                                  html.Div(
-                                                    '27',
-                                                  className='unfocused dash-cell-value' #, tabindex='-1'
-                                                  ),
-                                                # tabindex='-1',  data-dash-column='3000' data-dash-row='1'
-                                                className='dash-cell column-4', style={'backgroundColor': 'rgb(247, 249, 249)', 'color': 'var(--colorway-0)', 'borderBottom': '1px solid rgb(209, 209, 209)', 'borderTop': '1px solid rgb(209, 209, 209)'}
-                                                ),
-                                                html.Td(
-                                                  html.Div(
-                                                    '7',
-                                                  className='unfocused dash-cell-value' #, tabindex='-1'
-                                                  ),
-                                                # tabindex='-1',  data-dash-column='4000' data-dash-row='1'
-                                                className='dash-cell column-5', style={'backgroundColor': 'rgb(247, 249, 249)', 'color': 'var(--colorway-0)', 'borderBottom': '1px solid rgb(209, 209, 209)', 'borderTop': '1px solid rgb(209, 209, 209)'}
-                                                ),
-                                                html.Td(
-                                                  html.Div(
-                                                    '0',
-                                                  className='unfocused dash-cell-value' #, tabindex='-1'
-                                                  ),
-                                                # tabindex='-1',  data-dash-column='4550' data-dash-row='1'
-                                                className='dash-cell column-6', style={'backgroundColor': 'rgb(247, 249, 249)', 'color': 'var(--colorway-0)', 'borderBottom': '1px solid rgb(209, 209, 209)', 'borderTop': '1px solid rgb(209, 209, 209)'}
-                                                ),
-                                              ]),
-                                            ]),
-                                          className='cell-table' #, tabindex='-1'
-                                          ),
-                                        className='cell cell-1-1 dash-fixed-content', style={'marginLeft': '0px', 'display': 'none'}
-                                        ),
-                                      ], 
-                                      className='dt-table-container__row dt-table-container__row-1'
-                                      ),
-                                    ], 
-                                    className='dash-spreadsheet-inner dash-spreadsheet dash-list-view dash-empty-01 dash-no-filter dash-fill-width', style={'minHeight': '100%', 'minWidth': '100%'}
-                                    ),
-                                  className='dash-spreadsheet-container dash-spreadsheet dash-list-view dash-empty-01 dash-no-filter dash-fill-width', style={'width': '100%'}
-                                  ),
                                 ], 
                                 id='sorted-yield-csv-table', className='dash-table-container', style={'position': 'relative'}
                                 ),
@@ -971,10 +747,9 @@ app.layout = html.Div(
 
                       #, loading_state='[object Object]'
                     ], 
-                    md=7, # style={'padding': '5px', 'margin': '0px'}
+                    md=7
                     )
                   ], 
-                  # style={'padding': '5px', 'width': '100%'}
                   ),
                 id='page-content', className='simagri-app'
                 ),
