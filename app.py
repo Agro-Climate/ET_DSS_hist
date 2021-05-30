@@ -73,10 +73,8 @@ app.layout = html.Div( ## MAIN APP DIV
           className='mx-auto d-block'
           )
         ), 
-      className="app__banner"
-      )
-      # [html.Img(src=app.get_asset_url("ethioagroclimate.png"))], 
       # className="app__banner"
+      )
     ),
     html.Br(),
     dbc.Row( # HEADER AND DESCRIPTION
@@ -100,11 +98,6 @@ app.layout = html.Div( ## MAIN APP DIV
                     ''', 
         className="text-center",
         ),
-        # html.Span("CAMDT  ", className="uppercase bold", style={'textAlign': 'Center'}),
-        # html.Span(
-        #     "is a tool designed to guide decision-makers in adopting appropriate crop and management practices that can improve crop yields given a seasonal climatic condition."
-        #     , style={'textAlign': 'Center'}
-        # ),
         html.Br(),
         html.Div(
           children= '''
@@ -763,7 +756,6 @@ app.layout = html.Div( ## MAIN APP DIV
         ], md=7 )
       ], 
       ),
-    id='page-content', className='simagri-app'
     ),
   )
 ],
