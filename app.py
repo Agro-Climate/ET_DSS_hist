@@ -371,7 +371,6 @@ app.layout = html.Div( ## MAIN APP DIV
                     className="overflow-auto",
                     style={"height": "70vh"},
                     ),
-                    html.Br(),
                     html.Div([ # SCENARIO TABLE
                       # Deletable summary table : EJ(5/3/2021)
                       html.Header(html.B("Scenarios"), className="card-header",),
@@ -391,7 +390,6 @@ app.layout = html.Div( ## MAIN APP DIV
                       id="sce-table-Comp", 
                       className="overflow-auto block",
                       ),
-                      html.Br(),
                       # end of Deletable summary table : EJ(5/3/2021)
                       html.Button(id="write-button-state", 
                       n_clicks=0, 
@@ -489,7 +487,7 @@ app.layout = html.Div( ## MAIN APP DIV
                       id="simulation-graphs", 
                       # className="dash-graph ddk-graph", 
                       className="overflow-auto",
-                      style={"height": "70vh"},
+                      style={"height": "94vh"},
                       ),
                     ),
                   ], 
