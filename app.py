@@ -48,811 +48,692 @@ app.css.config.serve_locally = True
 #column names for scenario summary table:EJ(5/3/2021)
 sce_col_names=["sce_name", "Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","TargetYr",
                  "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
-                 'CropPrice', 'NFertCost', 'SeedCost','OtherVariableCosts','FixedCosts']
+                 "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]
 
 cultivar_options = {
-    'MZ': ["CIMT01 BH540-Kassie","CIMT02 MELKASA-Kassi","CIMT17 BH660-FAW-40%", "CIMT19 MELKASA2-FAW-40%", "CIMT21 MELKASA-LowY"],
-    'WH': ["CI2021 KT-KUB", "CI2022 RMSI", "CI2023 Meda wolabu", "CI2024 Sofumer", "CI2025 Hollandi"],
-    'SG': ["IB0020 ESH-1","IB0020 ESH-2","IB0027 Dekeba","IB0027 Melkam","IB0027 Teshale"]
+    "MZ": ["CIMT01 BH540-Kassie","CIMT02 MELKASA-Kassi","CIMT17 BH660-FAW-40%", "CIMT19 MELKASA2-FAW-40%", "CIMT21 MELKASA-LowY"],
+    "WH": ["CI2021 KT-KUB", "CI2022 RMSI", "CI2023 Meda wolabu", "CI2024 Sofumer", "CI2025 Hollandi"],
+    "SG": ["IB0020 ESH-1","IB0020 ESH-2","IB0027 Dekeba","IB0027 Melkam","IB0027 Teshale"]
 }
-# Wdir_path = 'C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\'
+# Wdir_path = "C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\"
 Wdir_path = DSSAT_FILES_DIR    #for linux systemn
+
+CAMDT_LOGOS = app.get_asset_url("ethioagroclimate.png")
 
 app.layout = html.Div( ## MAIN APP DIV
 [
-  dcc.Store(id='memory-yield-table'),  #to save fertilizer application table
-  dcc.Store(id='memory-sorted-yield-table'),  #to save fertilizer application table
-  dcc.Store(id='memory-EB-table'),  #to save fertilizer application table
+  dcc.Store(id="memory-yield-table"),  #to save fertilizer application table
+  dcc.Store(id="memory-sorted-yield-table"),  #to save fertilizer application table
+  dcc.Store(id="memory-EB-table"),  #to save fertilizer application table
 
-  html.Div([ # HEADERS
+  # NAVBAR
+  dbc.Navbar([
+    # LOGO & BRAND
+    html.A(
+      # Use row and col to control vertical alignment of logo / brand
+      dbc.Row([
+        dbc.Col(html.Img(src=CAMDT_LOGOS)),
+        dbc.Col(dbc.NavbarBrand("CAMDT", className="ml-3 font-weight-bold"),className="my-auto"),
+      ],
+      align ="left",
+      no_gutters=True,
+      ),
+    href="#",
+    ),
+    # NAV ITEMS
+    dbc.Nav([
+      dbc.NavItem(dbc.NavLink("Historical Analysis", href="#historical"),),
+      dbc.NavItem(dbc.NavLink("Forecast Analysis", href="#forecast")),
+      dbc.NavItem(dbc.NavLink("About", href="#about")),
+    ],
+    navbar=True,
+    ),
+  ],
+  color="light",
+  dark=False
+  ),
+
+  html.Div([ # HEADERS # HIDDEN FOR NOW
     html.Br(),
     html.Div( # IRI AND OTHER LOGOS
       dbc.Row([
         dbc.Col(
           html.H5("Climate-Agriculture Modeling Decision Support Tool for Ethiopia"),
         md=7,
-        className='my-auto'
+        className="my-auto"
         ),
         dbc.Col(
-          html.Img(src=app.get_asset_url("ethioagroclimate.png"), 
-          className='img-fluid'
+          html.Img(src=CAMDT_LOGOS, 
+          className="img-fluid"
           ),
         md=5,
-        className='my-auto'
+        className="my-auto"
         ), 
       ],
-      className='mx-auto'
+      className="mx-auto"
       ),
-    className='card p-1 border-secondary text-uppercase'
+    className="card text-uppercase"
     ),
     html.Br(),
   ]
-  ,className='block p-1 card-header'
+  ,className="block  card-header d-none"
   ),
 
-  html.Br(),
-  
-  dbc.Card([
+  html.Div([ # NAVIGATE TO THESE SECTIONS
     html.Div(
-      html.Ul([
-        html.Li(
-          html.A('Historical Analysis', 
-          className='nav-link active', href='#historical', role="tab",
-          **{'aria-controls': 'description','aria-selected': 'true'}
-          ),
-        className='nav-item'  
-        ),
-        html.Li(
-          html.A('Forecast Analysis', 
-          className='nav-link disabled', href='#forecast', role="tab",
-          **{'aria-controls': 'description','aria-selected': 'false'}
-          ),
-        className='nav-item'  
-        ),
-        html.Li(
-          html.A('About', 
-          className='nav-link', href='#about', role="tab",
-          **{'aria-controls': 'description','aria-selected': 'false'}
-          ),
-        className='nav-item'
-        ),
-      ],
-      className='nav nav-tabs card-header-tabs'  
-      ),
-    className='card-header'
-    ),
-    html.Div(
-      html.Div([
+      html.Div( ## HISTORICAL: INPUT AND GRAPHS
         html.Div(
-          html.Div( ## HISTORICAL: INPUT AND GRAPHS
-            html.Div(
-              dbc.Row([ ## MAIN PART
-                dbc.Col([ ## LEFT HAND SIDE
-                  html.Div(
-                    html.Div(
-                      html.Div([ ## MAIN INPUT p-1 border-secondary CARD
-                        html.Header(
-                          html.B(
-                            'Simulation Input',
-                          ),
-                        className='p-1 card-header',
-                        ),
-                        html.Div( #INPUT FORM
-                          html.Div([
-                            # INPUT FORM START
-                            html.Div([ #1
-                              dbc.Row([
-                                dbc.Col(html.Span("1) Enter a Scenario name ", className="text-uppercase font-weight-bold"),md="auto"),
-                              ]),
-                              dbc.Row([
-                                dbc.Col([
-                                  dcc.Input(id="sce-name", type="text", placeholder="Enter a scenario name"),
-                                  html.Span(" (only 4 characters)"),
-                                ],
-                                md="auto"),
-                              ]),
-                            ],
-                            ),
-                            html.Br(),
-                            html.Div([ #2
-                              dbc.Row([
-                                dbc.Col(html.Span("2) Select a crop to simulate", 
-                                className="text-uppercase font-weight-bold"),
-                                md="auto"
-                                ),
-                              ]),
-                              dcc.RadioItems(
-                                id='crop-radio',
-                                # options=[{'label': k, 'value': k} for k in cultivar_options.keys()],
-                                options = [
-                                  {'label': 'Maize', 'value': 'MZ'}, 
-                                  {'label': 'Wheat', 'value': 'WH'}, 
-                                  {'label': 'Sorghum', 'value': 'SG'},
-                                ],
-                                labelStyle = {'display': 'inline-block','margin-right': 10},
-                                value='MZ'
-                              ),
-                            ],),
-                                
-                            html.Br(),
-                            html.Div([ #3
-                                dbc.Row([
-                                  dbc.Col(html.Span("3) Select a station name for analysis",
-                                  className="text-uppercase font-weight-bold"),
-                                  md="auto"
-                                  ),
-                                ]),
-                                dcc.Dropdown(
-                                  id='ETstation', 
-                                  options=[
-                                    {'label': 'Melkasa', 'value': 'MELK'},
-                                    {'label': 'Awassa', 'value': 'AWAS'},
-                                    {'label': 'Bako', 'value': 'BAKO'},
-                                    {'label': 'Mahoni', 'value': 'MAHO'}
-                                  ],
-                                  value='MELK'
-                                )
-                            ],
-                            ),
-                            html.Br(),
-                            html.Div([ #4
-                                dbc.Row([
-                                  dbc.Col(html.Span("4) Type years to simulate", className="text-uppercase font-weight-bold")),
-                                ]),
-                                dbc.Row([
-                                  dbc.Col(html.Span("*Note: Available years are from 1981 to 2018")),
-                                ]),
-                                html.Span("From "),
-                                dcc.Input(id="year1", type="text", placeholder="YYYY", value='1981'),
-                                html.Span(" to "),
-                                dcc.Input(id="year2", type="text", placeholder="YYYY", value='2018'),    
-                                html.Br(),                 
-                                ]),
-                            html.Br(),
-                            html.Div([ #5
-                                dbc.Row([
-                                  dbc.Col(html.Span("5) Select a Planting Date", className="text-uppercase font-weight-bold"),md="auto"),
-                                ]),
-                                dbc.Row([
-                                  dbc.Col(html.Span("Only Monthly and Date are counted (i.e., selected year is ignored)"),md="auto"),
-                                ]),
-                                dbc.Row([
-                                    dbc.Col(
-                                        dcc.DatePickerSingle(
-                                        id='plt-date-picker',
-                                        min_date_allowed=date(2021, 1, 1),
-                                        max_date_allowed=date(2021, 12, 31),
-                                        initial_visible_month=date(2021, 6, 5),
-                                        date=date(2021, 6, 15)
-                                        ),align="start"),
-                                    ],align="start",
-                                    ),
-                                ]),
-                            html.Br(),
-                            html.Div([ #6
-                              dbc.Row([
-                                dbc.Col(html.Span("6) Select a Cultivar to simulate", className="text-uppercase font-weight-bold"),md="auto"),
-                              ]),
-                              dbc.Row([
-                                # dcc.Dropdown(id='ETMZcultivar', options=[{'label': 'CIMT01 BH540-Kassie', 'value': 'CIMT01 BH540-Kassie'},
-                                #                                         {'label': 'CIMT02 MELKASA-Kassi', 'value': 'CIMT02 MELKASA-Kassi'},
-                                #                                         {'label': 'CIMT17 BH660-FAW-40%', 'value': 'CIMT17 BH660-FAW-40%'},
-                                #                                         {'label': 'CIMT19 MELKASA2-FAW-40%', 'value': 'CIMT19 MELKASA2-FAW-40%'},
-                                #                                         {'label': 'CIMT21 MELKASA-LowY', 'value': 'CIMT21 MELKASA-LowY'},], 
-                                #             value='CIMT01 BH540-Kassie'),
-                                # dcc.Dropdown(id='cultivar-dropdown'),
-                                dbc.Col(
-                                  dcc.Dropdown(
-                                    id='cultivar-dropdown', 
-                                    options=[
-                                      {'label': 'CIMT01 BH540-Kassie', 'value': 'CIMT01 BH540-Kassie'},
-                                      {'label': 'CIMT02 MELKASA-Kassi', 'value': 'CIMT02 MELKASA-Kassi'},
-                                      {'label': 'CIMT17 BH660-FAW-40%', 'value': 'CIMT17 BH660-FAW-40%'},
-                                      {'label': 'CIMT19 MELKASA2-FAW-40%', 'value': 'CIMT19 MELKASA2-FAW-40%'},
-                                      {'label': 'CIMT21 MELKASA-LowY', 'value': 'CIMT21 MELKASA-LowY'},], 
-                                    value='CIMT02 MELKASA-Kassi'
-                                  ),
-                                )
-                              ],align="start",
-                              ),
-                            ],
-                            ),
-                            html.Br(),
-                            html.Div([ #7
-                              dbc.Row([
-                                dbc.Col(html.Span("7) Select a Soil type to simulate", className="text-uppercase font-weight-bold"),md="auto"),
-                              ]),
-                              dbc.Row([
-                                dbc.Col(
-                                  dcc.Dropdown(
-                                    id='ETsoil', 
-                                    options=[
-                                      {'label': 'ETET000010(AWAS,L)', 'value': 'ETET000010'},
-                                      {'label': 'ETET000_10(AWAS,L, shallow)', 'value': 'ETET000_10'},
-                                      {'label': 'ETET000011(BAKO,C)', 'value': 'ETET000011'},
-                                      {'label': 'ETET001_11(BAKO,C,shallow)', 'value': 'ETET001_11'},
-                                      {'label': 'ETET000018(MELK,L)', 'value': 'ETET000018'},
-                                      {'label': 'ETET001_18(MELK,L,shallow)', 'value': 'ETET001_18'},
-                                      {'label': 'ETET000015(KULU,C)', 'value': 'ETET000015'},
-                                      {'label': 'ETET001_15(KULU,C,shallow)', 'value': 'ETET001_15'},
-                                      {'label': 'ET00990066(MAHO,C)', 'value': 'ET00990066'},
-                                      {'label': 'ET00990_66(MAHO,C,shallow)', 'value': 'ET00990_66'},
-                                      {'label': 'ET00920067(KOBO,CL)', 'value': 'ET00920067'},
-                                      {'label': 'ET00920_67(KOBO,CL,shallow)', 'value': 'ET00920_67'},
-                                      {'label': 'ETET000022(MIES, C)', 'value': 'ETET000022'},
-                                      {'label': 'ETET001_22(MIES, C, shallow', 'value': 'ETET001_22'},
-                                    ],
-                                    value='ETET001_18'
-                                  ),
-                                ),
-                              ],align="start",
-                              ),
-                            ],
-                            ),
-                            html.Br(),
-                            html.Div([ #8
-                              dbc.Row([
-                                dbc.Col(html.Span("8) Select initial soil water condition", className="text-uppercase font-weight-bold"),md="auto"),
-                              ]),
-                              dbc.Row([
-                                dbc.Col(
-                                  dcc.Dropdown(
-                                    id='ini-H2O', 
-                                    options=[
-                                      {'label': '30% of AWC', 'value': '0.3'},
-                                      {'label': '50% of AWC', 'value': '0.5'},
-                                      {'label': '70% of AWC', 'value': '0.7'},
-                                      {'label': '100% of AWC', 'value': '1.0'},
-                                    ], 
-                                    value='0.5'  
-                                  ),
-                                ),
-                              ],align="start",
-                              ),
-                            ],
-                            ),
-                            html.Br(),
-                            html.Div([ #9
-                              dbc.Row([
-                                dbc.Col(html.Span("9) Select initial NO3 condition", className="text-uppercase font-weight-bold"),md="auto"),
-                              ]),
-                              dbc.Row([
-                                dbc.Col(
-                                  dcc.Dropdown(
-                                    id='ini-NO3', 
-                                    options=[
-                                      {'label': 'High(65 N kg/ha)', 'value': 'H'},
-                                      {'label': 'Low(23 N kg/ha)', 'value': 'L'},
-                                    ], 
-                                    value='L'
-                                  ),                                      
-                                ),
-                              ],align="start",
-                              ),
-                            ],
-                            ),
-                            html.Br(),
-                            html.Div([ #10
-                              dbc.Row([
-                                dbc.Col(html.Span("10) Enter a Planting Density", className="text-uppercase font-weight-bold"),md="auto"),
-                              ]),
-                              dbc.Row([
-                                dbc.Col([
-                                  dcc.Input(id="plt-density", type="text", placeholder="Enter planting density"),
-                                  html.Span(" plants/m"),
-                                  html.Sup("2"),
-                                ],)
-                              ],align="start",
-                              ),
-                            ],
-                            ),
-                            html.Br(),
-                            html.Div([ #11
-                              dbc.Row([
-                                dbc.Col(html.Span("11) Fertilizer Application", className="text-uppercase font-weight-bold"),md="auto"),
-                              ]),
-                              dbc.Row([
-                                dbc.Col(html.Span("*Note: DAP(days after planting), Amount (N kg/ha)"),md="auto"),
-                              ]),
-                              dbc.Row([
-                                dbc.Col(
-                                  dcc.RadioItems(
-                                    id="fert_input",
-                                    options=[
-                                      {'label': 'Fertilizer', 'value': 'Fert'},
-                                      {'label': 'No Fertilizer', 'value': 'No_fert'},
-                                    ],
-                                    value='No_fert'
-                                  ),
-                                ),
-                              ],align="start",
-                              ),
-                            ],
-                            ),
-                            html.Br(),
-                            # html.Div(id="fert-table",style={"width": "40%"}),
-                            html.Div([ #FERTILIZER INPUT TABLE
-                              dash_table.DataTable(id='fert-table',
-                                style_cell = {
-                                  'font_family': 'sans-serif', #'cursive',
-                                  #'minWidth': '50px', 'width': '50px', 'maxWidth': '50px',
-                                  'whiteSpace': 'normal',
-                                  'font_size': '14px',
-                                  'text_align': 'center'
-                                },
-                                columns=([
-                                  {'id': p, 'name': p} for p in ['DAP', 'NAmount']
-                                ]),
-                                data=[
-                                  dict(**{param: -99 for param in ['DAP', 'NAmount']}) for i in range(1, 5)
-                                  # dict(**{param: 0 for param in params}) for i in range(1, 5)
-                                ],
-                                style_cell_conditional=[
-                                  {'if': {'id': 'DAP'}, 'width': '30%'}, # Failed component prop type: Invalid component prop 
-                                  {'if': {'id': 'NAmount'}, 'width': '30%'},
-                                ],
-                                editable=True    
-                              )
-                              # row_deletable=True)  
-                              # fill_width=False, editable=True)
-                            ],
-                            id='fert-table-Comp', 
-                            className='w-50',
-                            style={'display': 'none'},
-                            ),
-                            html.Br(),
-                            html.Div([ #12
-                              dbc.Row([
-                                dbc.Col(html.Span("12) Target year to compare with ", className="text-uppercase font-weight-bold"),md="auto"),
-                              ]),
-                              dbc.Row([
-                                dbc.Col(html.Span("*Note: Target year can a specific year you remember (e.g., drought year) and want to compare with a full climatology distribution", 
-                                  className="text-uppercase font-weight-bold"),
-                                md="auto"),
-                              ]),
-                              dbc.Row([
-                                dbc.Col(
-                                  dcc.Input(id="target-year", type="text", placeholder="YYYY"),                                    
-                                ),
-                              ],align="start",
-                              ),
-                            ],
-                            ),
-                            html.Br(),
-                            html.Div([ #13
-                              dbc.Row([
-                                dbc.Col(html.Span("13) Simple Enterprise Budgeting?", className="text-uppercase font-weight-bold"),md="auto"),
-                              ]),
-                              dbc.Row([
-                                dbc.Col(                                      
-                                  dcc.RadioItems(
-                                    id="EB_radio",
-                                    options=[
-                                      {'label': 'Yes', 'value': 'EB_Yes'},
-                                      {'label': 'No', 'value': 'EB_No'},
-                                    ],
-                                    value='EB_No'
-                                  ),
-                                ),
-                              ],align="start",
-                              ),
-                            ],
-                            ),
-                            html.Br(),
-                            html.Div([ # ENTERPRISE BUDGETING TABLE
-                              dbc.Row([
-                                dash_table.DataTable(id='EB-table',
-                                  style_cell = {
-                                  'font_family': 'sans-serif', #'cursive',
-                                  'whiteSpace': 'normal',
-                                  'font_size': '14px',
-                                  'text_align': 'center'},
-                                  columns=([
-                                    {'id': p, 'name': p} for p in ['CropPrice', 'NFertCost', 'SeedCost','OtherVariableCosts','FixedCosts']
-                                  ]),
-                                  data=[
-                                    dict(**{param: -99 for param in ['CropPrice', 'NFertCost', 'SeedCost','OtherVariableCosts','FixedCosts']}) for i in range(1, 2)
-                                  ],
-                                  style_cell_conditional=[
-                                    {'if': {'id': 'CropPrice'}, 'width': '20%'}, # Failed component prop type: Invalid component prop 
-                                    {'if': {'id': 'NFertCost'}, 'width': '20%'},
-                                  ],
-                                  editable=True
-                                )
-                              ]),
-                              dbc.Row([
-                                html.Span("Unit: CropPrice[Birr/kg], NFertCost[Birr/N kg], SeedCost [Birr/kg], OtherVariableCosts[Birr/ha], FixedCosts[Birr/ha]"),
-                              ],align="start",
-                              ),
-                              dbc.Row([
-                                html.Span(" Calculation =>  Gross Margin [Birr/ha] = Revenues [Birr/ha] - Variable Costs [Birr/ha] - Fixed Costs [Birr/ha]"),
-                              ],align="start",
-                              ),
-                              dbc.Row([
-                                html.Span("  - Revenues [Birr/ha] = Yield [kg/ha] * Crop Price [Birr/kg]"),
-                              ],align="start",
-                              ),  
-                              dbc.Row([
-                                html.Span("  - Variable costs for fertilizer [Birr/ha] = N Fertilizer amount [N kg/ha] * cost [Birr/N kg]"),
-                              ],align="start",
-                              ),  
-                              dbc.Row([
-                                html.Span("  - Variable costs for seed purchase [Birr/ha]"), # = Planting Density in #9 [plants/m2] *10000 [m2/ha]* Seed Cost [Birr/plant]"),
-                              ],align="start",
-                              ),  
-                              dbc.Row([
-                                html.Span(" **(reference: the price of hybrid maize seed from the MOA was about 600 Birr/100 kg compared to 50-80 Birr/100 kg for local maize seed purchased in the local market (Birr 7 = US$ 1)."),
-                              ],align="start",
-                              ),  
-                              dbc.Row([
-                                html.Span("  - Other variable costs [Birr/ha] may include pesticide, insurance, labor etc."),
-                              ],align="start",
-                              ), 
-                              dbc.Row([
-                                html.Span("  - Fixed costs [Birr/ha] may include interests for land, machinery etc."),
-                              ],align="start",
-                              ), 
-                            ],
-                            id='EB-table-Comp', 
-                            className='w-100',
-                            style={'display': 'none'},
-                            ), 
-                            # INPUT FORM END
-                          ], 
-                          ),
-                        className='overflow-auto',
-                        style={'height': '70vh'},
+          dbc.Row([ ## MAIN PART
+            dbc.Col([ ## LEFT HAND SIDE
+              html.Div(
+                html.Div(
+                  html.Div([ ## MAIN INPUT CARD
+                    html.Header(
+                      html.B(
+                        "Simulation Input",
+                      ),
+                    className=" card-header",
+                    ),
+                    html.Div( #INPUT FORM
+                      html.Div([
+                        # INPUT FORM START
+                        html.Div([ #1
+                          html.Div("1) Scenario Name"),
+                          dcc.Input(id="sce-name", type="text"),
+                          html.Span(" (only 4 characters)"),
+                        ],
                         ),
                         html.Br(),
-                        html.Div([ # SCENARIO TABLE
-                          # Deletable summary table : EJ(5/3/2021)
-                          html.Div([
-                            dash_table.DataTable(
-                            id='scenario-table',
-                            columns=([
-                              {'id': p, 'name': p} for p in sce_col_names
-                            ]),
-                            data=[
-                              dict(**{param: 'N/A' for param in sce_col_names}) for i in range(1, 2)
+                        html.Div([ #2
+                          html.Div("2) Station"),
+                          dcc.Dropdown(
+                            id="ETstation", 
+                            options=[
+                              {"label": "Melkasa", "value": "MELK"},
+                              {"label": "Awassa", "value": "AWAS"},
+                              {"label": "Bako", "value": "BAKO"},
+                              {"label": "Mahoni", "value": "MAHO"}
                             ],
-                            editable=True,
-                            row_deletable=True
-                            ) 
-                          ],
-                          id='sce-table-Comp', 
-                          className='overflow-auto block',
-                          ),
-                          html.Br(),
-                          # end of Deletable summary table : EJ(5/3/2021)
-                          html.Button(id='write-button-state', 
-                          n_clicks=0, 
-                          children='Create or Add a new Scenario', 
-                          className='w-100 btn btn-success',
-                          ),
-                        ]),
-
+                            value="MELK"
+                          )
+                        ],
+                        ),
                         html.Br(),
-                        html.Div([ ## GROWING SEASON
-                          dbc.Row([
-                            dbc.Col(html.Span("14) Approximate growing season", className="text-uppercase font-weight-bold"),md="12"),
-                          ]),
-                          dbc.Row([
-                            dbc.Col(html.Span("*Note: This growing season is used to sort drier/wetter years based on the seasonal total rainfall", className="text-uppercase font-weight-bold"),md="auto"),
-                          ]),
-                          dbc.Row([
-                            dbc.Col(
-                              dcc.RangeSlider(
-                                id='season-slider',
-                                min=1, max=12, step=1,
-                                marks={1: 'Jan', 2: 'Feb',3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'},
-                                value=[6, 9]
-                              ),
-                            md='12'
-                            ),
-                          ],align="start",
+                        html.Div([ #3
+                          html.Div("3) Crop"),
+                          dcc.RadioItems(
+                            id="crop-radio",
+                            # options=[{"label": k, "value": k} for k in cultivar_options.keys()],
+                            options = [
+                              {"label": "Maize", "value": "MZ"}, 
+                              {"label": "Wheat", "value": "WH"}, 
+                              {"label": "Sorghum", "value": "SG"},
+                            ],
+                            labelStyle = {"display": "inline-block","margin-right": 10},
+                            value="MZ"
+                          ),
+                        ],),
+                        html.Br(),
+                        html.Div([ #4
+                          html.Div("4) Cultivar"),
+                          dcc.Dropdown(
+                            id="cultivar-dropdown", 
+                            options=[
+                              {"label": "CIMT01 BH540-Kassie", "value": "CIMT01 BH540-Kassie"},
+                              {"label": "CIMT02 MELKASA-Kassi", "value": "CIMT02 MELKASA-Kassi"},
+                              {"label": "CIMT17 BH660-FAW-40%", "value": "CIMT17 BH660-FAW-40%"},
+                              {"label": "CIMT19 MELKASA2-FAW-40%", "value": "CIMT19 MELKASA2-FAW-40%"},
+                              {"label": "CIMT21 MELKASA-LowY", "value": "CIMT21 MELKASA-LowY"},], 
+                            value="CIMT02 MELKASA-Kassi"
                           ),
                         ],
                         ),
-
                         html.Br(),
-                        html.Div( ## RUN DSSAT BUTTON
-                          html.Button(id='simulate-button-state', 
-                          children='Simulate all scenarios (Run DSSAT)',
-                          className='w-100 btn btn-primary'
+                        html.Div([ #5
+                          html.Div("5) Years"),
+                          html.Div("*Note: Available years are from 1981 to 2018"),
+                          html.Span("From "),
+                          dcc.Input(id="year1", type="text", placeholder="YYYY", value="1981"),
+                          html.Span(" to "),
+                          dcc.Input(id="year2", type="text", placeholder="YYYY", value="2018"),    
+                          html.Br(),                 
+                        ]),
+                        html.Br(),
+                        html.Div([ #6
+                          html.Div("6) Planting Date"),
+                          html.Div("Only Monthly and Date are counted (i.e., selected year is ignored)"),
+                          dcc.DatePickerSingle(
+                          id="plt-date-picker",
+                          min_date_allowed=date(2021, 1, 1),
+                          max_date_allowed=date(2021, 12, 31),
+                          initial_visible_month=date(2021, 6, 5),
+                          date=date(2021, 6, 15)
                           ),
-                        ) # RUN SIMULATIONS BUTTON
+                        ]),
+                        html.Br(),
+                        html.Div([ #7
+                          html.Div("7) Soil Type"),
+                          dcc.Dropdown(
+                            id="ETsoil", 
+                            options=[
+                              {"label": "ETET000010(AWAS,L)", "value": "ETET000010"},
+                              {"label": "ETET000_10(AWAS,L, shallow)", "value": "ETET000_10"},
+                              {"label": "ETET000011(BAKO,C)", "value": "ETET000011"},
+                              {"label": "ETET001_11(BAKO,C,shallow)", "value": "ETET001_11"},
+                              {"label": "ETET000018(MELK,L)", "value": "ETET000018"},
+                              {"label": "ETET001_18(MELK,L,shallow)", "value": "ETET001_18"},
+                              {"label": "ETET000015(KULU,C)", "value": "ETET000015"},
+                              {"label": "ETET001_15(KULU,C,shallow)", "value": "ETET001_15"},
+                              {"label": "ET00990066(MAHO,C)", "value": "ET00990066"},
+                              {"label": "ET00990_66(MAHO,C,shallow)", "value": "ET00990_66"},
+                              {"label": "ET00920067(KOBO,CL)", "value": "ET00920067"},
+                              {"label": "ET00920_67(KOBO,CL,shallow)", "value": "ET00920_67"},
+                              {"label": "ETET000022(MIES, C)", "value": "ETET000022"},
+                              {"label": "ETET001_22(MIES, C, shallow", "value": "ETET001_22"},
+                            ],
+                            value="ETET001_18"
+                          ),
+                        ],
+                        ),
+                        html.Br(),
+                        html.Div([ #8
+                          html.Div("8) Soil Water Condition"),
+                          dcc.Dropdown(
+                            id="ini-H2O", 
+                            options=[
+                              {"label": "30% of AWC", "value": "0.3"},
+                              {"label": "50% of AWC", "value": "0.5"},
+                              {"label": "70% of AWC", "value": "0.7"},
+                              {"label": "100% of AWC", "value": "1.0"},
+                            ], 
+                            value="0.5"  
+                          ),
+                        ],
+                        ),
+                        html.Br(),
+                        html.Div([ #9
+                          html.Div("9) Initial NO3 Condition"),
+                          dcc.Dropdown(
+                            id="ini-NO3", 
+                            options=[
+                              {"label": "High(65 N kg/ha)", "value": "H"},
+                              {"label": "Low(23 N kg/ha)", "value": "L"},
+                            ], 
+                            value="L"
+                          ),                                      
+                        ],
+                        ),
+                        html.Br(),
+                        html.Div([ #10
+                          html.Div("10) Planting Density"),
+                          dcc.Input(id="plt-density", type="text", placeholder="Enter planting density"),
+                          html.Span(" plants/m"),
+                          html.Sup("2"),
+                        ],
+                        ),
+                        html.Br(),
+                        html.Div([ #11
+                          html.Div("11) Fertilizer Application"),
+                          html.Div("*Note: DAP(days after planting), Amount (N kg/ha)"),
+                          dcc.RadioItems(
+                            id="fert_input",
+                            options=[
+                              {"label": "Fertilizer", "value": "Fert"},
+                              {"label": "No Fertilizer", "value": "No_fert"},
+                            ],
+                            value="No_fert"
+                          ),
+                        ],
+                        ),
+                        html.Br(),
+                        html.Div([ #FERTILIZER INPUT TABLE
+                          dash_table.DataTable(id="fert-table",
+                            style_cell = {
+                              "font_family": "sans-serif", #"cursive",
+                              #"minWidth": "50px", "width": "50px", "maxWidth": "50px",
+                              "whiteSpace": "normal",
+                              "font_size": "14px",
+                              "text_align": "center"
+                            },
+                            columns=([
+                              {"id": p, "name": p} for p in ["DAP", "NAmount"]
+                            ]),
+                            data=[
+                              dict(**{param: -99 for param in ["DAP", "NAmount"]}) for i in range(1, 5)
+                              # dict(**{param: 0 for param in params}) for i in range(1, 5)
+                            ],
+                            style_cell_conditional=[
+                              {"if": {"id": "DAP"}, "width": "30%"}, # Failed component prop type: Invalid component prop 
+                              {"if": {"id": "NAmount"}, "width": "30%"},
+                            ],
+                            editable=True    
+                          )
+                          # row_deletable=True)  
+                          # fill_width=False, editable=True)
+                        ],
+                        id="fert-table-Comp", 
+                        className="w-50",
+                        style={"display": "none"},
+                        ),
+                        html.Br(),
+                        html.Div([ #12
+                          html.Div("12) Target year to compare with "),
+                          html.Div("*Note: Target year can a specific year you remember (e.g., drought year) and want to compare with a full climatology distribution"),
+                          dcc.Input(id="target-year", type="text", placeholder="YYYY"),
+                        ],
+                        ),
+                        html.Br(),
+                        html.Div([ #13
+                          html.Div("13) Simple Enterprise Budgeting?"),
+                          dcc.RadioItems(
+                            id="EB_radio",
+                            options=[
+                              {"label": "Yes", "value": "EB_Yes"},
+                              {"label": "No", "value": "EB_No"},
+                            ],
+                            value="EB_No"
+                          ),
+                        ],
+                        ),
+                        html.Br(),
+                        html.Div([ # ENTERPRISE BUDGETING TABLE
+                          dbc.Row([
+                            dash_table.DataTable(id="EB-table",
+                              style_cell = {
+                              "font_family": "sans-serif", #"cursive",
+                              "whiteSpace": "normal",
+                              "font_size": "14px",
+                              "text_align": "center"},
+                              columns=([
+                                {"id": p, "name": p} for p in ["CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]
+                              ]),
+                              data=[
+                                dict(**{param: -99 for param in ["CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]}) for i in range(1, 2)
+                              ],
+                              style_cell_conditional=[
+                                {"if": {"id": "CropPrice"}, "width": "20%"}, # Failed component prop type: Invalid component prop 
+                                {"if": {"id": "NFertCost"}, "width": "20%"},
+                              ],
+                              editable=True
+                            )
+                          ]),
+                          dbc.Row([
+                            html.Span("Unit: CropPrice[Birr/kg], NFertCost[Birr/N kg], SeedCost [Birr/kg], OtherVariableCosts[Birr/ha], FixedCosts[Birr/ha]"),
+                          ],
+                          no_gutters=True,
+                          align="start",
+                          ),
+                          dbc.Row([
+                            html.Span(" Calculation =>  Gross Margin [Birr/ha] = Revenues [Birr/ha] - Variable Costs [Birr/ha] - Fixed Costs [Birr/ha]"),
+                          ],
+                          no_gutters=True,
+                          align="start",
+                          ),
+                          dbc.Row([
+                            html.Span("  - Revenues [Birr/ha] = Yield [kg/ha] * Crop Price [Birr/kg]"),
+                          ],
+                          no_gutters=True,
+                          align="start",
+                          ),  
+                          dbc.Row([
+                            html.Span("  - Variable costs for fertilizer [Birr/ha] = N Fertilizer amount [N kg/ha] * cost [Birr/N kg]"),
+                          ],
+                          no_gutters=True,
+                          align="start",
+                          ),  
+                          dbc.Row([
+                            html.Span("  - Variable costs for seed purchase [Birr/ha]"), # = Planting Density in #9 [plants/m2] *10000 [m2/ha]* Seed Cost [Birr/plant]"),
+                          ],
+                          no_gutters=True,
+                          align="start",
+                          ),  
+                          dbc.Row([
+                            html.Span(" **(reference: the price of hybrid maize seed from the MOA was about 600 Birr/100 kg compared to 50-80 Birr/100 kg for local maize seed purchased in the local market (Birr 7 = US$ 1)."),
+                          ],
+                          no_gutters=True,
+                          align="start",
+                          ),  
+                          dbc.Row([
+                            html.Span("  - Other variable costs [Birr/ha] may include pesticide, insurance, labor etc."),
+                          ],
+                          no_gutters=True,
+                          align="start",
+                          ), 
+                          dbc.Row([
+                            html.Span("  - Fixed costs [Birr/ha] may include interests for land, machinery etc."),
+                          ],
+                          no_gutters=True,
+                          align="start",
+                          ), 
+                        ],
+                        id="EB-table-Comp", 
+                        className="w-100",
+                        style={"display": "none"},
+                        ), 
+                        # INPUT FORM END
                       ], 
-                      className='m-2',
                       ),
-                    className='block p-1 border-secondary card',
+                    className="overflow-auto",
+                    style={"height": "70vh"},
                     ),
-                  className='block' 
-                  ),
-                ], md=5 ),
-                dbc.Col([ ## RIGHT HAND SIDE -- p-1 border-secondary CARDS WITH SIMULATION ETC
-                  html.Div([
-                    html.Div( # SIMULATIONS
+                    html.Br(),
+                    html.Div([ # SCENARIO TABLE
+                      # Deletable summary table : EJ(5/3/2021)
+                      html.Header(html.B("Scenarios"), className="card-header",),
                       html.Div([
-                        html.Header(
-                          html.B('Simulation Graphs'),
-                        className='p-1 card-header'
-                        ),
-                        html.Div(
-                          html.Div([
-                            html.Div(
-                              html.Div([
-                                dbc.Spinner(children=[html.Div(id='yieldbox-container')], size="lg", color="primary", type="border", fullscreen=True,),
-                                html.Div(id='yieldcdf-container'),  #exceedance curve
-                                html.Div(id='yieldtimeseries-container'),  #time-series
-                                dbc.Row([
-                                  dbc.Col(
-                                    html.Div(id='yield-BN-container', 
-                                    # style={"width": "33%", 'display': 'inline-block'}
-                                    ),
-                                  md=4),
-                                  dbc.Col(
-                                    html.Div(id='yield-NN-container', 
-                                    # style={"width": "33%", 'display': 'inline-block'}
-                                    ),
-                                  md=4),
-                                  dbc.Col(
-                                    html.Div(id='yield-AN-container', 
-                                    # style={"width": "33%", 'display': 'inline-block'}
-                                    ),
-                                  md=4),
-                                ]),
-                                # html.Br(),
-                                  # html.Div([
-                                  #   dbc.Row(
-                                  #     dbc.Col(
-                                  #       html.Span("====================================================================", style={'color': 'black', 'font-style': 'italic', 'font-weight': 'font-weight-bold'
-                                  #       }),
-                                  #       width={"size": 6, "offset": 3},
-                                  #     ),
-                                  #   ),
-                                  #   dbc.Row(
-                                  #     dbc.Col(
-                                  #       html.Span("----------------------------- Post-Simulation Analysis --------------------------------", style={'color': 'black', 'font-style': 'italic', 'font-weight': 'font-weight-bold'}),
-                                  #       width={"size": 10, "offset": 3},
-                                  #     ),
-                                  #   ),
-                                  #   dbc.Row([
-                                  #     html.Span("====================================================================",style={'color': 'black', 'font-style': 'italic', 'font-weight': 'font-weight-bold'}),
-                                  #   ],justify="center",),
-                                  # ],style={"width": "100%"},)
-                              ], 
-                              className='plot-container plotly'),
-                            className='js-plotly-plot'
-                            )
-                          ], 
-                          id='simulation-graphs', 
-                          # className='dash-graph ddk-graph', 
-                          className='overflow-auto',
-                          style={'height': '70vh'},
-                          ),
-                        ),
-                      ], 
-                      className='m-2',
+                        dash_table.DataTable(
+                        id="scenario-table",
+                        columns=([
+                          {"id": p, "name": p} for p in sce_col_names
+                        ]),
+                        data=[
+                          dict(**{param: "N/A" for param in sce_col_names}) for i in range(1, 2)
+                        ],
+                        editable=True,
+                        row_deletable=True
+                        ) 
+                      ],
+                      id="sce-table-Comp", 
+                      className="overflow-auto block",
                       ),
-                    className='block p-1 border-secondary card'),
-                    
-                    html.Div([ # CSV FOR SIMULATED YIELD
-                      html.Div( # ORIGINAL CSV
-                        html.Div([
-                          html.Header(
-                            html.B('Simulated Yield Original CSV'),
-                          className='p-1 card-header'
-                          ),
-                          html.Div(
-                            html.Div([
-                              html.Div([
-                                html.Div([ # ORIGINAL CSV STUFF
-                                  html.Br(),
-                                  html.Button("Download CSV for Simulated Yield", id="btn_csv",
-                                  className='w-100 btn btn-secondary'
-                                  ),
-                                  # dcc.Download(id="download-dataframe-csv"),
-                                  Download(id="download-dataframe-csv"),
-                                  html.Div(id='yieldtables-container', 
-                                  className='overflow-auto',
-                                  style={'height': '10vh'},
-                                  ),  #yield simulated output
-                                ], ),
-                              ],
-                              ),
-                            ], 
-                            id='original-yield-csv-table', 
-                            className='dash-table-container'
-                            ),
-                          ),
-                        ], 
-                        className='m-2',
-                        ),
-                      className='block p-1 border-secondary card',
+                      html.Br(),
+                      # end of Deletable summary table : EJ(5/3/2021)
+                      html.Button(id="write-button-state", 
+                      n_clicks=0, 
+                      children="Create or Add a new Scenario", 
+                      className="w-100 btn btn-success",
                       ),
-                      
-                      html.Div( # SORTED CSV
-                        html.Div([
-                          html.Header(
-                            html.B('Simulated Yield Sorted CSV'),
-                          className='p-1 card-header'
-                          ),
-                          html.Div(
-                            html.Div([
-                              html.Div([
-                                html.Div([ # SORTING CONTROLS AND BUTTON
-                                  html.Br(),
-                                  html.Div([
-                                    dbc.Row([
-                                      dbc.Col(html.Span("(i) Select a column name to sort: "), width=4),
-                                      dbc.Col(html.Div([dcc.Dropdown(id='column-dropdown', options=[{'label': 'YEAR', 'value': 'YEAR'},],value='YEAR')]), width=4),
-                                    ],align="start",
-                                    #justify="start",
-                                    ),
-                                  ],
-                                  ),
-                                  html.Br(),
-                                  html.Div([
-                                    html.Span("(ii) Yield adjustment factor: "),
-                                    dcc.Input(id="yield-multiplier", type="text", placeholder="Enter ", value = '1'),
-                                    html.Span(" (e.g., 90% reduction => 0.9)"),  
-                                  ]),
-                                  html.Br(),
-                                  html.Button("Click to update and sort the Datatable by the selected column name", id="btn_table_sort",
-                                  className='w-100 btn btn-info',
-                                  ),
-                                  html.Br(),   
-                                  html.Br(),   
-                                  html.Button("Download SORTED CSV for Simulated Yield", id="btn_csv2",
-                                  className='w-100 btn btn-secondary',
-                                  ),
-                                  # dcc.Download(id="download-dataframe-csv"),
-                                  Download(id="download-dataframe-csv2"),
-                                  html.Div(id='yieldtables-container2', 
-                                  className='overflow-auto',
-                                  style={'height': '10vh'},
-                                  ),  #sorted yield simulated output
-                                ],
-                                ),
-                              ],
-                              ),
-                            ], 
-                            id='sorted-yield-csv-table', className='dash-table-container'
-                            ),
-                          ),
-                        ], 
-                        className='m-2',
-                        ),
-                      className='block p-1 border-secondary card ',
+                    ]),
+
+                    html.Br(),
+                    html.Div([ ## GROWING SEASON
+                      html.Div("14) Approximate Growing Season"),
+                      html.Div("*Note: This growing season is used to sort drier/wetter years based on the seasonal total rainfall"),
+                      dcc.RangeSlider(
+                        id="season-slider",
+                        min=1, max=12, step=1,
+                        marks={1: "Jan", 2: "Feb",3: "Mar", 4: "Apr", 5: "May", 6: "Jun", 7: "Jul", 8: "Aug", 9: "Sep", 10: "Oct", 11: "Nov", 12: "Dec"},
+                        value=[6, 9]
                       ),
-                    ],className='block p-1 border-secondary card ',),
-                  
-                    html.Div( # ENTERPRISE BUDGETING
-                      html.Div([
-                        html.Header(
-                          html.B('Enterprise Budgeting'),
-                        className='p-1 card-header',
-                        ),
-                        html.Div(
-                          html.Div([
-                            html.Div(
-                              html.Div([
-                                html.Br(),
-                                html.Button(id='EB-button-state', 
-                                children='Display figures for Enterprise Budgets',
-                                className='w-100 btn btn-danger'
-                                ), #red
-                                html.Br(),
-                                html.Div(id='EBbox-container'), 
-                                html.Div(id='EBcdf-container'),  #exceedance curve
-                                html.Div(id='EBtimeseries-container'), #exceedance curve
-                                html.Br(),
-                                html.Button("Download CSV file for Enterprise Budgeting", 
-                                id="btn_csv_EB",
-                                className='w-100 btn btn-secondary'
-                                ),
-                                # dcc.Download(id="download-dataframe-csv"),
-                                Download(id="download-dataframe-csv_EB"),
-                                html.Div(id='EBtables-container', className='w-50'),   #yield simulated output
-                              ], 
-                              className='plot-container plotly'),
-                            className='js-plotly-plot',
-                            )
-                          ], 
-                          id='enterprise-budgeting', className='dash-graph ddk-graph', style={'height': '20vh'}
-                          ),
-                        ),
-                      ], 
-                      className='m-2',
-                      ),
-                    className='block p-1 border-secondary card'
+                    ],
                     ),
 
+                    html.Br(),
+                    html.Div( ## RUN DSSAT BUTTON
+                      html.Button(id="simulate-button-state", 
+                      children="Simulate all scenarios (Run DSSAT)",
+                      className="w-100 btn btn-primary"
+                      ),
+                    ) # RUN SIMULATIONS BUTTON
                   ], 
-                  className='block'
-                  )
-                ], md=7 )
-              ], 
+                  ),
+                className="block card",
+                ),
+              className="block" 
               ),
+            ], 
+            md=5,
+            className="p-1",
             ),
-          ),
-        className='tab-pane active',
-        id='historical',
-        role='tabpanel',
-        **{'aria-labelledby': 'historical-tab'}
-        ),
-        html.Div('BBBBB'
-          ,
-        className='tab-pane',
-        id='forecast',
-        role='tabpanel',
-        **{'aria-labelledby': 'forecast-tab'}
-        ),
-        html.Div(
-          dbc.Row( # HEADER AND DESCRIPTION
-            dbc.Col([
-              dbc.Row(
-                # dbc.Col(
-                #   html.Div([
-                #     html.H4("Climate-Agriculture Modeling Decision Support Tool for Ethiopia"),
-                #     html.H4("(Historical Analysis)"),
-                #   ],
-                #   className="p-1 border-secondary card text-uppercase",
-                #   ),
-                # md=9,
-                # className='mx-auto'
-                # )
-              ),
-              html.Br(),
-              html.Div(
-                children= '''
-                            CAMDT is a tool designed to guide decision-makers in adopting appropriate crop and management practices that can improve crop yields given a seasonal climatic condition.
-                          ''', 
-              ),
-              html.Br(),
-              html.Div(
-                children= '''
-                            Smart planning of annual crop production requires consideration of possible scenarios.
-                            The CAMDT tool adopts crop simulation models included in the DSSAT package (Decision Support System for Agrotechnology Transfer). 
-                            The methodology was developed by the IRI (International Research Institute for Climate and Society / Columbia University) 
-                            in collaboration with the Ethiopian Institute of Agricultural Research (EIAR). 
-                            The purpose of this tool is to support decision-making of the producer or technical advisor, which facilitates discussion of optimal production strategies, risks of technology adoption, 
-                            and evaluation of long-term effects, considering interactions of various factors.
-                          ''', 
-              ),
-              html.Br(),
+            dbc.Col([ ## RIGHT HAND SIDE -- CARDS WITH SIMULATION ETC
+              html.Div([
+                html.Div( # SIMULATIONS
+                  html.Div([
+                    html.Header(
+                      html.B("Simulation Graphs"),
+                    className=" card-header"
+                    ),
+                    html.Div(
+                      html.Div([
+                        html.Div(
+                          html.Div([
+                            dbc.Spinner(children=[html.Div(id="yieldbox-container")], size="lg", color="primary", type="border", fullscreen=True,),
+                            html.Div(id="yieldcdf-container"),  #exceedance curve
+                            html.Div(id="yieldtimeseries-container"),  #time-series
+                            dbc.Row([
+                              dbc.Col(
+                                html.Div(id="yield-BN-container", 
+                                # style={"width": "33%", "display": "inline-block"}
+                                ),
+                              md=4),
+                              dbc.Col(
+                                html.Div(id="yield-NN-container", 
+                                # style={"width": "33%", "display": "inline-block"}
+                                ),
+                              md=4),
+                              dbc.Col(
+                                html.Div(id="yield-AN-container", 
+                                # style={"width": "33%", "display": "inline-block"}
+                                ),
+                              md=4),
+                            ]),
+                            # html.Br(),
+                              # html.Div([
+                              #   dbc.Row(
+                              #     dbc.Col(
+                              #       html.Span("====================================================================", style={"color": "black", "font-style": "italic", "font-weight": "font-weight-bold"
+                              #       }),
+                              #       width={"size": 6, "offset": 3},
+                              #     ),
+                              #   ),
+                              #   dbc.Row(
+                              #     dbc.Col(
+                              #       html.Span("----------------------------- Post-Simulation Analysis --------------------------------", style={"color": "black", "font-style": "italic", "font-weight": "font-weight-bold"}),
+                              #       width={"size": 10, "offset": 3},
+                              #     ),
+                              #   ),
+                              #   dbc.Row([
+                              #     html.Span("====================================================================",style={"color": "black", "font-style": "italic", "font-weight": "font-weight-bold"}),
+                              #   ],justify="center",),
+                              # ],style={"width": "100%"},)
+                          ], 
+                          className="plot-container plotly"),
+                        className="js-plotly-plot"
+                        )
+                      ], 
+                      id="simulation-graphs", 
+                      # className="dash-graph ddk-graph", 
+                      className="overflow-auto",
+                      style={"height": "70vh"},
+                      ),
+                    ),
+                  ], 
+                  ),
+                ),
+                
+                # CSV FOR SIMULATED YIELD
+                html.Div( # ORIGINAL CSV
+                  html.Div([
+                    html.Header(
+                      html.B("Simulated Yield Original CSV"),
+                    className=" card-header"
+                    ),
+                    html.Div(
+                      html.Div([
+                        html.Div([
+                          html.Div([ # ORIGINAL CSV STUFF
+                            html.Br(),
+                            html.Button("Download CSV for Simulated Yield", id="btn_csv",
+                            className="w-100 btn btn-secondary"
+                            ),
+                            # dcc.Download(id="download-dataframe-csv"),
+                            Download(id="download-dataframe-csv"),
+                            html.Div(id="yieldtables-container", 
+                            className="overflow-auto",
+                            style={"height": "10vh"},
+                            ),  #yield simulated output
+                          ], ),
+                        ],
+                        ),
+                      ], 
+                      id="original-yield-csv-table", 
+                      className="dash-table-container"
+                      ),
+                    ),
+                  ], 
+                  ),
+                ),
+                
+                html.Div( # SORTED CSV
+                  html.Div([
+                    html.Header(
+                      html.B("Simulated Yield Sorted CSV"),
+                    className=" card-header"
+                    ),
+                    html.Div(
+                      html.Div([
+                        html.Div([
+                          html.Div([ # SORTING CONTROLS AND BUTTON
+                            html.Br(),
+                            html.Div([
+                              html.Span("(i) Select a column name to sort: "),
+                              html.Div([dcc.Dropdown(id="column-dropdown", options=[{"label": "YEAR", "value": "YEAR"},],value="YEAR")]),
+                            ],
+                            ),
+                            html.Br(),
+                            html.Div([
+                              html.Span("(ii) Yield adjustment factor: "),
+                              dcc.Input(id="yield-multiplier", type="text", placeholder="Enter ", value = "1"),
+                              html.Span(" (e.g., 90% reduction => 0.9)"),  
+                            ]),
+                            html.Br(),
+                            html.Button("Click to update and sort the Datatable by the selected column name", id="btn_table_sort",
+                            className="w-100 btn btn-info",
+                            ),
+                            html.Br(),   
+                            html.Br(),   
+                            html.Button("Download SORTED CSV for Simulated Yield", id="btn_csv2",
+                            className="w-100 btn btn-secondary",
+                            ),
+                            # dcc.Download(id="download-dataframe-csv"),
+                            Download(id="download-dataframe-csv2"),
+                            html.Div(id="yieldtables-container2", 
+                            className="overflow-auto",
+                            style={"height": "10vh"},
+                            ),  #sorted yield simulated output
+                          ],
+                          ),
+                        ],
+                        ),
+                      ], 
+                      id="sorted-yield-csv-table", className="dash-table-container"
+                      ),
+                    ),
+                  ], 
+                  ),
+                ),
+            
+                html.Div( # ENTERPRISE BUDGETING
+                  html.Div([
+                    html.Header(
+                      html.B("Enterprise Budgeting"),
+                    className=" card-header",
+                    ),
+                    html.Div(
+                      html.Div([
+                        html.Div(
+                          html.Div([
+                            html.Br(),
+                            html.Button(id="EB-button-state", 
+                            children="Display figures for Enterprise Budgets",
+                            className="w-100 btn btn-danger"
+                            ), #red
+                            html.Br(),
+                            html.Div(id="EBbox-container"), 
+                            html.Div(id="EBcdf-container"),  #exceedance curve
+                            html.Div(id="EBtimeseries-container"), #exceedance curve
+                            html.Br(),
+                            html.Button("Download CSV file for Enterprise Budgeting", 
+                            id="btn_csv_EB",
+                            className="w-100 btn btn-secondary"
+                            ),
+                            # dcc.Download(id="download-dataframe-csv"),
+                            Download(id="download-dataframe-csv_EB"),
+                            html.Div(id="EBtables-container", className="w-50"),   #yield simulated output
+                          ], 
+                          className="plot-container plotly"),
+                        className="js-plotly-plot",
+                        )
+                      ], 
+                      id="enterprise-budgeting", className="dash-graph ddk-graph", style={"height": "20vh"}
+                      ),
+                    ),
+                  ], 
+                  ),
+                ),
+              ], 
+              className="block card"
+              )
             ],
-            md=11,
-            className='text-center mx-auto'
-            )
+            md=7,
+            className="p-1",
+            ),
+          ],
+          # no_gutters=True,
+          className="m-1"
           ),
-        className='tab-pane',
-        id='about',
-        role='tabpanel',
-        **{'aria-labelledby': 'about-tab'}
         ),
-      ],
-      className='tab-content'
       ),
-    className='card-body'
+    ),
+    html.Div( ## HISTORICAL -- HIDDEN FOR NOW
+      "HISTORICAL",
+    className="d-none",
+    ),
+    html.Div( ## ABOUT CAMDT -- HIDDEN FOR NOW
+      dbc.Row( # HEADER AND DESCRIPTION
+        dbc.Col([
+          dbc.Row(
+            # dbc.Col(
+            #   html.Div([
+            #     html.H4("Climate-Agriculture Modeling Decision Support Tool for Ethiopia"),
+            #     html.H4("(Historical Analysis)"),
+            #   ],
+            #   className="card text-uppercase",
+            #   ),
+            # md=9,
+            # className="mx-auto"
+            # )
+          ),
+          html.Br(),
+          html.Div(
+            children= """
+                        CAMDT is a tool designed to guide decision-makers in adopting appropriate crop and management practices that can improve crop yields given a seasonal climatic condition.
+                      """, 
+          ),
+          html.Br(),
+          html.Div(
+            children= """
+                        Smart planning of annual crop production requires consideration of possible scenarios.
+                        The CAMDT tool adopts crop simulation models included in the DSSAT package (Decision Support System for Agrotechnology Transfer). 
+                        The methodology was developed by the IRI (International Research Institute for Climate and Society / Columbia University) 
+                        in collaboration with the Ethiopian Institute of Agricultural Research (EIAR). 
+                        The purpose of this tool is to support decision-making of the producer or technical advisor, which facilitates discussion of optimal production strategies, risks of technology adoption, 
+                        and evaluation of long-term effects, considering interactions of various factors.
+                      """, 
+          ),
+          html.Br(),
+        ],
+        className="text-center"
+        )
+      ),
+    className="d-none",
     ),
   ],
+  className="tab-content"
   ),
 
-
 ],
-className='m-3'
 )
 
 #==============================================================
 #Dynamic call back for sorting datatable by a column name
-@app.callback(Output(component_id='yieldtables-container2', component_property='children'),
-                Output('memory-sorted-yield-table', 'data'),
-                # Input('column-dropdown', 'value'),
+@app.callback(Output(component_id="yieldtables-container2", component_property="children"),
+                Output("memory-sorted-yield-table", "data"),
+                # Input("column-dropdown", "value"),
                 Input("btn_table_sort", "n_clicks"),
-                State('memory-yield-table', 'data'),
-                State('yield-multiplier', 'value'),
-                State('column-dropdown', 'value'),
+                State("memory-yield-table", "data"),
+                State("yield-multiplier", "value"),
+                State("column-dropdown", "value"),
                 prevent_initial_call=True,
             )
 def sort_table(n_clicks, yield_table, multiplier, col_name):
@@ -866,20 +747,20 @@ def sort_table(n_clicks, yield_table, multiplier, col_name):
             # temp.round(0)  #Round a DataFrame to a variable number of decimal places.
             df_out.iloc[:,i]=temp.values
         return [
-            dash_table.DataTable(columns=[{"name": i, "id": i} for i in df_out.columns],data=df_out.to_dict('records'),
-                style_table={'overflowX': 'auto'}, 
+            dash_table.DataTable(columns=[{"name": i, "id": i} for i in df_out.columns],data=df_out.to_dict("records"),
+                style_table={"overflowX": "auto"}, 
                 style_cell={   # all three widths are needed
-                    'minWidth': '10px', 'width': '10px', 'maxWidth': '30px',
-                    'overflow': 'hidden',
-                    'textOverflow': 'ellipsis', }),
-            df_out.to_dict('records')
+                    "minWidth": "10px", "width": "10px", "maxWidth": "30px",
+                    "overflow": "hidden",
+                    "textOverflow": "ellipsis", }),
+            df_out.to_dict("records")
             ]
 
 #call back to save df into a csv file
 @app.callback(
     Output("download-dataframe-csv2", "data"),
     Input("btn_csv2", "n_clicks"),
-    State('memory-sorted-yield-table', 'data'),
+    State("memory-sorted-yield-table", "data"),
     prevent_initial_call=True,
 )
 def func(n_clicks, yield_data):
@@ -890,22 +771,22 @@ def func(n_clicks, yield_data):
 #==============================================================
 #Dynamic call back for different cultivars for a selected target crop
 @app.callback(
-    Output('cultivar-dropdown', 'options'),
-    Input('crop-radio', 'value'))
+    Output("cultivar-dropdown", "options"),
+    Input("crop-radio", "value"))
 def set_cultivar_options(selected_crop):
-    return [{'label': i, 'value': i} for i in cultivar_options[selected_crop]]
+    return [{"label": i, "value": i} for i in cultivar_options[selected_crop]]
 
 @app.callback(
-    Output('cultivar-dropdown', 'value'),
-    Input('cultivar-dropdown', 'options'))
+    Output("cultivar-dropdown", "value"),
+    Input("cultivar-dropdown", "options"))
 def set_cultivar_value(available_options):
-    return cultivar_options[0]['value']
+    return cultivar_options[0]["value"]
 #==============================================================
 #call back to save df into a csv file
 @app.callback(
     Output("download-dataframe-csv", "data"),
     Input("btn_csv", "n_clicks"),
-    State('memory-yield-table', 'data'),
+    State("memory-yield-table", "data"),
     prevent_initial_call=True,
 )
 def func(n_clicks, yield_data):
@@ -918,7 +799,7 @@ def func(n_clicks, yield_data):
 @app.callback(
     Output("download-dataframe-csv_EB", "data"),
     Input("btn_csv_EB", "n_clicks"),
-    State('memory-EB-table', 'data'),
+    State("memory-EB-table", "data"),
     prevent_initial_call=True,
 )
 def func(n_clicks, EB_data):
@@ -927,45 +808,45 @@ def func(n_clicks, EB_data):
     return dcc.send_data_frame(df.to_csv, "simulated_yield_EB.csv")
 #=================================================   
 #call back to "show/hide" fertilizer input table
-@app.callback(Output('fert-table-Comp', component_property='style'),
-              Input('fert_input', component_property='value'))
+@app.callback(Output("fert-table-Comp", component_property="style"),
+              Input("fert_input", component_property="value"))
 def show_hide_table(visibility_state):
-    if visibility_state == 'Fert':
-        return {"width": "30%",'display': 'block'}  #{'display': 'block'}   
-    if visibility_state == 'No_fert':
-        return {"width": "30%",'display': 'none'} #'display': 'none'} 
+    if visibility_state == "Fert":
+        return {"width": "30%","display": "block"}  #{"display": "block"}   
+    if visibility_state == "No_fert":
+        return {"width": "30%","display": "none"} #"display": "none"} 
 #==============================================================
 #call back to "show/hide" Enterprise Budgetting input table
-@app.callback(Output('EB-table-Comp', component_property='style'),
-              Input('EB_radio', component_property='value'))
+@app.callback(Output("EB-table-Comp", component_property="style"),
+              Input("EB_radio", component_property="value"))
 def show_hide_EBtable(visibility_state):
-    if visibility_state == 'EB_Yes':
-        return {"width": "80%",'display': 'block'}  #{'display': 'block'}   
-    if visibility_state == 'EB_No':
-        return {"width": "80%",'display': 'none'} #'display': 'none'} 
+    if visibility_state == "EB_Yes":
+        return {"width": "80%","display": "block"}  #{"display": "block"}   
+    if visibility_state == "EB_No":
+        return {"width": "80%","display": "none"} #"display": "none"} 
 #==============================================================
-@app.callback(Output('scenario-table', 'data'),
-                # Output('intermediate-value', 'children'),
-                Input('write-button-state', 'n_clicks'),
-                State('ETstation', 'value'),  #input 1
-                State('year1', 'value'),      #input 2
-                State('year2', 'value'),      #input 3
-                State('plt-date-picker', 'date'),  #input 4
-                # State('ETMZcultivar', 'value'),   #input 5
-                State('crop-radio', 'value'),  #input 50
-                State('cultivar-dropdown', 'value'),   #input 5
-                State('ETsoil', 'value'),         #input 6
-                State('ini-H2O', 'value'),        #input 7           
-                State('ini-NO3', 'value'),        #input 8
-                State('plt-density', 'value'),    #input 9
-                State('sce-name', 'value'),       #input 10
-                State('target-year', 'value'),    #input 11
-                # State('intermediate-value', 'children'),  #input 12 scenario summary table
-                State('fert_input', 'value'),     ##input 13 fertilizer yes or no
-                State('fert-table','data'), ###input 14 fert input table
-                State('EB_radio', 'value'),     ##input 15 Enterprise budgeting yes or no
-                State('EB-table','data'), #Input 16 Enterprise budget input
-                State('scenario-table','data') ###input 17 scenario summary table
+@app.callback(Output("scenario-table", "data"),
+                # Output("intermediate-value", "children"),
+                Input("write-button-state", "n_clicks"),
+                State("ETstation", "value"),  #input 1
+                State("year1", "value"),      #input 2
+                State("year2", "value"),      #input 3
+                State("plt-date-picker", "date"),  #input 4
+                # State("ETMZcultivar", "value"),   #input 5
+                State("crop-radio", "value"),  #input 50
+                State("cultivar-dropdown", "value"),   #input 5
+                State("ETsoil", "value"),         #input 6
+                State("ini-H2O", "value"),        #input 7           
+                State("ini-NO3", "value"),        #input 8
+                State("plt-density", "value"),    #input 9
+                State("sce-name", "value"),       #input 10
+                State("target-year", "value"),    #input 11
+                # State("intermediate-value", "children"),  #input 12 scenario summary table
+                State("fert_input", "value"),     ##input 13 fertilizer yes or no
+                State("fert-table","data"), ###input 14 fert input table
+                State("EB_radio", "value"),     ##input 15 Enterprise budgeting yes or no
+                State("EB-table","data"), #Input 16 Enterprise budget input
+                State("scenario-table","data") ###input 17 scenario summary table
             )
 def make_sce_table(n_clicks, input1,input2,input3,input4,input50,input5,input6,input7,input8,input9,input10,
                   input11, fert_app, fert_in_table, EB_radio, EB_in_table, sce_in_table):
@@ -983,37 +864,37 @@ def make_sce_table(n_clicks, input1,input2,input3,input4,input50,input5,input6,i
     # print(input12)  #scenario summary
     # print(input13)  #fertilizler or no-fertilizer
     # print(input14)  #fertilizler summary
-    # print('input15:',EB_in_table)  #scenario summary
+    # print("input15:",EB_in_table)  #scenario summary
 
     # 2) Read fertilizer application information
-    if fert_app == 'Fert':
-        # print('fert-table in callback make_sce_table= {}'.format(fert_in_table))
+    if fert_app == "Fert":
+        # print("fert-table in callback make_sce_table= {}".format(fert_in_table))
         df_fert =pd.DataFrame(fert_in_table)
-        # print('fert-table in callback make_sce_table= {}'.format(df_fert))
+        # print("fert-table in callback make_sce_table= {}".format(df_fert))
     else: #if no fertilizer, then an empty df with an arbitrary column
         df_fert = pd.DataFrame(columns=["DAP", "NAmount"]) 
 
     # 3) Read Enterprise budget input
-    if EB_radio == 'EB_Yes':
-        # print('EB-table in callback make_sce_table= {}'.format(EB_in_table))
+    if EB_radio == "EB_Yes":
+        # print("EB-table in callback make_sce_table= {}".format(EB_in_table))
         df_EB =pd.DataFrame(EB_in_table)
-        # print('EB-table in callback make_sce_table= {}'.format(df_EB))
+        # print("EB-table in callback make_sce_table= {}".format(df_EB))
     else: #if no EB analysis
         df_EB = pd.DataFrame(columns=["sce_name","Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
                  "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
-                 'CropPrice', 'NFertCost', 'SeedCost','OtherVariableCosts','FixedCosts']) 
+                 "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]) 
     #Make a new dataframe to return to scenario-summary table
     df = pd.DataFrame(
         [[input10, input50, input5[7:], input1, input4[5:],input2, input3, input6, input7, input8, input9, input11,
-            '-99', '-99', '-99', '-99','-99', '-99','-99', '-99', '-99','-99', '-99','-99', '-99']],
+            "-99", "-99", "-99", "-99","-99", "-99","-99", "-99", "-99","-99", "-99","-99", "-99"]],
         columns=["sce_name","Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
                  "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
-                 'CropPrice', 'NFertCost', 'SeedCost','OtherVariableCosts','FixedCosts'],)
-    # data = df.to_dict('rows')
-    data = [{'sce_name': None,'Crop': None, 'Cultivar': None, 'stn_name': None, 'Plt-date': None, 'FirstYear': None, 'LastYear': None, 'soil': None,
-             'iH2O': None, 'iNO3': None, 'plt_density': None, 'TargetYr': None,
-             '1_Fert(DOY)': None,'1_Fert(Kg/ha)': None,'2_Fert(DOY)': None,'2_Fert(Kg/ha)': None, '3_Fert(DOY)': None,'3_Fert(Kg/ha)': None, '4_Fert(DOY)': None,'4_Fert(Kg/ha)': None,
-             'CropPrice': None,'NFertCost': None,'SeedCost': None,'OtherVariableCosts': None, 'FixedCosts': None}] 
+                 "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"],)
+    # data = df.to_dict("rows")
+    data = [{"sce_name": None,"Crop": None, "Cultivar": None, "stn_name": None, "Plt-date": None, "FirstYear": None, "LastYear": None, "soil": None,
+             "iH2O": None, "iNO3": None, "plt_density": None, "TargetYr": None,
+             "1_Fert(DOY)": None,"1_Fert(Kg/ha)": None,"2_Fert(DOY)": None,"2_Fert(Kg/ha)": None, "3_Fert(DOY)": None,"3_Fert(Kg/ha)": None, "4_Fert(DOY)": None,"4_Fert(Kg/ha)": None,
+             "CropPrice": None,"NFertCost": None,"SeedCost": None,"OtherVariableCosts": None, "FixedCosts": None}] 
     # columns =  [{"name": i, "id": i,} for i in (df.columns)]
     dff = df.copy()
 
@@ -1024,7 +905,7 @@ def make_sce_table(n_clicks, input1,input2,input3,input4,input50,input5,input6,i
                            input9,input10,fert_app, df_fert)
         #=====================================================================
         # #Make a new dataframe for fertilizer inputs
-        if fert_app == 'Fert' and EB_radio == 'EB_Yes':
+        if fert_app == "Fert" and EB_radio == "EB_Yes":
             #Make a new dataframe
             df = pd.DataFrame(
                 [[input10, input50, input5[7:], input1, input4[5:],input2, input3, input6, input7, input8, input9,input11, 
@@ -1034,66 +915,66 @@ def make_sce_table(n_clicks, input1,input2,input3,input4,input50,input5,input6,i
                 df_EB.FixedCosts.values[0]]],
                 columns=["sce_name", "Crop","Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
                         "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
-                        'CropPrice', 'NFertCost', 'SeedCost','OtherVariableCosts','FixedCosts'],)
-        elif fert_app == 'Fert' and EB_radio == 'EB_No':
+                        "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"],)
+        elif fert_app == "Fert" and EB_radio == "EB_No":
             #Make a new dataframe
             df = pd.DataFrame(
                 [[input10, input50, input5[7:], input1, input4[5:],input2, input3, input6, input7, input8,input9, input11, 
                 df_fert.DAP.values[0], df_fert.NAmount.values[0], df_fert.DAP.values[1], df_fert.NAmount.values[1],
                 df_fert.DAP.values[2], df_fert.NAmount.values[2],df_fert.DAP.values[3], df_fert.NAmount.values[3],
-                '-99','-99', '-99','-99', '-99']],
+                "-99","-99", "-99","-99", "-99"]],
                 columns=["sce_name", "Crop","Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
                         "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
-                        'CropPrice', 'NFertCost', 'SeedCost','OtherVariableCosts','FixedCosts'],)
-        elif fert_app == 'No_fert' and EB_radio == 'EB_Yes':
+                        "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"],)
+        elif fert_app == "No_fert" and EB_radio == "EB_Yes":
             #Make a new dataframe
             df = pd.DataFrame(
                 [[input10, input50, input5[7:], input1, input4[5:],input2, input3, input6, input7, input8, input9,input11, 
-                 '-99', '-99', '-99', '-99','-99', '-99','-99', '-99',
+                 "-99", "-99", "-99", "-99","-99", "-99","-99", "-99",
                 df_EB.CropPrice.values[0], df_EB.NFertCost.values[0], df_EB.SeedCost.values[0], df_EB.OtherVariableCosts.values[0],
                 df_EB.FixedCosts.values[0]]],
                 columns=["sce_name", "Crop","Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
                         "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
-                        'CropPrice', 'NFertCost', 'SeedCost','OtherVariableCosts','FixedCosts'],)
+                        "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"],)
         else:  #no fertilizer application & No EB analyze
             df = pd.DataFrame(
                 [[input10, input50, input5[7:], input1, input4[5:],input2, input3, input6, input7, input8,input9, input11, 
-                 '-99', '-99', '-99', '-99','-99', '-99','-99', '-99','-99','-99', '-99','-99', '-99']],
+                 "-99", "-99", "-99", "-99","-99", "-99","-99", "-99","-99","-99", "-99","-99", "-99"]],
                 columns=["sce_name", "Crop","Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
                         "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
-                        'CropPrice', 'NFertCost', 'SeedCost','OtherVariableCosts','FixedCosts'],)           
-        data = df.to_dict('rows')
+                        "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"],)           
+        data = df.to_dict("rows")
         # columns =  [{"name": i, "id": i,} for i in (df.columns)]
 
     if n_clicks == 1:
         dff = df.copy()
-        data = dff.to_dict('rows')
+        data = dff.to_dict("rows")
     elif n_clicks > 1:
         # # Read previously saved scenario summaries  https://dash.plotly.com/sharing-data-between-callbacks
-        # dff = pd.read_json(intermediate, orient='split')
+        # dff = pd.read_json(intermediate, orient="split")
         dff = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
         dff = dff.append(df, ignore_index=True)
-        data = dff.to_dict('rows')
+        data = dff.to_dict("rows")
     # print(data)
     return data
-    # return dash_table.DataTable(data=data, columns=columns,row_deletable=True), dff.to_json(date_format='iso', orient='split')
+    # return dash_table.DataTable(data=data, columns=columns,row_deletable=True), dff.to_json(date_format="iso", orient="split")
 
 #===============================
 #2nd callback to run ALL scenarios
-@app.callback(Output(component_id='yieldbox-container', component_property='children'),
-                Output(component_id='yieldcdf-container', component_property='children'),
-                Output(component_id='yieldtimeseries-container', component_property='children'),
-                Output(component_id='yield-BN-container', component_property='children'),
-                Output(component_id='yield-NN-container', component_property='children'),
-                Output(component_id='yield-AN-container', component_property='children'),
-                Output(component_id='yieldtables-container', component_property='children'),
-                Output('memory-yield-table', 'data'),
-                Output('column-dropdown', 'options'), #EJ(5/19/2021) update dropdown list for sorting a datatable
-                Input('simulate-button-state', 'n_clicks'),
-                # State('target-year', 'value'),       #input 11
-                # State('intermediate-value', 'children') #scenario summary table
-                State('scenario-table','data'), ### scenario summary table
-                State('season-slider', 'value'), #EJ (5/13/2021) for seasonal total rainfall
+@app.callback(Output(component_id="yieldbox-container", component_property="children"),
+                Output(component_id="yieldcdf-container", component_property="children"),
+                Output(component_id="yieldtimeseries-container", component_property="children"),
+                Output(component_id="yield-BN-container", component_property="children"),
+                Output(component_id="yield-NN-container", component_property="children"),
+                Output(component_id="yield-AN-container", component_property="children"),
+                Output(component_id="yieldtables-container", component_property="children"),
+                Output("memory-yield-table", "data"),
+                Output("column-dropdown", "options"), #EJ(5/19/2021) update dropdown list for sorting a datatable
+                Input("simulate-button-state", "n_clicks"),
+                # State("target-year", "value"),       #input 11
+                # State("intermediate-value", "children") #scenario summary table
+                State("scenario-table","data"), ### scenario summary table
+                State("season-slider", "value"), #EJ (5/13/2021) for seasonal total rainfall
                 prevent_initial_call=True,
               )
 
@@ -1103,11 +984,11 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
         return 
     else: 
         # 1) Read saved scenario summaries and get a list of scenarios to run
-        # dff = pd.read_json(intermediate, orient='split')
+        # dff = pd.read_json(intermediate, orient="split")
         dff = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
         # print(dff)
         sce_numbers = len(dff.sce_name.values)
-        # Wdir_path = 'C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\'
+        # Wdir_path = "C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\"
         Wdir_path = DSSAT_FILES_DIR   #for linux system
         TG_yield = []
 
@@ -1125,13 +1006,13 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             lastyear = int(dff.LastYear[i])
             WTD_fname = path.join(Wdir_path, dff.stn_name[i]+".WTD")
             df_obs = read_WTD(WTD_fname,firstyear, lastyear)  # === Read daily observations into a dataframe (note: Feb 29th was skipped in df_obs)
-            df_season_rain = season_rain_rank(df_obs, sdoy, edoy)  #get indices of the sorted years based on SCF1 => df_season_rain.columns = ['YEAR','season_rain', 'Rank']  
+            df_season_rain = season_rain_rank(df_obs, sdoy, edoy)  #get indices of the sorted years based on SCF1 => df_season_rain.columns = ["YEAR","season_rain", "Rank"]  
             #==============end of # EJ(5/18/2021) extract seasonal rainfall total
 
             # 2) Write V47 file
-            if dff.Crop[i] == 'WH':
+            if dff.Crop[i] == "WH":
                 temp_dv7 = path.join(Wdir_path, "DSSBatch_template_WH.V47")
-            elif dff.Crop[i] == 'MZ':
+            elif dff.Crop[i] == "MZ":
                 temp_dv7 = path.join(Wdir_path, "DSSBatch_template_MZ.V47")
             else:  # SG
                 temp_dv7 = path.join(Wdir_path, "DSSBatch_template_SG.V47")
@@ -1147,26 +1028,26 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             temp_str = fr.readline()
             sname = dff.sce_name.values[i]
             # SNX_fname = path.join(Wdir_path, "ETMZ"+sname+".SNX")
-            if dff.Crop[i] == 'WH':
+            if dff.Crop[i] == "WH":
                 SNX_fname = path.join(Wdir_path, "ETWH"+sname+".SNX")
-            elif dff.Crop[i] == 'MZ':
+            elif dff.Crop[i] == "MZ":
                 SNX_fname = path.join(Wdir_path, "ETMZ"+sname+".SNX")
             else:  # SG
                 SNX_fname = path.join(Wdir_path, "ETSG"+sname+".SNX")
 
-            # On Linux system, we don't need to do this:
+            # On Linux system, we don"t need to do this:
             # SNX_fname = SNX_fname.replace("/", "\\")
-            new_str2 = '{0:<95}{1:4s}'.format(SNX_fname, repr(1).rjust(4)) + temp_str[99:]
+            new_str2 = "{0:<95}{1:4s}".format(SNX_fname, repr(1).rjust(4)) + temp_str[99:]
             fw.write(new_str2)
             fr.close()
             fw.close()
             #=====================================================================
             #3) Run DSSAT executable
             os.chdir(Wdir_path)  #change directory  #check if needed or not
-            # if dff.Crop[i] == 'WH':
+            # if dff.Crop[i] == "WH":
             #     args = "DSCSM047.EXE CSCER047 B DSSBatch.v47"
             #     fout_name = path.join(Wdir_path, "ETWH"+sname+".OSU")
-            # elif dff.Crop[i] == 'MZ':
+            # elif dff.Crop[i] == "MZ":
             #     args = "DSCSM047.EXE MZCER047 B DSSBatch.v47"
             #     fout_name = path.join(Wdir_path, "ETMZ"+sname+".OSU")
             # else:  # SG
@@ -1174,13 +1055,13 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             #     fout_name = path.join(Wdir_path, "ETSG"+sname+".OSU")
             # subprocess.call(args) ##Run executable with argument  , stdout=FNULL, stderr=FNULL, shell=False)
             #===========>for linux system
-            if dff.Crop[i] == 'WH':
+            if dff.Crop[i] == "WH":
                 args = "./DSCSM047.EXE CSCER047 B DSSBatch.V47"
                 # args = "./DSCSM047.EXE B DSSBatch.V47"
                 fout_name = "ETWH"+sname+".OSU"
                 arg_mv = "cp Summary.OUT "+ "ETWH"+sname+".OSU" #"cp Summary.OUT $fout_name"
                 # fout_name = path.join(Wdir_path, "ETWH"+sname+".OSU")
-            elif dff.Crop[i] == 'MZ':
+            elif dff.Crop[i] == "MZ":
                 args = "./DSCSM047.EXE MZCER047 B DSSBatch.V47"
                 fout_name = "ETMZ"+sname+".OSU"
                 arg_mv = "cp Summary.OUT "+ "ETMZ"+sname+".OSU" #"cp Summary.OUT $fout_name"
@@ -1208,18 +1089,18 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
                 doy = repr(PDAT[0])[4:]
                 target = dff.TargetYr[i] + doy
                 yr_index = np.argwhere(PDAT == int(target))
-                # print('target year:', int(dff.TargetYr[i]) )
-                # print('last sim year:', int(dff.LastYear[i]))
-                # print('PDAT:', PDAT)
-                # print('target:', target)
-                # print('yr_index:', yr_index[0][0])
+                # print("target year:", int(dff.TargetYr[i]) )
+                # print("last sim year:", int(dff.LastYear[i]))
+                # print("PDAT:", PDAT)
+                # print("target:", target)
+                # print("yr_index:", yr_index[0][0])
                 TG_yield_temp = HWAM[yr_index[0][0]]
             else: 
                 TG_yield_temp = np.nan
 
             # Make a new dataframe for plotting
-            data = {'EXPERIMENT':EXPERIMENT, 'YEAR':YEAR, 'PDAT': PDAT, 'ADAT':ADAT, 'HWAM':HWAM,'RAIN':df_season_rain.season_rain.values,'RANK':df_season_rain.Rank.values}
-            temp_df = pd.DataFrame (data, columns = ['EXPERIMENT','YEAR', 'PDAT','ADAT','HWAM', 'RAIN', 'RANK'])
+            data = {"EXPERIMENT":EXPERIMENT, "YEAR":YEAR, "PDAT": PDAT, "ADAT":ADAT, "HWAM":HWAM,"RAIN":df_season_rain.season_rain.values,"RANK":df_season_rain.Rank.values}
+            temp_df = pd.DataFrame (data, columns = ["EXPERIMENT","YEAR", "PDAT","ADAT","HWAM", "RAIN", "RANK"])
 
             if i==0:
                 df = temp_df.copy()
@@ -1228,12 +1109,12 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
                 
             TG_yield.append(TG_yield_temp)
 
-        df = df.round({'RAIN': 0})  #Round a DataFrame to a variable number of decimal places.
+        df = df.round({"RAIN": 0})  #Round a DataFrame to a variable number of decimal places.
         yield_min = np.min(df.HWAM.values)  #to make a consistent yield scale for exceedance curve =>Fig 4,5,6
         yield_max = np.max(df.HWAM.values)
         x_val = np.unique(df.EXPERIMENT.values)
         # print(df)
-        # print('x_val={}'.format(x_val))
+        # print("x_val={}".format(x_val))
         #4) Make a boxplot
         # df = px.data.tips()
         # fig = px.box(df, x="time", y="total_bill")
@@ -1241,42 +1122,42 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
         # fig.update_layout(transition_duration=500)
         # df = px.data.tips()
         # fig = px.box(df, x="Scenario Name", y="Yield [kg/ha]")
-        fig = px.box(df, x="EXPERIMENT", y="HWAM", title='Yield Boxplot')
-        fig.add_scatter(x=x_val,y=TG_yield, mode='markers') #, mode='lines+markers') #'lines')
-        fig.update_xaxes(title= 'Scenario Name [*Note:Red dot(s) represents yield(s) based on the weather of target year]')
-        fig.update_yaxes(title= 'Yield [kg/ha]')
+        fig = px.box(df, x="EXPERIMENT", y="HWAM", title="Yield Boxplot")
+        fig.add_scatter(x=x_val,y=TG_yield, mode="markers") #, mode="lines+markers") #"lines")
+        fig.update_xaxes(title= "Scenario Name [*Note:Red dot(s) represents yield(s) based on the weather of target year]")
+        fig.update_yaxes(title= "Yield [kg/ha]")
         # # return fig
 
         fig2 = go.Figure()
         for i in x_val:
-            x_data = df.HWAM[df['EXPERIMENT']==i].values
+            x_data = df.HWAM[df["EXPERIMENT"]==i].values
             x_data = np.sort(x_data)
             fx_scf = [1.0/len(x_data)] * len(x_data) #pdf
             Fx_scf= 1.0-np.cumsum(fx_scf)  #for exceedance curve
 
             fig2.add_trace(go.Scatter(x=x_data, y=Fx_scf,
-                        mode='lines+markers',
+                        mode="lines+markers",
                         name=i[4:]))
         # Edit the layout
-        fig2.update_layout(title='Yield Exceedance Curve',
-                        xaxis_title='Yield [kg/ha]',
-                        yaxis_title='Probability of Exceedance [-]')
+        fig2.update_layout(title="Yield Exceedance Curve",
+                        xaxis_title="Yield [kg/ha]",
+                        yaxis_title="Probability of Exceedance [-]")
 
         #make a new dataframe to save into CSV
         yr_val = np.unique(df.YEAR.values)
-        df_out = pd.DataFrame({'YEAR':yr_val})
+        df_out = pd.DataFrame({"YEAR":yr_val})
 
         fig3 = go.Figure()
         fig4 = go.Figure() #yield exceedance curve using only BN category
         fig5 = go.Figure()  #yield exceedance curve using only NN category
         fig6 = go.Figure()  #yield exceedance curve using only AN category
         for i in x_val:
-            x_data = df.YEAR[df['EXPERIMENT']==i].values
-            y_data = df.HWAM[df['EXPERIMENT']==i].values
+            x_data = df.YEAR[df["EXPERIMENT"]==i].values
+            y_data = df.HWAM[df["EXPERIMENT"]==i].values
             yield_rank = y_data.argsort().argsort() + 1 #<<<<<<==================
             yield_Pexe = np.around(1-[1.0/len(y_data)] * yield_rank, 2) #<<<<<<=====probability of exceedance,  round to the given number of decimals.
-            rain_data = df.RAIN[df['EXPERIMENT']==i].values  # EJ(5/18/2021) seasonal rainfall total
-            rain_rank = df.RANK[df['EXPERIMENT']==i].values  # EJ(5/18/2021) rank of seasonal rainfall total
+            rain_data = df.RAIN[df["EXPERIMENT"]==i].values  # EJ(5/18/2021) seasonal rainfall total
+            rain_rank = df.RANK[df["EXPERIMENT"]==i].values  # EJ(5/18/2021) rank of seasonal rainfall total
 
             ##make a new dataframe to save into CSV 
             col_name0 = "Yield_" + i[4:]
@@ -1286,7 +1167,7 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             df_out = pd.concat([df_out, df_temp], axis=1)
 
             fig3.add_trace(go.Scatter(x=x_data, y=y_data,
-                        mode='lines+markers',
+                        mode="lines+markers",
                         name=i[4:]))
             #==================================================
             #exceedance curve for BN
@@ -1297,7 +1178,7 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             x_data = np.sort(x_data)
             fx_scf = [1.0/len(x_data)] * len(x_data) #pdf
             Fx_scf= 1.0-np.cumsum(fx_scf)  #for exceedance curve
-            fig4.add_trace(go.Scatter(x=x_data, y=Fx_scf, mode='lines+markers', name=i[4:]))
+            fig4.add_trace(go.Scatter(x=x_data, y=Fx_scf, mode="lines+markers", name=i[4:]))
             #2)NN
             mask = np.logical_and(rain_rank > BN_thres, rain_rank <= NN_thres)
             x_data = y_data[mask]
@@ -1305,85 +1186,85 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             x_data = np.sort(x_data)
             fx_scf = [1.0/len(x_data)] * len(x_data) #pdf
             Fx_scf= 1.0-np.cumsum(fx_scf)  #for exceedance curve
-            fig5.add_trace(go.Scatter(x=x_data, y=Fx_scf, mode='lines+markers', name=i[4:]))
+            fig5.add_trace(go.Scatter(x=x_data, y=Fx_scf, mode="lines+markers", name=i[4:]))
             #3)AN
             x_data = y_data[rain_rank > NN_thres]
             x_data = np.sort(x_data)
             fx_scf = [1.0/len(x_data)] * len(x_data) #pdf
             Fx_scf= 1.0-np.cumsum(fx_scf)  #for exceedance curve
-            fig6.add_trace(go.Scatter(x=x_data, y=Fx_scf, mode='lines+markers', name=i[4:]))
+            fig6.add_trace(go.Scatter(x=x_data, y=Fx_scf, mode="lines+markers", name=i[4:]))
             #====================================================                
         # Edit the layout
-        fig3.update_layout(title='Yield Time-Series',
-                        xaxis_title='Year',
-                        yaxis_title='Yield [kg/ha]')
-        fig4.update_layout(title='Yield Exceedance [Dry category]',
-                        xaxis_title='Yield [kg/ha]',
-                        yaxis_title='Probability of Exceedance [-]',
+        fig3.update_layout(title="Yield Time-Series",
+                        xaxis_title="Year",
+                        yaxis_title="Yield [kg/ha]")
+        fig4.update_layout(title="Yield Exceedance [Dry category]",
+                        xaxis_title="Yield [kg/ha]",
+                        yaxis_title="Probability of Exceedance [-]",
                         legend=dict(yanchor="bottom", y=0.1, xanchor="left", x=0.01))
         fig4.update_xaxes(range=[yield_min, yield_max])
-        fig5.update_layout(title='Yield Exceedance [Normal category]',
-                        xaxis_title='Yield [kg/ha]',
-                        yaxis_title='Probability of Exceedance [-]',
+        fig5.update_layout(title="Yield Exceedance [Normal category]",
+                        xaxis_title="Yield [kg/ha]",
+                        yaxis_title="Probability of Exceedance [-]",
                         legend=dict(yanchor="bottom", y=0.1, xanchor="left", x=0.01))
         fig5.update_xaxes(range=[yield_min, yield_max])
-        fig6.update_layout(title='Yield Exceedance [Wet category]',
-                        xaxis_title='Yield [kg/ha]',
-                        yaxis_title='Probability of Exceedance [-]',
+        fig6.update_layout(title="Yield Exceedance [Wet category]",
+                        xaxis_title="Yield [kg/ha]",
+                        yaxis_title="Probability of Exceedance [-]",
                         legend=dict(yanchor="bottom", y=0.1, xanchor="left", x=0.01))
         fig6.update_xaxes(range=[yield_min, yield_max])
 
         #save simulated yield outputs into a csv file <<<<<<=======================
         fname = path.join(Wdir_path, "simulated_yield.csv")
         df_out.to_csv(fname, index=False)
-        #print({'label': i, 'value': i} for i in list(df_out.columns))
+        #print({"label": i, "value": i} for i in list(df_out.columns))
 
         return [
-            dcc.Graph(id='yield-boxplot',figure=fig), 
-            dcc.Graph(id='yield-exceedance',figure=fig2),
-            dcc.Graph(id='yield-ts',figure=fig3),
-            dcc.Graph(id='yield-BN_exceedance',figure=fig4),
-            dcc.Graph(id='yield-NN_exceedance',figure=fig5),
-            dcc.Graph(id='yield-AN_exceedance',figure=fig6),
-            dash_table.DataTable(columns=[{"name": i, "id": i} for i in df_out.columns],data=df_out.to_dict('records'),
-                style_table={'overflowX': 'auto'}, 
+            dcc.Graph(id="yield-boxplot",figure=fig), 
+            dcc.Graph(id="yield-exceedance",figure=fig2),
+            dcc.Graph(id="yield-ts",figure=fig3),
+            dcc.Graph(id="yield-BN_exceedance",figure=fig4),
+            dcc.Graph(id="yield-NN_exceedance",figure=fig5),
+            dcc.Graph(id="yield-AN_exceedance",figure=fig6),
+            dash_table.DataTable(columns=[{"name": i, "id": i} for i in df_out.columns],data=df_out.to_dict("records"),
+                style_table={"overflowX": "auto"}, 
                 style_cell={   # all three widths are needed
-                    'minWidth': '10px', 'width': '10px', 'maxWidth': '30px',
-                    'overflow': 'hidden',
-                    'textOverflow': 'ellipsis', }),
-            df_out.to_dict('records'),
-            [{'label': i, 'value': i} for i in list(df_out.columns)]
+                    "minWidth": "10px", "width": "10px", "maxWidth": "30px",
+                    "overflow": "hidden",
+                    "textOverflow": "ellipsis", }),
+            df_out.to_dict("records"),
+            [{"label": i, "value": i} for i in list(df_out.columns)]
             ]
 #==============================================================
 #==============================================================
 #Dynamic call back for update dropdown values, before datatable filtering by col name
 # @app.callback(
-#     Output('column-dropdown', 'options'),
+#     Output("column-dropdown", "options"),
 #     Input("btn_table_sort", "n_clicks"),
-#     State('memory-yield-table', 'data'),
+#     State("memory-yield-table", "data"),
 #     prevent_initial_call=True,
 #     )
 # def set_column_options(n_clicks, yield_table):
 #     df =pd.DataFrame(yield_table)
-#     return [{'label': i, 'value': i} for i in list(df.columns)]
+#     return [{"label": i, "value": i} for i in list(df.columns)]
 #==============================================================
 #==============================================================
 @app.callback(
-    Output('column-dropdown', 'value'),
-    Input('column-dropdown', 'options'))
+    Output("column-dropdown", "value"),
+    Input("column-dropdown", "options"))
 def set_column_value(available_options):
     # print(available_options)
-    # return cultivar_options[0]['value']
-    return [available_options[i]['value'] for i in range(len(available_options))]
+    # return cultivar_options[0]["value"]
+    return [available_options[i]["value"] for i in range(len(available_options))]
 
 #Last callback to create figures for Enterprise budgeting
-@app.callback(Output(component_id='EBbox-container', component_property='children'),
-                Output(component_id='EBcdf-container', component_property='children'),
-                Output(component_id='EBtimeseries-container', component_property='children'),
-                Output(component_id='EBtables-container', component_property='children'),
-                Output('memory-EB-table', 'data'),
-                Input('EB-button-state', 'n_clicks'),
-                State('scenario-table','data') ### scenario summary table
+@app.callback(Output(component_id="EBbox-container", component_property="children"),
+                Output(component_id="EBcdf-container", component_property="children"),
+                Output(component_id="EBtimeseries-container", component_property="children"),
+                Output(component_id="EBtables-container", component_property="children"),
+                Output("memory-EB-table", "data"),
+                Input("EB-button-state", "n_clicks"),
+                State("scenario-table","data") ### scenario summary table
               )
 
 def EB_figure(n_clicks, sce_in_table):
@@ -1393,10 +1274,10 @@ def EB_figure(n_clicks, sce_in_table):
     else: 
         # 1) Read saved scenario summaries and get a list of scenarios to run
         dff = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
-        # print('Callback EB_figure:', dff)
-        # print('Callback EB_figure:', sce_in_table)
+        # print("Callback EB_figure:", dff)
+        # print("Callback EB_figure:", sce_in_table)
         sce_numbers = len(dff.sce_name.values)
-        # Wdir_path = 'C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\'
+        # Wdir_path = "C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\"
         Wdir_path = DSSAT_FILES_DIR  #for linux system
         os.chdir(Wdir_path)  #change directory  #check if needed or not
         TG_GMargin = []
@@ -1404,9 +1285,9 @@ def EB_figure(n_clicks, sce_in_table):
         #EJ(5/3/2021) Read DSSAT output for each scenarios
         for i in range(sce_numbers):
             sname = dff.sce_name.values[i]
-            if dff.Crop[i] == 'WH':
+            if dff.Crop[i] == "WH":
                 fout_name = path.join(Wdir_path, "ETWH"+sname+".OSU")
-            elif dff.Crop[i] == 'MZ':
+            elif dff.Crop[i] == "MZ":
                 fout_name = path.join(Wdir_path, "ETMZ"+sname+".OSU")
             else:  # SG
                 fout_name = path.join(Wdir_path, "ETSG"+sname+".OSU")
@@ -1433,17 +1314,17 @@ def EB_figure(n_clicks, sce_in_table):
                 TG_GMargin_temp = np.nan
 
             # # Make a new dataframe for plotting
-            # df1 = pd.DataFrame({'EXPERIMENT':EXPERIMENT})
-            # df2 = pd.DataFrame({'PDAT':PDAT})
-            # df3 = pd.DataFrame({'ADAT':ADAT})
-            # df4 = pd.DataFrame({'HWAM':HWAM})
-            # df5 = pd.DataFrame({'YEAR':YEAR})
-            # df6 = pd.DataFrame({'NICM':NICM})
-            # df7 = pd.DataFrame({'GMargin':GMargin})
+            # df1 = pd.DataFrame({"EXPERIMENT":EXPERIMENT})
+            # df2 = pd.DataFrame({"PDAT":PDAT})
+            # df3 = pd.DataFrame({"ADAT":ADAT})
+            # df4 = pd.DataFrame({"HWAM":HWAM})
+            # df5 = pd.DataFrame({"YEAR":YEAR})
+            # df6 = pd.DataFrame({"NICM":NICM})
+            # df7 = pd.DataFrame({"GMargin":GMargin})
             # temp_df = pd.concat([df1.EXPERIMENT,df5.YEAR, df2.PDAT, df3.ADAT, df4.HWAM, df6.NICM, df7.GMargin], ignore_index=True, axis=1)
 
-            data = {'EXPERIMENT':EXPERIMENT, 'YEAR':YEAR, 'PDAT': PDAT, 'ADAT':ADAT, 'HWAM':HWAM,'NICM':NICM, 'GMargin':GMargin, 'RAIN':df_season_rain.season_rain.values,'RANK':df_season_rain.Rank.values}
-            temp_df = pd.DataFrame (data, columns = ['EXPERIMENT','YEAR', 'PDAT','ADAT','HWAM', 'RAIN', 'RANK'])
+            data = {"EXPERIMENT":EXPERIMENT, "YEAR":YEAR, "PDAT": PDAT, "ADAT":ADAT, "HWAM":HWAM,"NICM":NICM, "GMargin":GMargin, "RAIN":df_season_rain.season_rain.values,"RANK":df_season_rain.Rank.values}
+            temp_df = pd.DataFrame (data, columns = ["EXPERIMENT","YEAR", "PDAT","ADAT","HWAM", "RAIN", "RANK"])
 
             if i==0:
                 df = temp_df.copy()
@@ -1453,67 +1334,67 @@ def EB_figure(n_clicks, sce_in_table):
             TG_GMargin.append(TG_GMargin_temp)
 
         # adding column name to the respective columns
-        df.columns =['EXPERIMENT', 'YEAR','PDAT', 'ADAT','HWAM','NICM','GMargin']
+        df.columns =["EXPERIMENT", "YEAR","PDAT", "ADAT","HWAM","NICM","GMargin"]
         x_val = np.unique(df.EXPERIMENT.values)
         # print(df)
-        fig = px.box(df, x="EXPERIMENT", y="GMargin", title='Gross Margin Boxplot')
-        fig.add_scatter(x=x_val,y=TG_GMargin, mode='markers') #, mode='lines+markers') #'lines')
-        fig.update_xaxes(title= 'Scenario Name')
-        fig.update_yaxes(title= 'Gross Margin[Birr/ha]')
+        fig = px.box(df, x="EXPERIMENT", y="GMargin", title="Gross Margin Boxplot")
+        fig.add_scatter(x=x_val,y=TG_GMargin, mode="markers") #, mode="lines+markers") #"lines")
+        fig.update_xaxes(title= "Scenario Name")
+        fig.update_yaxes(title= "Gross Margin[Birr/ha]")
 
         fig2 = go.Figure()
         for i in x_val:
-            x_data = df.GMargin[df['EXPERIMENT']==i].values
+            x_data = df.GMargin[df["EXPERIMENT"]==i].values
             x_data = np.sort(x_data)
             fx_scf = [1.0/len(x_data)] * len(x_data) #pdf
             Fx_scf= 1.0-np.cumsum(fx_scf)  #for exceedance curve
 
             fig2.add_trace(go.Scatter(x=x_data, y=Fx_scf,
-                        mode='lines+markers',
+                        mode="lines+markers",
                         name=i))
         # Edit the layout
-        fig2.update_layout(title='Gross Margin Exceedance Curve',
-                        xaxis_title='Gross Margin[Birr/ha]',
-                        yaxis_title='Probability of Exceedance [-]')
+        fig2.update_layout(title="Gross Margin Exceedance Curve",
+                        xaxis_title="Gross Margin[Birr/ha]",
+                        yaxis_title="Probability of Exceedance [-]")
 
         #make a new dataframe to save into CSV
         yr_val = np.unique(df.YEAR.values)
-        df_out = pd.DataFrame({'YEAR':yr_val})
+        df_out = pd.DataFrame({"YEAR":yr_val})
 
         fig3 = go.Figure()
         for i in x_val:
-            x_data = df.YEAR[df['EXPERIMENT']==i].values
-            y_data = df.GMargin[df['EXPERIMENT']==i].values
+            x_data = df.YEAR[df["EXPERIMENT"]==i].values
+            y_data = df.GMargin[df["EXPERIMENT"]==i].values
 
             ##make a new dataframe to save into CSV
             df_temp = pd.DataFrame({i:y_data})
             df_out = pd.concat([df_out, df_temp], axis=1)
 
             fig3.add_trace(go.Scatter(x=x_data, y=y_data,
-                        mode='lines+markers',
+                        mode="lines+markers",
                         name=i))
         # Edit the layout
-        fig3.update_layout(title='Gross Margin Time-Series',
-                        xaxis_title='Year',
-                        yaxis_title='Gross Margin[Birr/ha]')
+        fig3.update_layout(title="Gross Margin Time-Series",
+                        xaxis_title="Year",
+                        yaxis_title="Gross Margin[Birr/ha]")
         #save simulated yield outputs into a csv file <<<<<<=======================
         fname = path.join(Wdir_path, "simulated_yield_GMargin.csv")
         df_out.to_csv(fname, index=False)
         return [
-            dcc.Graph(id='EB-boxplot',figure=fig), 
-            dcc.Graph(id='EB-exceedance',figure=fig2),
-            dcc.Graph(id='EB-ts',figure=fig3),
+            dcc.Graph(id="EB-boxplot",figure=fig), 
+            dcc.Graph(id="EB-exceedance",figure=fig2),
+            dcc.Graph(id="EB-ts",figure=fig3),
             dash_table.DataTable(columns=[{"name": i, "id": i} for i in df_out.columns],
-                data=df_out.to_dict('records'),
-                style_cell={'whiteSpace': 'normal','height': 'auto',},),
-            df_out.to_dict('records')
+                data=df_out.to_dict("records"),
+                style_cell={"whiteSpace": "normal","height": "auto",},),
+            df_out.to_dict("records")
             ]
 
 # =============================================
 # def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input7,input8,input9,input10):
 def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,crop,input5,input6,input7,input8,
                        input9,input10,fert_app, df_fert):    
-    # print('check writeSNX_main')
+    # print("check writeSNX_main")
     # print(input1)  #MELK
     # print(input2)  #1981
     # print(input3)  #2014
@@ -1530,7 +1411,7 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,crop,input5,input6,
     plt_year = input2
     if input4 is not None:
         date_object = date.fromisoformat(input4)
-        date_string = date_object.strftime('%B %d, %Y')
+        date_string = date_object.strftime("%B %d, %Y")
         plt_doy = date_object.timetuple().tm_yday
         # print(date_string)  #June 15, 2021 
         # print(plt_doy)  #166
@@ -1544,23 +1425,23 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,crop,input5,input6,
     CNAME = input5[7:]  
     ID_SOIL = input6
     PPOP = input9  #planting density
-    i_NO3 = input8  # self.label_04.cget("text")[0:1]  #self.NO3_soil.getvalue()[0][0:1] #'H' #or 'L'
+    i_NO3 = input8  # self.label_04.cget("text")[0:1]  #self.NO3_soil.getvalue()[0][0:1] #"H" #or "L"
     IC_w_ratio = float(input7)
-    # crop = 'MZ' #EJ(1/6/2021) temporary
+    # crop = "MZ" #EJ(1/6/2021) temporary
 
     #1) make SNX
-    if crop == 'WH':
+    if crop == "WH":
         temp_snx = path.join(Wdir_path, "TEMP_ETWH.SNX")
-        snx_name = 'ETWH'+input10[:4]+'.SNX'
-    elif crop == 'MZ':
+        snx_name = "ETWH"+input10[:4]+".SNX"
+    elif crop == "MZ":
         temp_snx = path.join(Wdir_path, "TEMP_ETMZ.SNX")
-        snx_name = 'ETMZ'+input10[:4]+'.SNX'
+        snx_name = "ETMZ"+input10[:4]+".SNX"
     else:  # SG
         temp_snx = path.join(Wdir_path, "TEMP_ETSG.SNX")
-        snx_name = 'ETSG'+input10[:4]+'.SNX'
+        snx_name = "ETSG"+input10[:4]+".SNX"
     # # temp_snx = path.join(Wdir_path, "ETMZTEMP.SNX")
     # temp_snx = path.join(Wdir_path, "TEMP_ETMZ.SNX")
-    # snx_name = 'ETMZ'+input10[:4]+'.SNX'
+    # snx_name = "ETMZ"+input10[:4]+".SNX"
     SNX_fname = path.join(Wdir_path, snx_name)
     fr = open(temp_snx, "r")  # opens temp SNX file to read
     fw = open(SNX_fname, "w")  # opens SNX file to write
@@ -1569,25 +1450,25 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,crop,input5,input6,
         temp_str = fr.readline()
         fw.write(temp_str)
 
-    MI = '0' 
-    if fert_app == 'Fert':
-        MF = '1'
+    MI = "0" 
+    if fert_app == "Fert":
+        MF = "1"
     else: 
-        MF = '0'
-    # MF = '1'
-    SA = '0'
-    IC = '1'
-    MP = '1'
-    MR = '0'
-    MC = '0'
-    MT = '0'
-    ME = '0'
-    MH = '0'
-    SM = '1'
+        MF = "0"
+    # MF = "1"
+    SA = "0"
+    IC = "1"
+    MP = "1"
+    MR = "0"
+    MC = "0"
+    MT = "0"
+    ME = "0"
+    MH = "0"
+    SM = "1"
     temp_str = fr.readline()
-    FL = '1'
-    fw.write('{0:3s}{1:31s}{2:3s}{3:3s}{4:3s}{5:3s}{6:3s}{7:3s}{8:3s}{9:3s}{10:3s}{11:3s}{12:3s}{13:3s}'.format(
-        FL.rjust(3), '1 0 0 ET-SIMAGRI                 1',
+    FL = "1"
+    fw.write("{0:3s}{1:31s}{2:3s}{3:3s}{4:3s}{5:3s}{6:3s}{7:3s}{8:3s}{9:3s}{10:3s}{11:3s}{12:3s}{13:3s}".format(
+        FL.rjust(3), "1 0 0 ET-SIMAGRI                 1",
         FL.rjust(3), SA.rjust(3), IC.rjust(3), MP.rjust(3), MI.rjust(3), MF.rjust(3), MR.rjust(3), MC.rjust(3),
         MT.rjust(3), ME.rjust(3), MH.rjust(3), SM.rjust(3)))
     fw.write(" \n")
@@ -1613,14 +1494,14 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,crop,input5,input6,
     # soil_depth, wp, fc, nlayer = get_soil_IC(SOL_file, ID_SOIL)
     soil_depth, wp, fc, nlayer, SLTX = get_soil_IC(SOL_file, ID_SOIL)
     SLDP = repr(soil_depth[-1])
-    ID_FIELD = WSTA + '0001'
+    ID_FIELD = WSTA + "0001"
     WSTA_ID =  WSTA
     # This line must not be changed for Linux version - DSSAt seems to be sensitive to spacing
     fw.write(
-        '{0:2s} {1:8s}{2:5s}{3:3s}{4:6s}{5:4s}  {6:10s}{7:4s}'.format(FL.rjust(2), ID_FIELD, WSTA_ID.rjust(5),
-                                                                        '       -99   -99   -99   -99   -99   -99 ',
+        "{0:2s} {1:8s}{2:5s}{3:3s}{4:6s}{5:4s}  {6:10s}{7:4s}".format(FL.rjust(2), ID_FIELD, WSTA_ID.rjust(5),
+                                                                        "       -99   -99   -99   -99   -99   -99 ",
                                                                         SLTX.ljust(6), SLDP.rjust(4), ID_SOIL,
-                                                                        ' -99'))
+                                                                        " -99"))
     fw.write(" \n")
     temp_str = fr.readline()  # 1 -99      CCER       -99   -99 DR000   -99   -99
     temp_str = fr.readline()  # @L ...........XCRD ...........YCRD .....ELEV
@@ -1628,8 +1509,8 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,crop,input5,input6,
     temp_str = fr.readline()  # 1             -99             -99       -99   ==> skip
     # ================write *FIELDS - second section
     # This line must not be changed for Linux version - DSSAt seems to be sensitive to spacing
-    fw.write('{0:2s} {1:89s}'.format(FL.rjust(2),
-                                    '            -99             -99       -99               -99   -99   -99   -99   -99   -99'))
+    fw.write("{0:2s} {1:89s}".format(FL.rjust(2),
+                                    "            -99             -99       -99               -99   -99   -99   -99   -99   -99"))
     fw.write(" \n")
     fw.write(" \n")
 
@@ -1648,30 +1529,30 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,crop,input5,input6,
     for nline in range(0, nlayer):
         if nline == 0:  # first layer
             temp_SH2O = IC_w_ratio * (fc[nline] - wp[nline]) + wp[nline]  # EJ(6/25/2015): initial AWC=70% of maximum AWC
-            if i_NO3 == 'H':
-                SNO3 = '15'  # **EJ(4/29/2020) used one constant number regardless of soil types
-            else:  # i_NO3 == 'L':
-                SNO3 = '5'  # **EJ(5/27/2015)
+            if i_NO3 == "H":
+                SNO3 = "15"  # **EJ(4/29/2020) used one constant number regardless of soil types
+            else:  # i_NO3 == "L":
+                SNO3 = "5"  # **EJ(5/27/2015)
         elif nline == 1:  # second layer
             temp_SH2O = IC_w_ratio * (fc[nline] - wp[nline]) + wp[nline]  # EJ(6/25/2015): initial AWC=70% of maximum AWC
-            if i_NO3 == 'H':
-                SNO3 = '2'  # **EJ(4/29/2020) used one constant number regardless of soil types
-            else:  # elif i_NO3 == 'L':
-                SNO3 = '.5'  # **EJ(4/29/2020) used one constant number regardless of soil types
+            if i_NO3 == "H":
+                SNO3 = "2"  # **EJ(4/29/2020) used one constant number regardless of soil types
+            else:  # elif i_NO3 == "L":
+                SNO3 = ".5"  # **EJ(4/29/2020) used one constant number regardless of soil types
         else:
             temp_SH2O = fc[nline]  # float
-            SNO3 = '0'  # **EJ(5/27/2015)
+            SNO3 = "0"  # **EJ(5/27/2015)
         SH2O = repr(temp_SH2O)[0:5]  # convert float to string
-        new_str = temp_str[0:5] + repr(soil_depth[nline]).rjust(3) + ' ' + SH2O.rjust(5) + temp_str[14:22] + SNO3.rjust(4) + "\n"
+        new_str = temp_str[0:5] + repr(soil_depth[nline]).rjust(3) + " " + SH2O.rjust(5) + temp_str[14:22] + SNO3.rjust(4) + "\n"
         fw.write(new_str)
     fw.write("  \n")
-    # print('ICDAT= {0}'.format(ICDAT))  #test here
-    # print('fc[0]= {0}'.format(fc[0] ))  #test here
-    # print('test after writing init')  #test here
+    # print("ICDAT= {0}".format(ICDAT))  #test here
+    # print("fc[0]= {0}".format(fc[0] ))  #test here
+    # print("test after writing init")  #test here
     for nline in range(0, 10):
         temp_str = fr.readline()
         # print temp_str
-        if temp_str[0:9] == '*PLANTING':
+        if temp_str[0:9] == "*PLANTING":
             break
 
     fw.write(temp_str)  # *PLANTING DETAILS
@@ -1680,10 +1561,10 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,crop,input5,input6,
     # write *PLANTING DETAILS
     temp_str = fr.readline()
     PPOE = PPOP #planting density 
-    new_str = temp_str[0:3] + PDATE + '   -99' + PPOP.rjust(6) + PPOE.rjust(6) + temp_str[26:]
+    new_str = temp_str[0:3] + PDATE + "   -99" + PPOP.rjust(6) + PPOE.rjust(6) + temp_str[26:]
     fw.write(new_str)
     fw.write("  \n")
-    # print('PPOE = {0}'.format(PPOE))  #test here
+    # print("PPOE = {0}".format(PPOE))  #test here
     # write *IRRIGATION AND WATER MANAGEMENT, if irrigation on reported dates
     # skip irrigation for now   #EJ(1/6/2021) temporary
 
@@ -1693,29 +1574,29 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,crop,input5,input6,
     for nline in range(0, 20):
         temp_str = fr.readline()
         # print temp_str
-        if temp_str[0:12] == '*FERTILIZERS':
+        if temp_str[0:12] == "*FERTILIZERS":
             break
     fw.write(temp_str)  # *FERTILIZERS (INORGANIC)
     temp_str = fr.readline()  # @F FDATE  FMCD  FACD 
     fw.write(temp_str)
     temp_str = fr.readline()  #1     0 FE005 AP001     5    30   -99   -99   -99   -99   -99   -99
 #-0------------        # write *FERTILIZERS (INORGANIC)
-    if fert_app == 'Fert':
+    if fert_app == "Fert":
         # print(df_fert)
         df_fert = df_fert.astype(float)
         df_filtered = df_fert[(df_fert["DAP"] >= 0) & (df_fert["NAmount"] >= 0)]
         fert_count = len(df_filtered)  #Get the number of rows: len(df)  => May need more error-checking
         FDATE = df_filtered.DAP.values
-        FMCD = 'FE005'  #Urea
-        FACD = 'AP001'  #Broadcast, not incorporated    
-        FDEP = '5'   #5cm depth
+        FMCD = "FE005"  #Urea
+        FACD = "AP001"  #Broadcast, not incorporated    
+        FDEP = "5"   #5cm depth
         FAMN = df_filtered.NAmount.values
-        FAMP = '-99'
-        FAMK = '-99'
+        FAMP = "-99"
+        FAMK = "-99"
 
         if fert_count > 0:   # fertilizer applied
             for i in range(fert_count):
-                new_str = temp_str[0:5] + repr(int(FDATE[i])).rjust(3) + ' ' + FMCD.rjust(5) + ' ' + FACD.rjust(5) + ' ' + FDEP.rjust(5) + ' ' + repr(FAMN[i]).rjust(5) + ' ' + FAMP.rjust(5) + ' ' + FAMK.rjust(5) + temp_str[44:]
+                new_str = temp_str[0:5] + repr(int(FDATE[i])).rjust(3) + " " + FMCD.rjust(5) + " " + FACD.rjust(5) + " " + FDEP.rjust(5) + " " + repr(FAMN[i]).rjust(5) + " " + FAMP.rjust(5) + " " + FAMK.rjust(5) + temp_str[44:]
                 fw.write(new_str)
             fw.write(" \n")
 #-------------------------------------------
@@ -1729,7 +1610,7 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,crop,input5,input6,
     for nline in range(0, 20):
         temp_str = fr.readline()
         # print temp_str
-        if temp_str[0:11] == '*SIMULATION':
+        if temp_str[0:11] == "*SIMULATION":
             break
     fw.write(temp_str)  # *SIMULATION CONTROLS
     temp_str = fr.readline()
@@ -1741,7 +1622,7 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,crop,input5,input6,
     temp_str = fr.readline()  # @N OPTIONS
     fw.write(temp_str)
     temp_str = fr.readline()  # 1 OP
-    fw.write(' 1 OP              Y     Y     Y     N     N     N     N     N     D'+ "\n")
+    fw.write(" 1 OP              Y     Y     Y     N     N     N     N     N     D"+ "\n")
     temp_str = fr.readline()  # @N METHODS
     fw.write(temp_str)
     temp_str = fr.readline()  # 1 ME
@@ -1828,33 +1709,33 @@ def season_rain_rank(WTD_df, sdoy, edoy):
     #================================================================
     # #save dataframe into a csv file [Note: Feb 29th was excluded]
     # df_season_rain = pd.DataFrame(np.zeros((nyears, 3)))   
-    # df_season_rain.columns = ['YEAR','season_rain', 'rank']  #iyear => ith year
-    # df_season_rain.name = 'season_rain_sorted'+str(sdoy)
+    # df_season_rain.columns = ["YEAR","season_rain", "rank"]  #iyear => ith year
+    # df_season_rain.name = "season_rain_sorted"+str(sdoy)
     # df_season_rain.YEAR.iloc[:]= year_array[0:nyears][np.argsort(season_rain_sum)]
     # df_season_rain.season_rain.iloc[:]= season_rain_sum[np.argsort(season_rain_sum)]
     # df_season_rain.sindex.iloc[:]= np.argsort(season_rain_sum)
     rain_rank = season_rain_sum.argsort().argsort()+1  #<<<<<<==================
     # rain_rank = rain_rank +1  #to start from 1, not 0
-    data = {'YEAR':year_array[0:nyears], 'season_rain': season_rain_sum, 'Rank':rain_rank}
-    df_season_rain = pd.DataFrame (data, columns = ['YEAR','season_rain', 'Rank'])
+    data = {"YEAR":year_array[0:nyears], "season_rain": season_rain_sum, "Rank":rain_rank}
+    df_season_rain = pd.DataFrame (data, columns = ["YEAR","season_rain", "Rank"])
     #write dataframe into CSV file for debugging
-    df_season_rain.to_csv('C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\df_season_rain.csv', index=False)
+    df_season_rain.to_csv("C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\df_season_rain.csv", index=False)
     return df_season_rain
 #===============================================================
 #====================================================================
 # === Read daily observations into a dataframe (note: Feb 29th was skipped in df_obs)
 def read_WTD(fname,firstyear, lastyear):  
     #1) Read daily observations into a matrix (note: Feb 29th was skipped)
-    # WTD_fname = r'C:\Users\Eunjin\IRI\Hybrid_WGEN\CNRA.WTD'
+    # WTD_fname = r"C:\Users\Eunjin\IRI\Hybrid_WGEN\CNRA.WTD"
     #1) read observed weather *.WTD (skip 1st row - heading)
     data1 = np.loadtxt(fname,skiprows=1)
     #convert numpy array to dataframe
-    WTD_df = pd.DataFrame({'YEAR':data1[:,0].astype(int)//1000,    #python 3.6: / --> //
-                    'DOY':data1[:,0].astype(int)%1000,
-                    'SRAD':data1[:,1],
-                    'TMAX':data1[:,2],
-                    'TMIN':data1[:,3],
-                    'RAIN':data1[:,4]})
+    WTD_df = pd.DataFrame({"YEAR":data1[:,0].astype(int)//1000,    #python 3.6: / --> //
+                    "DOY":data1[:,0].astype(int)%1000,
+                    "SRAD":data1[:,1],
+                    "TMAX":data1[:,2],
+                    "TMIN":data1[:,3],
+                    "RAIN":data1[:,4]})
 
     #=== Extract only years with full 365/366 days:  by checking last obs year if it is incomplete or not
     WTD_last_year = WTD_df.YEAR.values[-1] 
@@ -1899,8 +1780,8 @@ def read_WTD(fname,firstyear, lastyear):
 
     #save dataframe into a csv file [Note: Feb 29th was excluded]
     df_obs = pd.DataFrame(np.zeros((obs_yrs*365, 6)))   
-    df_obs.columns = ['YEAR','DOY','SRAD','TMAX','TMIN','RAIN']  #iyear => ith year
-    df_obs.name = 'WTD_observed_365'
+    df_obs.columns = ["YEAR","DOY","SRAD","TMAX","TMIN","RAIN"]  #iyear => ith year
+    df_obs.name = "WTD_observed_365"
     k = 0
     for i in range(obs_yrs):
         iyear = np.unique(year_WTD)[i]
@@ -1913,9 +1794,9 @@ def read_WTD(fname,firstyear, lastyear):
         k=k+365
      
     #EJ(5/18/2021) Filter df by condition (from firstyear to lastyear)
-    df_obs_filter = df_obs.loc[(df_obs['YEAR'] >= firstyear) & (df_obs['YEAR'] <= lastyear)] 
+    df_obs_filter = df_obs.loc[(df_obs["YEAR"] >= firstyear) & (df_obs["YEAR"] <= lastyear)] 
 
-    ## df_obs.to_csv(wdir +'//'+ df_obs.name + '.csv', index=False)
+    ## df_obs.to_csv(wdir +"//"+ df_obs.name + ".csv", index=False)
     del rain_WTD; del srad_WTD; del Tmax_WTD; del Tmin_WTD; del year_WTD; del doy_WTD
     del rain_array; del srad_array; del Tmax_array; del Tmin_array
     # return WTD_df_orig, df_obs
@@ -1932,7 +1813,7 @@ def read_WTD(fname,firstyear, lastyear):
 port = int(os.environ.get("PORT", 5000))
 
 if __name__ == "__main__":
-    app.run_server(debug=False,
+    app.run_server(debug=True,
                    host="0.0.0.0",
                    port=port)
 #===>end of for linux system
