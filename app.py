@@ -166,8 +166,7 @@ app.layout = html.Div( ## MAIN APP DIV
                             # options=[{"label": k, "value": k} for k in cultivar_options.keys()],
                             options = [
                               {"label": "Maize", "value": "MZ"}, 
-                              {"label": 
-                              labelStyle = {"display": "inline-block","margin-right": 10},
+                              {"label": "Wheat", "value": "WH"}, 
                               {"label": "Sorghum", "value": "SG"},
                             ],
                             labelStyle = {"display": "inline-block","margin-right": 10},
