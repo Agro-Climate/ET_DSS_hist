@@ -166,7 +166,8 @@ app.layout = html.Div( ## MAIN APP DIV
                             # options=[{"label": k, "value": k} for k in cultivar_options.keys()],
                             options = [
                               {"label": "Maize", "value": "MZ"}, 
-                              {"label": "Wheat", "value": "WH"}, 
+                              {"label": 
+                              labelStyle = {"display": "inline-block","margin-right": 10},
                               {"label": "Sorghum", "value": "SG"},
                             ],
                             labelStyle = {"display": "inline-block","margin-right": 10},
@@ -281,6 +282,7 @@ app.layout = html.Div( ## MAIN APP DIV
                               {"label": "Fertilizer", "value": "Fert"},
                               {"label": "No Fertilizer", "value": "No_fert"},
                             ],
+                            labelStyle = {"display": "inline-block","margin-right": 10},
                             value="No_fert"
                           ),
                         ],
@@ -327,6 +329,7 @@ app.layout = html.Div( ## MAIN APP DIV
                               {"label": "Yes", "value": "EB_Yes"},
                               {"label": "No", "value": "EB_No"},
                             ],
+                            labelStyle = {"display": "inline-block","margin-right": 10},
                             value="EB_No"
                           ),
                         ],
