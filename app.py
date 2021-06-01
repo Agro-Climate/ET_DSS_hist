@@ -289,8 +289,7 @@ app.layout = html.Div( ## MAIN APP DIV
                         html.Div([ #FERTILIZER INPUT TABLE
                           dash_table.DataTable(id="fert-table",
                             style_cell = {
-                              "font_family": "sans-serif", #"cursive",
-                              #"minWidth": "50px", "width": "50px", "maxWidth": "50px",
+                              "font_family": "sans-serif",
                               "whiteSpace": "normal",
                               "font_size": "14px",
                               "text_align": "center"
@@ -300,16 +299,13 @@ app.layout = html.Div( ## MAIN APP DIV
                             ]),
                             data=[
                               dict(**{param: -99 for param in ["DAP", "NAmount"]}) for i in range(1, 5)
-                              # dict(**{param: 0 for param in params}) for i in range(1, 5)
                             ],
                             style_cell_conditional=[
-                              {"if": {"id": "DAP"}, "width": "30%"}, # Failed component prop type: Invalid component prop 
+                              {"if": {"id": "DAP"}, "width": "30%"}, # Failed component prop type: Invalid component prop (when app.run_server() Debug=True)
                               {"if": {"id": "NAmount"}, "width": "30%"},
                             ],
                             editable=True    
                           )
-                          # row_deletable=True)  
-                          # fill_width=False, editable=True)
                         ],
                         id="fert-table-Comp", 
                         className="w-50",
@@ -337,74 +333,33 @@ app.layout = html.Div( ## MAIN APP DIV
                         ),
                         html.Br(),
                         html.Div([ # ENTERPRISE BUDGETING TABLE
-                          dbc.Row([
-                            dash_table.DataTable(id="EB-table",
-                              style_cell = {
-                              "font_family": "sans-serif", #"cursive",
-                              "whiteSpace": "normal",
-                              "font_size": "14px",
-                              "text_align": "center"},
-                              columns=([
-                                {"id": p, "name": p} for p in ["CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]
-                              ]),
-                              data=[
-                                dict(**{param: -99 for param in ["CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]}) for i in range(1, 2)
-                              ],
-                              style_cell_conditional=[
-                                {"if": {"id": "CropPrice"}, "width": "20%"}, # Failed component prop type: Invalid component prop 
-                                {"if": {"id": "NFertCost"}, "width": "20%"},
-                              ],
-                              editable=True
-                            )
-                          ]),
-                          dbc.Row([
-                            html.Span("Unit: CropPrice[Birr/kg], NFertCost[Birr/N kg], SeedCost [Birr/kg], OtherVariableCosts[Birr/ha], FixedCosts[Birr/ha]"),
-                          ],
-                          no_gutters=True,
-                          align="start",
+                          dash_table.DataTable(id="EB-table",
+                            style_cell = {
+                            "font_family": "sans-serif", #"cursive",
+                            "whiteSpace": "normal",
+                            "font_size": "14px",
+                            "text_align": "center"},
+                            columns=([
+                              {"id": p, "name": p} for p in ["CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]
+                            ]),
+                            data=[
+                              dict(**{param: -99 for param in ["CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]}) for i in range(1, 2)
+                            ],
+                            style_cell_conditional=[
+                              {"if": {"id": "CropPrice"}, "width": "20%"}, # Failed component prop type: Invalid component prop (when app.run_server() Debug=True)
+                              {"if": {"id": "NFertCost"}, "width": "20%"},
+                            ],
+                            editable=True
                           ),
-                          dbc.Row([
-                            html.Span(" Calculation =>  Gross Margin [Birr/ha] = Revenues [Birr/ha] - Variable Costs [Birr/ha] - Fixed Costs [Birr/ha]"),
-                          ],
-                          no_gutters=True,
-                          align="start",
-                          ),
-                          dbc.Row([
-                            html.Span("  - Revenues [Birr/ha] = Yield [kg/ha] * Crop Price [Birr/kg]"),
-                          ],
-                          no_gutters=True,
-                          align="start",
-                          ),  
-                          dbc.Row([
-                            html.Span("  - Variable costs for fertilizer [Birr/ha] = N Fertilizer amount [N kg/ha] * cost [Birr/N kg]"),
-                          ],
-                          no_gutters=True,
-                          align="start",
-                          ),  
-                          dbc.Row([
-                            html.Span("  - Variable costs for seed purchase [Birr/ha]"), # = Planting Density in #9 [plants/m2] *10000 [m2/ha]* Seed Cost [Birr/plant]"),
-                          ],
-                          no_gutters=True,
-                          align="start",
-                          ),  
-                          dbc.Row([
-                            html.Span(" **(reference: the price of hybrid maize seed from the MOA was about 600 Birr/100 kg compared to 50-80 Birr/100 kg for local maize seed purchased in the local market (Birr 7 = US$ 1)."),
-                          ],
-                          no_gutters=True,
-                          align="start",
-                          ),  
-                          dbc.Row([
-                            html.Span("  - Other variable costs [Birr/ha] may include pesticide, insurance, labor etc."),
-                          ],
-                          no_gutters=True,
-                          align="start",
-                          ), 
-                          dbc.Row([
-                            html.Span("  - Fixed costs [Birr/ha] may include interests for land, machinery etc."),
-                          ],
-                          no_gutters=True,
-                          align="start",
-                          ), 
+
+                          html.Span("Unit: CropPrice[Birr/kg], NFertCost[Birr/N kg], SeedCost [Birr/kg], OtherVariableCosts[Birr/ha], FixedCosts[Birr/ha]"),
+                          html.Span(" Calculation =>  Gross Margin [Birr/ha] = Revenues [Birr/ha] - Variable Costs [Birr/ha] - Fixed Costs [Birr/ha]"),
+                          html.Span("  - Revenues [Birr/ha] = Yield [kg/ha] * Crop Price [Birr/kg]"),
+                          html.Span("  - Variable costs for fertilizer [Birr/ha] = N Fertilizer amount [N kg/ha] * cost [Birr/N kg]"),
+                          html.Span("  - Variable costs for seed purchase [Birr/ha]"), # = Planting Density in #9 [plants/m2] *10000 [m2/ha]* Seed Cost [Birr/plant]"),
+                          html.Span(" **(reference: the price of hybrid maize seed from the MOA was about 600 Birr/100 kg compared to 50-80 Birr/100 kg for local maize seed purchased in the local market (Birr 7 = US$ 1)."),
+                          html.Span("  - Other variable costs [Birr/ha] may include pesticide, insurance, labor etc."),
+                          html.Span("  - Fixed costs [Birr/ha] may include interests for land, machinery etc."),
                         ],
                         id="EB-table-Comp", 
                         className="w-100",
@@ -1813,7 +1768,7 @@ def read_WTD(fname,firstyear, lastyear):
 port = int(os.environ.get("PORT", 5000))
 
 if __name__ == "__main__":
-    app.run_server(debug=True,
+    app.run_server(debug=False,
                    host="0.0.0.0",
                    port=port)
 #===>end of for linux system
