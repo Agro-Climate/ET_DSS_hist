@@ -354,14 +354,18 @@ app.layout = html.Div( ## MAIN APP DIV
                             editable=True
                           ),
 
-                          html.Span("Unit: CropPrice[Birr/kg], NFertCost[Birr/N kg], SeedCost [Birr/kg], OtherVariableCosts[Birr/ha], FixedCosts[Birr/ha]"),
-                          html.Span(" Calculation =>  Gross Margin [Birr/ha] = Revenues [Birr/ha] - Variable Costs [Birr/ha] - Fixed Costs [Birr/ha]"),
-                          html.Span("  - Revenues [Birr/ha] = Yield [kg/ha] * Crop Price [Birr/kg]"),
-                          html.Span("  - Variable costs for fertilizer [Birr/ha] = N Fertilizer amount [N kg/ha] * cost [Birr/N kg]"),
-                          html.Span("  - Variable costs for seed purchase [Birr/ha]"), # = Planting Density in #9 [plants/m2] *10000 [m2/ha]* Seed Cost [Birr/plant]"),
-                          html.Span(" **(reference: the price of hybrid maize seed from the MOA was about 600 Birr/100 kg compared to 50-80 Birr/100 kg for local maize seed purchased in the local market (Birr 7 = US$ 1)."),
-                          html.Span("  - Other variable costs [Birr/ha] may include pesticide, insurance, labor etc."),
-                          html.Span("  - Fixed costs [Birr/ha] may include interests for land, machinery etc."),
+                          html.Div([
+                            html.Div("Unit: CropPrice[Birr/kg], NFertCost[Birr/N kg], SeedCost [Birr/kg], OtherVariableCosts[Birr/ha], FixedCosts[Birr/ha]"),
+                            html.Div("Calculation =>  Gross Margin [Birr/ha] = Revenues [Birr/ha] - Variable Costs [Birr/ha] - Fixed Costs [Birr/ha]"),
+                            html.Ul([
+                              html.Li("Revenues [Birr/ha] = Yield [kg/ha] * Crop Price [Birr/kg]"),
+                              html.Li("Variable costs for fertilizer [Birr/ha] = N Fertilizer amount [N kg/ha] * cost [Birr/N kg]"),
+                              html.Li("Variable costs for seed purchase [Birr/ha]"), # = Planting Density in #9 [plants/m2] *10000 [m2/ha]* Seed Cost [Birr/plant]"),
+                              html.Div("**(reference: the price of hybrid maize seed from the MOA was about 600 Birr/100 kg compared to 50-80 Birr/100 kg for local maize seed purchased in the local market (Birr 7 = US$ 1)."),
+                              html.Li("Other variable costs [Birr/ha] may include pesticide, insurance, labor etc."),
+                              html.Li("Fixed costs [Birr/ha] may include interests for land, machinery etc."),
+                            ]),
+                          ]),
                         ],
                         id="EB-table-Comp", 
                         className="w-100",
