@@ -402,7 +402,7 @@ app.layout = html.Div( ## MAIN APP DIV
                 dbc.Button(id="write-button-state", 
                 n_clicks=0, 
                 children="Create or Add a new Scenario", 
-                  className="w-75 d-block mx-auto",
+                className="w-75 d-block mx-auto",
                 color="primary"
                 ),
               ]),
@@ -517,8 +517,11 @@ app.layout = html.Div( ## MAIN APP DIV
                   html.Div([
                     html.Div([ # ORIGINAL CSV STUFF
                       html.Br(),
-                      html.Button("Download CSV for Simulated Yield", id="btn_csv",
-                      className="w-100 btn btn-secondary"
+
+                      dbc.Button(id="btn_csv", 
+                      children="Download CSV for Simulated Yield", 
+                      className="w-75 d-block mx-auto",
+                      color="secondary"
                       ),
                       # dcc.Download(id="download-dataframe-csv"),
                       Download(id="download-dataframe-csv"),
@@ -561,13 +564,16 @@ app.layout = html.Div( ## MAIN APP DIV
                         html.Span(" (e.g., 90% reduction => 0.9)"),  
                       ]),
                       html.Br(),
-                      html.Button("Click to update and sort the Datatable by the selected column name", id="btn_table_sort",
-                      className="w-100 btn btn-info",
+                      dbc.Button(id="btn_table_sort", 
+                      children="Click to update and sort the Datatable by the selected column name", 
+                      className="w-75 d-block mx-auto",
+                      color="info"
                       ),
                       html.Br(),   
-                      html.Br(),   
-                      html.Button("Download SORTED CSV for Simulated Yield", id="btn_csv2",
-                      className="w-100 btn btn-secondary",
+                      dbc.Button(id="btn_csv2", 
+                      children="Download SORTED CSV for Simulated Yield", 
+                      className="w-75 d-block mx-auto",
+                      color="secondary"
                       ),
                       # dcc.Download(id="download-dataframe-csv"),
                       Download(id="download-dataframe-csv2"),
@@ -598,18 +604,20 @@ app.layout = html.Div( ## MAIN APP DIV
                   html.Div(
                     html.Div([
                       html.Br(),
-                      html.Button(id="EB-button-state", 
-                      children="Display figures for Enterprise Budgets",
-                      className="w-100 btn btn-danger"
-                      ), #red
+                      dbc.Button(id="EB-button-state", 
+                      children="Display figures for Enterprise Budgets", 
+                      className="w-75 d-block mx-auto",
+                      color="danger"
+                      ),
                       html.Br(),
                       html.Div(id="EBbox-container"), 
                       html.Div(id="EBcdf-container"),  #exceedance curve
                       html.Div(id="EBtimeseries-container"), #exceedance curve
                       html.Br(),
-                      html.Button("Download CSV file for Enterprise Budgeting", 
-                      id="btn_csv_EB",
-                      className="w-100 btn btn-secondary"
+                      dbc.Button(id="btn_csv_EB", 
+                      children="Download CSV file for Enterprise Budgeting", 
+                      className="w-75 d-block mx-auto",
+                      color="secondary"
                       ),
                       # dcc.Download(id="download-dataframe-csv"),
                       Download(id="download-dataframe-csv_EB"),
