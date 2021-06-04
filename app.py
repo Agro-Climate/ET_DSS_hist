@@ -527,7 +527,7 @@ app.layout = html.Div( ## MAIN APP DIV
                       Download(id="download-dataframe-csv"),
                       html.Div(id="yieldtables-container", 
                       className="overflow-auto",
-                      style={"height": "10vh"},
+                      style={"height": "20vh"},
                       ),  #yield simulated output
                     ], ),
                   ],
@@ -579,7 +579,7 @@ app.layout = html.Div( ## MAIN APP DIV
                       Download(id="download-dataframe-csv2"),
                       html.Div(id="yieldtables-container2", 
                       className="overflow-auto",
-                      style={"height": "10vh"},
+                      style={"height": "20vh"},
                       ),  #sorted yield simulated output
                     ],
                     ),
@@ -853,7 +853,7 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
     else: #if no EB analysis
         df_EB = pd.DataFrame(columns=["sce_name","Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
                  "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
-                 "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]) 
+                 "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"])
     #Make a new dataframe to return to scenario-summary table
     df = pd.DataFrame(
         [[scenario, crop, cultivar[7:], station, planting_date[5:], start_year, end_year, soil_type, initial_soil_moisture, initial_soil_no3_content, planting_density, targetyear,
@@ -865,7 +865,7 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
     data = [{"sce_name": None,"Crop": None, "Cultivar": None, "stn_name": None, "Plt-date": None, "FirstYear": None, "LastYear": None, "soil": None,
              "iH2O": None, "iNO3": None, "plt_density": None, "TargetYr": None,
              "1_Fert(DOY)": None,"1_Fert(Kg/ha)": None,"2_Fert(DOY)": None,"2_Fert(Kg/ha)": None, "3_Fert(DOY)": None,"3_Fert(Kg/ha)": None, "4_Fert(DOY)": None,"4_Fert(Kg/ha)": None,
-             "CropPrice": None,"NFertCost": None,"SeedCost": None,"OtherVariableCosts": None, "FixedCosts": None}] 
+             "CropPrice": None,"NFertCost": None,"SeedCost": None,"OtherVariableCosts": None, "FixedCosts": None}]
     # columns =  [{"name": i, "id": i,} for i in (df.columns)]
     dff = df.copy()
 
@@ -924,7 +924,10 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
         # # Read previously saved scenario summaries  https://dash.plotly.com/sharing-data-between-callbacks
         # dff = pd.read_json(intermediate, orient="split")
         dff = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
-        dff = dff.append(df, ignore_index=True)
+        
+        if scenario not in dff.sce_name.values: # prevent adding scenarios with the same name.
+            dff = dff.append(df, ignore_index=True)
+
         data = dff.to_dict("rows")
     # print(data)
     return data
