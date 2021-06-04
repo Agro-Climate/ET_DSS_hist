@@ -273,7 +273,6 @@ app.layout = html.Div( ## MAIN APP DIV
                   ],),
                   dbc.FormGroup([ # Fertilizer Application
                     dbc.Label("13) Fertilizer Application", html_for="fert_input"),
-                    dbc.FormText("DAP(days after planting), Amount (N kg/ha)"),
                     dcc.RadioItems(
                       id="fert_input",
                       options=[
@@ -284,14 +283,6 @@ app.layout = html.Div( ## MAIN APP DIV
                       value="No_fert"
                     ),
                   ],),
-                  # Days After Planting
-                  # Amount of N in kg/ha
-                  #
-                  # Crop Price
-                  # Fertilizer Cost
-                  # Seed Cost
-                  # Other Variable Costs
-                  # Fixed Costs
                   dbc.FormGroup([ # FERTILIZER INPUT TABLE
                     dash_table.DataTable(id="fert-table",
                       style_cell = {
@@ -301,7 +292,8 @@ app.layout = html.Div( ## MAIN APP DIV
                         "text_align": "center"
                       },
                       columns=([
-                        {"id": p, "name": p} for p in ["DAP", "NAmount"]
+                        {"id": "DAP", "name": "Days After Planting"},
+                        {"id": "NAmount", "name": "Amount of N in kg/ha"},
                       ]),
                       data=[
                         dict(**{param: 0 for param in ["DAP", "NAmount"]}) for i in range(1, 5)
@@ -339,7 +331,11 @@ app.layout = html.Div( ## MAIN APP DIV
                       "font_size": "14px",
                       "text_align": "center"},
                       columns=([
-                        {"id": p, "name": p} for p in ["CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]
+                        {"id": "CropPrice", "name": "Crop Price"},
+                        {"id": "NFertCost", "name": "Fertilizer Cost"},
+                        {"id": "SeedCost", "name": "Seed Cost"},
+                        {"id": "OtherVariableCosts", "name": "Other Variable Costs"},
+                        {"id": "FixedCosts", "name": "Fixed Costs"},
                       ]),
                       data=[
                         dict(**{param: 0 for param in ["CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]}) for i in range(1, 2)
@@ -352,15 +348,15 @@ app.layout = html.Div( ## MAIN APP DIV
                     ),
 
                     html.Div([
-                      html.Div("Unit: CropPrice[Birr/kg], NFertCost[Birr/N kg], SeedCost [Birr/kg], OtherVariableCosts[Birr/ha], FixedCosts[Birr/ha]"),
-                      html.Div("Calculation =>  Gross Margin [Birr/ha] = Revenues [Birr/ha] - Variable Costs [Birr/ha] - Fixed Costs [Birr/ha]"),
+                      html.Div("Unit: Crop Price [ETB/kg], Fertilizer Cost [ETB/N kg], Seed Cost [ETB/kg], Other Variable Costs [ETB/ha], Fixed Costs [ETB/ha]"),
+                      html.Div("Calculation =>  Gross Margin [ETB/ha] = Revenues [ETB/ha] - Variable Costs [ETB/ha] - Fixed Costs [ETB/ha]"),
                       html.Ul([
-                        html.Li("Revenues [Birr/ha] = Yield [kg/ha] * Crop Price [Birr/kg]"),
-                        html.Li("Variable costs for fertilizer [Birr/ha] = N Fertilizer amount [N kg/ha] * cost [Birr/N kg]"),
-                        html.Li("Variable costs for seed purchase [Birr/ha]"), # = Planting Density in #9 [plants/m2] *10000 [m2/ha]* Seed Cost [Birr/plant]"),
-                        html.Div("**(reference: the price of hybrid maize seed from the MOA was about 600 Birr/100 kg compared to 50-80 Birr/100 kg for local maize seed purchased in the local market (Birr 7 = US$ 1)."),
-                        html.Li("Other variable costs [Birr/ha] may include pesticide, insurance, labor etc."),
-                        html.Li("Fixed costs [Birr/ha] may include interests for land, machinery etc."),
+                        html.Li("Revenues [ETB/ha] = Yield [kg/ha] * Crop Price [ETB/kg]"),
+                        html.Li("Variable costs for fertilizer [ETB/ha] = N Fertilizer amount [N kg/ha] * cost [ETB/N kg]"),
+                        html.Li("Variable costs for seed purchase [ETB/ha]"), # = Planting Density in #9 [plants/m2] *10000 [m2/ha]* Seed Cost [ETB/plant]"),
+                        html.Div("**(reference: the price of hybrid maize seed from the MOA was about 600 ETB/100 kg compared to 50-80 ETB/100 kg for local maize seed purchased in the local market (ETB 7 = US$ 1)."),
+                        html.Li("Other variable costs [ETB/ha] may include pesticide, insurance, labor etc."),
+                        html.Li("Fixed costs [ETB/ha] may include interests for land, machinery etc."),
                       ]),
                     ]),
                   ],
@@ -383,7 +379,30 @@ app.layout = html.Div( ## MAIN APP DIV
                   dash_table.DataTable(
                   id="scenario-table",
                   columns=([
-                    {"id": p, "name": p} for p in sce_col_names
+                    {"id": "sce_name", "name": "Scenario Name"},
+                    {"id": "Crop", "name": "Crop"},
+                    {"id": "Cultivar", "name": "Cultivar"},
+                    {"id": "stn_name", "name": "Station"},
+                    {"id": "Plt-date", "name": "Planting Date"},
+                    {"id": "FirstYear", "name": "First Year"},
+                    {"id": "LastYear", "name": "Last Year"},
+                    {"id": "soil", "name": "Soil Type"},
+                    {"id": "iH2O", "name": "Initial Soil Water Content"},
+                    {"id": "iNO3", "name": "Initial Soil Nitrate Content"},
+                    {"id": "TargetYr", "name": "Target Year"},
+                    {"id": "1_Fert(DOY)", "name": "DOY 1st Fertilizer Applied"},
+                    {"id": "1_Fert(Kg/ha)", "name": "1st Amount Applied (Kg/ha)"},
+                    {"id": "2_Fert(DOY)", "name": "DOY 2nd Fertilizer Applied"},
+                    {"id": "2_Fert(Kg/ha)", "name": "2nd Amount Applied(Kg/ha)"},
+                    {"id": "3_Fert(DOY)", "name": "DOY 3rd Fertilizer Applied"},
+                    {"id": "3_Fert(Kg/ha)", "name": "3rd Amount Applied(Kg/ha)"},
+                    {"id": "4_Fert(DOY)", "name": "DOY 4th Fertilizer Applied"},
+                    {"id": "4_Fert(Kg/ha)", "name": "4th Amount Applied(Kg/ha)"},
+                    {"id": "CropPrice", "name": "Crop Price"},
+                    {"id": "NFertCost", "name": "Fertilizer Cost"},
+                    {"id": "SeedCost", "name": "Seed Cost"},
+                    {"id": "OtherVariableCosts", "name": "Other Variable Costs"},
+                    {"id": "FixedCosts", "name": "Fixed Costs"},
                   ]),
                   data=[
                     dict(**{param: "N/A" for param in sce_col_names}) for i in range(1, 2)
@@ -471,25 +490,6 @@ app.layout = html.Div( ## MAIN APP DIV
                           ),
                         md=4),
                       ]),
-                      # html.Br(),
-                        # html.Div([
-                        #   dbc.Row(
-                        #     dbc.Col(
-                        #       html.Span("====================================================================", style={"color": "black", "font-style": "italic", "font-weight": "font-weight-bold"
-                        #       }),
-                        #       width={"size": 6, "offset": 3},
-                        #     ),
-                        #   ),
-                        #   dbc.Row(
-                        #     dbc.Col(
-                        #       html.Span("----------------------------- Post-Simulation Analysis --------------------------------", style={"color": "black", "font-style": "italic", "font-weight": "font-weight-bold"}),
-                        #       width={"size": 10, "offset": 3},
-                        #     ),
-                        #   ),
-                        #   dbc.Row([
-                        #     html.Span("====================================================================",style={"color": "black", "font-style": "italic", "font-weight": "font-weight-bold"}),
-                        #   ],justify="center",),
-                        # ],style={"width": "100%"},)
                     ], 
                     className="plot-container plotly"),
                   className="js-plotly-plot"
@@ -819,23 +819,23 @@ def show_hide_EBtable(visibility_state):
                 State("EB-table","data"), #Input 16 Enterprise budget input
                 State("scenario-table","data") ###input 17 scenario summary table
             )
-def make_sce_table(n_clicks, input1,input2,input3,input4,input50,input5,input6,input7,input8,input9,input10,
-                  input11, fert_app, fert_in_table, EB_radio, EB_in_table, sce_in_table):
-    # print(input1)  #MELK
-    # print(input2)  #1981
-    # print(input3)  #2014
-    # print(input4)  #2021-06-15
-    # print(input5)  #CIMT01 BH540-Kassie
-    # print(input6)  #ETET001_18
-    # print(input7)  #0.7
-    # print(input8)  #H
-    # print(input9)  #6
-    # print(input10)  #scenario name
-    # print(input11)  #target year as a benchmark
-    # print(input12)  #scenario summary
-    # print(input13)  #fertilizler or no-fertilizer
-    # print(input14)  #fertilizler summary
-    # print("input15:",EB_in_table)  #scenario summary
+def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop, cultivar, soil_type, initial_soil_moisture, initial_soil_no3_content, planting_density, scenario,
+                  targetyear, fert_app, fert_in_table, EB_radio, EB_in_table, sce_in_table):
+    # print(station)  #MELK
+    # print(start_year)  #1981
+    # print(end_year)  #2014
+    # print(planting_date)  #2021-06-15
+    # print(cultivar)  #CIMT01 BH540-Kassie
+    # print(soil_type)  #ETET001_18
+    # print(initial_soil_moisture)  #0.7
+    # print(initial_soil_no3_content)  #H
+    # print(planting_density)  #6
+    # print(scenario)  #scenario name
+    # print(targetyear)  #target year as a benchmark
+    # print(station2)  #scenario summary
+    # print(station3)  #fertilizler or no-fertilizer
+    # print(station4)  #fertilizler summary
+    # print("station5:",EB_in_table)  #scenario summary
 
     # 2) Read fertilizer application information
     if fert_app == "Fert":
@@ -856,7 +856,7 @@ def make_sce_table(n_clicks, input1,input2,input3,input4,input50,input5,input6,i
                  "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]) 
     #Make a new dataframe to return to scenario-summary table
     df = pd.DataFrame(
-        [[input10, input50, input5[7:], input1, input4[5:],input2, input3, input6, input7, input8, input9, input11,
+        [[scenario, crop, cultivar[7:], station, planting_date[5:], start_year, end_year, soil_type, initial_soil_moisture, initial_soil_no3_content, planting_density, targetyear,
             "-99", "-99", "-99", "-99","-99", "-99","-99", "-99", "-99","-99", "-99","-99", "-99"]],
         columns=["sce_name","Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
                  "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
@@ -872,14 +872,14 @@ def make_sce_table(n_clicks, input1,input2,input3,input4,input50,input5,input6,i
     if n_clicks:  
         #=====================================================================
         #1) Write SNX file
-        writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input50, input5,input6,input7,input8,
-                           input9,input10,fert_app, df_fert)
+        writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
+                           planting_density,scenario,fert_app, df_fert)
         #=====================================================================
         # #Make a new dataframe for fertilizer inputs
         if fert_app == "Fert" and EB_radio == "EB_Yes":
             #Make a new dataframe
             df = pd.DataFrame(
-                [[input10, input50, input5[7:], input1, input4[5:],input2, input3, input6, input7, input8, input9,input11, 
+                [[scenario, crop, cultivar[7:], station, planting_date[5:],start_year, end_year, soil_type, initial_soil_moisture, initial_soil_no3_content, planting_density,targetyear, 
                 df_fert.DAP.values[0], df_fert.NAmount.values[0], df_fert.DAP.values[1], df_fert.NAmount.values[1],
                 df_fert.DAP.values[2], df_fert.NAmount.values[2],df_fert.DAP.values[3], df_fert.NAmount.values[3],
                 df_EB.CropPrice.values[0], df_EB.NFertCost.values[0], df_EB.SeedCost.values[0], df_EB.OtherVariableCosts.values[0],
@@ -890,7 +890,7 @@ def make_sce_table(n_clicks, input1,input2,input3,input4,input50,input5,input6,i
         elif fert_app == "Fert" and EB_radio == "EB_No":
             #Make a new dataframe
             df = pd.DataFrame(
-                [[input10, input50, input5[7:], input1, input4[5:],input2, input3, input6, input7, input8,input9, input11, 
+                [[scenario, crop, cultivar[7:], station, planting_date[5:],start_year, end_year, soil_type, initial_soil_moisture, initial_soil_no3_content,planting_density, targetyear, 
                 df_fert.DAP.values[0], df_fert.NAmount.values[0], df_fert.DAP.values[1], df_fert.NAmount.values[1],
                 df_fert.DAP.values[2], df_fert.NAmount.values[2],df_fert.DAP.values[3], df_fert.NAmount.values[3],
                 "-99","-99", "-99","-99", "-99"]],
@@ -900,7 +900,7 @@ def make_sce_table(n_clicks, input1,input2,input3,input4,input50,input5,input6,i
         elif fert_app == "No_fert" and EB_radio == "EB_Yes":
             #Make a new dataframe
             df = pd.DataFrame(
-                [[input10, input50, input5[7:], input1, input4[5:],input2, input3, input6, input7, input8, input9,input11, 
+                [[scenario, crop, cultivar[7:], station, planting_date[5:],start_year, end_year, soil_type, initial_soil_moisture, initial_soil_no3_content, planting_density,targetyear, 
                  "-99", "-99", "-99", "-99","-99", "-99","-99", "-99",
                 df_EB.CropPrice.values[0], df_EB.NFertCost.values[0], df_EB.SeedCost.values[0], df_EB.OtherVariableCosts.values[0],
                 df_EB.FixedCosts.values[0]]],
@@ -909,7 +909,7 @@ def make_sce_table(n_clicks, input1,input2,input3,input4,input50,input5,input6,i
                         "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"],)
         else:  #no fertilizer application & No EB analyze
             df = pd.DataFrame(
-                [[input10, input50, input5[7:], input1, input4[5:],input2, input3, input6, input7, input8,input9, input11, 
+                [[scenario, crop, cultivar[7:], station, planting_date[5:],start_year, end_year, soil_type, initial_soil_moisture, initial_soil_no3_content,planting_density, targetyear, 
                  "-99", "-99", "-99", "-99","-99", "-99","-99", "-99","-99","-99", "-99","-99", "-99"]],
                 columns=["sce_name", "Crop","Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
                         "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
@@ -1362,26 +1362,26 @@ def EB_figure(n_clicks, sce_in_table):
             ]
 
 # =============================================
-# def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,input5,input6,input7,input8,input9,input10):
-def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,crop,input5,input6,input7,input8,
-                       input9,input10,fert_app, df_fert):    
+# def writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,planting_density,scenario):
+def writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop,cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
+                       planting_density,scenario,fert_app, df_fert):    
     # print("check writeSNX_main")
-    # print(input1)  #MELK
-    # print(input2)  #1981
-    # print(input3)  #2014
-    # print(input4)  #2021-06-15
-    # print(input50)  #MZ crop type
-    # print(input5)  #CIMT01 BH540-Kassie
-    # print(input6)  #ETET001_18
-    # print(input7)  #0.7
-    # print(input8)  #H
-    # print(input9)  #6
-    # print(input10)  #scenario name
-    WSTA = input1
-    NYERS = repr(int(input3) - int(input2) + 1)
-    plt_year = input2
-    if input4 is not None:
-        date_object = date.fromisoformat(input4)
+    # print(station)  #MELK
+    # print(start_year)  #1981
+    # print(end_year)  #2014
+    # print(planting_date)  #2021-06-15
+    # print(crop)  #MZ crop type
+    # print(cultivar)  #CIMT01 BH540-Kassie
+    # print(soil_type)  #ETET001_18
+    # print(initial_soil_moisture)  #0.7
+    # print(initial_soil_no3_content)  #H
+    # print(planting_density)  #6
+    # print(scenario)  #scenario name
+    WSTA = station
+    NYERS = repr(int(end_year) - int(start_year) + 1)
+    plt_year = start_year
+    if planting_date is not None:
+        date_object = date.fromisoformat(planting_date)
         date_string = date_object.strftime("%B %d, %Y")
         plt_doy = date_object.timetuple().tm_yday
         # print(date_string)  #June 15, 2021 
@@ -1392,27 +1392,27 @@ def writeSNX_main_hist(Wdir_path,input1,input2,input3,input4,crop,input5,input6,
         # ICDAT = repr(IC_date)[2:]
     ICDAT = plt_year[2:] + repr(plt_doy-1).zfill(3)  #Initial condition => 1 day before planting
     SDATE = ICDAT
-    INGENO = input5[0:6]  
-    CNAME = input5[7:]  
-    ID_SOIL = input6
-    PPOP = input9  #planting density
-    i_NO3 = input8  # self.label_04.cget("text")[0:1]  #self.NO3_soil.getvalue()[0][0:1] #"H" #or "L"
-    IC_w_ratio = float(input7)
+    INGENO = cultivar[0:6]  
+    CNAME = cultivar[7:]  
+    ID_SOIL = soil_type
+    PPOP = planting_density  #planting density
+    i_NO3 = initial_soil_no3_content  # self.label_04.cget("text")[0:1]  #self.NO3_soil.getvalue()[0][0:1] #"H" #or "L"
+    IC_w_ratio = float(initial_soil_moisture)
     # crop = "MZ" #EJ(1/6/2021) temporary
 
     #1) make SNX
     if crop == "WH":
         temp_snx = path.join(Wdir_path, "TEMP_ETWH.SNX")
-        snx_name = "ETWH"+input10[:4]+".SNX"
+        snx_name = "ETWH"+scenario[:4]+".SNX"
     elif crop == "MZ":
         temp_snx = path.join(Wdir_path, "TEMP_ETMZ.SNX")
-        snx_name = "ETMZ"+input10[:4]+".SNX"
+        snx_name = "ETMZ"+scenario[:4]+".SNX"
     else:  # SG
         temp_snx = path.join(Wdir_path, "TEMP_ETSG.SNX")
-        snx_name = "ETSG"+input10[:4]+".SNX"
+        snx_name = "ETSG"+scenario[:4]+".SNX"
     # # temp_snx = path.join(Wdir_path, "ETMZTEMP.SNX")
     # temp_snx = path.join(Wdir_path, "TEMP_ETMZ.SNX")
-    # snx_name = "ETMZ"+input10[:4]+".SNX"
+    # snx_name = "ETMZ"+scenario[:4]+".SNX"
     SNX_fname = path.join(Wdir_path, snx_name)
     fr = open(temp_snx, "r")  # opens temp SNX file to read
     fw = open(SNX_fname, "w")  # opens SNX file to write
