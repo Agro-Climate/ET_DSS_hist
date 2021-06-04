@@ -58,7 +58,7 @@ cultivar_options = {
 # Wdir_path = "C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\"
 Wdir_path = DSSAT_FILES_DIR    #for linux systemn
 
-CAMDT_LOGOS = app.get_asset_url("ethioagroclimate.png")
+SIMAGRI_LOGOS = app.get_asset_url("ethioagroclimate.png")
 
 app.layout = html.Div( ## MAIN APP DIV
 [
@@ -72,8 +72,8 @@ app.layout = html.Div( ## MAIN APP DIV
     html.A(
       # Use row and col to control vertical alignment of logo / brand
       dbc.Row([
-        dbc.Col(html.Img(src=CAMDT_LOGOS)),
-        dbc.Col(dbc.NavbarBrand("CAMDT", className="ml-3 font-weight-bold"),className="my-auto"),
+        dbc.Col(html.Img(src=SIMAGRI_LOGOS)),
+        dbc.Col(dbc.NavbarBrand("SIMAGRI-Ethiopia", className="ml-3 font-weight-bold"),className="my-auto"),
       ],
       align ="left",
       no_gutters=True,
@@ -89,556 +89,561 @@ app.layout = html.Div( ## MAIN APP DIV
     navbar=True,
     ),
   ],
-  color="light",
+  color="white",
   dark=False
   ),
 
-  html.Div([ # HEADERS # HIDDEN FOR NOW
-    html.Br(),
-    html.Div( # IRI AND OTHER LOGOS
-      dbc.Row([
-        dbc.Col(
-          html.H5("Climate-Agriculture Modeling Decision Support Tool for Ethiopia"),
-        md=7,
-        className="my-auto"
-        ),
-        dbc.Col(
-          html.Img(src=CAMDT_LOGOS, 
-          className="img-fluid"
-          ),
-        md=5,
-        className="my-auto"
-        ), 
-      ],
-      className="mx-auto"
-      ),
-    className="card text-uppercase"
-    ),
-    html.Br(),
-  ]
-  ,className="block  card-header d-none"
-  ),
-
-  html.Div([ # NAVIGATE TO THESE SECTIONS
-    html.Div(
-      html.Div( ## HISTORICAL: INPUT AND GRAPHS
+  html.Div( ## HISTORICAL: INPUT AND GRAPHS
+    dbc.Row([ 
+      dbc.Col([ ## LEFT HAND SIDE
         html.Div(
-          dbc.Row([ ## MAIN PART
-            dbc.Col([ ## LEFT HAND SIDE
-              html.Div(
-                html.Div(
-                  html.Div([ ## MAIN INPUT CARD
-                    html.Header(
-                      html.B(
-                        "Simulation Input",
-                      ),
-                    className=" card-header",
-                    ),
-                    html.Div( #INPUT FORM
-                      html.Div([
-                        # INPUT FORM START
-                        html.Div([ #1
-                          html.Div("1) Scenario Name"),
-                          dcc.Input(id="sce-name", type="text"),
-                          html.Span(" (only 4 characters)"),
-                        ],
-                        ),
-                        html.Br(),
-                        html.Div([ #2
-                          html.Div("2) Station"),
-                          dcc.Dropdown(
-                            id="ETstation", 
-                            options=[
-                              {"label": "Melkasa", "value": "MELK"},
-                              {"label": "Awassa", "value": "AWAS"},
-                              {"label": "Bako", "value": "BAKO"},
-                              {"label": "Mahoni", "value": "MAHO"}
-                            ],
-                            value="MELK"
-                          )
-                        ],
-                        ),
-                        html.Br(),
-                        html.Div([ #3
-                          html.Div("3) Crop"),
-                          dcc.RadioItems(
-                            id="crop-radio",
-                            # options=[{"label": k, "value": k} for k in cultivar_options.keys()],
-                            options = [
-                              {"label": "Maize", "value": "MZ"}, 
-                              {"label": "Wheat", "value": "WH"}, 
-                              {"label": "Sorghum", "value": "SG"},
-                            ],
-                            labelStyle = {"display": "inline-block","margin-right": 10},
-                            value="MZ"
-                          ),
-                        ],),
-                        html.Br(),
-                        html.Div([ #4
-                          html.Div("4) Cultivar"),
-                          dcc.Dropdown(
-                            id="cultivar-dropdown", 
-                            options=[
-                              {"label": "CIMT01 BH540-Kassie", "value": "CIMT01 BH540-Kassie"},
-                              {"label": "CIMT02 MELKASA-Kassi", "value": "CIMT02 MELKASA-Kassi"},
-                              {"label": "CIMT17 BH660-FAW-40%", "value": "CIMT17 BH660-FAW-40%"},
-                              {"label": "CIMT19 MELKASA2-FAW-40%", "value": "CIMT19 MELKASA2-FAW-40%"},
-                              {"label": "CIMT21 MELKASA-LowY", "value": "CIMT21 MELKASA-LowY"},], 
-                            value="CIMT02 MELKASA-Kassi"
-                          ),
-                        ],
-                        ),
-                        html.Br(),
-                        html.Div([ #5
-                          html.Div("5) Years"),
-                          html.Div("*Note: Available years are from 1981 to 2018"),
-                          html.Span("From "),
-                          dcc.Input(id="year1", type="text", placeholder="YYYY", value="1981"),
-                          html.Span(" to "),
-                          dcc.Input(id="year2", type="text", placeholder="YYYY", value="2018"),    
-                          html.Br(),                 
-                        ]),
-                        html.Br(),
-                        html.Div([ #6
-                          html.Div("6) Planting Date"),
-                          html.Div("Only Monthly and Date are counted (i.e., selected year is ignored)"),
-                          dcc.DatePickerSingle(
-                          id="plt-date-picker",
-                          min_date_allowed=date(2021, 1, 1),
-                          max_date_allowed=date(2021, 12, 31),
-                          initial_visible_month=date(2021, 6, 5),
-                          date=date(2021, 6, 15)
-                          ),
-                        ]),
-                        html.Br(),
-                        html.Div([ #7
-                          html.Div("7) Soil Type"),
-                          dcc.Dropdown(
-                            id="ETsoil", 
-                            options=[
-                              {"label": "ETET000010(AWAS,L)", "value": "ETET000010"},
-                              {"label": "ETET000_10(AWAS,L, shallow)", "value": "ETET000_10"},
-                              {"label": "ETET000011(BAKO,C)", "value": "ETET000011"},
-                              {"label": "ETET001_11(BAKO,C,shallow)", "value": "ETET001_11"},
-                              {"label": "ETET000018(MELK,L)", "value": "ETET000018"},
-                              {"label": "ETET001_18(MELK,L,shallow)", "value": "ETET001_18"},
-                              {"label": "ETET000015(KULU,C)", "value": "ETET000015"},
-                              {"label": "ETET001_15(KULU,C,shallow)", "value": "ETET001_15"},
-                              {"label": "ET00990066(MAHO,C)", "value": "ET00990066"},
-                              {"label": "ET00990_66(MAHO,C,shallow)", "value": "ET00990_66"},
-                              {"label": "ET00920067(KOBO,CL)", "value": "ET00920067"},
-                              {"label": "ET00920_67(KOBO,CL,shallow)", "value": "ET00920_67"},
-                              {"label": "ETET000022(MIES, C)", "value": "ETET000022"},
-                              {"label": "ETET001_22(MIES, C, shallow", "value": "ETET001_22"},
-                            ],
-                            value="ETET001_18"
-                          ),
-                        ],
-                        ),
-                        html.Br(),
-                        html.Div([ #8
-                          html.Div("8) Soil Water Condition"),
-                          dcc.Dropdown(
-                            id="ini-H2O", 
-                            options=[
-                              {"label": "30% of AWC", "value": "0.3"},
-                              {"label": "50% of AWC", "value": "0.5"},
-                              {"label": "70% of AWC", "value": "0.7"},
-                              {"label": "100% of AWC", "value": "1.0"},
-                            ], 
-                            value="0.5"  
-                          ),
-                        ],
-                        ),
-                        html.Br(),
-                        html.Div([ #9
-                          html.Div("9) Initial NO3 Condition"),
-                          dcc.Dropdown(
-                            id="ini-NO3", 
-                            options=[
-                              {"label": "High(65 N kg/ha)", "value": "H"},
-                              {"label": "Low(23 N kg/ha)", "value": "L"},
-                            ], 
-                            value="L"
-                          ),                                      
-                        ],
-                        ),
-                        html.Br(),
-                        html.Div([ #10
-                          html.Div("10) Planting Density"),
-                          dcc.Input(id="plt-density", type="text", placeholder="Enter planting density"),
-                          html.Span(" plants/m"),
-                          html.Sup("2"),
-                        ],
-                        ),
-                        html.Br(),
-                        html.Div([ #11
-                          html.Div("11) Fertilizer Application"),
-                          html.Div("*Note: DAP(days after planting), Amount (N kg/ha)"),
-                          dcc.RadioItems(
-                            id="fert_input",
-                            options=[
-                              {"label": "Fertilizer", "value": "Fert"},
-                              {"label": "No Fertilizer", "value": "No_fert"},
-                            ],
-                            labelStyle = {"display": "inline-block","margin-right": 10},
-                            value="No_fert"
-                          ),
-                        ],
-                        ),
-                        html.Br(),
-                        html.Div([ #FERTILIZER INPUT TABLE
-                          dash_table.DataTable(id="fert-table",
-                            style_cell = {
-                              "font_family": "sans-serif",
-                              "whiteSpace": "normal",
-                              "font_size": "14px",
-                              "text_align": "center"
-                            },
-                            columns=([
-                              {"id": p, "name": p} for p in ["DAP", "NAmount"]
-                            ]),
-                            data=[
-                              dict(**{param: -99 for param in ["DAP", "NAmount"]}) for i in range(1, 5)
-                            ],
-                            style_cell_conditional=[
-                              {"if": {"id": "DAP"}, "width": "30%"}, # Failed component prop type: Invalid component prop (when app.run_server() Debug=True)
-                              {"if": {"id": "NAmount"}, "width": "30%"},
-                            ],
-                            editable=True    
-                          )
-                        ],
-                        id="fert-table-Comp", 
-                        className="w-50",
-                        style={"display": "none"},
-                        ),
-                        html.Br(),
-                        html.Div([ #12
-                          html.Div("12) Target year to compare with "),
-                          html.Div("*Note: Target year can a specific year you remember (e.g., drought year) and want to compare with a full climatology distribution"),
-                          dcc.Input(id="target-year", type="text", placeholder="YYYY"),
-                        ],
-                        ),
-                        html.Br(),
-                        html.Div([ #13
-                          html.Div("13) Simple Enterprise Budgeting?"),
-                          dcc.RadioItems(
-                            id="EB_radio",
-                            options=[
-                              {"label": "Yes", "value": "EB_Yes"},
-                              {"label": "No", "value": "EB_No"},
-                            ],
-                            labelStyle = {"display": "inline-block","margin-right": 10},
-                            value="EB_No"
-                          ),
-                        ],
-                        ),
-                        html.Br(),
-                        html.Div([ # ENTERPRISE BUDGETING TABLE
-                          dash_table.DataTable(id="EB-table",
-                            style_cell = {
-                            "font_family": "sans-serif", #"cursive",
-                            "whiteSpace": "normal",
-                            "font_size": "14px",
-                            "text_align": "center"},
-                            columns=([
-                              {"id": p, "name": p} for p in ["CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]
-                            ]),
-                            data=[
-                              dict(**{param: -99 for param in ["CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]}) for i in range(1, 2)
-                            ],
-                            style_cell_conditional=[
-                              {"if": {"id": "CropPrice"}, "width": "20%"}, # Failed component prop type: Invalid component prop (when app.run_server() Debug=True)
-                              {"if": {"id": "NFertCost"}, "width": "20%"},
-                            ],
-                            editable=True
-                          ),
-
-                          html.Div([
-                            html.Div("Unit: CropPrice[Birr/kg], NFertCost[Birr/N kg], SeedCost [Birr/kg], OtherVariableCosts[Birr/ha], FixedCosts[Birr/ha]"),
-                            html.Div("Calculation =>  Gross Margin [Birr/ha] = Revenues [Birr/ha] - Variable Costs [Birr/ha] - Fixed Costs [Birr/ha]"),
-                            html.Ul([
-                              html.Li("Revenues [Birr/ha] = Yield [kg/ha] * Crop Price [Birr/kg]"),
-                              html.Li("Variable costs for fertilizer [Birr/ha] = N Fertilizer amount [N kg/ha] * cost [Birr/N kg]"),
-                              html.Li("Variable costs for seed purchase [Birr/ha]"), # = Planting Density in #9 [plants/m2] *10000 [m2/ha]* Seed Cost [Birr/plant]"),
-                              html.Div("**(reference: the price of hybrid maize seed from the MOA was about 600 Birr/100 kg compared to 50-80 Birr/100 kg for local maize seed purchased in the local market (Birr 7 = US$ 1)."),
-                              html.Li("Other variable costs [Birr/ha] may include pesticide, insurance, labor etc."),
-                              html.Li("Fixed costs [Birr/ha] may include interests for land, machinery etc."),
-                            ]),
-                          ]),
-                        ],
-                        id="EB-table-Comp", 
-                        className="w-100",
-                        style={"display": "none"},
-                        ), 
-                        # INPUT FORM END
-                      ], 
-                      ),
-                    className="overflow-auto",
-                    style={"height": "70vh"},
-                    ),
-                    html.Div([ # SCENARIO TABLE
-                      # Deletable summary table : EJ(5/3/2021)
-                      html.Header(html.B("Scenarios"), className="card-header",),
-                      html.Div([
-                        dash_table.DataTable(
-                        id="scenario-table",
-                        columns=([
-                          {"id": p, "name": p} for p in sce_col_names
-                        ]),
-                        data=[
-                          dict(**{param: "N/A" for param in sce_col_names}) for i in range(1, 2)
-                        ],
-                        editable=True,
-                        row_deletable=True
-                        ) 
-                      ],
-                      id="sce-table-Comp", 
-                      className="overflow-auto block",
-                      ),
-                      # end of Deletable summary table : EJ(5/3/2021)
-                      html.Button(id="write-button-state", 
-                      n_clicks=0, 
-                      children="Create or Add a new Scenario", 
-                      className="w-100 btn btn-success",
-                      ),
-                    ]),
-
-                    html.Br(),
-                    html.Div([ ## GROWING SEASON
-                      html.Div("14) Approximate Growing Season"),
-                      html.Div("*Note: This growing season is used to sort drier/wetter years based on the seasonal total rainfall"),
-                      dcc.RangeSlider(
-                        id="season-slider",
-                        min=1, max=12, step=1,
-                        marks={1: "Jan", 2: "Feb",3: "Mar", 4: "Apr", 5: "May", 6: "Jun", 7: "Jul", 8: "Aug", 9: "Sep", 10: "Oct", 11: "Nov", 12: "Dec"},
-                        value=[6, 9]
-                      ),
-                    ],
-                    ),
-
-                    html.Br(),
-                    html.Div( ## RUN DSSAT BUTTON
-                      html.Button(id="simulate-button-state", 
-                      children="Simulate all scenarios (Run DSSAT)",
-                      className="w-100 btn btn-primary"
-                      ),
-                    ) # RUN SIMULATIONS BUTTON
-                  ], 
-                  ),
-                className="block card",
-                ),
-              className="block" 
+          html.Div([
+            html.Header(
+              html.B(
+                "Simulation Input",
               ),
-            ], 
-            md=5,
-            className="p-1",
+            className=" card-header",
             ),
-            dbc.Col([ ## RIGHT HAND SIDE -- CARDS WITH SIMULATION ETC
-              html.Div([
-                html.Div( # SIMULATIONS
-                  html.Div([
-                    html.Header(
-                      html.B("Simulation Graphs"),
-                    className=" card-header"
+
+            dbc.Form([ ## INPUT FORM
+              html.Div( # SCROLLABLE FORM
+                html.Div([ # FORM START
+                  dbc.FormGroup([ # Scenario
+                    dbc.Label("1) Scenario Name", html_for="sce-name"),
+                    dbc.Input(type="text", id="sce-name", minLength=4, maxLength=4),
+                  ],),
+                  dbc.FormGroup([ # Station
+                    dbc.Label("2) Station", html_for="ETstation"),
+                    dcc.Dropdown(
+                      id="ETstation",
+                      options=[
+                        {"label": "Melkasa", "value": "MELK"},
+                        {"label": "Awassa", "value": "AWAS"},
+                        {"label": "Bako", "value": "BAKO"},
+                        {"label": "Mahoni", "value": "MAHO"}
+                      ],
+                      value="MELK"
                     ),
-                    html.Div(
-                      html.Div([
-                        html.Div(
-                          html.Div([
-                            dbc.Spinner(children=[html.Div(id="yieldbox-container")], size="lg", color="primary", type="border", fullscreen=True,),
-                            html.Div(id="yieldcdf-container"),  #exceedance curve
-                            html.Div(id="yieldtimeseries-container"),  #time-series
-                            dbc.Row([
-                              dbc.Col(
-                                html.Div(id="yield-BN-container", 
-                                # style={"width": "33%", "display": "inline-block"}
-                                ),
-                              md=4),
-                              dbc.Col(
-                                html.Div(id="yield-NN-container", 
-                                # style={"width": "33%", "display": "inline-block"}
-                                ),
-                              md=4),
-                              dbc.Col(
-                                html.Div(id="yield-AN-container", 
-                                # style={"width": "33%", "display": "inline-block"}
-                                ),
-                              md=4),
-                            ]),
-                            # html.Br(),
-                              # html.Div([
-                              #   dbc.Row(
-                              #     dbc.Col(
-                              #       html.Span("====================================================================", style={"color": "black", "font-style": "italic", "font-weight": "font-weight-bold"
-                              #       }),
-                              #       width={"size": 6, "offset": 3},
-                              #     ),
-                              #   ),
-                              #   dbc.Row(
-                              #     dbc.Col(
-                              #       html.Span("----------------------------- Post-Simulation Analysis --------------------------------", style={"color": "black", "font-style": "italic", "font-weight": "font-weight-bold"}),
-                              #       width={"size": 10, "offset": 3},
-                              #     ),
-                              #   ),
-                              #   dbc.Row([
-                              #     html.Span("====================================================================",style={"color": "black", "font-style": "italic", "font-weight": "font-weight-bold"}),
-                              #   ],justify="center",),
-                              # ],style={"width": "100%"},)
-                          ], 
-                          className="plot-container plotly"),
-                        className="js-plotly-plot"
-                        )
+                  ],),
+                  dbc.FormGroup([ # Crop
+                    dbc.Label("3) Crop", html_for="crop-radio"),
+                    dcc.RadioItems(
+                      id="crop-radio",
+                      # options=[{"label": k, "value": k} for k in cultivar_options.keys()],
+                      options = [
+                        {"label": "Maize", "value": "MZ"}, 
+                        {"label": "Wheat", "value": "WH"}, 
+                        {"label": "Sorghum", "value": "SG"},
+                      ],
+                      labelStyle = {"display": "inline-block","margin-right": 10},
+                      value="MZ"
+                    ),
+                  ],),
+                  dbc.FormGroup([ # Cultivar
+                    dbc.Label("4) Cultivar", html_for="cultivar-dropdown"),
+                    dcc.Dropdown(
+                      id="cultivar-dropdown", 
+                      options=[
+                        {"label": "CIMT01 BH540-Kassie", "value": "CIMT01 BH540-Kassie"},
+                        {"label": "CIMT02 MELKASA-Kassi", "value": "CIMT02 MELKASA-Kassi"},
+                        {"label": "CIMT17 BH660-FAW-40%", "value": "CIMT17 BH660-FAW-40%"},
+                        {"label": "CIMT19 MELKASA2-FAW-40%", "value": "CIMT19 MELKASA2-FAW-40%"},
+                        {"label": "CIMT21 MELKASA-LowY", "value": "CIMT21 MELKASA-LowY"},], 
+                      value="CIMT02 MELKASA-Kassi"
+                    ),
+                  ],),
+
+                  #  type="number"
+                    # dbc.FormGroup([ # Start Year
+                    #   dbc.Label("5) Start Year", html_for="year1"),
+                    #   dbc.Input(type="number", id="year1", placeholder="YYYY", value="1981", min=1981, max=2018, ),
+                    #   dbc.FormText("(No earlier than 1981)"),
+                    # ],),
+                    # dbc.FormGroup([ # End Year
+                    #   dbc.Label("6) End Year", html_for="year2"),
+                    #   dbc.Input(type="number", id="year2", placeholder="YYYY", value="2018", min=1981, max=2018, ),
+                    #   dbc.FormText("(No later than 2018)"),
+                    # ],),
+                    # dbc.FormGroup([ # Year to Highlight
+                    #   dbc.Label("7) Year to Highlight", html_for="target-year"),
+                    #   dbc.Input(type="number", id="target-year", placeholder="YYYY", min=1981, max=2018, ),
+                    #   dbc.FormText("Target year can a specific year you remember (e.g., drought year) and want to compare with a full climatology distribution"),
+                    # ],),
+
+                  # type="text"
+                  dbc.FormGroup([ # Start Year
+                    dbc.Label("5) Start Year", html_for="year1"),
+                    dbc.Input(type="text", id="year1", placeholder="YYYY", value="1981",),
+                    dbc.FormText("(No earlier than 1981)"),
+                  ],),
+                  dbc.FormGroup([ # End Year
+                    dbc.Label("6) End Year", html_for="year2"),
+                    dbc.Input(type="text", id="year2", placeholder="YYYY", value="2018",),
+                    dbc.FormText("(No later than 2018)"),
+                  ],),
+                  dbc.FormGroup([ # Year to Highlight
+                    dbc.Label("7) Year to Highlight", html_for="target-year"),
+                    dbc.Input(type="text", id="target-year", placeholder="YYYY",),
+                    dbc.FormText("Target year can a specific year you remember (e.g., drought year) and want to compare with a full climatology distribution"),
+                  ],),
+
+                  html.Div([ #5
+                    html.Div("5) Years"),
+                    dbc.FormText("Available years are from 1981 to 2018"),
+                    html.Span("From "),
+                    html.Span(" to "),
+                    html.Br(),                 
+                  ], className="d-none"),
+                  dbc.FormGroup([ # Soil Type
+                    dbc.Label("8) Soil Type", html_for="ETsoil"),
+                    dcc.Dropdown(
+                      id="ETsoil", 
+                      options=[
+                        {"label": "ETET000010(AWAS,L)", "value": "ETET000010"},
+                        {"label": "ETET000_10(AWAS,L, shallow)", "value": "ETET000_10"},
+                        {"label": "ETET000011(BAKO,C)", "value": "ETET000011"},
+                        {"label": "ETET001_11(BAKO,C,shallow)", "value": "ETET001_11"},
+                        {"label": "ETET000018(MELK,L)", "value": "ETET000018"},
+                        {"label": "ETET001_18(MELK,L,shallow)", "value": "ETET001_18"},
+                        {"label": "ETET000015(KULU,C)", "value": "ETET000015"},
+                        {"label": "ETET001_15(KULU,C,shallow)", "value": "ETET001_15"},
+                        {"label": "ET00990066(MAHO,C)", "value": "ET00990066"},
+                        {"label": "ET00990_66(MAHO,C,shallow)", "value": "ET00990_66"},
+                        {"label": "ET00920067(KOBO,CL)", "value": "ET00920067"},
+                        {"label": "ET00920_67(KOBO,CL,shallow)", "value": "ET00920_67"},
+                        {"label": "ETET000022(MIES, C)", "value": "ETET000022"},
+                        {"label": "ETET001_22(MIES, C, shallow", "value": "ETET001_22"},
+                      ],
+                      value="ETET001_18"
+                    ),
+                  ],),
+                  dbc.FormGroup([ # Soil Water Condition
+                    dbc.Label("9) Soil Water Condition", html_for="ini-H2O"),
+                    dcc.Dropdown(
+                      id="ini-H2O", 
+                      options=[
+                        {"label": "30% of AWC", "value": "0.3"},
+                        {"label": "50% of AWC", "value": "0.5"},
+                        {"label": "70% of AWC", "value": "0.7"},
+                        {"label": "100% of AWC", "value": "1.0"},
                       ], 
-                      id="simulation-graphs", 
-                      # className="dash-graph ddk-graph", 
-                      className="overflow-auto",
-                      style={"height": "94vh"},
-                      ),
+                      value="0.5"  
                     ),
-                  ], 
-                  ),
-                ),
-                
-                # CSV FOR SIMULATED YIELD
-                html.Div( # ORIGINAL CSV
-                  html.Div([
-                    html.Header(
-                      html.B("Simulated Yield Original CSV"),
-                    className=" card-header"
-                    ),
-                    html.Div(
-                      html.Div([
-                        html.Div([
-                          html.Div([ # ORIGINAL CSV STUFF
-                            html.Br(),
-                            html.Button("Download CSV for Simulated Yield", id="btn_csv",
-                            className="w-100 btn btn-secondary"
-                            ),
-                            # dcc.Download(id="download-dataframe-csv"),
-                            Download(id="download-dataframe-csv"),
-                            html.Div(id="yieldtables-container", 
-                            className="overflow-auto",
-                            style={"height": "10vh"},
-                            ),  #yield simulated output
-                          ], ),
-                        ],
-                        ),
+                  ],),
+                  dbc.FormGroup([ # Initial NO3 Condition
+                    dbc.Label("10) Initial NO3 Condition", html_for="ini-NO3"),
+                    dcc.Dropdown(
+                      id="ini-NO3", 
+                      options=[
+                        {"label": "High(65 N kg/ha)", "value": "H"},
+                        {"label": "Low(23 N kg/ha)", "value": "L"},
                       ], 
-                      id="original-yield-csv-table", 
-                      className="dash-table-container"
-                      ),
+                      value="L"
+                    ),                                      
+                  ],),
+                  dbc.FormGroup([ # Planting Date
+                    dbc.Label("11) Planting Date", html_for="plt-date-picker"),
+                    dbc.FormText("Only Monthly and Date are counted"),
+                    dcc.DatePickerSingle(
+                    id="plt-date-picker",
+                    min_date_allowed=date(2021, 1, 1),
+                    max_date_allowed=date(2021, 12, 31),
+                    initial_visible_month=date(2021, 6, 5),
+                    date=date(2021, 6, 15)
                     ),
-                  ], 
+                  ],),
+                  # type="number"    
+                    # dbc.FormGroup([ # Planting Density
+                    #   dbc.Label("12) Planting Density", html_for="plt-density"),
+                    #   dbc.Input(type="number", id="plt-density", value=1, min=1, max=250),
+                    #   dbc.FormText([
+                    #     html.Span(" plants/m"),
+                    #     html.Sup("2"),
+                    #   ]),
+                    # ],),
+
+                  # type="text"
+                  dbc.FormGroup([ # Planting Density
+                    dbc.Label("12) Planting Density", html_for="plt-density"),
+                    dbc.Input(type="text", id="plt-density", value="1"),
+                    dbc.FormText([
+                      html.Span(" plants/m"),
+                      html.Sup("2"),
+                    ]),
+                  ],),
+                  dbc.FormGroup([ # Fertilizer Application
+                    dbc.Label("13) Fertilizer Application", html_for="fert_input"),
+                    dbc.FormText("DAP(days after planting), Amount (N kg/ha)"),
+                    dcc.RadioItems(
+                      id="fert_input",
+                      options=[
+                        {"label": "Fertilizer", "value": "Fert"},
+                        {"label": "No Fertilizer", "value": "No_fert"},
+                      ],
+                      labelStyle = {"display": "inline-block","margin-right": 10},
+                      value="No_fert"
+                    ),
+                  ],),
+                  # Days After Planting
+                  # Amount of N in kg/ha
+                  #
+                  # Crop Price
+                  # Fertilizer Cost
+                  # Seed Cost
+                  # Other Variable Costs
+                  # Fixed Costs
+                  dbc.FormGroup([ # FERTILIZER INPUT TABLE
+                    dash_table.DataTable(id="fert-table",
+                      style_cell = {
+                        "font_family": "sans-serif",
+                        "whiteSpace": "normal",
+                        "font_size": "14px",
+                        "text_align": "center"
+                      },
+                      columns=([
+                        {"id": p, "name": p} for p in ["DAP", "NAmount"]
+                      ]),
+                      data=[
+                        dict(**{param: 0 for param in ["DAP", "NAmount"]}) for i in range(1, 5)
+                      ],
+                      # Days After Planting
+                      # Amount of N in kg/ha
+                      style_cell_conditional=[
+                        {"if": {"id": "DAP"}, "width": "30%"}, # Failed component prop type: Invalid component prop (when app.run_server() Debug=True)
+                        {"if": {"id": "NAmount"}, "width": "30%"},
+                      ],
+                      editable=True    
+                    ),
+                  ],
+                  id="fert-table-Comp", 
+                  className="w-50",
+                  style={"display": "none"},
                   ),
-                ),
-                
-                html.Div( # SORTED CSV
-                  html.Div([
-                    html.Header(
-                      html.B("Simulated Yield Sorted CSV"),
-                    className=" card-header"
+                  dbc.FormGroup([ # Enterprise Budgeting?
+                    dbc.Label("14) Enterprise Budgeting?", html_for="EB_radio"),
+                    dcc.RadioItems(
+                      id="EB_radio",
+                      options=[
+                        {"label": "Yes", "value": "EB_Yes"},
+                        {"label": "No", "value": "EB_No"},
+                      ],
+                      labelStyle = {"display": "inline-block","margin-right": 10},
+                      value="EB_No"
                     ),
-                    html.Div(
-                      html.Div([
-                        html.Div([
-                          html.Div([ # SORTING CONTROLS AND BUTTON
-                            html.Br(),
-                            html.Div([
-                              html.Span("(i) Select a column name to sort: "),
-                              html.Div([dcc.Dropdown(id="column-dropdown", options=[{"label": "YEAR", "value": "YEAR"},],value="YEAR")]),
-                            ],
-                            ),
-                            html.Br(),
-                            html.Div([
-                              html.Span("(ii) Yield adjustment factor: "),
-                              dcc.Input(id="yield-multiplier", type="text", placeholder="Enter ", value = "1"),
-                              html.Span(" (e.g., 90% reduction => 0.9)"),  
-                            ]),
-                            html.Br(),
-                            html.Button("Click to update and sort the Datatable by the selected column name", id="btn_table_sort",
-                            className="w-100 btn btn-info",
-                            ),
-                            html.Br(),   
-                            html.Br(),   
-                            html.Button("Download SORTED CSV for Simulated Yield", id="btn_csv2",
-                            className="w-100 btn btn-secondary",
-                            ),
-                            # dcc.Download(id="download-dataframe-csv"),
-                            Download(id="download-dataframe-csv2"),
-                            html.Div(id="yieldtables-container2", 
-                            className="overflow-auto",
-                            style={"height": "10vh"},
-                            ),  #sorted yield simulated output
-                          ],
-                          ),
-                        ],
-                        ),
-                      ], 
-                      id="sorted-yield-csv-table", className="dash-table-container"
-                      ),
+                  ]),
+                  dbc.FormGroup([ # ENTERPRISE BUDGETING TABLE
+                    dash_table.DataTable(id="EB-table",
+                      style_cell = {
+                      "font_family": "sans-serif", #"cursive",
+                      "whiteSpace": "normal",
+                      "font_size": "14px",
+                      "text_align": "center"},
+                      columns=([
+                        {"id": p, "name": p} for p in ["CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]
+                      ]),
+                      data=[
+                        dict(**{param: 0 for param in ["CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]}) for i in range(1, 2)
+                      ],
+                      style_cell_conditional=[
+                        {"if": {"id": "CropPrice"}, "width": "20%"}, # Failed component prop type: Invalid component prop (when app.run_server() Debug=True)
+                        {"if": {"id": "NFertCost"}, "width": "20%"},
+                      ],
+                      editable=True
                     ),
-                  ], 
+
+                    html.Div([
+                      html.Div("Unit: CropPrice[Birr/kg], NFertCost[Birr/N kg], SeedCost [Birr/kg], OtherVariableCosts[Birr/ha], FixedCosts[Birr/ha]"),
+                      html.Div("Calculation =>  Gross Margin [Birr/ha] = Revenues [Birr/ha] - Variable Costs [Birr/ha] - Fixed Costs [Birr/ha]"),
+                      html.Ul([
+                        html.Li("Revenues [Birr/ha] = Yield [kg/ha] * Crop Price [Birr/kg]"),
+                        html.Li("Variable costs for fertilizer [Birr/ha] = N Fertilizer amount [N kg/ha] * cost [Birr/N kg]"),
+                        html.Li("Variable costs for seed purchase [Birr/ha]"), # = Planting Density in #9 [plants/m2] *10000 [m2/ha]* Seed Cost [Birr/plant]"),
+                        html.Div("**(reference: the price of hybrid maize seed from the MOA was about 600 Birr/100 kg compared to 50-80 Birr/100 kg for local maize seed purchased in the local market (Birr 7 = US$ 1)."),
+                        html.Li("Other variable costs [Birr/ha] may include pesticide, insurance, labor etc."),
+                        html.Li("Fixed costs [Birr/ha] may include interests for land, machinery etc."),
+                      ]),
+                    ]),
+                  ],
+                  id="EB-table-Comp", 
+                  className="w-100",
+                  style={"display": "none"},
                   ),
+                  # INPUT FORM END
+                ], 
+                className="p-3"
                 ),
-            
-                html.Div( # ENTERPRISE BUDGETING
-                  html.Div([
-                    html.Header(
-                      html.B("Enterprise Budgeting"),
-                    className=" card-header",
-                    ),
-                    html.Div(
-                      html.Div([
-                        html.Div(
-                          html.Div([
-                            html.Br(),
-                            html.Button(id="EB-button-state", 
-                            children="Display figures for Enterprise Budgets",
-                            className="w-100 btn btn-danger"
-                            ), #red
-                            html.Br(),
-                            html.Div(id="EBbox-container"), 
-                            html.Div(id="EBcdf-container"),  #exceedance curve
-                            html.Div(id="EBtimeseries-container"), #exceedance curve
-                            html.Br(),
-                            html.Button("Download CSV file for Enterprise Budgeting", 
-                            id="btn_csv_EB",
-                            className="w-100 btn btn-secondary"
-                            ),
-                            # dcc.Download(id="download-dataframe-csv"),
-                            Download(id="download-dataframe-csv_EB"),
-                            html.Div(id="EBtables-container", className="w-50"),   #yield simulated output
-                          ], 
-                          className="plot-container plotly"),
-                        className="js-plotly-plot",
-                        )
-                      ], 
-                      id="enterprise-budgeting", className="dash-graph ddk-graph", style={"height": "20vh"}
-                      ),
-                    ),
-                  ], 
-                  ),
+              className="overflow-auto",
+              style={"height": "67vh"},
+              ),
+
+              html.Div([ # SCENARIO TABLE
+                # Deletable summary table : EJ(5/3/2021)
+                html.Header(html.B("Scenarios"), className="card-header",),
+                html.Div([
+                  dash_table.DataTable(
+                  id="scenario-table",
+                  columns=([
+                    {"id": p, "name": p} for p in sce_col_names
+                  ]),
+                  data=[
+                    dict(**{param: "N/A" for param in sce_col_names}) for i in range(1, 2)
+                  ],
+                  editable=True,
+                  row_deletable=True
+                  ) 
+                ],
+                id="sce-table-Comp", 
+                className="overflow-auto block",
                 ),
-              ], 
-              className="block card"
+                # end of Deletable summary table : EJ(5/3/2021)
+              ]),
+
+              dbc.FormGroup([ # SUBMIT - ADD SCENARIO
+                dbc.Button(id="write-button-state", 
+                n_clicks=0, 
+                children="Create or Add a new Scenario", 
+                  className="w-75 d-block mx-auto",
+                color="primary"
+                ),
+              ]),
+            ]),
+
+            html.Div([ # AFTER SCENARIO TABLE
+              dbc.FormGroup([ # Approximate Growing Season
+                dbc.Label("15) Approximate Growing Season", html_for="season-slider"),
+                dbc.FormText("This growing season is used to sort drier/wetter years based on the seasonal total rainfall"),
+                dcc.RangeSlider(
+                  id="season-slider",
+                  min=1, max=12, step=1,
+                  marks={1: "Jan", 2: "Feb",3: "Mar", 4: "Apr", 5: "May", 6: "Jun", 7: "Jul", 8: "Aug", 9: "Sep", 10: "Oct", 11: "Nov", 12: "Dec"},
+                  value=[6, 9]
+                ),
+              ]),
+
+              html.Div( ## RUN DSSAT BUTTON
+                dbc.Button(id="simulate-button-state", 
+                children="Simulate all scenarios (Run DSSAT)",
+                className="w-75 d-block mx-auto",
+                color="success",
+                ),
               )
             ],
-            md=7,
-            className="p-1",
+            className="p-3",
             ),
-          ],
-          # no_gutters=True,
-          className="m-1"
+
+          ], 
           ),
+        className="block card",
         ),
+      ], 
+      md=5,
+      className="p-1",
       ),
+      dbc.Col([ ## RIGHT HAND SIDE -- CARDS WITH SIMULATION ETC
+        html.Div([
+          html.Div( # SIMULATIONS
+            html.Div([
+              html.Header(
+                html.B("Simulation Graphs"),
+              className=" card-header"
+              ),
+              html.Div(
+                html.Div([
+                  html.Div(
+                    html.Div([
+                      dbc.Spinner(children=[html.Div(id="yieldbox-container")], size="lg", color="primary", type="border", fullscreen=True,),
+                      html.Div(id="yieldcdf-container"),  #exceedance curve
+                      html.Div(id="yieldtimeseries-container"),  #time-series
+                      dbc.Row([
+                        dbc.Col(
+                          html.Div(id="yield-BN-container", 
+                          # style={"width": "33%", "display": "inline-block"}
+                          ),
+                        md=4),
+                        dbc.Col(
+                          html.Div(id="yield-NN-container", 
+                          # style={"width": "33%", "display": "inline-block"}
+                          ),
+                        md=4),
+                        dbc.Col(
+                          html.Div(id="yield-AN-container", 
+                          # style={"width": "33%", "display": "inline-block"}
+                          ),
+                        md=4),
+                      ]),
+                      # html.Br(),
+                        # html.Div([
+                        #   dbc.Row(
+                        #     dbc.Col(
+                        #       html.Span("====================================================================", style={"color": "black", "font-style": "italic", "font-weight": "font-weight-bold"
+                        #       }),
+                        #       width={"size": 6, "offset": 3},
+                        #     ),
+                        #   ),
+                        #   dbc.Row(
+                        #     dbc.Col(
+                        #       html.Span("----------------------------- Post-Simulation Analysis --------------------------------", style={"color": "black", "font-style": "italic", "font-weight": "font-weight-bold"}),
+                        #       width={"size": 10, "offset": 3},
+                        #     ),
+                        #   ),
+                        #   dbc.Row([
+                        #     html.Span("====================================================================",style={"color": "black", "font-style": "italic", "font-weight": "font-weight-bold"}),
+                        #   ],justify="center",),
+                        # ],style={"width": "100%"},)
+                    ], 
+                    className="plot-container plotly"),
+                  className="js-plotly-plot"
+                  )
+                ], 
+                id="simulation-graphs", 
+                # className="dash-graph ddk-graph", 
+                className="overflow-auto",
+                style={"height": "94vh"},
+                ),
+              ),
+            ], 
+            ),
+          ),
+          
+          # CSV FOR SIMULATED YIELD
+          html.Div( # ORIGINAL CSV
+            html.Div([
+              html.Header(
+                html.B("Simulated Yield Original CSV"),
+              className=" card-header"
+              ),
+              html.Div(
+                html.Div([
+                  html.Div([
+                    html.Div([ # ORIGINAL CSV STUFF
+                      html.Br(),
+                      html.Button("Download CSV for Simulated Yield", id="btn_csv",
+                      className="w-100 btn btn-secondary"
+                      ),
+                      # dcc.Download(id="download-dataframe-csv"),
+                      Download(id="download-dataframe-csv"),
+                      html.Div(id="yieldtables-container", 
+                      className="overflow-auto",
+                      style={"height": "10vh"},
+                      ),  #yield simulated output
+                    ], ),
+                  ],
+                  ),
+                ], 
+                id="original-yield-csv-table", 
+                className="dash-table-container"
+                ),
+              ),
+            ], 
+            ),
+          ),
+          
+          html.Div( # SORTED CSV
+            html.Div([
+              html.Header(
+                html.B("Simulated Yield Sorted CSV"),
+              className=" card-header"
+              ),
+              html.Div(
+                html.Div([
+                  html.Div([
+                    html.Div([ # SORTING CONTROLS AND BUTTON
+                      html.Br(),
+                      html.Div([
+                        html.Span("(i) Select a column name to sort: "),
+                        html.Div([dcc.Dropdown(id="column-dropdown", options=[{"label": "YEAR", "value": "YEAR"},],value="YEAR")]),
+                      ],
+                      ),
+                      html.Br(),
+                      html.Div([
+                        html.Span("(ii) Yield adjustment factor: "),
+                        dbc.Input(id="yield-multiplier", type="text", placeholder="Enter ", value = "1"),
+                        html.Span(" (e.g., 90% reduction => 0.9)"),  
+                      ]),
+                      html.Br(),
+                      html.Button("Click to update and sort the Datatable by the selected column name", id="btn_table_sort",
+                      className="w-100 btn btn-info",
+                      ),
+                      html.Br(),   
+                      html.Br(),   
+                      html.Button("Download SORTED CSV for Simulated Yield", id="btn_csv2",
+                      className="w-100 btn btn-secondary",
+                      ),
+                      # dcc.Download(id="download-dataframe-csv"),
+                      Download(id="download-dataframe-csv2"),
+                      html.Div(id="yieldtables-container2", 
+                      className="overflow-auto",
+                      style={"height": "10vh"},
+                      ),  #sorted yield simulated output
+                    ],
+                    ),
+                  ],
+                  ),
+                ], 
+                id="sorted-yield-csv-table", className="dash-table-container"
+                ),
+              ),
+            ], 
+            ),
+          ),
+      
+          html.Div( # ENTERPRISE BUDGETING
+            html.Div([
+              html.Header(
+                html.B("Enterprise Budgeting"),
+              className=" card-header",
+              ),
+              html.Div(
+                html.Div([
+                  html.Div(
+                    html.Div([
+                      html.Br(),
+                      html.Button(id="EB-button-state", 
+                      children="Display figures for Enterprise Budgets",
+                      className="w-100 btn btn-danger"
+                      ), #red
+                      html.Br(),
+                      html.Div(id="EBbox-container"), 
+                      html.Div(id="EBcdf-container"),  #exceedance curve
+                      html.Div(id="EBtimeseries-container"), #exceedance curve
+                      html.Br(),
+                      html.Button("Download CSV file for Enterprise Budgeting", 
+                      id="btn_csv_EB",
+                      className="w-100 btn btn-secondary"
+                      ),
+                      # dcc.Download(id="download-dataframe-csv"),
+                      Download(id="download-dataframe-csv_EB"),
+                      html.Div(id="EBtables-container", className="w-50"),   #yield simulated output
+                    ], 
+                    className="plot-container plotly"),
+                  className="js-plotly-plot",
+                  )
+                ], 
+                id="enterprise-budgeting", className="dash-graph ddk-graph", style={"height": "20vh"}
+                ),
+              ),
+            ], 
+            ),
+          ),
+        ], 
+        className="block card"
+        )
+      ],
+      md=7,
+      className="p-1",
+      ),
+    ],
+    className="m-1"
     ),
-    html.Div( ## HISTORICAL -- HIDDEN FOR NOW
+  ),
+
+
+  html.Div([ # NAVIGATE TO THESE SECTIONS
+    html.Div( ## FORECAST -- HIDDEN FOR NOW
       "HISTORICAL",
     className="d-none",
     ),
-    html.Div( ## ABOUT CAMDT -- HIDDEN FOR NOW
+    html.Div( ## ABOUT SIMAGRI -- HIDDEN FOR NOW
       dbc.Row( # HEADER AND DESCRIPTION
         dbc.Col([
           dbc.Row(
@@ -678,7 +683,6 @@ app.layout = html.Div( ## MAIN APP DIV
     className="d-none",
     ),
   ],
-  className="tab-content"
   ),
 
 ],
