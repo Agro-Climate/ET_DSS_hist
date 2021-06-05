@@ -1341,6 +1341,7 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
         for i in x_val:
             x_data = df.YEAR[df["EXPERIMENT"]==i].values
             y_data = df.GMargin[df["EXPERIMENT"]==i].values
+            y_data = y_data.astype(int) #EJ(6/5/2021)
 
             ##make a new dataframe to save into CSV
             df_temp = pd.DataFrame({i:y_data})
