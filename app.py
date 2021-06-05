@@ -1238,10 +1238,11 @@ def set_column_value(available_options):
                 Output(component_id="EBtables-container", component_property="children"),
                 Output("memory-EB-table", "data"),
                 Input("EB-button-state", "n_clicks"),
+                State('yield-multiplier', 'value'), #EJ(6/5/2021)
                 State("scenario-table","data") ### scenario summary table
               )
 
-def EB_figure(n_clicks, sce_in_table):
+def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplier
     if n_clicks is None:
         raise PreventUpdate
         return 
@@ -1269,6 +1270,7 @@ def EB_figure(n_clicks, sce_in_table):
             #4) read DSSAT output => Read Summary.out from all scenario output
             df_OUT=pd.read_csv(fout_name,delim_whitespace=True ,skiprows=3)
             HWAM = df_OUT.iloc[:,20].values  #read 21th column only
+            HWAM = np.multiply(HWAM, float(multiplier)) #EJ(6/5/2021) added multiplier
             EXPERIMENT = df_OUT.iloc[:,7].values  #read 4th column only
             PDAT = df_OUT.iloc[:,13].values  #read 14th column only
             ADAT = df_OUT.iloc[:,15].values  #read 14th column only
@@ -1297,8 +1299,8 @@ def EB_figure(n_clicks, sce_in_table):
             # df7 = pd.DataFrame({"GMargin":GMargin})
             # temp_df = pd.concat([df1.EXPERIMENT,df5.YEAR, df2.PDAT, df3.ADAT, df4.HWAM, df6.NICM, df7.GMargin], ignore_index=True, axis=1)
 
-            data = {"EXPERIMENT":EXPERIMENT, "YEAR":YEAR, "PDAT": PDAT, "ADAT":ADAT, "HWAM":HWAM,"NICM":NICM, "GMargin":GMargin, "RAIN":df_season_rain.season_rain.values,"RANK":df_season_rain.Rank.values}
-            temp_df = pd.DataFrame (data, columns = ["EXPERIMENT","YEAR", "PDAT","ADAT","HWAM", "RAIN", "RANK"])
+            data = {"EXPERIMENT":EXPERIMENT, "YEAR":YEAR, "PDAT": PDAT, "ADAT":ADAT, "HWAM":HWAM,"NICM":NICM, "GMargin":GMargin}  #EJ(6/5/2021) fixed
+            temp_df = pd.DataFrame (data, columns = ["EXPERIMENT","YEAR", "PDAT","ADAT","HWAM","NICM","GMargin"])  #EJ(6/5/2021) fixed
 
             if i==0:
                 df = temp_df.copy()
