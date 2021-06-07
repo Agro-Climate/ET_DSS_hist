@@ -518,14 +518,37 @@ app.layout = html.Div( ## MAIN APP DIV
                     html.Div([ # ORIGINAL CSV STUFF
                       html.Br(),
 
-                      dbc.Button(id="btn_csv", 
+                    #   dbc.Button(id="btn_csv", 
+                    #   children="Download CSV for Simulated Yield", 
+                    #   className="w-75 d-block mx-auto",
+                    #   color="secondary"
+                    #   ),
+                    #   # dcc.Download(id="download-dataframe-csv"),
+                    #   Download(id="download-dataframe-csv"),
+                    #EJ(6/7/2021) to download each column separately into a csv
+                    dbc.Button(id="btn_csv_yield", 
                       children="Download CSV for Simulated Yield", 
                       className="w-75 d-block mx-auto",
                       color="secondary"
                       ),
-                      # dcc.Download(id="download-dataframe-csv"),
-                      Download(id="download-dataframe-csv"),
-                      html.Div(id="yieldtables-container", 
+                    html.Br(),
+                    dbc.Button(id="btn_csv_rain", 
+                      children="Download CSV for Seasonal rainfall", 
+                      className="w-75 d-block mx-auto",
+                      color="secondary"
+                      ),
+                    html.Br(),
+                    dbc.Button(id="btn_csv_Pexe", 
+                      children="Download CSV for Prob. of exceedance", 
+                      className="w-75 d-block mx-auto",
+                      color="secondary"
+                      ),
+                    # dcc.Download(id="download-dataframe-csv"),
+                    Download(id="download-dataframe-csv-yield"),
+                    Download(id="download-dataframe-csv-rain"),
+                    Download(id="download-dataframe-csv-Pexe"),
+                    #end of EJ(6/7/2021) update
+                    html.Div(id="yieldtables-container", 
                       className="overflow-auto",
                       style={"height": "20vh"},
                       ),  #yield simulated output
@@ -753,17 +776,95 @@ def set_cultivar_options(selected_crop):
 def set_cultivar_value(available_options):
     return cultivar_options[0]["value"]
 #==============================================================
-#call back to save df into a csv file
+# #call back to save df into a csv file
+# @app.callback(
+#     Output("download-dataframe-csv", "data"),
+#     Input("btn_csv", "n_clicks"),
+#     State("memory-yield-table", "data"),
+#     prevent_initial_call=True,
+# )
+# def func(n_clicks, yield_data):
+#     # print(yield_data)
+#     df =pd.DataFrame(yield_data)
+#     return dcc.send_data_frame(df.to_csv, "simulated_yield.csv")
+#============EJ(6/7/2021)
+#1) for yield - call back to save df into a csv file
 @app.callback(
-    Output("download-dataframe-csv", "data"),
-    Input("btn_csv", "n_clicks"),
+    Output("download-dataframe-csv-yield", "data"),
+    Input("btn_csv_yield", "n_clicks"),
     State("memory-yield-table", "data"),
     prevent_initial_call=True,
 )
 def func(n_clicks, yield_data):
     # print(yield_data)
     df =pd.DataFrame(yield_data)
-    return dcc.send_data_frame(df.to_csv, "simulated_yield.csv")
+    col = df.columns  #EJ(6/7/2021)
+    col_names = [df.columns[0]]   #list for col names - first column for YEAR
+    for i in range(1,len(col),3):  
+        col_names.append(df.columns[i])
+      
+    #make a new filtered dataframe to save into a csv
+    df_out = pd.DataFrame(columns = col_names)
+    # df_out.iloc[:,0]=df.iloc[:,[0]].values  #first column for YEAR
+    df_out.iloc[:,0] = df.iloc[:,0].values  #first column for YEAR
+    k=1
+    for i in range(1,len(col),3):  #for YIELD
+        temp=df.iloc[:,i]
+        temp=temp.astype(int)
+        df_out.iloc[:,k]=temp.values
+        k=k+1 #column index for a new df
+    return dcc.send_data_frame(df_out.to_csv, "simulated_yield.csv")
+#==============================================================
+#2) for rainfall - call back to save df into a csv file
+@app.callback(
+    Output("download-dataframe-csv-rain", "data"),
+    Input("btn_csv_rain", "n_clicks"),
+    State("memory-yield-table", "data"),
+    prevent_initial_call=True,
+)
+def func(n_clicks, yield_data):
+    df =pd.DataFrame(yield_data)
+    col = df.columns  #EJ(6/7/2021) 
+    col_names = [df.columns[0]]   #first column for YEAR
+    for i in range(3,len(col),3):  
+        col_names.append(df.columns[i])
+      
+    #make a new filtered dataframe to save into a csv
+    df_out = pd.DataFrame(columns = col_names)
+    df_out.iloc[:,0] = df.iloc[:,0].values  #first column for YEAR
+    k=1
+    for i in range(3,len(col),3):  #for YIELD
+        # temp=df.iloc[:,[i]]
+        temp=df.iloc[:,i]
+        temp=temp.astype(int)
+        df_out.iloc[:,k]=temp.values
+        k=k+1 #column index for a new df
+    return dcc.send_data_frame(df_out.to_csv, "seasonal_rainfall.csv")
+#=================================================    
+#3) for prob of exceedance - call back to save df into a csv file
+@app.callback(
+    Output("download-dataframe-csv-Pexe", "data"),
+    Input("btn_csv_Pexe", "n_clicks"),
+    State("memory-yield-table", "data"),
+    prevent_initial_call=True,
+)
+def func(n_clicks, yield_data):
+    df =pd.DataFrame(yield_data)
+    col = df.columns  #EJ(6/7/2021) 
+    col_names = [df.columns[0]]   #first column for YEAR
+    for i in range(2,len(col),3):  
+        col_names.append(df.columns[i])
+      
+    #make a new filtered dataframe to save into a csv
+    df_out = pd.DataFrame(columns = col_names)
+    df_out.iloc[:,0] = df.iloc[:,0].values  #first column for YEAR
+    k=1
+    for i in range(2,len(col),3):  #for YIELD
+        temp=df.iloc[:,i]
+        df_out.iloc[:,k]=temp.values
+        k=k+1 #column index for a new df
+    return dcc.send_data_frame(df_out.to_csv, "prob_of_exceedance.csv")
+#============end of EJ(6/7/2021)
 #=================================================    
 #==============================================================
 #call back to save Enterprise Budgeting df into a csv file
