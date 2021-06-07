@@ -154,39 +154,21 @@ app.layout = html.Div( ## MAIN APP DIV
                   ],),
 
                   #  type="number"
-                    # dbc.FormGroup([ # Start Year
-                    #   dbc.Label("5) Start Year", html_for="year1"),
-                    #   dbc.Input(type="number", id="year1", placeholder="YYYY", value="1981", min=1981, max=2018, ),
-                    #   dbc.FormText("(No earlier than 1981)"),
-                    # ],),
-                    # dbc.FormGroup([ # End Year
-                    #   dbc.Label("6) End Year", html_for="year2"),
-                    #   dbc.Input(type="number", id="year2", placeholder="YYYY", value="2018", min=1981, max=2018, ),
-                    #   dbc.FormText("(No later than 2018)"),
-                    # ],),
-                    # dbc.FormGroup([ # Year to Highlight
-                    #   dbc.Label("7) Year to Highlight", html_for="target-year"),
-                    #   dbc.Input(type="number", id="target-year", placeholder="YYYY", min=1981, max=2018, ),
-                    #   dbc.FormText("Target year can a specific year you remember (e.g., drought year) and want to compare with a full climatology distribution"),
-                    # ],),
-
-                  # type="text"
                   dbc.FormGroup([ # Start Year
                     dbc.Label("5) Start Year", html_for="year1"),
-                    dbc.Input(type="text", id="year1", placeholder="YYYY", value="1981",),
+                    dbc.Input(type="number", id="year1", placeholder="YYYY", value="1981", min=1981, max=2018, ),
                     dbc.FormText("(No earlier than 1981)"),
                   ],),
                   dbc.FormGroup([ # End Year
                     dbc.Label("6) End Year", html_for="year2"),
-                    dbc.Input(type="text", id="year2", placeholder="YYYY", value="2018",),
+                    dbc.Input(type="number", id="year2", placeholder="YYYY", value="2018", min=1981, max=2018, ),
                     dbc.FormText("(No later than 2018)"),
                   ],),
                   dbc.FormGroup([ # Year to Highlight
                     dbc.Label("7) Year to Highlight", html_for="target-year"),
-                    dbc.Input(type="text", id="target-year", placeholder="YYYY",),
+                    dbc.Input(type="number", id="target-year", placeholder="YYYY", min=1981, max=2018, ),
                     dbc.FormText("Target year can a specific year you remember (e.g., drought year) and want to compare with a full climatology distribution"),
                   ],),
-
                   html.Div([ #5
                     html.Div("5) Years"),
                     dbc.FormText("Available years are from 1981 to 2018"),
@@ -243,7 +225,7 @@ app.layout = html.Div( ## MAIN APP DIV
                   ],),
                   dbc.FormGroup([ # Planting Date
                     dbc.Label("11) Planting Date", html_for="plt-date-picker"),
-                    dbc.FormText("Only Monthly and Date are counted"),
+                    dbc.FormText("Only Month and Date are counted"),
                     dcc.DatePickerSingle(
                     id="plt-date-picker",
                     min_date_allowed=date(2021, 1, 1),
@@ -253,19 +235,9 @@ app.layout = html.Div( ## MAIN APP DIV
                     ),
                   ],),
                   # type="number"    
-                    # dbc.FormGroup([ # Planting Density
-                    #   dbc.Label("12) Planting Density", html_for="plt-density"),
-                    #   dbc.Input(type="number", id="plt-density", value=1, min=1, max=250),
-                    #   dbc.FormText([
-                    #     html.Span(" plants/m"),
-                    #     html.Sup("2"),
-                    #   ]),
-                    # ],),
-
-                  # type="text"
                   dbc.FormGroup([ # Planting Density
                     dbc.Label("12) Planting Density", html_for="plt-density"),
-                    dbc.Input(type="text", id="plt-density", value="1"),
+                    dbc.Input(type="number", id="plt-density", value=1, min=1, max=250),
                     dbc.FormText([
                       html.Span(" plants/m"),
                       html.Sup("2"),
@@ -298,8 +270,6 @@ app.layout = html.Div( ## MAIN APP DIV
                       data=[
                         dict(**{param: 0 for param in ["DAP", "NAmount"]}) for i in range(1, 5)
                       ],
-                      # Days After Planting
-                      # Amount of N in kg/ha
                       style_cell_conditional=[
                         {"if": {"id": "DAP"}, "width": "30%"}, # Failed component prop type: Invalid component prop (when app.run_server() Debug=True)
                         {"if": {"id": "NAmount"}, "width": "30%"},
@@ -346,7 +316,6 @@ app.layout = html.Div( ## MAIN APP DIV
                       ],
                       editable=True
                     ),
-
                     html.Div([
                       html.Div("Unit: Crop Price [ETB/kg], Fertilizer Cost [ETB/N kg], Seed Cost [ETB/kg], Other Variable Costs [ETB/ha], Fixed Costs [ETB/ha]"),
                       html.Div("Calculation =>  Gross Margin [ETB/ha] = Revenues [ETB/ha] - Variable Costs [ETB/ha] - Fixed Costs [ETB/ha]"),
@@ -416,7 +385,7 @@ app.layout = html.Div( ## MAIN APP DIV
                 ),
                 # end of Deletable summary table : EJ(5/3/2021)
               ]),
-
+              html.Br(),
               dbc.FormGroup([ # SUBMIT - ADD SCENARIO
                 dbc.Button(id="write-button-state", 
                 n_clicks=0, 
@@ -438,7 +407,7 @@ app.layout = html.Div( ## MAIN APP DIV
                   value=[6, 9]
                 ),
               ]),
-
+              html.Br(),
               html.Div( ## RUN DSSAT BUTTON
                 dbc.Button(id="simulate-button-state", 
                 children="Simulate all scenarios (Run DSSAT)",
@@ -523,6 +492,7 @@ app.layout = html.Div( ## MAIN APP DIV
                       className="w-75 d-block mx-auto",
                       color="secondary"
                       ),
+                      html.Br(),
                       # dcc.Download(id="download-dataframe-csv"),
                       Download(id="download-dataframe-csv"),
                       html.Div(id="yieldtables-container", 
@@ -575,6 +545,7 @@ app.layout = html.Div( ## MAIN APP DIV
                       className="w-75 d-block mx-auto",
                       color="secondary"
                       ),
+                      html.Br(),   
                       # dcc.Download(id="download-dataframe-csv"),
                       Download(id="download-dataframe-csv2"),
                       html.Div(id="yieldtables-container2", 
@@ -593,43 +564,53 @@ app.layout = html.Div( ## MAIN APP DIV
             ),
           ),
       
+
           html.Div( # ENTERPRISE BUDGETING
             html.Div([
               html.Header(
                 html.B("Enterprise Budgeting"),
               className=" card-header",
               ),
-              html.Div(
+              html.Div([
+                html.Br(),
+                dbc.Button(id="EB-button-state", 
+                children="Display figures for Enterprise Budgets", 
+                className="w-75 d-block mx-auto",
+                color="danger"
+                ),
+
                 html.Div([
                   html.Div(
                     html.Div([
-                      html.Br(),
-                      dbc.Button(id="EB-button-state", 
-                      children="Display figures for Enterprise Budgets", 
-                      className="w-75 d-block mx-auto",
-                      color="danger"
-                      ),
-                      html.Br(),
                       html.Div(id="EBbox-container"), 
                       html.Div(id="EBcdf-container"),  #exceedance curve
                       html.Div(id="EBtimeseries-container"), #exceedance curve
-                      html.Br(),
-                      dbc.Button(id="btn_csv_EB", 
-                      children="Download CSV file for Enterprise Budgeting", 
-                      className="w-75 d-block mx-auto",
-                      color="secondary"
-                      ),
-                      # dcc.Download(id="download-dataframe-csv"),
-                      Download(id="download-dataframe-csv_EB"),
-                      html.Div(id="EBtables-container", className="w-50"),   #yield simulated output
+
                     ], 
                     className="plot-container plotly"),
-                  className="js-plotly-plot",
+                  className="js-plotly-plot"
                   )
                 ], 
-                id="enterprise-budgeting", className="dash-graph ddk-graph", style={"height": "20vh"}
+                id="enterprise-budgeting", 
+                className="overflow-auto",
+                style={"height": "94vh"},
                 ),
-              ),
+
+                html.Div([
+                  html.Br(),
+                  dbc.Button(id="btn_csv_EB", 
+                  children="Download CSV file for Enterprise Budgeting", 
+                  className="w-75 d-block mx-auto",
+                  color="secondary"
+                  ),
+                  # dcc.Download(id="download-dataframe-csv"),
+                  Download(id="download-dataframe-csv_EB"),
+                  html.Div(id="EBtables-container", 
+                  className="overflow-auto",
+                  style={"height": "20vh"},
+                  ),   #yield simulated output
+                ]),
+              ]),
             ], 
             ),
           ),
@@ -820,7 +801,7 @@ def show_hide_EBtable(visibility_state):
                 State("scenario-table","data") ###input 17 scenario summary table
             )
 def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop, cultivar, soil_type, initial_soil_moisture, initial_soil_no3_content, planting_density, scenario,
-                  targetyear, fert_app, fert_in_table, EB_radio, EB_in_table, sce_in_table):
+                  target_year, fert_app, fert_in_table, EB_radio, EB_in_table, sce_in_table):
     # print(station)  #MELK
     # print(start_year)  #1981
     # print(end_year)  #2014
@@ -831,11 +812,17 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
     # print(initial_soil_no3_content)  #H
     # print(planting_density)  #6
     # print(scenario)  #scenario name
-    # print(targetyear)  #target year as a benchmark
+    # print(target_year)  #target year as a benchmark
     # print(station2)  #scenario summary
     # print(station3)  #fertilizler or no-fertilizer
     # print(station4)  #fertilizler summary
     # print("station5:",EB_in_table)  #scenario summary
+
+    # convert integer inputs to string
+    start_year = str(start_year)
+    end_year = str(end_year)
+    target_year = str(target_year)
+    planting_density = str(planting_density)
 
     # 2) Read fertilizer application information
     if fert_app == "Fert":
@@ -856,7 +843,7 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
                  "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"])
     #Make a new dataframe to return to scenario-summary table
     df = pd.DataFrame(
-        [[scenario, crop, cultivar[7:], station, planting_date[5:], start_year, end_year, soil_type, initial_soil_moisture, initial_soil_no3_content, planting_density, targetyear,
+        [[scenario, crop, cultivar[7:], station, planting_date[5:], start_year, end_year, soil_type, initial_soil_moisture, initial_soil_no3_content, planting_density, target_year,
             "-99", "-99", "-99", "-99","-99", "-99","-99", "-99", "-99","-99", "-99","-99", "-99"]],
         columns=["sce_name","Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
                  "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
@@ -879,7 +866,7 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
         if fert_app == "Fert" and EB_radio == "EB_Yes":
             #Make a new dataframe
             df = pd.DataFrame(
-                [[scenario, crop, cultivar[7:], station, planting_date[5:],start_year, end_year, soil_type, initial_soil_moisture, initial_soil_no3_content, planting_density,targetyear, 
+                [[scenario, crop, cultivar[7:], station, planting_date[5:],start_year, end_year, soil_type, initial_soil_moisture, initial_soil_no3_content, planting_density,target_year, 
                 df_fert.DAP.values[0], df_fert.NAmount.values[0], df_fert.DAP.values[1], df_fert.NAmount.values[1],
                 df_fert.DAP.values[2], df_fert.NAmount.values[2],df_fert.DAP.values[3], df_fert.NAmount.values[3],
                 df_EB.CropPrice.values[0], df_EB.NFertCost.values[0], df_EB.SeedCost.values[0], df_EB.OtherVariableCosts.values[0],
@@ -890,7 +877,7 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
         elif fert_app == "Fert" and EB_radio == "EB_No":
             #Make a new dataframe
             df = pd.DataFrame(
-                [[scenario, crop, cultivar[7:], station, planting_date[5:],start_year, end_year, soil_type, initial_soil_moisture, initial_soil_no3_content,planting_density, targetyear, 
+                [[scenario, crop, cultivar[7:], station, planting_date[5:],start_year, end_year, soil_type, initial_soil_moisture, initial_soil_no3_content,planting_density, target_year, 
                 df_fert.DAP.values[0], df_fert.NAmount.values[0], df_fert.DAP.values[1], df_fert.NAmount.values[1],
                 df_fert.DAP.values[2], df_fert.NAmount.values[2],df_fert.DAP.values[3], df_fert.NAmount.values[3],
                 "-99","-99", "-99","-99", "-99"]],
@@ -900,7 +887,7 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
         elif fert_app == "No_fert" and EB_radio == "EB_Yes":
             #Make a new dataframe
             df = pd.DataFrame(
-                [[scenario, crop, cultivar[7:], station, planting_date[5:],start_year, end_year, soil_type, initial_soil_moisture, initial_soil_no3_content, planting_density,targetyear, 
+                [[scenario, crop, cultivar[7:], station, planting_date[5:],start_year, end_year, soil_type, initial_soil_moisture, initial_soil_no3_content, planting_density,target_year, 
                  "-99", "-99", "-99", "-99","-99", "-99","-99", "-99",
                 df_EB.CropPrice.values[0], df_EB.NFertCost.values[0], df_EB.SeedCost.values[0], df_EB.OtherVariableCosts.values[0],
                 df_EB.FixedCosts.values[0]]],
@@ -909,7 +896,7 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
                         "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"],)
         else:  #no fertilizer application & No EB analyze
             df = pd.DataFrame(
-                [[scenario, crop, cultivar[7:], station, planting_date[5:],start_year, end_year, soil_type, initial_soil_moisture, initial_soil_no3_content,planting_density, targetyear, 
+                [[scenario, crop, cultivar[7:], station, planting_date[5:],start_year, end_year, soil_type, initial_soil_moisture, initial_soil_no3_content,planting_density, target_year, 
                  "-99", "-99", "-99", "-99","-99", "-99","-99", "-99","-99","-99", "-99","-99", "-99"]],
                 columns=["sce_name", "Crop","Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
                         "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
