@@ -562,14 +562,36 @@ app.layout = html.Div( ## MAIN APP DIV
                       color="info"
                       ),
                       html.Br(),   
-                      dbc.Button(id="btn_csv2", 
-                      children="Download SORTED CSV for Simulated Yield", 
+                    #   dbc.Button(id="btn_csv2", 
+                    #   children="Download CSV for SORTED Simulated Yield", 
+                    #   className="w-75 d-block mx-auto",
+                    #   color="secondary"
+                    #   ),
+                    #   html.Br(),   
+                      # dcc.Download(id="download-dataframe-csv"),
+                    #EJ(6/7/2021) to download each column separately into a csv
+                    dbc.Button(id="btn_csv2_yield", 
+                      children="Download CSV for SORTED simulated Yield", 
                       className="w-75 d-block mx-auto",
                       color="secondary"
                       ),
-                      html.Br(),   
-                      # dcc.Download(id="download-dataframe-csv"),
-                      Download(id="download-dataframe-csv2"),
+                    html.Br(),
+                    dbc.Button(id="btn_csv2_rain", 
+                      children="Download CSV for SORTED seasonal rainfall", 
+                      className="w-75 d-block mx-auto",
+                      color="secondary"
+                      ),
+                    html.Br(),
+                    dbc.Button(id="btn_csv2_Pexe", 
+                      children="Download CSV for SORTED prob. of exceedance", 
+                      className="w-75 d-block mx-auto",
+                      color="secondary"
+                      ),
+                    #   Download(id="download-dataframe-csv2"),
+                    Download(id="download-dataframe-csv2-yield"),
+                    Download(id="download-dataframe-csv2-rain"),
+                    Download(id="download-dataframe-csv2-Pexe"),
+                    #end of EJ(6/7/2021) update
                       html.Div(id="yieldtables-container2", 
                       className="overflow-auto",
                       style={"height": "20vh"},
@@ -730,17 +752,95 @@ def sort_table(n_clicks, yield_table, multiplier, col_name):
             df_out.to_dict("records")
             ]
 
-#call back to save df into a csv file
+# #call back to save df into a csv file
+# @app.callback(
+#     Output("download-dataframe-csv2", "data"),
+#     Input("btn_csv2", "n_clicks"),
+#     State("memory-sorted-yield-table", "data"),
+#     prevent_initial_call=True,
+# )
+# def func(n_clicks, yield_data):
+#     # print(yield_data)
+#     df =pd.DataFrame(yield_data)
+#     return dcc.send_data_frame(df.to_csv, "simulated_yield_sorted.csv")
+#============EJ(6/7/2021)
+#1) for yield - call back to save df into a csv file
 @app.callback(
-    Output("download-dataframe-csv2", "data"),
-    Input("btn_csv2", "n_clicks"),
+    Output("download-dataframe-csv2-yield", "data"),
+    Input("btn_csv2_yield", "n_clicks"),
     State("memory-sorted-yield-table", "data"),
     prevent_initial_call=True,
 )
 def func(n_clicks, yield_data):
-    # print(yield_data)
     df =pd.DataFrame(yield_data)
-    return dcc.send_data_frame(df.to_csv, "simulated_yield_sorted.csv")
+    col = df.columns  #EJ(6/7/2021)
+    col_names = [df.columns[0]]   #list for col names - first column for YEAR
+    for i in range(1,len(col),3):  
+        col_names.append(df.columns[i])
+      
+    #make a new filtered dataframe to save into a csv
+    df_out = pd.DataFrame(columns = col_names)
+    # df_out.iloc[:,0]=df.iloc[:,[0]].values  #first column for YEAR
+    df_out.iloc[:,0] = df.iloc[:,0].values  #first column for YEAR
+    k=1
+    for i in range(1,len(col),3):  #for YIELD
+        temp=df.iloc[:,i]
+        temp=temp.astype(int)
+        df_out.iloc[:,k]=temp.values
+        k=k+1 #column index for a new df
+    return dcc.send_data_frame(df_out.to_csv, "simulated_yield_sorted.csv")
+#==============================================================
+#2) for rainfall - call back to save df into a csv file
+@app.callback(
+    Output("download-dataframe-csv2-rain", "data"),
+    Input("btn_csv2_rain", "n_clicks"),
+    State("memory-sorted-yield-table", "data"),
+    prevent_initial_call=True,
+)
+def func(n_clicks, yield_data):
+    df =pd.DataFrame(yield_data)
+    col = df.columns  #EJ(6/7/2021) 
+    col_names = [df.columns[0]]   #first column for YEAR
+    for i in range(3,len(col),3):  
+        col_names.append(df.columns[i])
+      
+    #make a new filtered dataframe to save into a csv
+    df_out = pd.DataFrame(columns = col_names)
+    df_out.iloc[:,0] = df.iloc[:,0].values  #first column for YEAR
+    k=1
+    for i in range(3,len(col),3):  #for YIELD
+        # temp=df.iloc[:,[i]]
+        temp=df.iloc[:,i]
+        temp=temp.astype(int)
+        df_out.iloc[:,k]=temp.values
+        k=k+1 #column index for a new df
+    return dcc.send_data_frame(df_out.to_csv, "seasonal_rainfall_sorted.csv")
+#=================================================    
+#3) for prob of exceedance - call back to save df into a csv file
+@app.callback(
+    Output("download-dataframe-csv2-Pexe", "data"),
+    Input("btn_csv2_Pexe", "n_clicks"),
+    State("memory-sorted-yield-table", "data"),
+    prevent_initial_call=True,
+)
+def func(n_clicks, yield_data):
+    df =pd.DataFrame(yield_data)
+    col = df.columns  #EJ(6/7/2021) 
+    col_names = [df.columns[0]]   #first column for YEAR
+    for i in range(2,len(col),3):  
+        col_names.append(df.columns[i])
+      
+    #make a new filtered dataframe to save into a csv
+    df_out = pd.DataFrame(columns = col_names)
+    df_out.iloc[:,0] = df.iloc[:,0].values  #first column for YEAR
+    k=1
+    for i in range(2,len(col),3):  #for YIELD
+        temp=df.iloc[:,i]
+        df_out.iloc[:,k]=temp.values
+        k=k+1 #column index for a new df
+    return dcc.send_data_frame(df_out.to_csv, "prob_of_exceedance_sorted.csv")
+#============end of EJ(6/7/2021)
+#=================================================    
 #==============================================================
 #==============================================================
 #Dynamic call back for different cultivars for a selected target crop
