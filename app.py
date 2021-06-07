@@ -149,7 +149,7 @@ app.layout = html.Div( ## MAIN APP DIV
                         {"label": "CIMT17 BH660-FAW-40%", "value": "CIMT17 BH660-FAW-40%"},
                         {"label": "CIMT19 MELKASA2-FAW-40%", "value": "CIMT19 MELKASA2-FAW-40%"},
                         {"label": "CIMT21 MELKASA-LowY", "value": "CIMT21 MELKASA-LowY"},], 
-                      value="CIMT02 MELKASA-Kassi"
+                      value="CIMT19 MELKASA2-FAW-40%"
                     ),
                   ],),
 
@@ -166,7 +166,7 @@ app.layout = html.Div( ## MAIN APP DIV
                   ],),
                   dbc.FormGroup([ # Year to Highlight
                     dbc.Label("7) Year to Highlight", html_for="target-year"),
-                    dbc.Input(type="number", id="target-year", placeholder="YYYY", min=1981, max=2018, ),
+                    dbc.Input(type="number", id="target-year", placeholder="YYYY", value="2015",min=1981, max=2018, ),
                     dbc.FormText("Target year can a specific year you remember (e.g., drought year) and want to compare with a full climatology distribution"),
                   ],),
                   html.Div([ #5
@@ -237,7 +237,7 @@ app.layout = html.Div( ## MAIN APP DIV
                   # type="number"    
                   dbc.FormGroup([ # Planting Density
                     dbc.Label("12) Planting Density", html_for="plt-density"),
-                    dbc.Input(type="number", id="plt-density", value=1, min=1, max=250),
+                    dbc.Input(type="number", id="plt-density", value=5, min=1, max=250),
                     dbc.FormText([
                       html.Span(" plants/m"),
                       html.Sup("2"),
