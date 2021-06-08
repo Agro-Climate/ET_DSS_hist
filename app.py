@@ -118,9 +118,12 @@ app.layout = html.Div( ## MAIN APP DIV
                       id="ETstation",
                       options=[
                         {"label": "Melkasa", "value": "MELK"},
+                        {"label": "Mieso", "value": "MEIS"},
                         {"label": "Awassa", "value": "AWAS"},
+                        {"label": "Asella", "value": "ASEL"},
                         {"label": "Bako", "value": "BAKO"},
-                        {"label": "Mahoni", "value": "MAHO"}
+                        {"label": "Mahoni", "value": "MAHO"},
+                        {"label": "Kobo", "value": "KOBO"}
                       ],
                       value="MELK"
                     ),
@@ -144,8 +147,8 @@ app.layout = html.Div( ## MAIN APP DIV
                     dcc.Dropdown(
                       id="cultivar-dropdown", 
                       options=[
-                        {"label": "CIMT01 BH540-Kassie", "value": "CIMT01 BH540-Kassie"},
-                        {"label": "CIMT02 MELKASA-Kassi", "value": "CIMT02 MELKASA-Kassi"},
+                        {"label": "CIMT01 BH540", "value": "CIMT01 BH540-Kassie"},
+                        {"label": "CIMT02 MELKASA-1", "value": "CIMT02 MELKASA-Kassi"},
                         {"label": "CIMT17 BH660-FAW-40%", "value": "CIMT17 BH660-FAW-40%"},
                         {"label": "CIMT19 MELKASA2-FAW-40%", "value": "CIMT19 MELKASA2-FAW-40%"},
                         {"label": "CIMT21 MELKASA-LowY", "value": "CIMT21 MELKASA-LowY"},], 
