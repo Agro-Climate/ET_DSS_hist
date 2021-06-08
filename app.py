@@ -110,232 +110,309 @@ app.layout = html.Div( ## MAIN APP DIV
               html.Div( # SCROLLABLE FORM
                 html.Div([ # FORM START
                   dbc.FormGroup([ # Scenario
-                    dbc.Label("1) Scenario Name", html_for="sce-name"),
-                    dbc.Input(type="text", id="sce-name", minLength=4, maxLength=4),
-                  ],),
+                    dbc.Label("1) Scenario Name", html_for="sce-name", width=3, align="start", ),
+                    dbc.Col([
+                      dbc.Input(type="text", id="sce-name", placeholder="????", minLength=4, maxLength=4, ),
+                    ],
+                    width=9,
+                    ),
+                  ],
+                  row=True
+                  ),
                   dbc.FormGroup([ # Station
-                    dbc.Label("2) Station", html_for="ETstation"),
-                    dcc.Dropdown(
-                      id="ETstation",
-                      options=[
-                        {"label": "Melkasa", "value": "MELK"},
-                        {"label": "Mieso", "value": "MEIS"},
-                        {"label": "Awassa", "value": "AWAS"},
-                        {"label": "Asella", "value": "ASEL"},
-                        {"label": "Bako", "value": "BAKO"},
-                        {"label": "Mahoni", "value": "MAHO"},
-                        {"label": "Kobo", "value": "KOBO"}
-                      ],
-                      value="MELK"
+                    dbc.Label("2) Station", html_for="ETstation", width=3, align="start", ),
+                    dbc.Col([
+                      dcc.Dropdown(
+                        id="ETstation",
+                        options=[
+                          {"label": "Melkasa", "value": "MELK"},
+                          {"label": "Mieso", "value": "MEIS"},
+                          {"label": "Awassa", "value": "AWAS"},
+                          {"label": "Asella", "value": "ASEL"},
+                          {"label": "Bako", "value": "BAKO"},
+                          {"label": "Mahoni", "value": "MAHO"},
+                          {"label": "Kobo", "value": "KOBO"}
+                        ],
+                        value="MELK"
+                      ),
+                    ],
+                    width=9,
                     ),
-                  ],),
+                  ],
+                  row=True
+                  ),
                   dbc.FormGroup([ # Crop
-                    dbc.Label("3) Crop", html_for="crop-radio"),
-                    dcc.RadioItems(
-                      id="crop-radio",
-                      # options=[{"label": k, "value": k} for k in cultivar_options.keys()],
-                      options = [
-                        {"label": "Maize", "value": "MZ"}, 
-                        {"label": "Wheat", "value": "WH"}, 
-                        {"label": "Sorghum", "value": "SG"},
-                      ],
-                      labelStyle = {"display": "inline-block","margin-right": 10},
-                      value="MZ"
+                    dbc.Label("3) Crop", html_for="crop-radio", width=3, align="start", ),
+                    dbc.Col([
+                      dcc.RadioItems(
+                        id="crop-radio",
+                        # options=[{"label": k, "value": k} for k in cultivar_options.keys()],
+                        options = [
+                          {"label": "Maize", "value": "MZ"}, 
+                          {"label": "Wheat", "value": "WH"}, 
+                          {"label": "Sorghum", "value": "SG"},
+                        ],
+                        labelStyle = {"display": "inline-block","margin-right": 10},
+                        value="MZ"
+                      ),
+                    ],
+                    width=9,
                     ),
-                  ],),
+                  ],
+                  row=True
+                  ),
                   dbc.FormGroup([ # Cultivar
-                    dbc.Label("4) Cultivar", html_for="cultivar-dropdown"),
-                    dcc.Dropdown(
-                      id="cultivar-dropdown", 
-                      options=[
-                        {"label": "CIMT01 BH540", "value": "CIMT01 BH540-Kassie"},
-                        {"label": "CIMT02 MELKASA-1", "value": "CIMT02 MELKASA-Kassi"},
-                        {"label": "CIMT17 BH660-FAW-40%", "value": "CIMT17 BH660-FAW-40%"},
-                        {"label": "CIMT19 MELKASA2-FAW-40%", "value": "CIMT19 MELKASA2-FAW-40%"},
-                        {"label": "CIMT21 MELKASA-LowY", "value": "CIMT21 MELKASA-LowY"},], 
-                      value="CIMT19 MELKASA2-FAW-40%"
+                    dbc.Label("4) Cultivar", html_for="cultivar-dropdown", width=3, align="start", ),
+                    dbc.Col([
+                      dcc.Dropdown(
+                        id="cultivar-dropdown", 
+                        options=[
+                          {"label": "CIMT01 BH540", "value": "CIMT01 BH540-Kassie"},
+                          {"label": "CIMT02 MELKASA-1", "value": "CIMT02 MELKASA-Kassi"},
+                          {"label": "CIMT17 BH660-FAW-40%", "value": "CIMT17 BH660-FAW-40%"},
+                          {"label": "CIMT19 MELKASA2-FAW-40%", "value": "CIMT19 MELKASA2-FAW-40%"},
+                          {"label": "CIMT21 MELKASA-LowY", "value": "CIMT21 MELKASA-LowY"},], 
+                        value="CIMT19 MELKASA2-FAW-40%"
+                      ),
+                    ],
+                    width=9,
                     ),
-                  ],),
+                  ],
+                  row=True
+                  ),
 
                   #  type="number"
                   dbc.FormGroup([ # Start Year
-                    dbc.Label("5) Start Year", html_for="year1"),
-                    dbc.Input(type="number", id="year1", placeholder="YYYY", value="1981", min=1981, max=2018, ),
-                    dbc.FormText("(No earlier than 1981)"),
-                  ],),
+                    dbc.Label("5) Start Year", html_for="year1", width=3, align="start", ),
+                    dbc.Col([
+                      dbc.Input(type="number", id="year1", placeholder="YYYY", value="1981", min=1981, max=2018, ),
+                      dbc.FormText("(No earlier than 1981)"),
+                    ],
+                    width=9,
+                    ),
+                  ],
+                  row=True
+                  ),
                   dbc.FormGroup([ # End Year
-                    dbc.Label("6) End Year", html_for="year2"),
-                    dbc.Input(type="number", id="year2", placeholder="YYYY", value="2018", min=1981, max=2018, ),
-                    dbc.FormText("(No later than 2018)"),
-                  ],),
+                    dbc.Label("6) End Year", html_for="year2", width=3, align="start", ),
+                    dbc.Col([
+                      dbc.Input(type="number", id="year2", placeholder="YYYY", value="2018", min=1981, max=2018, ),
+                      dbc.FormText("(No later than 2018)"),
+                    ],
+                    width=9,
+                    ),
+                  ],
+                  row=True
+                  ),
                   dbc.FormGroup([ # Year to Highlight
-                    dbc.Label("7) Year to Highlight", html_for="target-year"),
-                    dbc.Input(type="number", id="target-year", placeholder="YYYY", value="2015",min=1981, max=2018, ),
-                    dbc.FormText("Target year can a specific year you remember (e.g., drought year) and want to compare with a full climatology distribution"),
-                  ],),
-                  html.Div([ #5
-                    html.Div("5) Years"),
-                    dbc.FormText("Available years are from 1981 to 2018"),
-                    html.Span("From "),
-                    html.Span(" to "),
-                    html.Br(),                 
-                  ], className="d-none"),
+                    dbc.Label("7) Year to Highlight", html_for="target-year", width=3, align="start", ),
+                    dbc.Col([
+                      dbc.Input(type="number", id="target-year", placeholder="YYYY", value="2015",min=1981, max=2018, ),
+                      dbc.FormText("Target year can a specific year you remember (e.g., drought year) and want to compare with a full climatology distribution"),
+                    ],
+                    width=9,
+                    ),
+                  ],
+                  row=True
+                  ),
                   dbc.FormGroup([ # Soil Type
-                    dbc.Label("8) Soil Type", html_for="ETsoil"),
-                    dcc.Dropdown(
-                      id="ETsoil", 
-                      options=[
-                        {"label": "ETET000010(AWAS,L)", "value": "ETET000010"},
-                        {"label": "ETET000_10(AWAS,L, shallow)", "value": "ETET000_10"},
-                        {"label": "ETET000011(BAKO,C)", "value": "ETET000011"},
-                        {"label": "ETET001_11(BAKO,C,shallow)", "value": "ETET001_11"},
-                        {"label": "ETET000018(MELK,L)", "value": "ETET000018"},
-                        {"label": "ETET001_18(MELK,L,shallow)", "value": "ETET001_18"},
-                        {"label": "ETET000015(KULU,C)", "value": "ETET000015"},
-                        {"label": "ETET001_15(KULU,C,shallow)", "value": "ETET001_15"},
-                        {"label": "ET00990066(MAHO,C)", "value": "ET00990066"},
-                        {"label": "ET00990_66(MAHO,C,shallow)", "value": "ET00990_66"},
-                        {"label": "ET00920067(KOBO,CL)", "value": "ET00920067"},
-                        {"label": "ET00920_67(KOBO,CL,shallow)", "value": "ET00920_67"},
-                        {"label": "ETET000022(MIES, C)", "value": "ETET000022"},
-                        {"label": "ETET001_22(MIES, C, shallow", "value": "ETET001_22"},
-                      ],
-                      value="ETET001_18"
+                    dbc.Label("8) Soil Type", html_for="ETsoil", width=3, align="start", ),
+                    dbc.Col([
+                      dcc.Dropdown(
+                        id="ETsoil", 
+                        options=[
+                          {"label": "ETET000010(AWAS,L)", "value": "ETET000010"},
+                          {"label": "ETET000_10(AWAS,L, shallow)", "value": "ETET000_10"},
+                          {"label": "ETET000011(BAKO,C)", "value": "ETET000011"},
+                          {"label": "ETET001_11(BAKO,C,shallow)", "value": "ETET001_11"},
+                          {"label": "ETET000018(MELK,L)", "value": "ETET000018"},
+                          {"label": "ETET001_18(MELK,L,shallow)", "value": "ETET001_18"},
+                          {"label": "ETET000015(KULU,C)", "value": "ETET000015"},
+                          {"label": "ETET001_15(KULU,C,shallow)", "value": "ETET001_15"},
+                          {"label": "ET00990066(MAHO,C)", "value": "ET00990066"},
+                          {"label": "ET00990_66(MAHO,C,shallow)", "value": "ET00990_66"},
+                          {"label": "ET00920067(KOBO,CL)", "value": "ET00920067"},
+                          {"label": "ET00920_67(KOBO,CL,shallow)", "value": "ET00920_67"},
+                          {"label": "ETET000022(MIES, C)", "value": "ETET000022"},
+                          {"label": "ETET001_22(MIES, C, shallow", "value": "ETET001_22"},
+                        ],
+                        value="ETET001_18"
+                      ),
+                    ],
+                    width=9,
                     ),
-                  ],),
+                  ],
+                  row=True
+                  ),
                   dbc.FormGroup([ # Soil Water Condition
-                    dbc.Label("9) Soil Water Condition", html_for="ini-H2O"),
-                    dcc.Dropdown(
-                      id="ini-H2O", 
-                      options=[
-                        {"label": "30% of AWC", "value": "0.3"},
-                        {"label": "50% of AWC", "value": "0.5"},
-                        {"label": "70% of AWC", "value": "0.7"},
-                        {"label": "100% of AWC", "value": "1.0"},
-                      ], 
-                      value="0.5"  
+                    dbc.Label("9) Soil Water Condition", html_for="ini-H2O", width=3, align="start", ),
+                    dbc.Col([
+                      dcc.Dropdown(
+                        id="ini-H2O", 
+                        options=[
+                          {"label": "30% of AWC", "value": "0.3"},
+                          {"label": "50% of AWC", "value": "0.5"},
+                          {"label": "70% of AWC", "value": "0.7"},
+                          {"label": "100% of AWC", "value": "1.0"},
+                        ], 
+                        value="0.5"  
+                      ),
+                    ],
+                    width=9,
                     ),
-                  ],),
+                  ],
+                  row=True
+                  ),
                   dbc.FormGroup([ # Initial NO3 Condition
-                    dbc.Label("10) Initial NO3 Condition", html_for="ini-NO3"),
-                    dcc.Dropdown(
-                      id="ini-NO3", 
-                      options=[
-                        {"label": "High(65 N kg/ha)", "value": "H"},
-                        {"label": "Low(23 N kg/ha)", "value": "L"},
-                      ], 
-                      value="L"
-                    ),                                      
-                  ],),
-                  dbc.FormGroup([ # Planting Date
-                    dbc.Label("11) Planting Date", html_for="plt-date-picker"),
-                    dbc.FormText("Only Month and Date are counted"),
-                    dcc.DatePickerSingle(
-                    id="plt-date-picker",
-                    min_date_allowed=date(2021, 1, 1),
-                    max_date_allowed=date(2021, 12, 31),
-                    initial_visible_month=date(2021, 6, 5),
-                    date=date(2021, 6, 15)
+                    dbc.Label("10) Initial NO3 Condition", html_for="ini-NO3", width=3, align="start", ),
+                    dbc.Col([
+                      dcc.Dropdown(
+                        id="ini-NO3", 
+                        options=[
+                          {"label": "High(65 N kg/ha)", "value": "H"},
+                          {"label": "Low(23 N kg/ha)", "value": "L"},
+                        ], 
+                        value="L"
+                      ),                                      
+                    ],
+                    width=9,
                     ),
-                  ],),
+                  ],
+                  row=True
+                  ),
+                  dbc.FormGroup([ # Planting Date
+                    dbc.Label("11) Planting Date", html_for="plt-date-picker", width=3, align="start", ),
+                    dbc.Col([
+                      dcc.DatePickerSingle(
+                      id="plt-date-picker",
+                      min_date_allowed=date(2021, 1, 1),
+                      max_date_allowed=date(2021, 12, 31),
+                      initial_visible_month=date(2021, 6, 5),
+                      date=date(2021, 6, 15)
+                      ),
+                      dbc.FormText("Only Month and Date are counted"),
+                    ],
+                    width=9,
+                    ),
+                  ],
+                  row=True
+                  ),
                   # type="number"    
                   dbc.FormGroup([ # Planting Density
-                    dbc.Label("12) Planting Density", html_for="plt-density"),
-                    dbc.Input(type="number", id="plt-density", value=5, min=1, max=250),
-                    dbc.FormText([
-                      html.Span(" plants/m"),
-                      html.Sup("2"),
-                    ]),
-                  ],),
-                  dbc.FormGroup([ # Fertilizer Application
-                    dbc.Label("13) Fertilizer Application", html_for="fert_input"),
-                    dcc.RadioItems(
-                      id="fert_input",
-                      options=[
-                        {"label": "Fertilizer", "value": "Fert"},
-                        {"label": "No Fertilizer", "value": "No_fert"},
-                      ],
-                      labelStyle = {"display": "inline-block","margin-right": 10},
-                      value="No_fert"
-                    ),
-                  ],),
-                  dbc.FormGroup([ # FERTILIZER INPUT TABLE
-                    dash_table.DataTable(id="fert-table",
-                      style_cell = {
-                        "font_family": "sans-serif",
-                        "whiteSpace": "normal",
-                        "font_size": "14px",
-                        "text_align": "center"
-                      },
-                      columns=([
-                        {"id": "DAP", "name": "Days After Planting"},
-                        {"id": "NAmount", "name": "Amount of N in kg/ha"},
+                    dbc.Label("12) Planting Density", html_for="plt-density", width=3, align="start", ),
+                    dbc.Col([
+                      dbc.Input(type="number", id="plt-density", value=5, min=1, max=250),
+                      dbc.FormText([
+                        html.Span(" plants/m"),
+                        html.Sup("2"),
                       ]),
-                      data=[
-                        dict(**{param: 0 for param in ["DAP", "NAmount"]}) for i in range(1, 5)
-                      ],
-                      style_cell_conditional=[
-                        {"if": {"id": "DAP"}, "width": "30%"}, # Failed component prop type: Invalid component prop (when app.run_server() Debug=True)
-                        {"if": {"id": "NAmount"}, "width": "30%"},
-                      ],
-                      editable=True    
+                    ],
+                    width=9,
                     ),
                   ],
-                  id="fert-table-Comp", 
-                  className="w-50",
-                  style={"display": "none"},
+                  row=True
+                  ),
+                  dbc.FormGroup([ # Fertilizer Application
+                    dbc.Label("13) Fertilizer Application", html_for="fert_input", width=3, align="start", ),
+                    dbc.Col([
+                      dcc.RadioItems(
+                        id="fert_input",
+                        options=[
+                          {"label": "Fertilizer", "value": "Fert"},
+                          {"label": "No Fertilizer", "value": "No_fert"},
+                        ],
+                        labelStyle = {"display": "inline-block","margin-right": 10},
+                        value="No_fert"
+                      ),
+                      html.Div([ # FERTILIZER INPUT TABLE
+                        dash_table.DataTable(id="fert-table",
+                          style_cell = {
+                            "font_family": "sans-serif",
+                            "whiteSpace": "normal",
+                            "font_size": "14px",
+                            "text_align": "center"
+                          },
+                          columns=([
+                            {"id": "DAP", "name": "Days After Planting"},
+                            {"id": "NAmount", "name": "Amount of N in kg/ha"},
+                          ]),
+                          data=[
+                            dict(**{param: 0 for param in ["DAP", "NAmount"]}) for i in range(1, 5)
+                          ],
+                          style_cell_conditional=[
+                            {"if": {"id": "DAP"}, "width": "30%"}, # Failed component prop type: Invalid component prop (when app.run_server() Debug=True)
+                            {"if": {"id": "NAmount"}, "width": "30%"},
+                          ],
+                          editable=True    
+                        ),
+                      ],
+                      id="fert-table-Comp", 
+                      className="w-50",
+                      style={"display": "none"},
+                      ),
+                    ],
+                    width=9,
+                    ),
+                  ],
+                  row=True
                   ),
                   dbc.FormGroup([ # Enterprise Budgeting?
-                    dbc.Label("14) Enterprise Budgeting?", html_for="EB_radio"),
-                    dcc.RadioItems(
-                      id="EB_radio",
-                      options=[
-                        {"label": "Yes", "value": "EB_Yes"},
-                        {"label": "No", "value": "EB_No"},
+                    dbc.Label("14) Enterprise Budgeting?", html_for="EB_radio", width=3, align="start", ),
+                    dbc.Col([
+                      dcc.RadioItems(
+                        id="EB_radio",
+                        options=[
+                          {"label": "Yes", "value": "EB_Yes"},
+                          {"label": "No", "value": "EB_No"},
+                        ],
+                        labelStyle = {"display": "inline-block","margin-right": 10},
+                        value="EB_No"
+                      ),
+                      html.Div([ # ENTERPRISE BUDGETING TABLE
+                        dash_table.DataTable(id="EB-table",
+                          style_cell = {
+                          "font_family": "sans-serif", #"cursive",
+                          "whiteSpace": "normal",
+                          "font_size": "14px",
+                          "text_align": "center"},
+                          columns=([
+                            {"id": "CropPrice", "name": "Crop Price"},
+                            {"id": "NFertCost", "name": "Fertilizer Cost"},
+                            {"id": "SeedCost", "name": "Seed Cost"},
+                            {"id": "OtherVariableCosts", "name": "Other Variable Costs"},
+                            {"id": "FixedCosts", "name": "Fixed Costs"},
+                          ]),
+                          data=[
+                            dict(**{param: 0 for param in ["CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]}) for i in range(1, 2)
+                          ],
+                          style_cell_conditional=[
+                            {"if": {"id": "CropPrice"}, "width": "20%"}, # Failed component prop type: Invalid component prop (when app.run_server() Debug=True)
+                            {"if": {"id": "NFertCost"}, "width": "20%"},
+                          ],
+                          editable=True
+                        ),
+                        html.Div([
+                          html.Div("Unit: Crop Price [ETB/kg], Fertilizer Cost [ETB/N kg], Seed Cost [ETB/kg], Other Variable Costs [ETB/ha], Fixed Costs [ETB/ha]"),
+                          html.Div("Calculation =>  Gross Margin [ETB/ha] = Revenues [ETB/ha] - Variable Costs [ETB/ha] - Fixed Costs [ETB/ha]"),
+                          html.Ul([
+                            html.Li("Revenues [ETB/ha] = Yield [kg/ha] * Crop Price [ETB/kg]"),
+                            html.Li("Variable costs for fertilizer [ETB/ha] = N Fertilizer amount [N kg/ha] * cost [ETB/N kg]"),
+                            html.Li("Variable costs for seed purchase [ETB/ha]"), # = Planting Density in #9 [plants/m2] *10000 [m2/ha]* Seed Cost [ETB/plant]"),
+                            html.Div("**(reference: the price of hybrid maize seed from the MOA was about 600 ETB/100 kg compared to 50-80 ETB/100 kg for local maize seed purchased in the local market (ETB 7 = US$ 1)."),
+                            html.Li("Other variable costs [ETB/ha] may include pesticide, insurance, labor etc."),
+                            html.Li("Fixed costs [ETB/ha] may include interests for land, machinery etc."),
+                          ]),
+                        ]),
                       ],
-                      labelStyle = {"display": "inline-block","margin-right": 10},
-                      value="EB_No"
+                      id="EB-table-Comp", 
+                      className="w-100",
+                      style={"display": "none"},
+                      ),
+                    ],
+                    width=9,
                     ),
-                  ]),
-                  dbc.FormGroup([ # ENTERPRISE BUDGETING TABLE
-                    dash_table.DataTable(id="EB-table",
-                      style_cell = {
-                      "font_family": "sans-serif", #"cursive",
-                      "whiteSpace": "normal",
-                      "font_size": "14px",
-                      "text_align": "center"},
-                      columns=([
-                        {"id": "CropPrice", "name": "Crop Price"},
-                        {"id": "NFertCost", "name": "Fertilizer Cost"},
-                        {"id": "SeedCost", "name": "Seed Cost"},
-                        {"id": "OtherVariableCosts", "name": "Other Variable Costs"},
-                        {"id": "FixedCosts", "name": "Fixed Costs"},
-                      ]),
-                      data=[
-                        dict(**{param: 0 for param in ["CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]}) for i in range(1, 2)
-                      ],
-                      style_cell_conditional=[
-                        {"if": {"id": "CropPrice"}, "width": "20%"}, # Failed component prop type: Invalid component prop (when app.run_server() Debug=True)
-                        {"if": {"id": "NFertCost"}, "width": "20%"},
-                      ],
-                      editable=True
-                    ),
-                    html.Div([
-                      html.Div("Unit: Crop Price [ETB/kg], Fertilizer Cost [ETB/N kg], Seed Cost [ETB/kg], Other Variable Costs [ETB/ha], Fixed Costs [ETB/ha]"),
-                      html.Div("Calculation =>  Gross Margin [ETB/ha] = Revenues [ETB/ha] - Variable Costs [ETB/ha] - Fixed Costs [ETB/ha]"),
-                      html.Ul([
-                        html.Li("Revenues [ETB/ha] = Yield [kg/ha] * Crop Price [ETB/kg]"),
-                        html.Li("Variable costs for fertilizer [ETB/ha] = N Fertilizer amount [N kg/ha] * cost [ETB/N kg]"),
-                        html.Li("Variable costs for seed purchase [ETB/ha]"), # = Planting Density in #9 [plants/m2] *10000 [m2/ha]* Seed Cost [ETB/plant]"),
-                        html.Div("**(reference: the price of hybrid maize seed from the MOA was about 600 ETB/100 kg compared to 50-80 ETB/100 kg for local maize seed purchased in the local market (ETB 7 = US$ 1)."),
-                        html.Li("Other variable costs [ETB/ha] may include pesticide, insurance, labor etc."),
-                        html.Li("Fixed costs [ETB/ha] may include interests for land, machinery etc."),
-                      ]),
-                    ]),
                   ],
-                  id="EB-table-Comp", 
-                  className="w-100",
-                  style={"display": "none"},
+                  row=True
                   ),
                   # INPUT FORM END
                 ], 
@@ -410,7 +487,8 @@ app.layout = html.Div( ## MAIN APP DIV
                   marks={1: "Jan", 2: "Feb",3: "Mar", 4: "Apr", 5: "May", 6: "Jun", 7: "Jul", 8: "Aug", 9: "Sep", 10: "Oct", 11: "Nov", 12: "Dec"},
                   value=[6, 9]
                 ),
-              ]),
+              ],
+              ),
               html.Br(),
               html.Div( ## RUN DSSAT BUTTON
                 dbc.Button(id="simulate-button-state", 
@@ -724,6 +802,10 @@ app.layout = html.Div( ## MAIN APP DIV
 
 ],
 )
+
+#==============================================================
+#==============================================================
+
 
 #==============================================================
 #Dynamic call back for sorting datatable by a column name
