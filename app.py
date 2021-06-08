@@ -858,7 +858,7 @@ def set_cultivar_options(selected_crop):
     Output("cultivar-dropdown", "value"),
     Input("cultivar-dropdown", "options"))
 def set_cultivar_value(available_options):
-    return cultivar_options[0]["value"]
+    return available_options[0]["value"]
 #==============================================================
 # #call back to save df into a csv file
 # @app.callback(
