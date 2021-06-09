@@ -85,7 +85,7 @@ app.layout = html.Div( ## MAIN APP DIV
     dbc.Nav([
       dbc.NavItem(dbc.NavLink("Historical Analysis", href="#historical"),),
       dbc.NavItem(dbc.NavLink("Forecast Analysis", href="#forecast")),
-      dbc.NavItem(dbc.NavLink("About", href="#about")),
+      dbc.NavItem(dbc.NavLink("About", href="about")),
     ],
     navbar=True,
     ),
@@ -110,17 +110,17 @@ app.layout = html.Div( ## MAIN APP DIV
               html.Div( # SCROLLABLE FORM
                 html.Div([ # FORM START
                   dbc.FormGroup([ # Scenario
-                    dbc.Label("1) Scenario Name", html_for="sce-name", width=3, align="start", ),
+                    dbc.Label("1) Scenario Name", html_for="sce-name", sm=3, className="p-0", align="start", ),
                     dbc.Col([
                       dbc.Input(type="text", id="sce-name", value="", minLength=4, maxLength=4, ),
                     ],
-                    width=9,
+                    xl=9,
                     ),
                   ],
                   row=True
                   ),
                   dbc.FormGroup([ # Station
-                    dbc.Label("2) Station", html_for="ETstation", width=3, align="start", ),
+                    dbc.Label("2) Station", html_for="ETstation", sm=3, className="p-0", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
                         id="ETstation",
@@ -136,13 +136,13 @@ app.layout = html.Div( ## MAIN APP DIV
                         value="MELK"
                       ),
                     ],
-                    width=9,
+                    xl=9,
                     ),
                   ],
                   row=True
                   ),
                   dbc.FormGroup([ # Crop
-                    dbc.Label("3) Crop", html_for="crop-radio", width=3, align="start", ),
+                    dbc.Label("3) Crop", html_for="crop-radio", sm=3, className="p-0", align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                         id="crop-radio",
@@ -156,13 +156,13 @@ app.layout = html.Div( ## MAIN APP DIV
                         value="MZ"
                       ),
                     ],
-                    width=9,
+                    xl=9,
                     ),
                   ],
                   row=True
                   ),
                   dbc.FormGroup([ # Cultivar
-                    dbc.Label("4) Cultivar", html_for="cultivar-dropdown", width=3, align="start", ),
+                    dbc.Label("4) Cultivar", html_for="cultivar-dropdown", sm=3, className="p-0", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
                         id="cultivar-dropdown", 
@@ -175,7 +175,7 @@ app.layout = html.Div( ## MAIN APP DIV
                         value="CIMT19 MELKASA2-FAW-40%"
                       ),
                     ],
-                    width=9,
+                    xl=9,
                     ),
                   ],
                   row=True
@@ -183,40 +183,40 @@ app.layout = html.Div( ## MAIN APP DIV
 
                   #  type="number"
                   dbc.FormGroup([ # Start Year
-                    dbc.Label("5) Start Year", html_for="year1", width=3, align="start", ),
+                    dbc.Label("5) Start Year", html_for="year1", sm=3, className="p-0", align="start", ),
                     dbc.Col([
                       dbc.Input(type="number", id="year1", placeholder="YYYY", value="1981", min=1981, max=2018, ),
                       dbc.FormText("(No earlier than 1981)"),
                     ],
-                    width=9,
+                    xl=9,
                     ),
                   ],
                   row=True
                   ),
                   dbc.FormGroup([ # End Year
-                    dbc.Label("6) End Year", html_for="year2", width=3, align="start", ),
+                    dbc.Label("6) End Year", html_for="year2", sm=3, className="p-0", align="start", ),
                     dbc.Col([
                       dbc.Input(type="number", id="year2", placeholder="YYYY", value="2018", min=1981, max=2018, ),
                       dbc.FormText("(No later than 2018)"),
                     ],
-                    width=9,
+                    xl=9,
                     ),
                   ],
                   row=True
                   ),
                   dbc.FormGroup([ # Year to Highlight
-                    dbc.Label("7) Year to Highlight", html_for="target-year", width=3, align="start", ),
+                    dbc.Label("7) Year to Highlight", html_for="target-year", sm=3, className="p-0", align="start", ),
                     dbc.Col([
                       dbc.Input(type="number", id="target-year", placeholder="YYYY", value="2015",min=1981, max=2018, ),
                       dbc.FormText("Type a specific year you remember (e.g., drought year) and want to compare with a full climatology distribution"),
                     ],
-                    width=9,
+                    xl=9,
                     ),
                   ],
                   row=True
                   ),
                   dbc.FormGroup([ # Soil Type
-                    dbc.Label("8) Soil Type", html_for="ETsoil", width=3, align="start", ),
+                    dbc.Label("8) Soil Type", html_for="ETsoil", sm=3, className="p-0", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
                         id="ETsoil", 
@@ -239,13 +239,13 @@ app.layout = html.Div( ## MAIN APP DIV
                         value="ETET001_18"
                       ),
                     ],
-                    width=9,
+                    xl=9,
                     ),
                   ],
                   row=True
                   ),
-                  dbc.FormGroup([ # Soil Water Condition
-                    dbc.Label("9) Soil Water Condition", html_for="ini-H2O", width=3, align="start", ),
+                  dbc.FormGroup([ # Initial Soil Water Condition
+                    dbc.Label("9) Initial Soil Water Condition", html_for="ini-H2O", sm=3, className="p-0", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
                         id="ini-H2O", 
@@ -258,13 +258,13 @@ app.layout = html.Div( ## MAIN APP DIV
                         value="0.5"  
                       ),
                     ],
-                    width=9,
+                    xl=9,
                     ),
                   ],
                   row=True
                   ),
                   dbc.FormGroup([ # Initial NO3 Condition
-                    dbc.Label("10) Initial NO3 Condition", html_for="ini-NO3", width=3, align="start", ),
+                    dbc.Label("10) Initial NO3 Condition", html_for="ini-NO3", sm=3, className="p-0", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
                         id="ini-NO3", 
@@ -275,13 +275,13 @@ app.layout = html.Div( ## MAIN APP DIV
                         value="L"
                       ),                                      
                     ],
-                    width=9,
+                    xl=9,
                     ),
                   ],
                   row=True
                   ),
                   dbc.FormGroup([ # Planting Date
-                    dbc.Label("11) Planting Date", html_for="plt-date-picker", width=3, align="start", ),
+                    dbc.Label("11) Planting Date", html_for="plt-date-picker", sm=3, className="p-0", align="start", ),
                     dbc.Col([
                       dcc.DatePickerSingle(
                       id="plt-date-picker",
@@ -292,28 +292,24 @@ app.layout = html.Div( ## MAIN APP DIV
                       ),
                       dbc.FormText("Only Month and Date are counted"),
                     ],
-                    width=9,
+                    xl=9,
                     ),
                   ],
                   row=True
                   ),
                   # type="number"    
                   dbc.FormGroup([ # Planting Density
-                    dbc.Label("12) Planting Density", html_for="plt-density", width=3, align="start", ),
+                    dbc.Label(["12) Planting Density", html.Span(" (plants/m"), html.Sup("2"), html.Span(")"), ], html_for="plt-density", sm=3, className="p-0", align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="plt-density", value=5, min=1, max=250),
-                      dbc.FormText([
-                        html.Span(" plants/m"),
-                        html.Sup("2"),
-                      ]),
+                      dbc.Input(type="number", id="plt-density", value=5, min=1, max=300),
                     ],
-                    width=9,
+                    xl=9,
                     ),
                   ],
                   row=True
                   ),
                   dbc.FormGroup([ # Fertilizer Application
-                    dbc.Label("13) Fertilizer Application", html_for="fert_input", width=3, align="start", ),
+                    dbc.Label("13) Fertilizer Application", html_for="fert_input", xl=3, className="p-0", align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                         id="fert_input",
@@ -334,7 +330,7 @@ app.layout = html.Div( ## MAIN APP DIV
                           },
                           columns=([
                             {"id": "DAP", "name": "Days After Planting"},
-                            {"id": "NAmount", "name": "Amount of N in kg/ha"},
+                            {"id": "NAmount", "name": "Amount of N (kg/ha)"},
                           ]),
                           data=[
                             dict(**{param: 0 for param in ["DAP", "NAmount"]}) for i in range(1, 5)
@@ -351,13 +347,13 @@ app.layout = html.Div( ## MAIN APP DIV
                       style={"display": "none"},
                       ),
                     ],
-                    width=9,
+                    xl=9,
                     ),
                   ],
                   row=True
                   ),
                   dbc.FormGroup([ # Enterprise Budgeting?
-                    dbc.Label("14) Enterprise Budgeting?", html_for="EB_radio", width=3, align="start", ),
+                    dbc.Label("14) Enterprise Budgeting?", html_for="EB_radio", sm=3, className="p-0", align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                         id="EB_radio",
@@ -376,11 +372,11 @@ app.layout = html.Div( ## MAIN APP DIV
                           "font_size": "14px",
                           "text_align": "center"},
                           columns=([
-                            {"id": "CropPrice", "name": "Crop Price"},
-                            {"id": "NFertCost", "name": "Fertilizer Cost"},
-                            {"id": "SeedCost", "name": "Seed Cost"},
-                            {"id": "OtherVariableCosts", "name": "Other Variable Costs"},
-                            {"id": "FixedCosts", "name": "Fixed Costs"},
+                            {"id": "CropPrice", "name": "Crop Price (ETB/kg)"},
+                            {"id": "NFertCost", "name": "Fertilizer Cost (ETB/kg)"},
+                            {"id": "SeedCost", "name": "Seed Cost (ETB/kg)"},
+                            {"id": "OtherVariableCosts", "name": "Variable Costs (ETB/ha)"},
+                            {"id": "FixedCosts", "name": "Fixed Costs (ETB/ha)"},
                           ]),
                           data=[
                             dict(**{param: 0 for param in ["CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]}) for i in range(1, 2)
@@ -392,7 +388,7 @@ app.layout = html.Div( ## MAIN APP DIV
                           editable=True
                         ),
                         html.Div([
-                          html.Div("Unit: Crop Price [ETB/kg], Fertilizer Cost [ETB/N kg], Seed Cost [ETB/kg], Other Variable Costs [ETB/ha], Fixed Costs [ETB/ha]"),
+                          html.Div("Unit: Crop Price (ETB/kg), Fertilizer Cost (ETB/N kg), Seed Cost (ETB/kg), Variable Costs (ETB/ha), Fixed Costs (ETB/ha)"),
                           html.Div("Calculation =>  Gross Margin [ETB/ha] = Revenues [ETB/ha] - Variable Costs [ETB/ha] - Fixed Costs [ETB/ha]"),
                           html.Ul([
                             html.Li("Revenues [ETB/ha] = Yield [kg/ha] * Crop Price [ETB/kg]"),
@@ -402,14 +398,16 @@ app.layout = html.Div( ## MAIN APP DIV
                             html.Li("Other variable costs [ETB/ha] may include pesticide, insurance, labor etc."),
                             html.Li("Fixed costs [ETB/ha] may include interests for land, machinery etc."),
                           ]),
-                        ]),
+                        ],
+                        className="d-none"
+                        ),
                       ],
                       id="EB-table-Comp", 
                       className="w-100",
                       style={"display": "none"},
                       ),
                     ],
-                    width=9,
+                    xl=9,
                     ),
                   ],
                   row=True
@@ -470,6 +468,7 @@ app.layout = html.Div( ## MAIN APP DIV
               dbc.FormGroup([ # SUBMIT - ADD SCENARIO
                 dbc.Button(id="write-button-state", 
                 n_clicks=0, 
+                # type="submit",
                 children="Create or Add a new Scenario", 
                 className="w-75 d-block mx-auto",
                 color="primary"
@@ -1138,40 +1137,17 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
     })
     # data = df.to_dict("rows")
     data = [{
-        "sce_name": None,
-        "Crop": None,
-        "Cultivar": None,
-        "stn_name": None,
-        "Plt-date": None,
-        "FirstYear": None,
-        "LastYear": None,
-        "soil": None,
-        "iH2O": None,
-        "iNO3": None,
-        "plt_density": None,
-        "TargetYr": None,
-        "1_Fert(DOY)": None,
-        "1_Fert(Kg/ha)": None,
-        "2_Fert(DOY)": None,
-        "2_Fert(Kg/ha)": None,
-        "3_Fert(DOY)": None,
-        "3_Fert(Kg/ha)": None,
-        "4_Fert(DOY)": None,
-        "4_Fert(Kg/ha)": None,
-        "CropPrice": None,
-        "NFertCost": None,
-        "SeedCost": None,
-        "OtherVariableCosts": None,
-        "FixedCosts": None
+        "sce_name": None, "Crop": None, "Cultivar": None, "stn_name": None, "Plt-date": None, "FirstYear": None, "LastYear": None, 
+        "soil": None, "iH2O": None, "iNO3": None, "plt_density": None, "TargetYr": None, 
+        "1_Fert(DOY)": None, "1_Fert(Kg/ha)": None, "2_Fert(DOY)": None, "2_Fert(Kg/ha)": None, 
+        "3_Fert(DOY)": None, "3_Fert(Kg/ha)": None, "4_Fert(DOY)": None, "4_Fert(Kg/ha)": None, 
+        "CropPrice": None, "NFertCost": None, "SeedCost": None, "OtherVariableCosts": None, "FixedCosts": None
     }]
     # columns =  [{"name": i, "id": i,} for i in (df.columns)]
     dff = df.copy()
 
-    if scenario == None:
-        return data
-
-    if target_year == None:
-        return data
+    if scenario == "":
+        return
 
     if n_clicks:  
         #=====================================================================
@@ -1182,29 +1158,27 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
         # #Update dataframe for fertilizer and Enterprise Budgeting inputs
         if fert_app == "Fert":
             fert_frame =  pd.DataFrame({
-                              "1_Fert(DOY)": [df_fert.DAP.values[0]], "1_Fert(Kg/ha)": [df_fert.NAmount.values[0]],
-                              "2_Fert(DOY)": [df_fert.DAP.values[1]], "2_Fert(Kg/ha)": [df_fert.NAmount.values[1]],
-                              "3_Fert(DOY)": [df_fert.DAP.values[2]], "3_Fert(Kg/ha)": [df_fert.NAmount.values[2]],
-                              "4_Fert(DOY)": [df_fert.DAP.values[3]], "4_Fert(Kg/ha)": [df_fert.NAmount.values[3]],
-                          })
+                "1_Fert(DOY)": [df_fert.DAP.values[0]], "1_Fert(Kg/ha)": [df_fert.NAmount.values[0]],
+                "2_Fert(DOY)": [df_fert.DAP.values[1]], "2_Fert(Kg/ha)": [df_fert.NAmount.values[1]],
+                "3_Fert(DOY)": [df_fert.DAP.values[2]], "3_Fert(Kg/ha)": [df_fert.NAmount.values[2]],
+                "4_Fert(DOY)": [df_fert.DAP.values[3]], "4_Fert(Kg/ha)": [df_fert.NAmount.values[3]],
+            })
             df.update(fert_frame)
 
         if EB_radio == "EB_Yes":
             EB_frame =  pd.DataFrame({
-                              "CropPrice": [df_EB.CropPrice.values[0]],
-                              "NFertCost": [df_EB.NFertCost.values[0]],
-                              "SeedCost": [df_EB.SeedCost.values[0]],
-                              "OtherVariableCosts": [df_EB.OtherVariableCosts.values[0]],
-                              "FixedCosts": [df_EB.FixedCosts.values[0]],
-                          })
+                "CropPrice": [df_EB.CropPrice.values[0]],
+                "NFertCost": [df_EB.NFertCost.values[0]],
+                "SeedCost": [df_EB.SeedCost.values[0]],
+                "OtherVariableCosts": [df_EB.OtherVariableCosts.values[0]],
+                "FixedCosts": [df_EB.FixedCosts.values[0]],
+            })
             df.update(EB_frame)
         data = df.to_dict("rows")
-        # columns =  [{"name": i, "id": i,} for i in (df.columns)]
 
     if n_clicks == 1:
-        if scenario != None:
-            dff = df.copy()
-            data = dff.to_dict("rows")
+        dff = df.copy()
+        data = dff.to_dict("rows")
     elif n_clicks > 1:
         # # Read previously saved scenario summaries  https://dash.plotly.com/sharing-data-between-callbacks
         # dff = pd.read_json(intermediate, orient="split")
