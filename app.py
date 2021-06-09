@@ -20,6 +20,7 @@ import subprocess  #to run executable
 from datetime import date
 import datetime    #to convert date to doy or vice versa
 import calendar
+import re
 
 app = dash.Dash(
     __name__,
@@ -567,38 +568,30 @@ app.layout = html.Div( ## MAIN APP DIV
                   html.Div([
                     html.Div([ # ORIGINAL CSV STUFF
                       html.Br(),
-
-                    #   dbc.Button(id="btn_csv", 
-                    #   children="Download CSV for Simulated Yield", 
-                    #   className="w-75 d-block mx-auto",
-                    #   color="secondary"
-                    #   ),
-                    #   # dcc.Download(id="download-dataframe-csv"),
-                    #   Download(id="download-dataframe-csv"),
-                    #EJ(6/7/2021) to download each column separately into a csv
-                    dbc.Button(id="btn_csv_yield", 
+                      #EJ(6/7/2021) to download each column separately into a csv
+                      dbc.Button(id="btn_csv_yield", 
                       children="Download CSV for Simulated Yield", 
                       className="w-75 d-block mx-auto",
                       color="secondary"
                       ),
-                    html.Br(),
-                    dbc.Button(id="btn_csv_rain", 
+                      html.Br(),
+                      dbc.Button(id="btn_csv_rain", 
                       children="Download CSV for Seasonal rainfall", 
                       className="w-75 d-block mx-auto",
                       color="secondary"
                       ),
-                    html.Br(),
-                    dbc.Button(id="btn_csv_Pexe", 
+                      html.Br(),
+                      dbc.Button(id="btn_csv_Pexe", 
                       children="Download CSV for Prob. of exceedance", 
                       className="w-75 d-block mx-auto",
                       color="secondary"
                       ),
-                    # dcc.Download(id="download-dataframe-csv"),
-                    Download(id="download-dataframe-csv-yield"),
-                    Download(id="download-dataframe-csv-rain"),
-                    Download(id="download-dataframe-csv-Pexe"),
-                    #end of EJ(6/7/2021) update
-                    html.Div(id="yieldtables-container", 
+                      # dcc.Download(id="download-dataframe-csv"),
+                      Download(id="download-dataframe-csv-yield"),
+                      Download(id="download-dataframe-csv-rain"),
+                      Download(id="download-dataframe-csv-Pexe"),
+                      #end of EJ(6/7/2021) update
+                      html.Div(id="yieldtables-container", 
                       className="overflow-auto",
                       style={"height": "20vh"},
                       ),  #yield simulated output
@@ -643,36 +636,30 @@ app.layout = html.Div( ## MAIN APP DIV
                       color="info"
                       ),
                       html.Br(),   
-                    #   dbc.Button(id="btn_csv2", 
-                    #   children="Download CSV for SORTED Simulated Yield", 
-                    #   className="w-75 d-block mx-auto",
-                    #   color="secondary"
-                    #   ),
-                    #   html.Br(),   
-                      # dcc.Download(id="download-dataframe-csv"),
-                    #EJ(6/7/2021) to download each column separately into a csv
-                    dbc.Button(id="btn_csv2_yield", 
+                      #EJ(6/7/2021) to download each column separately into a csv
+                      dbc.Button(id="btn_csv2_yield", 
                       children="Download CSV for SORTED simulated Yield", 
                       className="w-75 d-block mx-auto",
                       color="secondary"
                       ),
-                    html.Br(),
-                    dbc.Button(id="btn_csv2_rain", 
+                      html.Br(),
+                      dbc.Button(id="btn_csv2_rain", 
                       children="Download CSV for SORTED seasonal rainfall", 
                       className="w-75 d-block mx-auto",
                       color="secondary"
                       ),
-                    html.Br(),
-                    dbc.Button(id="btn_csv2_Pexe", 
+                      html.Br(),
+                      dbc.Button(id="btn_csv2_Pexe", 
                       children="Download CSV for SORTED prob. of exceedance", 
                       className="w-75 d-block mx-auto",
                       color="secondary"
                       ),
-                    #   Download(id="download-dataframe-csv2"),
-                    Download(id="download-dataframe-csv2-yield"),
-                    Download(id="download-dataframe-csv2-rain"),
-                    Download(id="download-dataframe-csv2-Pexe"),
-                    #end of EJ(6/7/2021) update
+                      #   Download(id="download-dataframe-csv2"),
+                      Download(id="download-dataframe-csv2-yield"),
+                      Download(id="download-dataframe-csv2-rain"),
+                      Download(id="download-dataframe-csv2-Pexe"),
+                    
+                      #end of EJ(6/7/2021) update
                       html.Div(id="yieldtables-container2", 
                       className="overflow-auto",
                       style={"height": "20vh"},
@@ -1109,24 +1096,7 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
     target_year = str(target_year)
     planting_density = str(planting_density)
 
-    # 2) Read fertilizer application information
-    if fert_app == "Fert":
-        # print("fert-table in callback make_sce_table= {}".format(fert_in_table))
-        df_fert =pd.DataFrame(fert_in_table)
-        # print("fert-table in callback make_sce_table= {}".format(df_fert))
-    else: #if no fertilizer, then an empty df with an arbitrary column
-        df_fert = pd.DataFrame(columns=["DAP", "NAmount"]) 
-
-    # 3) Read Enterprise budget input
-    if EB_radio == "EB_Yes":
-        # print("EB-table in callback make_sce_table= {}".format(EB_in_table))
-        df_EB =pd.DataFrame(EB_in_table)
-        # print("EB-table in callback make_sce_table= {}".format(df_EB))
-    else: #if no EB analysis
-        df_EB = pd.DataFrame(columns=["sce_name","Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
-                 "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
-                 "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"])
-    #Make a new dataframe to return to scenario-summary table
+    # Make a new dataframe to return to scenario-summary table
     df = pd.DataFrame({
         "sce_name": [scenario], "Crop": [crop], "Cultivar": [cultivar[7:]], "stn_name": [station], "Plt-date": [planting_date[5:]], 
         "FirstYear": [start_year], "LastYear": [end_year], "soil": [soil_type], "iH2O": [initial_soil_moisture], 
@@ -1135,62 +1105,94 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
         "3_Fert(DOY)": ["-99"], "3_Fert(Kg/ha)": ["-99"], "4_Fert(DOY)": ["-99"], "4_Fert(Kg/ha)": ["-99"], 
         "CropPrice": ["-99"], "NFertCost": ["-99"], "SeedCost": ["-99"], "OtherVariableCosts": ["-99"], "FixedCosts": ["-99"],  
     })
-    # data = df.to_dict("rows")
-    data = [{
-        "sce_name": None, "Crop": None, "Cultivar": None, "stn_name": None, "Plt-date": None, "FirstYear": None, "LastYear": None, 
-        "soil": None, "iH2O": None, "iNO3": None, "plt_density": None, "TargetYr": None, 
-        "1_Fert(DOY)": None, "1_Fert(Kg/ha)": None, "2_Fert(DOY)": None, "2_Fert(Kg/ha)": None, 
-        "3_Fert(DOY)": None, "3_Fert(Kg/ha)": None, "4_Fert(DOY)": None, "4_Fert(Kg/ha)": None, 
-        "CropPrice": None, "NFertCost": None, "SeedCost": None, "OtherVariableCosts": None, "FixedCosts": None
-    }]
-    # columns =  [{"name": i, "id": i,} for i in (df.columns)]
-    dff = df.copy()
 
-    if scenario == "":
-        return
+    form_valid = (
+            re.match("....", df.sce_name.values[0]) 
+        and int(df.FirstYear.values[0]) >= 1981 and int(df.FirstYear.values[0]) <= 2018 
+        and int(df.LastYear.values[0]) >= 1981 and int(df.LastYear.values[0]) <= 2018 
+        and int(df.TargetYr.values[0]) >= 1981 and int(df.TargetYr.values[0]) <= 2018 
+        and int(df.plt_density.values[0]) >= 1 and int(df.plt_density.values[0]) <= 300
+        # and fert
+        # and EB
+    )
 
-    #=====================================================================
-    #1) Write SNX file
-    writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
-                        planting_density,scenario,fert_app, df_fert)
-    #=====================================================================
-    # #Update dataframe for fertilizer and Enterprise Budgeting inputs
-    if fert_app == "Fert":
-        fert_frame =  pd.DataFrame({
-            "1_Fert(DOY)": [df_fert.DAP.values[0]], "1_Fert(Kg/ha)": [df_fert.NAmount.values[0]],
-            "2_Fert(DOY)": [df_fert.DAP.values[1]], "2_Fert(Kg/ha)": [df_fert.NAmount.values[1]],
-            "3_Fert(DOY)": [df_fert.DAP.values[2]], "3_Fert(Kg/ha)": [df_fert.NAmount.values[2]],
-            "4_Fert(DOY)": [df_fert.DAP.values[3]], "4_Fert(Kg/ha)": [df_fert.NAmount.values[3]],
-        })
-        df.update(fert_frame)
-
-    if EB_radio == "EB_Yes":
-        EB_frame =  pd.DataFrame({
-            "CropPrice": [df_EB.CropPrice.values[0]],
-            "NFertCost": [df_EB.NFertCost.values[0]],
-            "SeedCost": [df_EB.SeedCost.values[0]],
-            "OtherVariableCosts": [df_EB.OtherVariableCosts.values[0]],
-            "FixedCosts": [df_EB.FixedCosts.values[0]],
-        })
-        df.update(EB_frame)
-    data = df.to_dict("rows")
-
-    if n_clicks == 1:
+    if form_valid:
+        # data = df.to_dict("rows")
+        data = [{
+            "sce_name": None, "Crop": None, "Cultivar": None, "stn_name": None, "Plt-date": None, "FirstYear": None, "LastYear": None, 
+            "soil": None, "iH2O": None, "iNO3": None, "plt_density": None, "TargetYr": None, 
+            "1_Fert(DOY)": None, "1_Fert(Kg/ha)": None, "2_Fert(DOY)": None, "2_Fert(Kg/ha)": None, 
+            "3_Fert(DOY)": None, "3_Fert(Kg/ha)": None, "4_Fert(DOY)": None, "4_Fert(Kg/ha)": None, 
+            "CropPrice": None, "NFertCost": None, "SeedCost": None, "OtherVariableCosts": None, "FixedCosts": None
+        }]
+        # columns =  [{"name": i, "id": i,} for i in (df.columns)]
         dff = df.copy()
-        data = dff.to_dict("rows")
-    elif n_clicks > 1:
-        # # Read previously saved scenario summaries  https://dash.plotly.com/sharing-data-between-callbacks
-        # dff = pd.read_json(intermediate, orient="split")
-        dff = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
-        
-        if scenario not in dff.sce_name.values: # prevent adding scenarios with the same name
-            dff = dff.append(df, ignore_index=True)
 
-        data = dff.to_dict("rows")
-    # print(data)
-    return data
-    # return dash_table.DataTable(data=data, columns=columns,row_deletable=True), dff.to_json(date_format="iso", orient="split")
+        #=====================================================================
+        # #Update dataframe for fertilizer inputs
+        if fert_app == "Fert":
+            # Read fertilizer application information
+            df_fert = pd.DataFrame(fert_in_table)
+            fert_frame =  pd.DataFrame({
+                "1_Fert(DOY)": [df_fert.DAP.values[0]], "1_Fert(Kg/ha)": [df_fert.NAmount.values[0]],
+                "2_Fert(DOY)": [df_fert.DAP.values[1]], "2_Fert(Kg/ha)": [df_fert.NAmount.values[1]],
+                "3_Fert(DOY)": [df_fert.DAP.values[2]], "3_Fert(Kg/ha)": [df_fert.NAmount.values[2]],
+                "4_Fert(DOY)": [df_fert.DAP.values[3]], "4_Fert(Kg/ha)": [df_fert.NAmount.values[3]],
+            })
+            df.update(fert_frame)
+        else:
+            df_fert = pd.DataFrame(columns=["DAP", "NAmount"])
+ 
+        #=====================================================================
+        # Write SNX file
+        writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
+                            planting_density,scenario,fert_app, df_fert)
 
+        #=====================================================================
+        # #Update dataframe for Enterprise Budgeting inputs
+        if EB_radio == "EB_Yes":
+            # Read Enterprise budget input
+            df_EB = pd.DataFrame(EB_in_table)
+            EB_frame =  pd.DataFrame({
+                "CropPrice": [df_EB.CropPrice.values[0]],
+                "NFertCost": [df_EB.NFertCost.values[0]],
+                "SeedCost": [df_EB.SeedCost.values[0]],
+                "OtherVariableCosts": [df_EB.OtherVariableCosts.values[0]],
+                "FixedCosts": [df_EB.FixedCosts.values[0]],
+            })
+            df.update(EB_frame)
+        # else:
+        #     df_EB = pd.DataFrame(
+        #         columns=["sce_name","Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
+        #             "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
+        #             "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"
+        #         ]
+        #     )
+
+        data = df.to_dict("rows")
+
+        if n_clicks == 1:
+            dff = df.copy()
+            data = dff.to_dict("rows")
+        elif n_clicks > 1:
+            # # Read previously saved scenario summaries  https://dash.plotly.com/sharing-data-between-callbacks
+            # dff = pd.read_json(intermediate, orient="split")
+            dff = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
+            
+            if scenario not in dff.sce_name.values: # prevent adding scenarios with the same name
+                if dff.sce_name.values[0] == "N/A": # overwrite if a row of "N/A" values present. should only happen first time
+                    dff = df.copy()
+                else:
+                    dff = dff.append(df, ignore_index=True)
+
+            data = dff.to_dict("rows")
+        # print(data)
+        return data
+        # return dash_table.DataTable(data=data, columns=columns,row_deletable=True), dff.to_json(date_format="iso", orient="split")
+    else:
+      return [
+          dict(**{param: "N/A" for param in sce_col_names}) for i in range(1, 2)
+      ]
 #===============================
 #2nd callback to run ALL scenarios
 @app.callback(Output(component_id="yieldbox-container", component_property="children"),
