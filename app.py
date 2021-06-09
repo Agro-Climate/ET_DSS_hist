@@ -83,9 +83,9 @@ app.layout = html.Div( ## MAIN APP DIV
     ),
     # NAV ITEMS
     dbc.Nav([
-      dbc.NavItem(dbc.NavLink("Historical Analysis", href="#historical"),),
-      dbc.NavItem(dbc.NavLink("Forecast Analysis", href="#forecast")),
-      dbc.NavItem(dbc.NavLink("About", href="about")),
+      dbc.NavItem(dbc.NavLink("Historical Analysis", href="historical", className="d-none", ),),
+      dbc.NavItem(dbc.NavLink("Forecast Analysis", href="forecast", className="d-none", ),),
+      dbc.NavItem(dbc.NavLink("About", href="about", className="d-none", ),),
     ],
     navbar=True,
     ),
@@ -1149,32 +1149,31 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
     if scenario == "":
         return
 
-    if n_clicks:  
-        #=====================================================================
-        #1) Write SNX file
-        writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
-                           planting_density,scenario,fert_app, df_fert)
-        #=====================================================================
-        # #Update dataframe for fertilizer and Enterprise Budgeting inputs
-        if fert_app == "Fert":
-            fert_frame =  pd.DataFrame({
-                "1_Fert(DOY)": [df_fert.DAP.values[0]], "1_Fert(Kg/ha)": [df_fert.NAmount.values[0]],
-                "2_Fert(DOY)": [df_fert.DAP.values[1]], "2_Fert(Kg/ha)": [df_fert.NAmount.values[1]],
-                "3_Fert(DOY)": [df_fert.DAP.values[2]], "3_Fert(Kg/ha)": [df_fert.NAmount.values[2]],
-                "4_Fert(DOY)": [df_fert.DAP.values[3]], "4_Fert(Kg/ha)": [df_fert.NAmount.values[3]],
-            })
-            df.update(fert_frame)
+    #=====================================================================
+    #1) Write SNX file
+    writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
+                        planting_density,scenario,fert_app, df_fert)
+    #=====================================================================
+    # #Update dataframe for fertilizer and Enterprise Budgeting inputs
+    if fert_app == "Fert":
+        fert_frame =  pd.DataFrame({
+            "1_Fert(DOY)": [df_fert.DAP.values[0]], "1_Fert(Kg/ha)": [df_fert.NAmount.values[0]],
+            "2_Fert(DOY)": [df_fert.DAP.values[1]], "2_Fert(Kg/ha)": [df_fert.NAmount.values[1]],
+            "3_Fert(DOY)": [df_fert.DAP.values[2]], "3_Fert(Kg/ha)": [df_fert.NAmount.values[2]],
+            "4_Fert(DOY)": [df_fert.DAP.values[3]], "4_Fert(Kg/ha)": [df_fert.NAmount.values[3]],
+        })
+        df.update(fert_frame)
 
-        if EB_radio == "EB_Yes":
-            EB_frame =  pd.DataFrame({
-                "CropPrice": [df_EB.CropPrice.values[0]],
-                "NFertCost": [df_EB.NFertCost.values[0]],
-                "SeedCost": [df_EB.SeedCost.values[0]],
-                "OtherVariableCosts": [df_EB.OtherVariableCosts.values[0]],
-                "FixedCosts": [df_EB.FixedCosts.values[0]],
-            })
-            df.update(EB_frame)
-        data = df.to_dict("rows")
+    if EB_radio == "EB_Yes":
+        EB_frame =  pd.DataFrame({
+            "CropPrice": [df_EB.CropPrice.values[0]],
+            "NFertCost": [df_EB.NFertCost.values[0]],
+            "SeedCost": [df_EB.SeedCost.values[0]],
+            "OtherVariableCosts": [df_EB.OtherVariableCosts.values[0]],
+            "FixedCosts": [df_EB.FixedCosts.values[0]],
+        })
+        df.update(EB_frame)
+    data = df.to_dict("rows")
 
     if n_clicks == 1:
         dff = df.copy()
