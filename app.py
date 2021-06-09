@@ -112,7 +112,7 @@ app.layout = html.Div( ## MAIN APP DIV
                   dbc.FormGroup([ # Scenario
                     dbc.Label("1) Scenario Name", html_for="sce-name", width=3, align="start", ),
                     dbc.Col([
-                      dbc.Input(type="text", id="sce-name", placeholder="????", minLength=4, maxLength=4, ),
+                      dbc.Input(type="text", id="sce-name", value="", minLength=4, maxLength=4, ),
                     ],
                     width=9,
                     ),
@@ -208,7 +208,7 @@ app.layout = html.Div( ## MAIN APP DIV
                     dbc.Label("7) Year to Highlight", html_for="target-year", width=3, align="start", ),
                     dbc.Col([
                       dbc.Input(type="number", id="target-year", placeholder="YYYY", value="2015",min=1981, max=2018, ),
-                      dbc.FormText("Target year can a specific year you remember (e.g., drought year) and want to compare with a full climatology distribution"),
+                      dbc.FormText("Type a specific year you remember (e.g., drought year) and want to compare with a full climatology distribution"),
                     ],
                     width=9,
                     ),
@@ -1128,19 +1128,50 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
                  "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
                  "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"])
     #Make a new dataframe to return to scenario-summary table
-    df = pd.DataFrame(
-        [[scenario, crop, cultivar[7:], station, planting_date[5:], start_year, end_year, soil_type, initial_soil_moisture, initial_soil_no3_content, planting_density, target_year,
-            "-99", "-99", "-99", "-99","-99", "-99","-99", "-99", "-99","-99", "-99","-99", "-99"]],
-        columns=["sce_name","Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
-                 "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
-                 "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"],)
+    df = pd.DataFrame({
+        "sce_name": [scenario], "Crop": [crop], "Cultivar": [cultivar[7:]], "stn_name": [station], "Plt-date": [planting_date[5:]], 
+        "FirstYear": [start_year], "LastYear": [end_year], "soil": [soil_type], "iH2O": [initial_soil_moisture], 
+        "iNO3": [initial_soil_no3_content], "plt_density": [planting_density], "TargetYr": [target_year], 
+        "1_Fert(DOY)": ["-99"], "1_Fert(Kg/ha)": ["-99"], "2_Fert(DOY)": ["-99"], "2_Fert(Kg/ha)": ["-99"], 
+        "3_Fert(DOY)": ["-99"], "3_Fert(Kg/ha)": ["-99"], "4_Fert(DOY)": ["-99"], "4_Fert(Kg/ha)": ["-99"], 
+        "CropPrice": ["-99"], "NFertCost": ["-99"], "SeedCost": ["-99"], "OtherVariableCosts": ["-99"], "FixedCosts": ["-99"],  
+    })
     # data = df.to_dict("rows")
-    data = [{"sce_name": None,"Crop": None, "Cultivar": None, "stn_name": None, "Plt-date": None, "FirstYear": None, "LastYear": None, "soil": None,
-             "iH2O": None, "iNO3": None, "plt_density": None, "TargetYr": None,
-             "1_Fert(DOY)": None,"1_Fert(Kg/ha)": None,"2_Fert(DOY)": None,"2_Fert(Kg/ha)": None, "3_Fert(DOY)": None,"3_Fert(Kg/ha)": None, "4_Fert(DOY)": None,"4_Fert(Kg/ha)": None,
-             "CropPrice": None,"NFertCost": None,"SeedCost": None,"OtherVariableCosts": None, "FixedCosts": None}]
+    data = [{
+        "sce_name": None,
+        "Crop": None,
+        "Cultivar": None,
+        "stn_name": None,
+        "Plt-date": None,
+        "FirstYear": None,
+        "LastYear": None,
+        "soil": None,
+        "iH2O": None,
+        "iNO3": None,
+        "plt_density": None,
+        "TargetYr": None,
+        "1_Fert(DOY)": None,
+        "1_Fert(Kg/ha)": None,
+        "2_Fert(DOY)": None,
+        "2_Fert(Kg/ha)": None,
+        "3_Fert(DOY)": None,
+        "3_Fert(Kg/ha)": None,
+        "4_Fert(DOY)": None,
+        "4_Fert(Kg/ha)": None,
+        "CropPrice": None,
+        "NFertCost": None,
+        "SeedCost": None,
+        "OtherVariableCosts": None,
+        "FixedCosts": None
+    }]
     # columns =  [{"name": i, "id": i,} for i in (df.columns)]
     dff = df.copy()
+
+    if scenario == None:
+        return data
+
+    if target_year == None:
+        return data
 
     if n_clicks:  
         #=====================================================================
@@ -1148,57 +1179,38 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
         writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
                            planting_density,scenario,fert_app, df_fert)
         #=====================================================================
-        # #Make a new dataframe for fertilizer inputs
-        if fert_app == "Fert" and EB_radio == "EB_Yes":
-            #Make a new dataframe
-            df = pd.DataFrame(
-                [[scenario, crop, cultivar[7:], station, planting_date[5:],start_year, end_year, soil_type, initial_soil_moisture, initial_soil_no3_content, planting_density,target_year, 
-                df_fert.DAP.values[0], df_fert.NAmount.values[0], df_fert.DAP.values[1], df_fert.NAmount.values[1],
-                df_fert.DAP.values[2], df_fert.NAmount.values[2],df_fert.DAP.values[3], df_fert.NAmount.values[3],
-                df_EB.CropPrice.values[0], df_EB.NFertCost.values[0], df_EB.SeedCost.values[0], df_EB.OtherVariableCosts.values[0],
-                df_EB.FixedCosts.values[0]]],
-                columns=["sce_name", "Crop","Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
-                        "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
-                        "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"],)
-        elif fert_app == "Fert" and EB_radio == "EB_No":
-            #Make a new dataframe
-            df = pd.DataFrame(
-                [[scenario, crop, cultivar[7:], station, planting_date[5:],start_year, end_year, soil_type, initial_soil_moisture, initial_soil_no3_content,planting_density, target_year, 
-                df_fert.DAP.values[0], df_fert.NAmount.values[0], df_fert.DAP.values[1], df_fert.NAmount.values[1],
-                df_fert.DAP.values[2], df_fert.NAmount.values[2],df_fert.DAP.values[3], df_fert.NAmount.values[3],
-                "-99","-99", "-99","-99", "-99"]],
-                columns=["sce_name", "Crop","Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
-                        "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
-                        "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"],)
-        elif fert_app == "No_fert" and EB_radio == "EB_Yes":
-            #Make a new dataframe
-            df = pd.DataFrame(
-                [[scenario, crop, cultivar[7:], station, planting_date[5:],start_year, end_year, soil_type, initial_soil_moisture, initial_soil_no3_content, planting_density,target_year, 
-                 "-99", "-99", "-99", "-99","-99", "-99","-99", "-99",
-                df_EB.CropPrice.values[0], df_EB.NFertCost.values[0], df_EB.SeedCost.values[0], df_EB.OtherVariableCosts.values[0],
-                df_EB.FixedCosts.values[0]]],
-                columns=["sce_name", "Crop","Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
-                        "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
-                        "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"],)
-        else:  #no fertilizer application & No EB analyze
-            df = pd.DataFrame(
-                [[scenario, crop, cultivar[7:], station, planting_date[5:],start_year, end_year, soil_type, initial_soil_moisture, initial_soil_no3_content,planting_density, target_year, 
-                 "-99", "-99", "-99", "-99","-99", "-99","-99", "-99","-99","-99", "-99","-99", "-99"]],
-                columns=["sce_name", "Crop","Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
-                        "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
-                        "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"],)           
+        # #Update dataframe for fertilizer and Enterprise Budgeting inputs
+        if fert_app == "Fert":
+            fert_frame =  pd.DataFrame({
+                              "1_Fert(DOY)": [df_fert.DAP.values[0]], "1_Fert(Kg/ha)": [df_fert.NAmount.values[0]],
+                              "2_Fert(DOY)": [df_fert.DAP.values[1]], "2_Fert(Kg/ha)": [df_fert.NAmount.values[1]],
+                              "3_Fert(DOY)": [df_fert.DAP.values[2]], "3_Fert(Kg/ha)": [df_fert.NAmount.values[2]],
+                              "4_Fert(DOY)": [df_fert.DAP.values[3]], "4_Fert(Kg/ha)": [df_fert.NAmount.values[3]],
+                          })
+            df.update(fert_frame)
+
+        if EB_radio == "EB_Yes":
+            EB_frame =  pd.DataFrame({
+                              "CropPrice": [df_EB.CropPrice.values[0]],
+                              "NFertCost": [df_EB.NFertCost.values[0]],
+                              "SeedCost": [df_EB.SeedCost.values[0]],
+                              "OtherVariableCosts": [df_EB.OtherVariableCosts.values[0]],
+                              "FixedCosts": [df_EB.FixedCosts.values[0]],
+                          })
+            df.update(EB_frame)
         data = df.to_dict("rows")
         # columns =  [{"name": i, "id": i,} for i in (df.columns)]
 
     if n_clicks == 1:
-        dff = df.copy()
-        data = dff.to_dict("rows")
+        if scenario != None:
+            dff = df.copy()
+            data = dff.to_dict("rows")
     elif n_clicks > 1:
         # # Read previously saved scenario summaries  https://dash.plotly.com/sharing-data-between-callbacks
         # dff = pd.read_json(intermediate, orient="split")
         dff = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
         
-        if scenario not in dff.sce_name.values: # prevent adding scenarios with the same name.
+        if scenario not in dff.sce_name.values: # prevent adding scenarios with the same name
             dff = dff.append(df, ignore_index=True)
 
         data = dff.to_dict("rows")
