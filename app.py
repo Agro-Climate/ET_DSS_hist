@@ -375,8 +375,8 @@ app.layout = html.Div( ## MAIN APP DIV
                           columns=([
                             {"id": "CropPrice", "name": "Crop Price (ETB/kg)"},
                             {"id": "NFertCost", "name": "Fertilizer Cost (ETB/kg)"},
-                            {"id": "SeedCost", "name": "Seed Cost (ETB/kg)"},
-                            {"id": "OtherVariableCosts", "name": "Variable Costs (ETB/ha)"},
+                            {"id": "SeedCost", "name": "Seed Cost (ETB/ha)"},
+                            {"id": "OtherVariableCosts", "name": "Other Variable Costs (ETB/ha)"},
                             {"id": "FixedCosts", "name": "Fixed Costs (ETB/ha)"},
                           ]),
                           data=[
@@ -479,8 +479,8 @@ app.layout = html.Div( ## MAIN APP DIV
 
             html.Div([ # AFTER SCENARIO TABLE
               dbc.FormGroup([ # Approximate Growing Season
-                dbc.Label("15) Approximate Growing Season", html_for="season-slider"),
-                dbc.FormText("This growing season is used to sort drier/wetter years based on the seasonal total rainfall"),
+                dbc.Label("15) Critical growing period to relate rainfall amount with crop yield", html_for="season-slider"),
+                dbc.FormText("Selected period is used to sort drier/wetter years based on the seasonal total rainfall"),
                 dcc.RangeSlider(
                   id="season-slider",
                   min=1, max=12, step=1,
