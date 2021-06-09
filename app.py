@@ -1117,17 +1117,6 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
     )
 
     if form_valid:
-        # data = df.to_dict("rows")
-        data = [{
-            "sce_name": None, "Crop": None, "Cultivar": None, "stn_name": None, "Plt-date": None, "FirstYear": None, "LastYear": None, 
-            "soil": None, "iH2O": None, "iNO3": None, "plt_density": None, "TargetYr": None, 
-            "1_Fert(DOY)": None, "1_Fert(Kg/ha)": None, "2_Fert(DOY)": None, "2_Fert(Kg/ha)": None, 
-            "3_Fert(DOY)": None, "3_Fert(Kg/ha)": None, "4_Fert(DOY)": None, "4_Fert(Kg/ha)": None, 
-            "CropPrice": None, "NFertCost": None, "SeedCost": None, "OtherVariableCosts": None, "FixedCosts": None
-        }]
-        # columns =  [{"name": i, "id": i,} for i in (df.columns)]
-        dff = df.copy()
-
         #=====================================================================
         # #Update dataframe for fertilizer inputs
         if fert_app == "Fert":
@@ -1169,30 +1158,23 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
         #         ]
         #     )
 
+
+        # # Read previously saved scenario summaries  https://dash.plotly.com/sharing-data-between-callbacks
+        # dff = pd.read_json(intermediate, orient="split")
+        dff = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
+        if scenario not in dff.sce_name.values: # prevent adding scenarios with the same name
+            if not dff.sce_name.values[0] == "N/A": # overwrite if a row of "N/A" values present. should only happen first time
+                df = dff.append(df, ignore_index=True)
+
         data = df.to_dict("rows")
-
-        if n_clicks == 1:
-            dff = df.copy()
-            data = dff.to_dict("rows")
-        elif n_clicks > 1:
-            # # Read previously saved scenario summaries  https://dash.plotly.com/sharing-data-between-callbacks
-            # dff = pd.read_json(intermediate, orient="split")
-            dff = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
-            
-            if scenario not in dff.sce_name.values: # prevent adding scenarios with the same name
-                if dff.sce_name.values[0] == "N/A": # overwrite if a row of "N/A" values present. should only happen first time
-                    dff = df.copy()
-                else:
-                    dff = dff.append(df, ignore_index=True)
-
-            data = dff.to_dict("rows")
         # print(data)
         return data
         # return dash_table.DataTable(data=data, columns=columns,row_deletable=True), dff.to_json(date_format="iso", orient="split")
     else:
-      return [
-          dict(**{param: "N/A" for param in sce_col_names}) for i in range(1, 2)
-      ]
+      # TODO: Alert about form not fully filled out
+      df = pd.DataFrame(sce_in_table)
+      return df.to_dict("rows")
+
 #===============================
 #2nd callback to run ALL scenarios
 @app.callback(Output(component_id="yieldbox-container", component_property="children"),
