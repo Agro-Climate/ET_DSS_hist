@@ -374,8 +374,8 @@ app.layout = html.Div( ## MAIN APP DIV
                           columns=([
                             {"id": "CropPrice", "name": "Crop Price (ETB/kg)"},
                             {"id": "NFertCost", "name": "Fertilizer Cost (ETB/kg)"},
-                            {"id": "SeedCost", "name": "Seed Cost (ETB/kg)"},
-                            {"id": "OtherVariableCosts", "name": "Variable Costs (ETB/ha)"},
+                            {"id": "SeedCost", "name": "Seed Cost (ETB/ha)"},
+                            {"id": "OtherVariableCosts", "name": "Other Variable Costs (ETB/ha)"},
                             {"id": "FixedCosts", "name": "Fixed Costs (ETB/ha)"},
                           ]),
                           data=[
