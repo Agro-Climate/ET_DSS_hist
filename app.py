@@ -330,8 +330,8 @@ app.layout = html.Div( ## MAIN APP DIV
                             "text_align": "center"
                           },
                           columns=([
-                            {"id": "DAP", "name": "Days After Planting"},
-                            {"id": "NAmount", "name": "Amount of N (kg/ha)"},
+                            {"id": "DAP", "name": "Days After Planting",  "type": "numeric", },
+                            {"id": "NAmount", "name": "Amount of N (kg/ha)",  "type": "numeric", },
                           ]),
                           data=[
                             dict(**{param: 0 for param in ["DAP", "NAmount"]}) for i in range(1, 5)
@@ -373,11 +373,11 @@ app.layout = html.Div( ## MAIN APP DIV
                           "font_size": "14px",
                           "text_align": "center"},
                           columns=([
-                            {"id": "CropPrice", "name": "Crop Price (ETB/kg)"},
-                            {"id": "NFertCost", "name": "Fertilizer Cost (ETB/kg)"},
-                            {"id": "SeedCost", "name": "Seed Cost (ETB/ha)"},
-                            {"id": "OtherVariableCosts", "name": "Other Variable Costs (ETB/ha)"},
-                            {"id": "FixedCosts", "name": "Fixed Costs (ETB/ha)"},
+                            {"id": "CropPrice", "name": "Crop Price (ETB/kg)", "type": "numeric",},
+                            {"id": "NFertCost", "name": "Fertilizer Cost (ETB/kg)", "type": "numeric",},
+                            {"id": "SeedCost", "name": "Seed Cost (ETB/ha)", "type": "numeric",},
+                            {"id": "OtherVariableCosts", "name": "Other Variable Costs (ETB/ha)", "type": "numeric",},
+                            {"id": "FixedCosts", "name": "Fixed Costs (ETB/ha)", "type": "numeric",},
                           ]),
                           data=[
                             dict(**{param: 0 for param in ["CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]}) for i in range(1, 2)
@@ -386,7 +386,7 @@ app.layout = html.Div( ## MAIN APP DIV
                             {"if": {"id": "CropPrice"}, "width": "20%"}, # Failed component prop type: Invalid component prop (when app.run_server() Debug=True)
                             {"if": {"id": "NFertCost"}, "width": "20%"},
                           ],
-                          editable=True
+                        editable=True,
                         ),
                         html.Div([
                           html.Div("Unit: Crop Price (ETB/kg), Fertilizer Cost (ETB/N kg), Seed Cost (ETB/kg), Variable Costs (ETB/ha), Fixed Costs (ETB/ha)"),
@@ -1105,6 +1105,49 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
         "3_Fert(DOY)": ["-99"], "3_Fert(Kg/ha)": ["-99"], "4_Fert(DOY)": ["-99"], "4_Fert(Kg/ha)": ["-99"], 
         "CropPrice": ["-99"], "NFertCost": ["-99"], "SeedCost": ["-99"], "OtherVariableCosts": ["-99"], "FixedCosts": ["-99"],  
     })
+    
+    #=====================================================================
+    # #Update dataframe for fertilizer inputs
+    if fert_app == "Fert":
+        # Read fertilizer application information
+        df_fert = pd.DataFrame(fert_in_table)
+        fert_frame =  pd.DataFrame({
+            "1_Fert(DOY)": [df_fert.DAP.values[0]], "1_Fert(Kg/ha)": [df_fert.NAmount.values[0]],
+            "2_Fert(DOY)": [df_fert.DAP.values[1]], "2_Fert(Kg/ha)": [df_fert.NAmount.values[1]],
+            "3_Fert(DOY)": [df_fert.DAP.values[2]], "3_Fert(Kg/ha)": [df_fert.NAmount.values[2]],
+            "4_Fert(DOY)": [df_fert.DAP.values[3]], "4_Fert(Kg/ha)": [df_fert.NAmount.values[3]],
+        })
+        df.update(fert_frame)
+    else:
+        df_fert = pd.DataFrame(columns=["DAP", "NAmount"])
+
+    #=====================================================================
+    # Write SNX file
+    writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
+                        planting_density,scenario,fert_app, df_fert)
+
+    #=====================================================================
+    # #Update dataframe for Enterprise Budgeting inputs
+    if EB_radio == "EB_Yes":
+        # Read Enterprise budget input
+        df_EB = pd.DataFrame(EB_in_table)
+        EB_frame =  pd.DataFrame({
+            "CropPrice": [df_EB.CropPrice.values[0]],
+            "NFertCost": [df_EB.NFertCost.values[0]],
+            "SeedCost": [df_EB.SeedCost.values[0]],
+            "OtherVariableCosts": [df_EB.OtherVariableCosts.values[0]],
+            "FixedCosts": [df_EB.FixedCosts.values[0]],
+        })
+        df.update(EB_frame)
+    # else:
+    #     df_EB = pd.DataFrame(
+    #         columns=["sce_name","Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
+    #             "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
+    #             "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"
+    #         ]
+    #     )
+
+    re.match("\d*", )
 
     form_valid = (
             re.match("....", df.sce_name.values[0]) 
@@ -1117,48 +1160,6 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
     )
 
     if form_valid:
-        #=====================================================================
-        # #Update dataframe for fertilizer inputs
-        if fert_app == "Fert":
-            # Read fertilizer application information
-            df_fert = pd.DataFrame(fert_in_table)
-            fert_frame =  pd.DataFrame({
-                "1_Fert(DOY)": [df_fert.DAP.values[0]], "1_Fert(Kg/ha)": [df_fert.NAmount.values[0]],
-                "2_Fert(DOY)": [df_fert.DAP.values[1]], "2_Fert(Kg/ha)": [df_fert.NAmount.values[1]],
-                "3_Fert(DOY)": [df_fert.DAP.values[2]], "3_Fert(Kg/ha)": [df_fert.NAmount.values[2]],
-                "4_Fert(DOY)": [df_fert.DAP.values[3]], "4_Fert(Kg/ha)": [df_fert.NAmount.values[3]],
-            })
-            df.update(fert_frame)
-        else:
-            df_fert = pd.DataFrame(columns=["DAP", "NAmount"])
- 
-        #=====================================================================
-        # Write SNX file
-        writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
-                            planting_density,scenario,fert_app, df_fert)
-
-        #=====================================================================
-        # #Update dataframe for Enterprise Budgeting inputs
-        if EB_radio == "EB_Yes":
-            # Read Enterprise budget input
-            df_EB = pd.DataFrame(EB_in_table)
-            EB_frame =  pd.DataFrame({
-                "CropPrice": [df_EB.CropPrice.values[0]],
-                "NFertCost": [df_EB.NFertCost.values[0]],
-                "SeedCost": [df_EB.SeedCost.values[0]],
-                "OtherVariableCosts": [df_EB.OtherVariableCosts.values[0]],
-                "FixedCosts": [df_EB.FixedCosts.values[0]],
-            })
-            df.update(EB_frame)
-        # else:
-        #     df_EB = pd.DataFrame(
-        #         columns=["sce_name","Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
-        #             "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
-        #             "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"
-        #         ]
-        #     )
-
-
         # # Read previously saved scenario summaries  https://dash.plotly.com/sharing-data-between-callbacks
         # dff = pd.read_json(intermediate, orient="split")
         dff = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
