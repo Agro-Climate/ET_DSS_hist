@@ -48,7 +48,7 @@ app.css.config.serve_locally = True
 
 #column names for scenario summary table:EJ(5/3/2021)
 sce_col_names=["sce_name", "Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","TargetYr",
-                 "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
+                 "Fert_1_DOY","Fert_1_Kg","Fert_2_DOY","Fert_2_Kg","Fert_3_DOY","Fert_3_Kg","Fert_4_DOY","Fert_4_Kg",
                  "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]
 
 cultivar_options = {
@@ -439,14 +439,14 @@ app.layout = html.Div( ## MAIN APP DIV
                     {"id": "iH2O", "name": "Initial Soil Water Content"},
                     {"id": "iNO3", "name": "Initial Soil Nitrate Content"},
                     {"id": "TargetYr", "name": "Target Year"},
-                    {"id": "1_Fert(DOY)", "name": "DOY 1st Fertilizer Applied"},
-                    {"id": "1_Fert(Kg/ha)", "name": "1st Amount Applied (Kg/ha)"},
-                    {"id": "2_Fert(DOY)", "name": "DOY 2nd Fertilizer Applied"},
-                    {"id": "2_Fert(Kg/ha)", "name": "2nd Amount Applied(Kg/ha)"},
-                    {"id": "3_Fert(DOY)", "name": "DOY 3rd Fertilizer Applied"},
-                    {"id": "3_Fert(Kg/ha)", "name": "3rd Amount Applied(Kg/ha)"},
-                    {"id": "4_Fert(DOY)", "name": "DOY 4th Fertilizer Applied"},
-                    {"id": "4_Fert(Kg/ha)", "name": "4th Amount Applied(Kg/ha)"},
+                    {"id": "Fert_1_DOY", "name": "DOY 1st Fertilizer Applied"},
+                    {"id": "Fert_1_Kg", "name": "1st Amount Applied (Kg/ha)"},
+                    {"id": "Fert_2_DOY", "name": "DOY 2nd Fertilizer Applied"},
+                    {"id": "Fert_2_Kg", "name": "2nd Amount Applied(Kg/ha)"},
+                    {"id": "Fert_3_DOY", "name": "DOY 3rd Fertilizer Applied"},
+                    {"id": "Fert_3_Kg", "name": "3rd Amount Applied(Kg/ha)"},
+                    {"id": "Fert_4_DOY", "name": "DOY 4th Fertilizer Applied"},
+                    {"id": "Fert_4_Kg", "name": "4th Amount Applied(Kg/ha)"},
                     {"id": "CropPrice", "name": "Crop Price"},
                     {"id": "NFertCost", "name": "Fertilizer Cost"},
                     {"id": "SeedCost", "name": "Seed Cost"},
@@ -1101,23 +1101,64 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
         "sce_name": [scenario], "Crop": [crop], "Cultivar": [cultivar[7:]], "stn_name": [station], "Plt-date": [planting_date[5:]], 
         "FirstYear": [start_year], "LastYear": [end_year], "soil": [soil_type], "iH2O": [initial_soil_moisture], 
         "iNO3": [initial_soil_no3_content], "plt_density": [planting_density], "TargetYr": [target_year], 
-        "1_Fert(DOY)": ["-99"], "1_Fert(Kg/ha)": ["-99"], "2_Fert(DOY)": ["-99"], "2_Fert(Kg/ha)": ["-99"], 
-        "3_Fert(DOY)": ["-99"], "3_Fert(Kg/ha)": ["-99"], "4_Fert(DOY)": ["-99"], "4_Fert(Kg/ha)": ["-99"], 
+        "Fert_1_DOY": ["-99"], "Fert_1_Kg": ["-99"], "Fert_2_DOY": ["-99"], "Fert_2_Kg": ["-99"], 
+        "Fert_3_DOY": ["-99"], "Fert_3_Kg": ["-99"], "Fert_4_DOY": ["-99"], "Fert_4_Kg": ["-99"], 
         "CropPrice": ["-99"], "NFertCost": ["-99"], "SeedCost": ["-99"], "OtherVariableCosts": ["-99"], "FixedCosts": ["-99"],  
     })
     
+
+
     #=====================================================================
     # #Update dataframe for fertilizer inputs
+    fert_valid = True
     if fert_app == "Fert":
         # Read fertilizer application information
         df_fert = pd.DataFrame(fert_in_table)
         fert_frame =  pd.DataFrame({
-            "1_Fert(DOY)": [df_fert.DAP.values[0]], "1_Fert(Kg/ha)": [df_fert.NAmount.values[0]],
-            "2_Fert(DOY)": [df_fert.DAP.values[1]], "2_Fert(Kg/ha)": [df_fert.NAmount.values[1]],
-            "3_Fert(DOY)": [df_fert.DAP.values[2]], "3_Fert(Kg/ha)": [df_fert.NAmount.values[2]],
-            "4_Fert(DOY)": [df_fert.DAP.values[3]], "4_Fert(Kg/ha)": [df_fert.NAmount.values[3]],
+            "Fert_1_DOY": [df_fert.DAP.values[0]], "Fert_1_Kg": [df_fert.NAmount.values[0]],
+            "Fert_2_DOY": [df_fert.DAP.values[1]], "Fert_2_Kg": [df_fert.NAmount.values[1]],
+            "Fert_3_DOY": [df_fert.DAP.values[2]], "Fert_3_Kg": [df_fert.NAmount.values[2]],
+            "Fert_4_DOY": [df_fert.DAP.values[3]], "Fert_4_Kg": [df_fert.NAmount.values[3]],
         })
         df.update(fert_frame)
+
+        # validate days after planting values to be positive integers in the range 0-365
+        if ( # invalid if float or no input
+                not isinstance(df.Fert_1_DOY.values[0], int)
+            or  not isinstance(df.Fert_2_DOY.values[0], int)
+            or  not isinstance(df.Fert_3_DOY.values[0], int)
+            or  not isinstance(df.Fert_4_DOY.values[0], int)
+            or  df.Fert_1_DOY.values[0] == None
+            or  df.Fert_2_DOY.values[0] == None
+            or  df.Fert_3_DOY.values[0] == None
+            or  df.Fert_4_DOY.values[0] == None
+        ):
+            fert_valid = False        
+        else:
+            if ( # invalid if outside range   
+                    not (df.Fert_1_DOY.values[0] >= 0 and df.Fert_1_DOY.values[0] <= 365)
+                or  not (df.Fert_2_DOY.values[0] >= 0 and df.Fert_2_DOY.values[0] <= 365)
+                or  not (df.Fert_3_DOY.values[0] >= 0 and df.Fert_3_DOY.values[0] <= 365)
+                or  not (df.Fert_4_DOY.values[0] >= 0 and df.Fert_4_DOY.values[0] <= 365)
+            ):
+                fert_valid = False
+
+        # validate nitrate amounts to be positive ints/floats
+        if ( # invalid if no input
+                df.Fert_1_Kg.values[0] == None
+            or  df.Fert_2_Kg.values[0] == None
+            or  df.Fert_3_Kg.values[0] == None
+            or  df.Fert_4_Kg.values[0] == None
+        ):
+            fert_valid = False
+        else:
+            if ( # invalid if negative value
+                    df.Fert_1_Kg.values[0] < 0
+                or  df.Fert_2_Kg.values[0] < 0
+                or  df.Fert_3_Kg.values[0] < 0
+                or  df.Fert_4_Kg.values[0] < 0
+            ):
+                fert_valid = False        
     else:
         df_fert = pd.DataFrame(columns=["DAP", "NAmount"])
 
@@ -1128,9 +1169,11 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
 
     #=====================================================================
     # #Update dataframe for Enterprise Budgeting inputs
+    EB_valid = True
     if EB_radio == "EB_Yes":
         # Read Enterprise budget input
         df_EB = pd.DataFrame(EB_in_table)
+        
         EB_frame =  pd.DataFrame({
             "CropPrice": [df_EB.CropPrice.values[0]],
             "NFertCost": [df_EB.NFertCost.values[0]],
@@ -1139,15 +1182,22 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
             "FixedCosts": [df_EB.FixedCosts.values[0]],
         })
         df.update(EB_frame)
+
+        EB_valid = (
+                True
+            # and df.CropPrice.values[0] >= 0
+            # and df.NFertCost.values[0] >= 0
+            # and df.SeedCost.values[0] >= 0
+            # and df.OtherVariableCosts.values[0] >= 0
+            # and df.FixedCosts.values[0] >= 0
+        )
     # else:
     #     df_EB = pd.DataFrame(
     #         columns=["sce_name","Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
-    #             "1_Fert(DOY)","1_Fert(Kg/ha)","2_Fert(DOY)","2_Fert(Kg/ha)","3_Fert(DOY)","3_Fert(Kg/ha)","4_Fert(DOY)","4_Fert(Kg/ha)",
+    #             "Fert_1_DOY","Fert_1_Kg","Fert_2_DOY","Fert_2_Kg","Fert_3_DOY","Fert_3_Kg","Fert_4_DOY","Fert_4_Kg",
     #             "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"
     #         ]
     #     )
-
-    re.match("\d*", )
 
     form_valid = (
             re.match("....", df.sce_name.values[0]) 
@@ -1155,8 +1205,7 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
         and int(df.LastYear.values[0]) >= 1981 and int(df.LastYear.values[0]) <= 2018 
         and int(df.TargetYr.values[0]) >= 1981 and int(df.TargetYr.values[0]) <= 2018 
         and int(df.plt_density.values[0]) >= 1 and int(df.plt_density.values[0]) <= 300
-        # and fert
-        # and EB
+        and fert_valid and EB_valid
     )
 
     if form_valid:
