@@ -1183,14 +1183,24 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
         })
         df.update(EB_frame)
 
-        EB_valid = (
-                True
-            # and df.CropPrice.values[0] >= 0
-            # and df.NFertCost.values[0] >= 0
-            # and df.SeedCost.values[0] >= 0
-            # and df.OtherVariableCosts.values[0] >= 0
-            # and df.FixedCosts.values[0] >= 0
-        )
+        # validate budgeting inputs to be positive ints/floats
+        if ( # invalid if no input
+                df.CropPrice.values[0] == None
+            or  df.NFertCost.values[0] == None
+            or  df.SeedCost.values[0] == None
+            or  df.OtherVariableCosts.values[0] == None
+            or  df.FixedCosts.values[0] == None
+        ):
+            EB_valid = False
+        else:
+            if ( # invalid if negative value
+                    df.CropPrice.values[0] < 0
+                or  df.NFertCost.values[0] < 0
+                or  df.SeedCost.values[0] < 0
+                or  df.OtherVariableCosts.values[0] < 0
+                or  df.FixedCosts.values[0] < 0
+            ):
+                EB_valid = False
     # else:
     #     df_EB = pd.DataFrame(
     #         columns=["sce_name","Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
@@ -1214,14 +1224,14 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
         dff = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
         if scenario not in dff.sce_name.values: # prevent adding scenarios with the same name
             if not dff.sce_name.values[0] == "N/A": # overwrite if a row of "N/A" values present. should only happen first time
-                df = dff.append(df, ignore_index=True)
+                dff = df.append(dff, ignore_index=True)
 
-        data = df.to_dict("rows")
+        data = dff.to_dict("rows")
         # print(data)
         return data
         # return dash_table.DataTable(data=data, columns=columns,row_deletable=True), dff.to_json(date_format="iso", orient="split")
     else:
-      # TODO: Alert about form not fully filled out
+      # TODO: Alert about errors in form
       df = pd.DataFrame(sce_in_table)
       return df.to_dict("rows")
 
