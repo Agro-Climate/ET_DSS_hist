@@ -1218,23 +1218,41 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
         and fert_valid and EB_valid
     )
 
-    if form_valid:
-        # # Read previously saved scenario summaries  https://dash.plotly.com/sharing-data-between-callbacks
-        # dff = pd.read_json(intermediate, orient="split")
-        dff = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
-        if scenario not in dff.sce_name.values: # prevent adding scenarios with the same name
-            if not dff.sce_name.values[0] == "N/A": # overwrite if a row of "N/A" values present. should only happen first time
-                dff = df.append(dff, ignore_index=True)
+    # if form_valid:
+    #     # # Read previously saved scenario summaries  https://dash.plotly.com/sharing-data-between-callbacks
+    #     # dff = pd.read_json(intermediate, orient="split")
+    #     dff = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
+    #     if scenario not in dff.sce_name.values: # prevent adding scenarios with the same name
+    #         if not dff.sce_name.values[0] == "N/A": # overwrite if a row of "N/A" values present. should only happen first time
+    #             dff = df.append(dff, ignore_index=True)
 
-        data = dff.to_dict("rows")
-        # print(data)
-        return data
-        # return dash_table.DataTable(data=data, columns=columns,row_deletable=True), dff.to_json(date_format="iso", orient="split")
+    #     data = dff.to_dict("rows")
+    #     # print(data)
+    #     return data
+    #     # return dash_table.DataTable(data=data, columns=columns,row_deletable=True), dff.to_json(date_format="iso", orient="split")
+    # else:
+    #   # TODO: Alert about errors in form
+    #   df = pd.DataFrame(sce_in_table)
+    #   return df.to_dict("rows")
+###EJ(6/12/2021)
+    if form_valid:
+      if n_clicks == 1:
+          dff = df.copy()
+          data = dff.to_dict("rows")
+      elif n_clicks > 1:
+          # # Read previously saved scenario summaries  https://dash.plotly.com/sharing-data-between-callbacks
+          # dff = pd.read_json(intermediate, orient="split")
+          dff = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
+          
+          if scenario not in dff.sce_name.values: # prevent adding scenarios with the same name.
+              dff = dff.append(df, ignore_index=True)
+
+          data = dff.to_dict("rows")
+      return data
     else:
       # TODO: Alert about errors in form
       df = pd.DataFrame(sce_in_table)
       return df.to_dict("rows")
-
 #===============================
 #2nd callback to run ALL scenarios
 @app.callback(Output(component_id="yieldbox-container", component_property="children"),
