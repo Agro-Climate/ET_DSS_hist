@@ -1097,7 +1097,7 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
     planting_density = str(planting_density)
 
     # Make a new dataframe to return to scenario-summary table
-    df = pd.DataFrame({
+    current_sce = pd.DataFrame({
         "sce_name": [scenario], "Crop": [crop], "Cultivar": [cultivar[7:]], "stn_name": [station], "Plt-date": [planting_date[5:]], 
         "FirstYear": [start_year], "LastYear": [end_year], "soil": [soil_type], "iH2O": [initial_soil_moisture], 
         "iNO3": [initial_soil_no3_content], "plt_density": [planting_density], "TargetYr": [target_year], 
@@ -1113,96 +1113,96 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
     fert_valid = True
     if fert_app == "Fert":
         # Read fertilizer application information
-        df_fert = pd.DataFrame(fert_in_table)
+        currrent_fert = pd.DataFrame(fert_in_table)
         fert_frame =  pd.DataFrame({
-            "Fert_1_DOY": [df_fert.DAP.values[0]], "Fert_1_Kg": [df_fert.NAmount.values[0]],
-            "Fert_2_DOY": [df_fert.DAP.values[1]], "Fert_2_Kg": [df_fert.NAmount.values[1]],
-            "Fert_3_DOY": [df_fert.DAP.values[2]], "Fert_3_Kg": [df_fert.NAmount.values[2]],
-            "Fert_4_DOY": [df_fert.DAP.values[3]], "Fert_4_Kg": [df_fert.NAmount.values[3]],
+            "Fert_1_DOY": [currrent_fert.DAP.values[0]], "Fert_1_Kg": [currrent_fert.NAmount.values[0]],
+            "Fert_2_DOY": [currrent_fert.DAP.values[1]], "Fert_2_Kg": [currrent_fert.NAmount.values[1]],
+            "Fert_3_DOY": [currrent_fert.DAP.values[2]], "Fert_3_Kg": [currrent_fert.NAmount.values[2]],
+            "Fert_4_DOY": [currrent_fert.DAP.values[3]], "Fert_4_Kg": [currrent_fert.NAmount.values[3]],
         })
-        df.update(fert_frame)
+        current_sce.update(fert_frame)
 
         # validate days after planting values to be positive integers in the range 0-365
         if ( # invalid if float or no input
-                not isinstance(df.Fert_1_DOY.values[0], int)
-            or  not isinstance(df.Fert_2_DOY.values[0], int)
-            or  not isinstance(df.Fert_3_DOY.values[0], int)
-            or  not isinstance(df.Fert_4_DOY.values[0], int)
-            or  df.Fert_1_DOY.values[0] == None
-            or  df.Fert_2_DOY.values[0] == None
-            or  df.Fert_3_DOY.values[0] == None
-            or  df.Fert_4_DOY.values[0] == None
+                not isinstance(current_sce.Fert_1_DOY.values[0], int)
+            or  not isinstance(current_sce.Fert_2_DOY.values[0], int)
+            or  not isinstance(current_sce.Fert_3_DOY.values[0], int)
+            or  not isinstance(current_sce.Fert_4_DOY.values[0], int)
+            or  current_sce.Fert_1_DOY.values[0] == None
+            or  current_sce.Fert_2_DOY.values[0] == None
+            or  current_sce.Fert_3_DOY.values[0] == None
+            or  current_sce.Fert_4_DOY.values[0] == None
         ):
             fert_valid = False        
         else:
             if ( # invalid if outside range   
-                    not (df.Fert_1_DOY.values[0] >= 0 and df.Fert_1_DOY.values[0] <= 365)
-                or  not (df.Fert_2_DOY.values[0] >= 0 and df.Fert_2_DOY.values[0] <= 365)
-                or  not (df.Fert_3_DOY.values[0] >= 0 and df.Fert_3_DOY.values[0] <= 365)
-                or  not (df.Fert_4_DOY.values[0] >= 0 and df.Fert_4_DOY.values[0] <= 365)
+                    not (current_sce.Fert_1_DOY.values[0] >= 0 and current_sce.Fert_1_DOY.values[0] <= 365)
+                or  not (current_sce.Fert_2_DOY.values[0] >= 0 and current_sce.Fert_2_DOY.values[0] <= 365)
+                or  not (current_sce.Fert_3_DOY.values[0] >= 0 and current_sce.Fert_3_DOY.values[0] <= 365)
+                or  not (current_sce.Fert_4_DOY.values[0] >= 0 and current_sce.Fert_4_DOY.values[0] <= 365)
             ):
                 fert_valid = False
 
         # validate nitrate amounts to be positive ints/floats
         if ( # invalid if no input
-                df.Fert_1_Kg.values[0] == None
-            or  df.Fert_2_Kg.values[0] == None
-            or  df.Fert_3_Kg.values[0] == None
-            or  df.Fert_4_Kg.values[0] == None
+                current_sce.Fert_1_Kg.values[0] == None
+            or  current_sce.Fert_2_Kg.values[0] == None
+            or  current_sce.Fert_3_Kg.values[0] == None
+            or  current_sce.Fert_4_Kg.values[0] == None
         ):
             fert_valid = False
         else:
             if ( # invalid if negative value
-                    df.Fert_1_Kg.values[0] < 0
-                or  df.Fert_2_Kg.values[0] < 0
-                or  df.Fert_3_Kg.values[0] < 0
-                or  df.Fert_4_Kg.values[0] < 0
+                    current_sce.Fert_1_Kg.values[0] < 0
+                or  current_sce.Fert_2_Kg.values[0] < 0
+                or  current_sce.Fert_3_Kg.values[0] < 0
+                or  current_sce.Fert_4_Kg.values[0] < 0
             ):
                 fert_valid = False        
     else:
-        df_fert = pd.DataFrame(columns=["DAP", "NAmount"])
+        currrent_fert = pd.DataFrame(columns=["DAP", "NAmount"])
 
     #=====================================================================
     # Write SNX file
     writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
-                        planting_density,scenario,fert_app, df_fert)
+                        planting_density,scenario,fert_app, currrent_fert)
 
     #=====================================================================
     # #Update dataframe for Enterprise Budgeting inputs
     EB_valid = True
     if EB_radio == "EB_Yes":
         # Read Enterprise budget input
-        df_EB = pd.DataFrame(EB_in_table)
+        current_EB = pd.DataFrame(EB_in_table)
         
         EB_frame =  pd.DataFrame({
-            "CropPrice": [df_EB.CropPrice.values[0]],
-            "NFertCost": [df_EB.NFertCost.values[0]],
-            "SeedCost": [df_EB.SeedCost.values[0]],
-            "OtherVariableCosts": [df_EB.OtherVariableCosts.values[0]],
-            "FixedCosts": [df_EB.FixedCosts.values[0]],
+            "CropPrice": [current_EB.CropPrice.values[0]],
+            "NFertCost": [current_EB.NFertCost.values[0]],
+            "SeedCost": [current_EB.SeedCost.values[0]],
+            "OtherVariableCosts": [current_EB.OtherVariableCosts.values[0]],
+            "FixedCosts": [current_EB.FixedCosts.values[0]],
         })
-        df.update(EB_frame)
+        current_sce.update(EB_frame)
 
         # validate budgeting inputs to be positive ints/floats
         if ( # invalid if no input
-                df.CropPrice.values[0] == None
-            or  df.NFertCost.values[0] == None
-            or  df.SeedCost.values[0] == None
-            or  df.OtherVariableCosts.values[0] == None
-            or  df.FixedCosts.values[0] == None
+                current_sce.CropPrice.values[0] == None
+            or  current_sce.NFertCost.values[0] == None
+            or  current_sce.SeedCost.values[0] == None
+            or  current_sce.OtherVariableCosts.values[0] == None
+            or  current_sce.FixedCosts.values[0] == None
         ):
             EB_valid = False
         else:
             if ( # invalid if negative value
-                    df.CropPrice.values[0] < 0
-                or  df.NFertCost.values[0] < 0
-                or  df.SeedCost.values[0] < 0
-                or  df.OtherVariableCosts.values[0] < 0
-                or  df.FixedCosts.values[0] < 0
+                    current_sce.CropPrice.values[0] < 0
+                or  current_sce.NFertCost.values[0] < 0
+                or  current_sce.SeedCost.values[0] < 0
+                or  current_sce.OtherVariableCosts.values[0] < 0
+                or  current_sce.FixedCosts.values[0] < 0
             ):
                 EB_valid = False
     # else:
-    #     df_EB = pd.DataFrame(
+    #     current_EB = pd.DataFrame(
     #         columns=["sce_name","Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
     #             "Fert_1_DOY","Fert_1_Kg","Fert_2_DOY","Fert_2_Kg","Fert_3_DOY","Fert_3_Kg","Fert_4_DOY","Fert_4_Kg",
     #             "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"
@@ -1210,49 +1210,32 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
     #     )
 
     form_valid = (
-            re.match("....", df.sce_name.values[0]) 
-        and int(df.FirstYear.values[0]) >= 1981 and int(df.FirstYear.values[0]) <= 2018 
-        and int(df.LastYear.values[0]) >= 1981 and int(df.LastYear.values[0]) <= 2018 
-        and int(df.TargetYr.values[0]) >= 1981 and int(df.TargetYr.values[0]) <= 2018 
-        and int(df.plt_density.values[0]) >= 1 and int(df.plt_density.values[0]) <= 300
+            re.match("....", current_sce.sce_name.values[0]) 
+        and int(current_sce.FirstYear.values[0]) >= 1981 and int(current_sce.FirstYear.values[0]) <= 2018 
+        and int(current_sce.LastYear.values[0]) >= 1981 and int(current_sce.LastYear.values[0]) <= 2018 
+        and int(current_sce.TargetYr.values[0]) >= 1981 and int(current_sce.TargetYr.values[0]) <= 2018 
+        and int(current_sce.plt_density.values[0]) >= 1 and int(current_sce.plt_density.values[0]) <= 300
         and fert_valid and EB_valid
     )
 
-    # if form_valid:
-    #     # # Read previously saved scenario summaries  https://dash.plotly.com/sharing-data-between-callbacks
-    #     # dff = pd.read_json(intermediate, orient="split")
-    #     dff = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
-    #     if scenario not in dff.sce_name.values: # prevent adding scenarios with the same name
-    #         if not dff.sce_name.values[0] == "N/A": # overwrite if a row of "N/A" values present. should only happen first time
-    #             dff = df.append(dff, ignore_index=True)
-
-    #     data = dff.to_dict("rows")
-    #     # print(data)
-    #     return data
-    #     # return dash_table.DataTable(data=data, columns=columns,row_deletable=True), dff.to_json(date_format="iso", orient="split")
-    # else:
-    #   # TODO: Alert about errors in form
-    #   df = pd.DataFrame(sce_in_table)
-    #   return df.to_dict("rows")
-###EJ(6/12/2021)
+    existing_sces = pd.DataFrame(sce_in_table)
     if form_valid:
-      if n_clicks == 1:
-          dff = df.copy()
-          data = dff.to_dict("rows")
-      elif n_clicks > 1:
-          # # Read previously saved scenario summaries  https://dash.plotly.com/sharing-data-between-callbacks
-          # dff = pd.read_json(intermediate, orient="split")
-          dff = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
-          
-          if scenario not in dff.sce_name.values: # prevent adding scenarios with the same name.
-              dff = dff.append(df, ignore_index=True)
-
-          data = dff.to_dict("rows")
-      return data
+        # Read previously saved scenario summaries  https://dash.plotly.com/sharing-data-between-callbacks
+        # all_sces = pd.read_json(intermediate, orient="split")
+            
+        if n_clicks == 1 or existing_sces.sce_name.values[0] == "N/A": # overwrite if a row of "N/A" values present. should only happen first time
+            data = current_sce.to_dict("rows")
+        else:
+            if scenario in existing_sces.sce_name.values: # prevent adding scenarios with the same name.
+                data = existing_sces.to_dict("rows")
+            else:
+                all_sces = existing_sces.append(current_sce, ignore_index=True)
+                data = all_sces.to_dict("rows")
+        return data
     else:
-      # TODO: Alert about errors in form
-      df = pd.DataFrame(sce_in_table)
-      return df.to_dict("rows")
+        # TODO: Alert about errors in form
+        return existing_sces.to_dict("rows")
+
 #===============================
 #2nd callback to run ALL scenarios
 @app.callback(Output(component_id="yieldbox-container", component_property="children"),
