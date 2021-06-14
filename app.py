@@ -307,7 +307,7 @@ app.layout = html.Div( ## MAIN APP DIV
                   dbc.FormGroup([ # Planting Density
                     dbc.Label(["12) Planting Density", html.Span(" (plants/m"), html.Sup("2"), html.Span(")"), ], html_for="plt-density", sm=3, className="p-0", align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="plt-density", value=5, min=1, max=300, step=0.01),
+                      dbc.Input(type="number", id="plt-density", value=5, min=1, max=300, step=0.1),
                     ],
                     xl=9,
                     ),
