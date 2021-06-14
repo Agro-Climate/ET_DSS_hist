@@ -371,6 +371,11 @@ app.layout = html.Div( ## MAIN APP DIV
                         value="EB_No"
                       ),
                       html.Div([ # ENTERPRISE BUDGETING TABLE
+                        # dbc.Input(type="number", id="crop-price", value="0", step="0.1"),
+                        # dbc.Input(type="number", id="seed-cost", value="0", step="0.1"),
+                        # dbc.Input(type="number", id="fert-cost", value="0", step="0.1"),
+                        # dbc.Input(type="number", id="fixed-costs", value="0", step="0.1"),
+                        # dbc.Input(type="number", id="variable-costs", value="0", step="0.1"),
                         dash_table.DataTable(id="EB-table",
                           style_cell = {
                           "font_family": "sans-serif", #"cursive",
@@ -1219,7 +1224,7 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
         and int(current_sce.FirstYear.values[0]) >= 1981 and int(current_sce.FirstYear.values[0]) <= 2018 
         and int(current_sce.LastYear.values[0]) >= 1981 and int(current_sce.LastYear.values[0]) <= 2018 
         and int(current_sce.TargetYr.values[0]) >= 1981 and int(current_sce.TargetYr.values[0]) <= 2018 
-        and int(current_sce.plt_density.values[0]) >= 1 and int(current_sce.plt_density.values[0]) <= 300
+        and float(current_sce.plt_density.values[0]) >= 1 and float(current_sce.plt_density.values[0]) <= 300
         and fert_valid and EB_valid
     )
 
