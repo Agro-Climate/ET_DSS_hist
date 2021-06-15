@@ -186,8 +186,6 @@ app.layout = html.Div( ## MAIN APP DIV
                   ],
                   row=True
                   ),
-
-                  #  type="number"
                   dbc.FormGroup([ # Start Year
                     dbc.Label("5) Start Year", html_for="year1", sm=3, className="p-0", align="start", ),
                     dbc.Col([
@@ -315,7 +313,7 @@ app.layout = html.Div( ## MAIN APP DIV
                   row=True
                   ),
                   dbc.FormGroup([ # Fertilizer Application
-                    dbc.Label("13) Fertilizer Application", html_for="fert_input", xl=3, className="p-0", align="start", ),
+                    dbc.Label("13) Fertilizer Application", html_for="fert_input", sm=3, className="p-0", align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                         id="fert_input",
@@ -327,31 +325,121 @@ app.layout = html.Div( ## MAIN APP DIV
                         value="No_fert"
                       ),
                       html.Div([ # FERTILIZER INPUT TABLE
-                        dash_table.DataTable(id="fert-table",
-                          style_cell = {
-                            "font_family": "sans-serif",
-                            "whiteSpace": "normal",
-                            "font_size": "14px",
-                            "text_align": "center"
-                          },
-                          columns=([
-                            {"id": "DAP", "name": "Days After Planting",  "type": "numeric", },
-                            {"id": "NAmount", "name": "Amount of N (kg/ha)",  "type": "numeric", },
-                          ]),
-                          data=[
-                            dict(**{param: 0 for param in ["DAP", "NAmount"]}) for i in range(1, 5)
+                        dbc.Row([
+                          dbc.Col([  
+                            dbc.Label("Days After Planting", className="text-center", ),
+                            html.Div([
+                              dbc.FormGroup([
+                                dbc.Label("1st", html_for="fert-day1", ),
+                                dbc.Col([
+                                  dbc.Input(type="number", id="fert-day1", value=0, min="0", max="365", ),
+                                ],
+                                ),
+                              ],
+                              row=True,
+                              ),
+                              dbc.FormGroup([
+                                dbc.Label("2nd", html_for="fert-day2", ),
+                                dbc.Col([
+                                  dbc.Input(type="number", id="fert-day2", value=0, min="0", max="365", ),
+                                ],
+                                ),
+                              ],
+                              row=True,
+                              ),
+                              dbc.FormGroup([
+                                dbc.Label("3rd", html_for="fert-day3", ),
+                                dbc.Col([
+                                  dbc.Input(type="number", id="fert-day3", value=0, min="0", max="365", ),
+                                ],
+                                ),
+                              ],
+                              row=True,
+                              ),
+                              dbc.FormGroup([
+                                dbc.Label("4th", html_for="fert-day4", ),
+                                dbc.Col([
+                                  dbc.Input(type="number", id="fert-day4", value=0, min="0", max="365", ),
+                                ],
+                                ),
+                              ],
+                              row=True,
+                              ),
+                            ],
+                            ),
                           ],
-                          style_cell_conditional=[
-                            {"if": {"id": "DAP"}, "width": "30%"}, # Failed component prop type: Invalid component prop (when app.run_server() Debug=True)
-                            {"if": {"id": "NAmount"}, "width": "30%"},
+                          ),
+                          dbc.Col([  
+                            dbc.Label("Amount of N (kg/ha)", className="text-center", ),
+                            html.Div([
+                              dbc.FormGroup([
+                                dbc.Label("1st", html_for="fert-amt1", ),
+                                dbc.Col([
+                                  dbc.Input(type="number", id="fert-amt1", value=0, min="0", step="0.1", ),
+                                ],
+                                ),
+                              ],
+                              row=True,
+                              ),
+                              dbc.FormGroup([
+                                dbc.Label("2nd", html_for="fert-amt2", ),
+                                dbc.Col([
+                                  dbc.Input(type="number", id="fert-amt2", value=0, min="0", step="0.1", ),
+                                ],
+                                ),
+                              ],
+                              row=True,
+                              ),
+                              dbc.FormGroup([
+                                dbc.Label("3rd", html_for="fert-amt3", ),
+                                dbc.Col([
+                                  dbc.Input(type="number", id="fert-amt3", value=0, min="0", step="0.1", ),
+                                ],
+                                ),
+                              ],
+                              row=True,
+                              ),
+                              dbc.FormGroup([
+                                dbc.Label("4th", html_for="fert-amt4", ),
+                                dbc.Col([
+                                  dbc.Input(type="number", id="fert-amt4", value=0, min="0", step="0.1", ),
+                                ],
+                                ),
+                              ],
+                              row=True,
+                              ),
+                            ],
+                            ),
                           ],
-                          editable=True    
-                        ),
+                          ),
+                        ],
+                        ), 
                       ],
                       id="fert-table-Comp", 
-                      className="w-50",
+                      className="w-100",
                       style={"display": "none"},
                       ),
+
+                      # dash_table.DataTable(id="fert-table",
+                        #   style_cell = {
+                        #     "font_family": "sans-serif",
+                        #     "whiteSpace": "normal",
+                        #     "font_size": "14px",
+                        #     "text_align": "center"
+                        #   },
+                        #   columns=([
+                        #     {"id": "DAP", "name": "Days After Planting",  "type": "numeric", },
+                        #     {"id": "NAmount", "name": "Amount of N (kg/ha)",  "type": "numeric", },
+                        #   ]),
+                        #   data=[
+                        #     dict(**{param: 0 for param in ["DAP", "NAmount"]}) for i in range(1, 5)
+                        #   ],
+                        #   style_cell_conditional=[
+                        #     {"if": {"id": "DAP"}, "width": "30%"}, # Failed component prop type: Invalid component prop (when app.run_server() Debug=True)
+                        #     {"if": {"id": "NAmount"}, "width": "30%"},
+                        #   ],
+                        #   editable=True    
+                        # ),
                     ],
                     xl=9,
                     ),
@@ -371,33 +459,62 @@ app.layout = html.Div( ## MAIN APP DIV
                         value="EB_No"
                       ),
                       html.Div([ # ENTERPRISE BUDGETING TABLE
-                        # dbc.Input(type="number", id="crop-price", value="0", step="0.1"),
-                        # dbc.Input(type="number", id="seed-cost", value="0", step="0.1"),
-                        # dbc.Input(type="number", id="fert-cost", value="0", step="0.1"),
-                        # dbc.Input(type="number", id="fixed-costs", value="0", step="0.1"),
-                        # dbc.Input(type="number", id="variable-costs", value="0", step="0.1"),
-                        dash_table.DataTable(id="EB-table",
-                          style_cell = {
-                          "font_family": "sans-serif", #"cursive",
-                          "whiteSpace": "normal",
-                          "font_size": "14px",
-                          "text_align": "center"},
-                          columns=([
-                            {"id": "CropPrice", "name": "Crop Price (ETB/kg)", "type": "numeric",},
-                            {"id": "NFertCost", "name": "Fertilizer Cost (ETB/kg)", "type": "numeric",},
-                            {"id": "SeedCost", "name": "Seed Cost (ETB/ha)", "type": "numeric",},
-                            {"id": "OtherVariableCosts", "name": "Other Variable Costs (ETB/ha)", "type": "numeric",},
-                            {"id": "FixedCosts", "name": "Fixed Costs (ETB/ha)", "type": "numeric",},
+                        dbc.Row([
+                          dbc.Col([  
+                            dbc.FormGroup([
+                              dbc.Label("Crop Price", html_for="crop-price", style={"height": "5vh"}, align="start", ),
+                              dbc.Input(type="number", id="crop-price", value="0", min="0", step="0.1", ),
+                            ]),
                           ]),
-                          data=[
-                            dict(**{param: 0 for param in ["CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]}) for i in range(1, 2)
-                          ],
-                          style_cell_conditional=[
-                            {"if": {"id": "CropPrice"}, "width": "20%"}, # Failed component prop type: Invalid component prop (when app.run_server() Debug=True)
-                            {"if": {"id": "NFertCost"}, "width": "20%"},
-                          ],
-                        editable=True,
-                        ),
+                          dbc.Col([  
+                            dbc.FormGroup([
+                              dbc.Label("Seed Cost", html_for="seed-cost", style={"height": "5vh"}, align="start", ),
+                              dbc.Input(type="number", id="seed-cost", value="0", min="0", step="0.1", ),
+                            ]),
+                          ]),
+                          dbc.Col([  
+                            dbc.FormGroup([
+                              dbc.Label("Fertilizer Cost", html_for="fert-cost", style={"height": "5vh"}, align="start", ),
+                              dbc.Input(type="number", id="fert-cost", value="0", min="0", step="0.1", ),
+                            ]),
+                          ]),
+                          dbc.Col([  
+                            dbc.FormGroup([
+                              dbc.Label("Fixed Costs", html_for="fixed-costs", style={"height": "5vh"}, align="start", ),
+                              dbc.Input(type="number", id="fixed-costs", value="0", min="0", step="0.1", ),
+                            ]),
+                          ]),
+                          dbc.Col([  
+                            dbc.FormGroup([
+                              dbc.Label("Variable Costs", html_for="variable-costs", style={"height": "5vh"}, align="start", ),
+                              dbc.Input(type="number", id="variable-costs", value="0", min="0", step="0.1", ),
+                            ]),
+                          ]),
+                        ]),
+
+                        # dash_table.DataTable(id="EB-table",
+                          #   style_cell = {
+                          #   "font_family": "sans-serif", #"cursive",
+                          #   "whiteSpace": "normal",
+                          #   "font_size": "14px",
+                          #   "text_align": "center"},
+                          #   columns=([
+                          #     {"id": "CropPrice", "name": "Crop Price (ETB/kg)", "type": "numeric",},
+                          #     {"id": "NFertCost", "name": "Fertilizer Cost (ETB/kg)", "type": "numeric",},
+                          #     {"id": "SeedCost", "name": "Seed Cost (ETB/ha)", "type": "numeric",},
+                          #     {"id": "OtherVariableCosts", "name": "Other Variable Costs (ETB/ha)", "type": "numeric",},
+                          #     {"id": "FixedCosts", "name": "Fixed Costs (ETB/ha)", "type": "numeric",},
+                          #   ]),
+                          #   data=[
+                          #     dict(**{param: 0 for param in ["CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]}) for i in range(1, 2)
+                          #   ],
+                          #   style_cell_conditional=[
+                          #     {"if": {"id": "CropPrice"}, "width": "20%"}, # Failed component prop type: Invalid component prop (when app.run_server() Debug=True)
+                          #     {"if": {"id": "NFertCost"}, "width": "20%"},
+                          #   ],
+                          # editable=True,
+                          # ),
+                        
                         html.Div([
                           html.Div("Unit: Crop Price (ETB/kg), Fertilizer Cost (ETB/N kg), Seed Cost (ETB/kg), Variable Costs (ETB/ha), Fixed Costs (ETB/ha)"),
                           html.Div("Calculation =>  Gross Margin [ETB/ha] = Revenues [ETB/ha] - Variable Costs [ETB/ha] - Fixed Costs [ETB/ha]"),
@@ -1077,13 +1194,42 @@ def show_hide_EBtable(visibility_state):
                 State("target-year", "value"),    #input 11
                 # State("intermediate-value", "children"),  #input 12 scenario summary table
                 State("fert_input", "value"),     ##input 13 fertilizer yes or no
-                State("fert-table","data"), ###input 14 fert input table
+                # State("fert-table","data"), ###input 14 fert input table
+                State("fert-day1","value"), ###input 14 fert input table
+                State("fert-amt1","value"), ###input 14 fert input table
+                State("fert-day2","value"), ###input 14 fert input table
+                State("fert-amt2","value"), ###input 14 fert input table
+                State("fert-day3","value"), ###input 14 fert input table
+                State("fert-amt3","value"), ###input 14 fert input table
+                State("fert-day4","value"), ###input 14 fert input table
+                State("fert-amt4","value"), ###input 14 fert input table
                 State("EB_radio", "value"),     ##input 15 Enterprise budgeting yes or no
-                State("EB-table","data"), #Input 16 Enterprise budget input
+                # State("EB-table","data"), #Input 16 Enterprise budget input
+                State("crop-price","value"), #Input 16 Enterprise budget input
+                State("seed-cost","value"), #Input 16 Enterprise budget input
+                State("fert-cost","value"), #Input 16 Enterprise budget input
+                State("fixed-costs","value"), #Input 16 Enterprise budget input
+                State("variable-costs","value"), #Input 16 Enterprise budget input
                 State("scenario-table","data") ###input 17 scenario summary table
             )
-def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop, cultivar, soil_type, initial_soil_moisture, initial_soil_no3_content, planting_density, scenario,
-                  target_year, fert_app, fert_in_table, EB_radio, EB_in_table, sce_in_table):
+def make_sce_table(
+    n_clicks, station, start_year, end_year, planting_date, crop, cultivar, soil_type, 
+    initial_soil_moisture, initial_soil_no3_content, planting_density, scenario, target_year, 
+    fert_app, 
+    # fert_in_table, 
+    fd1, fa1,
+    fd2, fa2,
+    fd3, fa3,
+    fd4, fa4,
+    EB_radio,
+    # EB_in_table,
+    crop_price,
+    seed_cost,
+    fert_cost,
+    fixed_costs,
+    variable_costs,
+    sce_in_table
+):
     # print(station)  #MELK
     # print(start_year)  #1981
     # print(end_year)  #2014
@@ -1099,6 +1245,37 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
     # print(station3)  #fertilizler or no-fertilizer
     # print(station4)  #fertilizler summary
     # print("station5:",EB_in_table)  #scenario summary
+
+    existing_sces = pd.DataFrame(sce_in_table)
+
+    if ( # first check that all required inputs have been given
+            scenario == None
+        or  start_year == None
+        or  end_year == None
+        or  target_year == None
+        or  planting_date == None
+        or  planting_density == None
+        or (
+                fert_app == "Fert"
+            and (
+                    fd1 == None or fa1 == None
+                or  fd2 == None or fa2 == None
+                or  fd3 == None or fa3 == None
+                or  fd4 == None or fa4 == None
+            ) 
+        )
+        or (
+                EB_radio == "EB_Yes"
+            and (
+                    crop_price == None
+                or  seed_cost == None
+                or  fert_cost == None
+                or  fixed_costs == None
+                or  variable_costs == None
+            )
+        )        
+    ):
+        return existing_sces
 
     # convert integer inputs to string
     start_year = str(start_year)
@@ -1116,101 +1293,45 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
         "CropPrice": ["-99"], "NFertCost": ["-99"], "SeedCost": ["-99"], "OtherVariableCosts": ["-99"], "FixedCosts": ["-99"],  
     })
     
-
-
     #=====================================================================
     # #Update dataframe for fertilizer inputs
     fert_valid = True
+    current_fert = pd.DataFrame(columns=["DAP", "NAmount"])
     if fert_app == "Fert":
         # Read fertilizer application information
-        currrent_fert = pd.DataFrame(fert_in_table)
+        # currrent_fert = pd.DataFrame(fert_in_table)
+        current_fert = pd.DataFrame({
+            "DAP": [fd1, fd2, fd3, fd4, ],
+            "NAmount": [fa1, fa2, fa3, fa4, ],
+        })
+
         fert_frame =  pd.DataFrame({
-            "Fert_1_DOY": [currrent_fert.DAP.values[0]], "Fert_1_Kg": [currrent_fert.NAmount.values[0]],
-            "Fert_2_DOY": [currrent_fert.DAP.values[1]], "Fert_2_Kg": [currrent_fert.NAmount.values[1]],
-            "Fert_3_DOY": [currrent_fert.DAP.values[2]], "Fert_3_Kg": [currrent_fert.NAmount.values[2]],
-            "Fert_4_DOY": [currrent_fert.DAP.values[3]], "Fert_4_Kg": [currrent_fert.NAmount.values[3]],
+            "Fert_1_DOY": [fd1], "Fert_1_Kg": [fa1],
+            "Fert_2_DOY": [fd2], "Fert_2_Kg": [fa2],
+            "Fert_3_DOY": [fd3], "Fert_3_Kg": [fa3],
+            "Fert_4_DOY": [fd4], "Fert_4_Kg": [fa4],
         })
         current_sce.update(fert_frame)
-
-        # validate days after planting values to be positive integers in the range 0-365
-        if ( # invalid if float or no input
-                not isinstance(current_sce.Fert_1_DOY.values[0], int)
-            or  not isinstance(current_sce.Fert_2_DOY.values[0], int)
-            or  not isinstance(current_sce.Fert_3_DOY.values[0], int)
-            or  not isinstance(current_sce.Fert_4_DOY.values[0], int)
-            or  current_sce.Fert_1_DOY.values[0] == None
-            or  current_sce.Fert_2_DOY.values[0] == None
-            or  current_sce.Fert_3_DOY.values[0] == None
-            or  current_sce.Fert_4_DOY.values[0] == None
-        ):
-            fert_valid = False        
-        else:
-            if ( # invalid if outside range   
-                    not (current_sce.Fert_1_DOY.values[0] >= 0 and current_sce.Fert_1_DOY.values[0] <= 365)
-                or  not (current_sce.Fert_2_DOY.values[0] >= 0 and current_sce.Fert_2_DOY.values[0] <= 365)
-                or  not (current_sce.Fert_3_DOY.values[0] >= 0 and current_sce.Fert_3_DOY.values[0] <= 365)
-                or  not (current_sce.Fert_4_DOY.values[0] >= 0 and current_sce.Fert_4_DOY.values[0] <= 365)
-            ):
-                fert_valid = False
-
-        # validate nitrate amounts to be positive ints/floats
-        if ( # invalid if no input
-                current_sce.Fert_1_Kg.values[0] == None
-            or  current_sce.Fert_2_Kg.values[0] == None
-            or  current_sce.Fert_3_Kg.values[0] == None
-            or  current_sce.Fert_4_Kg.values[0] == None
-        ):
-            fert_valid = False
-        else:
-            if ( # invalid if negative value
-                    current_sce.Fert_1_Kg.values[0] < 0
-                or  current_sce.Fert_2_Kg.values[0] < 0
-                or  current_sce.Fert_3_Kg.values[0] < 0
-                or  current_sce.Fert_4_Kg.values[0] < 0
-            ):
-                fert_valid = False        
-    else:
-        currrent_fert = pd.DataFrame(columns=["DAP", "NAmount"])
 
     #=====================================================================
     # Write SNX file
     writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
-                        planting_density,scenario,fert_app, currrent_fert)
-
+                        planting_density,scenario,fert_app, current_fert)
     #=====================================================================
     # #Update dataframe for Enterprise Budgeting inputs
     EB_valid = True
     if EB_radio == "EB_Yes":
         # Read Enterprise budget input
-        current_EB = pd.DataFrame(EB_in_table)
+        # current_EB = pd.DataFrame(EB_in_table)
         
         EB_frame =  pd.DataFrame({
-            "CropPrice": [current_EB.CropPrice.values[0]],
-            "NFertCost": [current_EB.NFertCost.values[0]],
-            "SeedCost": [current_EB.SeedCost.values[0]],
-            "OtherVariableCosts": [current_EB.OtherVariableCosts.values[0]],
-            "FixedCosts": [current_EB.FixedCosts.values[0]],
+            "CropPrice": [crop_price],
+            "NFertCost": [seed_cost],
+            "SeedCost": [fert_cost],
+            "OtherVariableCosts": [fixed_costs],
+            "FixedCosts": [variable_costs],
         })
         current_sce.update(EB_frame)
-
-        # validate budgeting inputs to be positive ints/floats
-        if ( # invalid if no input
-                current_sce.CropPrice.values[0] == None
-            or  current_sce.NFertCost.values[0] == None
-            or  current_sce.SeedCost.values[0] == None
-            or  current_sce.OtherVariableCosts.values[0] == None
-            or  current_sce.FixedCosts.values[0] == None
-        ):
-            EB_valid = False
-        else:
-            if ( # invalid if negative value
-                    current_sce.CropPrice.values[0] < 0
-                or  current_sce.NFertCost.values[0] < 0
-                or  current_sce.SeedCost.values[0] < 0
-                or  current_sce.OtherVariableCosts.values[0] < 0
-                or  current_sce.FixedCosts.values[0] < 0
-            ):
-                EB_valid = False
     # else:
     #     current_EB = pd.DataFrame(
     #         columns=["sce_name","Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
@@ -1228,7 +1349,6 @@ def make_sce_table(n_clicks, station, start_year, end_year, planting_date, crop,
         and fert_valid and EB_valid
     )
 
-    existing_sces = pd.DataFrame(sce_in_table)
     if form_valid:
         # Read previously saved scenario summaries  https://dash.plotly.com/sharing-data-between-callbacks
         # all_sces = pd.read_json(intermediate, orient="split")
