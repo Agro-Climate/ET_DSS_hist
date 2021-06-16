@@ -292,6 +292,7 @@ app.layout = html.Div( ## MAIN APP DIV
                       min_date_allowed=date(2021, 1, 1),
                       max_date_allowed=date(2021, 12, 31),
                       initial_visible_month=date(2021, 6, 5),
+                      display_format="DD/MM/YYYY",
                       date=date(2021, 6, 15),
                       ),
                       dbc.FormText("Only Month and Date are counted"),
