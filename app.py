@@ -118,7 +118,7 @@ app.layout = html.Div( ## MAIN APP DIV
                   dbc.FormGroup([ # Scenario
                     dbc.Label("1) Scenario Name", html_for="sce-name", sm=3, className="p-0", align="start", ),
                     dbc.Col([
-                      dbc.Input(type="text", id="sce-name", value="", minLength=4, maxLength=4, ),
+                      dbc.Input(type="text", id="sce-name", value="", minLength=4, maxLength=4, required="required", ),
                     ],
                     xl=9,
                     ),
@@ -139,7 +139,7 @@ app.layout = html.Div( ## MAIN APP DIV
                           {"label": "Mahoni", "value": "MAHO"},
                           {"label": "Kobo", "value": "KOBO"}
                         ],
-                        value="MELK"
+                        value="MELK",
                       ),
                     ],
                     xl=9,
@@ -159,7 +159,7 @@ app.layout = html.Div( ## MAIN APP DIV
                           {"label": "Sorghum", "value": "SG"},
                         ],
                         labelStyle = {"display": "inline-block","margin-right": 10},
-                        value="MZ"
+                        value="MZ",
                       ),
                     ],
                     xl=9,
@@ -178,7 +178,7 @@ app.layout = html.Div( ## MAIN APP DIV
                           {"label": "CIMT17 BH660-FAW-40%", "value": "CIMT17 BH660-FAW-40%"},
                           {"label": "CIMT19 MELKASA2-FAW-40%", "value": "CIMT19 MELKASA2-FAW-40%"},
                           {"label": "CIMT21 MELKASA-LowY", "value": "CIMT21 MELKASA-LowY"},], 
-                        value="CIMT19 MELKASA2-FAW-40%"
+                        value="CIMT19 MELKASA2-FAW-40%",
                       ),
                     ],
                     xl=9,
@@ -189,7 +189,7 @@ app.layout = html.Div( ## MAIN APP DIV
                   dbc.FormGroup([ # Start Year
                     dbc.Label("5) Start Year", html_for="year1", sm=3, className="p-0", align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="year1", placeholder="YYYY", value="1981", min=1981, max=2018, ),
+                      dbc.Input(type="number", id="year1", placeholder="YYYY", value="1981", min=1981, max=2018, required="required", ),
                       dbc.FormText("(No earlier than 1981)"),
                     ],
                     xl=9,
@@ -200,7 +200,7 @@ app.layout = html.Div( ## MAIN APP DIV
                   dbc.FormGroup([ # End Year
                     dbc.Label("6) End Year", html_for="year2", sm=3, className="p-0", align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="year2", placeholder="YYYY", value="2018", min=1981, max=2018, ),
+                      dbc.Input(type="number", id="year2", placeholder="YYYY", value="2018", min=1981, max=2018, required="required", ),
                       dbc.FormText("(No later than 2018)"),
                     ],
                     xl=9,
@@ -211,7 +211,7 @@ app.layout = html.Div( ## MAIN APP DIV
                   dbc.FormGroup([ # Year to Highlight
                     dbc.Label("7) Year to Highlight", html_for="target-year", sm=3, className="p-0", align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="target-year", placeholder="YYYY", value="2015",min=1981, max=2018, ),
+                      dbc.Input(type="number", id="target-year", placeholder="YYYY", value="2015",min=1981, max=2018, required="required", ),
                       dbc.FormText("Type a specific year you remember (e.g., drought year) and want to compare with a full climatology distribution"),
                     ],
                     xl=9,
@@ -240,7 +240,7 @@ app.layout = html.Div( ## MAIN APP DIV
                           {"label": "ETET000022(MIES, C)", "value": "ETET000022"},
                           {"label": "ETET001_22(MIES, C, shallow", "value": "ETET001_22"},
                         ],
-                        value="ETET001_18"
+                        value="ETET001_18",
                       ),
                     ],
                     xl=9,
@@ -259,7 +259,7 @@ app.layout = html.Div( ## MAIN APP DIV
                           {"label": "70% of AWC", "value": "0.7"},
                           {"label": "100% of AWC", "value": "1.0"},
                         ], 
-                        value="0.5"  
+                        value="0.5",
                       ),
                     ],
                     xl=9,
@@ -276,7 +276,7 @@ app.layout = html.Div( ## MAIN APP DIV
                           {"label": "High(65 N kg/ha)", "value": "H"},
                           {"label": "Low(23 N kg/ha)", "value": "L"},
                         ], 
-                        value="L"
+                        value="L",
                       ),                                      
                     ],
                     xl=9,
@@ -292,7 +292,7 @@ app.layout = html.Div( ## MAIN APP DIV
                       min_date_allowed=date(2021, 1, 1),
                       max_date_allowed=date(2021, 12, 31),
                       initial_visible_month=date(2021, 6, 5),
-                      date=date(2021, 6, 15)
+                      date=date(2021, 6, 15),
                       ),
                       dbc.FormText("Only Month and Date are counted"),
                     ],
@@ -305,7 +305,7 @@ app.layout = html.Div( ## MAIN APP DIV
                   dbc.FormGroup([ # Planting Density
                     dbc.Label(["12) Planting Density", html.Span(" (plants/m"), html.Sup("2"), html.Span(")"), ], html_for="plt-density", sm=3, className="p-0", align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="plt-density", value=5, min=1, max=300, step=0.1),
+                      dbc.Input(type="number", id="plt-density", value=5, min=1, max=300, step=0.1, required="required", ),
                     ],
                     xl=9,
                     ),
@@ -322,7 +322,7 @@ app.layout = html.Div( ## MAIN APP DIV
                           {"label": "No Fertilizer", "value": "No_fert"},
                         ],
                         labelStyle = {"display": "inline-block","margin-right": 10},
-                        value="No_fert"
+                        value="No_fert",
                       ),
                       html.Div([ # FERTILIZER INPUT TABLE
                         dbc.Row([
@@ -332,7 +332,7 @@ app.layout = html.Div( ## MAIN APP DIV
                               dbc.FormGroup([
                                 dbc.Label("1st", html_for="fert-day1", ),
                                 dbc.Col([
-                                  dbc.Input(type="number", id="fert-day1", value=0, min="0", max="365", ),
+                                  dbc.Input(type="number", id="fert-day1", value=0, min="0", max="365", required="required", ),
                                 ],
                                 ),
                               ],
@@ -341,7 +341,7 @@ app.layout = html.Div( ## MAIN APP DIV
                               dbc.FormGroup([
                                 dbc.Label("2nd", html_for="fert-day2", ),
                                 dbc.Col([
-                                  dbc.Input(type="number", id="fert-day2", value=0, min="0", max="365", ),
+                                  dbc.Input(type="number", id="fert-day2", value=0, min="0", max="365", required="required", ),
                                 ],
                                 ),
                               ],
@@ -350,7 +350,7 @@ app.layout = html.Div( ## MAIN APP DIV
                               dbc.FormGroup([
                                 dbc.Label("3rd", html_for="fert-day3", ),
                                 dbc.Col([
-                                  dbc.Input(type="number", id="fert-day3", value=0, min="0", max="365", ),
+                                  dbc.Input(type="number", id="fert-day3", value=0, min="0", max="365", required="required", ),
                                 ],
                                 ),
                               ],
@@ -359,7 +359,7 @@ app.layout = html.Div( ## MAIN APP DIV
                               dbc.FormGroup([
                                 dbc.Label("4th", html_for="fert-day4", ),
                                 dbc.Col([
-                                  dbc.Input(type="number", id="fert-day4", value=0, min="0", max="365", ),
+                                  dbc.Input(type="number", id="fert-day4", value=0, min="0", max="365", required="required", ),
                                 ],
                                 ),
                               ],
@@ -375,7 +375,7 @@ app.layout = html.Div( ## MAIN APP DIV
                               dbc.FormGroup([
                                 dbc.Label("1st", html_for="fert-amt1", ),
                                 dbc.Col([
-                                  dbc.Input(type="number", id="fert-amt1", value=0, min="0", step="0.1", ),
+                                  dbc.Input(type="number", id="fert-amt1", value=0, min="0", step="0.1", required="required", ),
                                 ],
                                 ),
                               ],
@@ -384,7 +384,7 @@ app.layout = html.Div( ## MAIN APP DIV
                               dbc.FormGroup([
                                 dbc.Label("2nd", html_for="fert-amt2", ),
                                 dbc.Col([
-                                  dbc.Input(type="number", id="fert-amt2", value=0, min="0", step="0.1", ),
+                                  dbc.Input(type="number", id="fert-amt2", value=0, min="0", step="0.1", required="required", ),
                                 ],
                                 ),
                               ],
@@ -393,7 +393,7 @@ app.layout = html.Div( ## MAIN APP DIV
                               dbc.FormGroup([
                                 dbc.Label("3rd", html_for="fert-amt3", ),
                                 dbc.Col([
-                                  dbc.Input(type="number", id="fert-amt3", value=0, min="0", step="0.1", ),
+                                  dbc.Input(type="number", id="fert-amt3", value=0, min="0", step="0.1", required="required", ),
                                 ],
                                 ),
                               ],
@@ -402,7 +402,7 @@ app.layout = html.Div( ## MAIN APP DIV
                               dbc.FormGroup([
                                 dbc.Label("4th", html_for="fert-amt4", ),
                                 dbc.Col([
-                                  dbc.Input(type="number", id="fert-amt4", value=0, min="0", step="0.1", ),
+                                  dbc.Input(type="number", id="fert-amt4", value=0, min="0", step="0.1", required="required", ),
                                 ],
                                 ),
                               ],
@@ -456,38 +456,38 @@ app.layout = html.Div( ## MAIN APP DIV
                           {"label": "No", "value": "EB_No"},
                         ],
                         labelStyle = {"display": "inline-block","margin-right": 10},
-                        value="EB_No"
+                        value="EB_No",
                       ),
                       html.Div([ # ENTERPRISE BUDGETING TABLE
                         dbc.Row([
                           dbc.Col([  
                             dbc.FormGroup([
                               dbc.Label("Crop Price", html_for="crop-price", style={"height": "5vh"}, align="start", ),
-                              dbc.Input(type="number", id="crop-price", value="0", min="0", step="0.1", ),
+                              dbc.Input(type="number", id="crop-price", value="0", min="0", step="0.1", required="required", ),
                             ]),
                           ]),
                           dbc.Col([  
                             dbc.FormGroup([
                               dbc.Label("Seed Cost", html_for="seed-cost", style={"height": "5vh"}, align="start", ),
-                              dbc.Input(type="number", id="seed-cost", value="0", min="0", step="0.1", ),
+                              dbc.Input(type="number", id="seed-cost", value="0", min="0", step="0.1", required="required", ),
                             ]),
                           ]),
                           dbc.Col([  
                             dbc.FormGroup([
                               dbc.Label("Fertilizer Cost", html_for="fert-cost", style={"height": "5vh"}, align="start", ),
-                              dbc.Input(type="number", id="fert-cost", value="0", min="0", step="0.1", ),
+                              dbc.Input(type="number", id="fert-cost", value="0", min="0", step="0.1", required="required", ),
                             ]),
                           ]),
                           dbc.Col([  
                             dbc.FormGroup([
                               dbc.Label("Fixed Costs", html_for="fixed-costs", style={"height": "5vh"}, align="start", ),
-                              dbc.Input(type="number", id="fixed-costs", value="0", min="0", step="0.1", ),
+                              dbc.Input(type="number", id="fixed-costs", value="0", min="0", step="0.1", required="required", ),
                             ]),
                           ]),
                           dbc.Col([  
                             dbc.FormGroup([
                               dbc.Label("Variable Costs", html_for="variable-costs", style={"height": "5vh"}, align="start", ),
-                              dbc.Input(type="number", id="variable-costs", value="0", min="0", step="0.1", ),
+                              dbc.Input(type="number", id="variable-costs", value="0", min="0", step="0.1", required="required", ),
                             ]),
                           ]),
                         ]),
