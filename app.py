@@ -463,31 +463,56 @@ app.layout = html.Div( ## MAIN APP DIV
                         dbc.Row([
                           dbc.Col([  
                             dbc.FormGroup([
-                              dbc.Label("Crop Price[ETB/kg]", html_for="crop-price", style={"height": "5vh"}, align="start", ),
+                              html.Div([
+                                dbc.Label("Crop Price", html_for="crop-price", align="start", ),
+                                html.Div("[ETB/kg]"),
+                              ],
+                              style={"height": "12vh"}, 
+                              ),
                               dbc.Input(type="number", id="crop-price", value="0", min="0", step="0.1", required="required", ),
                             ]),
                           ]),
                           dbc.Col([  
                             dbc.FormGroup([
-                              dbc.Label("Fertilizer Price[ETB/N kg]", html_for="fert-cost", style={"height": "5vh"}, align="start", ),
+                              html.Div([
+                                dbc.Label("Fertilizer Price", html_for="fert-cost", align="start", ),
+                                html.Div("[ETB/N kg]"),
+                              ],
+                              style={"height": "12vh"}, 
+                              ),
                               dbc.Input(type="number", id="fert-cost", value="0", min="0", step="0.1", required="required", ),
                             ]),
                           ]),
                           dbc.Col([  
                             dbc.FormGroup([
-                              dbc.Label("Seed Cost[ETB/ha]", html_for="seed-cost", style={"height": "5vh"}, align="start", ),
+                              html.Div([
+                                dbc.Label("Seed Cost", html_for="seed-cost", align="start", ),
+                                html.Div("[ETB/ha]"),
+                              ],
+                              style={"height": "12vh"}, 
+                              ),
                               dbc.Input(type="number", id="seed-cost", value="0", min="0", step="0.1", required="required", ),
                             ]),
                           ]),
                           dbc.Col([  
                             dbc.FormGroup([
-                              dbc.Label("Other Variable Costs[ETB/ha]", html_for="variable-costs", style={"height": "5vh"}, align="start", ),
+                              html.Div([
+                                dbc.Label("Other Variable Costs", html_for="variable-costs", align="start", ),
+                                html.Div("[ETB/ha]"),
+                              ],
+                              style={"height": "12vh"}, 
+                              ),
                               dbc.Input(type="number", id="variable-costs", value="0", min="0", step="0.1", required="required", ),
                             ]),
                           ]),
                           dbc.Col([  
                             dbc.FormGroup([
-                              dbc.Label("Fixed Costs[ETB/ha]", html_for="fixed-costs", style={"height": "5vh"}, align="start", ),
+                              html.Div([
+                                dbc.Label("Fixed Costs", html_for="fixed-costs", align="start", ),
+                                html.Div("[ETB/ha]"),
+                              ],
+                              style={"height": "12vh"}, 
+                              ),
                               dbc.Input(type="number", id="fixed-costs", value="0", min="0", step="0.1", required="required", ),
                             ]),
                           ]),
