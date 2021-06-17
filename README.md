@@ -2,7 +2,8 @@
 
 A minimal working version of ET DSS using Docker, Flask and Heroku.
 
-A demo is hosted [here](https://ethiopia-dss-demo.herokuapp.com/).
+The first demo is hosted [here](https://ethiopia-dss-demo.herokuapp.com/).
+Actual working version for Ethiopia is hosted [here] (https://simagri-et.herokuapp.com/).
 
 ## Warning for Deployment on Linux:
 - `Summary.OUT` (not SUMMARY)
