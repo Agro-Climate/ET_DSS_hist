@@ -469,28 +469,29 @@ app.layout = html.Div( ## MAIN APP DIV
                           ]),
                           dbc.Col([  
                             dbc.FormGroup([
-                              dbc.Label("Seed Cost[ETB/kg]", html_for="seed-cost", style={"height": "5vh"}, align="start", ),
-                              dbc.Input(type="number", id="seed-cost", value="0", min="0", step="0.1", required="required", ),
-                            ]),
-                          ]),
-                          dbc.Col([  
-                            dbc.FormGroup([
-                              dbc.Label("Fertilizer Cost[ETB/kg]", html_for="fert-cost", style={"height": "5vh"}, align="start", ),
+                              dbc.Label("Fertilizer Price[ETB/N kg]", html_for="fert-cost", style={"height": "5vh"}, align="start", ),
                               dbc.Input(type="number", id="fert-cost", value="0", min="0", step="0.1", required="required", ),
                             ]),
                           ]),
                           dbc.Col([  
                             dbc.FormGroup([
-                              dbc.Label("Other Variable Costs[ETB/kg]", html_for="variable-costs", style={"height": "5vh"}, align="start", ),
+                              dbc.Label("Seed Cost[ETB/ha]", html_for="seed-cost", style={"height": "5vh"}, align="start", ),
+                              dbc.Input(type="number", id="seed-cost", value="0", min="0", step="0.1", required="required", ),
+                            ]),
+                          ]),
+                          dbc.Col([  
+                            dbc.FormGroup([
+                              dbc.Label("Other Variable Costs[ETB/ha]", html_for="variable-costs", style={"height": "5vh"}, align="start", ),
                               dbc.Input(type="number", id="variable-costs", value="0", min="0", step="0.1", required="required", ),
                             ]),
                           ]),
                           dbc.Col([  
                             dbc.FormGroup([
-                              dbc.Label("Fixed Costs[ETB/kg]", html_for="fixed-costs", style={"height": "5vh"}, align="start", ),
+                              dbc.Label("Fixed Costs[ETB/ha]", html_for="fixed-costs", style={"height": "5vh"}, align="start", ),
                               dbc.Input(type="number", id="fixed-costs", value="0", min="0", step="0.1", required="required", ),
                             ]),
                           ]),
+                          dbc.FormText("See the Tutorial for more details of calculation"),
                         ]),
 
                         # dash_table.DataTable(id="EB-table",
