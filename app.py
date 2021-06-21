@@ -661,17 +661,14 @@ app.layout = html.Div( ## MAIN APP DIV
                       dbc.Row([
                         dbc.Col(
                           html.Div(id="yield-BN-container", 
-                          # style={"width": "33%", "display": "inline-block"}
                           ),
                         md=4),
                         dbc.Col(
                           html.Div(id="yield-NN-container", 
-                          # style={"width": "33%", "display": "inline-block"}
                           ),
                         md=4),
                         dbc.Col(
                           html.Div(id="yield-AN-container", 
-                          # style={"width": "33%", "display": "inline-block"}
                           ),
                         md=4),
                       ]),
@@ -857,7 +854,9 @@ app.layout = html.Div( ## MAIN APP DIV
                   ),   #yield simulated output
                 ]),
               ]),
-            ], 
+            ],
+            id="EB-figures",
+            style={"display": "none"},
             ),
           ),
         ], 
@@ -1183,6 +1182,19 @@ def show_hide_EBtable(visibility_state):
     if visibility_state == "EB_No":
         return {"width": "80%","display": "none"} #"display": "none"} 
 #==============================================================
+#call back to "show/hide" Enterprise Budgetting graphs
+@app.callback(Output("EB-figures", component_property="style"),
+              Input("EB_radio", component_property="value"),
+              Input("scenario-table","data"),
+)
+def show_hide_EBtable(EB_radio, scenarios):
+    existing_sces = pd.DataFrame(scenarios)
+    if EB_radio == "EB_Yes":
+        return {}
+    else:
+        return {"display": "none"} if existing_sces.sce_name.values[0] == "N/A" or set(existing_sces.CropPrice.values) == {"-99"} else {}
+
+#==============================================================
 @app.callback(Output("scenario-table", "data"),
                 # Output("intermediate-value", "children"),
                 Input("write-button-state", "n_clicks"),
@@ -1299,7 +1311,7 @@ def make_sce_table(
         "Fert_3_DOY": ["-99"], "Fert_3_Kg": ["-99"], "Fert_4_DOY": ["-99"], "Fert_4_Kg": ["-99"], 
         "CropPrice": ["-99"], "NFertCost": ["-99"], "SeedCost": ["-99"], "OtherVariableCosts": ["-99"], "FixedCosts": ["-99"],  
     })
-    
+
     #=====================================================================
     # #Update dataframe for fertilizer inputs
     fert_valid = True
@@ -1372,6 +1384,7 @@ def make_sce_table(
     else:
         # TODO: Alert about errors in form
         return existing_sces.to_dict("rows")
+
 
 #===============================
 #2nd callback to run ALL scenarios
