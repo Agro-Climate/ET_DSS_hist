@@ -493,62 +493,65 @@ app.layout = html.Div( ## MAIN APP DIV
                 className="p-3"
                 ),
               className="overflow-auto",
-              style={"height": "67vh"},
+              style={"height": "63vh"},
               ),
 
               html.Div([ # SCENARIO TABLE
                 # Deletable summary table : EJ(5/3/2021)
                 html.Header(html.B("Scenarios"), className="card-header",),
-                html.Div([
-                  dash_table.DataTable(
-                  id="scenario-table",
-                  columns=([
-                    {"id": "sce_name", "name": "Scenario Name"},
-                    {"id": "Crop", "name": "Crop"},
-                    {"id": "Cultivar", "name": "Cultivar"},
-                    {"id": "stn_name", "name": "Station"},
-                    {"id": "Plt-date", "name": "Planting Date"},
-                    {"id": "FirstYear", "name": "First Year"},
-                    {"id": "LastYear", "name": "Last Year"},
-                    {"id": "soil", "name": "Soil Type"},
-                    {"id": "iH2O", "name": "Initial Soil Water Content"},
-                    {"id": "iNO3", "name": "Initial Soil Nitrate Content"},
-                    {"id": "TargetYr", "name": "Target Year"},
-                    {"id": "Fert_1_DOY", "name": "DOY 1st Fertilizer Applied"},
-                    {"id": "Fert_1_Kg", "name": "1st Amount Applied (Kg/ha)"},
-                    {"id": "Fert_2_DOY", "name": "DOY 2nd Fertilizer Applied"},
-                    {"id": "Fert_2_Kg", "name": "2nd Amount Applied(Kg/ha)"},
-                    {"id": "Fert_3_DOY", "name": "DOY 3rd Fertilizer Applied"},
-                    {"id": "Fert_3_Kg", "name": "3rd Amount Applied(Kg/ha)"},
-                    {"id": "Fert_4_DOY", "name": "DOY 4th Fertilizer Applied"},
-                    {"id": "Fert_4_Kg", "name": "4th Amount Applied(Kg/ha)"},
-                    {"id": "CropPrice", "name": "Crop Price"},
-                    {"id": "NFertCost", "name": "Fertilizer Cost"},
-                    {"id": "SeedCost", "name": "Seed Cost"},
-                    {"id": "OtherVariableCosts", "name": "Other Variable Costs"},
-                    {"id": "FixedCosts", "name": "Fixed Costs"},
-                  ]),
-                  data=[
-                    dict(**{param: "N/A" for param in sce_col_names}) for i in range(1, 2)
-                  ],
-                  editable=True,
-                  row_deletable=True
-                  ) 
+                dbc.FormGroup([ # SUBMIT - ADD SCENARIO
+                  dbc.Button(id="write-button-state", 
+                  n_clicks=0, 
+                  # type="submit",
+                  children="Create or Add a new Scenario", 
+                  className="w-75 d-block mx-auto my-3",
+                  color="primary"
+                  ),
+                ]),
+                dash_table.DataTable(
+                id="scenario-table",
+                columns=([
+                  {"id": "sce_name", "name": "Scenario Name"},
+                  {"id": "Crop", "name": "Crop"},
+                  {"id": "Cultivar", "name": "Cultivar"},
+                  {"id": "stn_name", "name": "Station"},
+                  {"id": "Plt-date", "name": "Planting Date"},
+                  {"id": "FirstYear", "name": "First Year"},
+                  {"id": "LastYear", "name": "Last Year"},
+                  {"id": "soil", "name": "Soil Type"},
+                  {"id": "iH2O", "name": "Initial Soil Water Content"},
+                  {"id": "iNO3", "name": "Initial Soil Nitrate Content"},
+                  {"id": "TargetYr", "name": "Target Year"},
+                  {"id": "Fert_1_DOY", "name": "DOY 1st Fertilizer Applied"},
+                  {"id": "Fert_1_Kg", "name": "1st Amount Applied (Kg/ha)"},
+                  {"id": "Fert_2_DOY", "name": "DOY 2nd Fertilizer Applied"},
+                  {"id": "Fert_2_Kg", "name": "2nd Amount Applied(Kg/ha)"},
+                  {"id": "Fert_3_DOY", "name": "DOY 3rd Fertilizer Applied"},
+                  {"id": "Fert_3_Kg", "name": "3rd Amount Applied(Kg/ha)"},
+                  {"id": "Fert_4_DOY", "name": "DOY 4th Fertilizer Applied"},
+                  {"id": "Fert_4_Kg", "name": "4th Amount Applied(Kg/ha)"},
+                  {"id": "CropPrice", "name": "Crop Price"},
+                  {"id": "NFertCost", "name": "Fertilizer Cost"},
+                  {"id": "SeedCost", "name": "Seed Cost"},
+                  {"id": "OtherVariableCosts", "name": "Other Variable Costs"},
+                  {"id": "FixedCosts", "name": "Fixed Costs"},
+                ]),
+                data=[
+                  dict(**{param: "N/A" for param in sce_col_names}) for i in range(1, 2)
                 ],
-                id="sce-table-Comp", 
-                className="overflow-auto block",
-                ),
-                # end of Deletable summary table : EJ(5/3/2021)
-              ]),
-              html.Br(),
-              dbc.FormGroup([ # SUBMIT - ADD SCENARIO
-                dbc.Button(id="write-button-state", 
-                n_clicks=0, 
-                # type="submit",
-                children="Create or Add a new Scenario", 
-                className="w-75 d-block mx-auto",
-                color="primary"
-                ),
+                style_table = {
+                  "overflowX": "auto",
+                  "minWidth": "100%",
+                },
+                fixed_columns = { "headers": True, "data": 1 },
+                style_cell = {   # all three widths are needed
+                  "minWidth": "120px", "width": "120px", "maxWidth": "150px",
+                  "overflow": "hidden",
+                  "textOverflow": "ellipsis", 
+                },
+                editable=True,
+                row_deletable=True
+                )                # end of Deletable summary table : EJ(5/3/2021)
               ]),
             ]),
 
@@ -1313,7 +1316,7 @@ def make_sce_table(
             if scenario in existing_sces.sce_name.values: # prevent adding scenarios with the same name.
                 data = existing_sces.to_dict("rows")
             else:
-                all_sces = existing_sces.append(current_sce, ignore_index=True)
+                all_sces = current_sce.append(existing_sces, ignore_index=True)
                 data = all_sces.to_dict("rows")
         return data
     else:
@@ -1589,10 +1592,12 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
               style_table = {
                 "maxHeight": "30vh",
                 "overflow": "auto",
+                "minWidth": "100%",
               },
               fixed_rows = { "headers": True, "data": 0 },
+              fixed_columns = { "headers": True, "data": 1 },
               style_cell = {   # all three widths are needed
-                "minWidth": "10px", "width": "10px", "maxWidth": "30px",
+                "minWidth": "120px", "width": "120px", "maxWidth": "150px",
                 "overflow": "hidden",
                 "textOverflow": "ellipsis", 
               }
