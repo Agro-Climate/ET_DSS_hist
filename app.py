@@ -277,7 +277,7 @@ app.layout = html.Div( ## MAIN APP DIV
                           {"label": "Low(23 N kg/ha)", "value": "L"},
                         ], 
                         value="L",
-                      ),                                      
+                      ),                
                     ],
                     xl=9,
                     ),
@@ -420,27 +420,6 @@ app.layout = html.Div( ## MAIN APP DIV
                       className="w-100",
                       style={"display": "none"},
                       ),
-
-                      # dash_table.DataTable(id="fert-table",
-                        #   style_cell = {
-                        #     "font_family": "sans-serif",
-                        #     "whiteSpace": "normal",
-                        #     "font_size": "14px",
-                        #     "text_align": "center"
-                        #   },
-                        #   columns=([
-                        #     {"id": "DAP", "name": "Days After Planting",  "type": "numeric", },
-                        #     {"id": "NAmount", "name": "Amount of N (kg/ha)",  "type": "numeric", },
-                        #   ]),
-                        #   data=[
-                        #     dict(**{param: 0 for param in ["DAP", "NAmount"]}) for i in range(1, 5)
-                        #   ],
-                        #   style_cell_conditional=[
-                        #     {"if": {"id": "DAP"}, "width": "30%"}, # Failed component prop type: Invalid component prop (when app.run_server() Debug=True)
-                        #     {"if": {"id": "NAmount"}, "width": "30%"},
-                        #   ],
-                        #   editable=True    
-                        # ),
                     ],
                     xl=9,
                     ),
@@ -498,44 +477,6 @@ app.layout = html.Div( ## MAIN APP DIV
                           ],),
                         ],),
                         dbc.FormText("See the Tutorial for more details of calculation"),
-
-                        # dash_table.DataTable(id="EB-table",
-                          #   style_cell = {
-                          #   "font_family": "sans-serif", #"cursive",
-                          #   "whiteSpace": "normal",
-                          #   "font_size": "14px",
-                          #   "text_align": "center"},
-                          #   columns=([
-                          #     {"id": "CropPrice", "name": "Crop Price (ETB/kg)", "type": "numeric",},
-                          #     {"id": "NFertCost", "name": "Fertilizer Cost (ETB/kg)", "type": "numeric",},
-                          #     {"id": "SeedCost", "name": "Seed Cost (ETB/ha)", "type": "numeric",},
-                          #     {"id": "OtherVariableCosts", "name": "Other Variable Costs (ETB/ha)", "type": "numeric",},
-                          #     {"id": "FixedCosts", "name": "Fixed Costs (ETB/ha)", "type": "numeric",},
-                          #   ]),
-                          #   data=[
-                          #     dict(**{param: 0 for param in ["CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]}) for i in range(1, 2)
-                          #   ],
-                          #   style_cell_conditional=[
-                          #     {"if": {"id": "CropPrice"}, "width": "20%"}, # Failed component prop type: Invalid component prop (when app.run_server() Debug=True)
-                          #     {"if": {"id": "NFertCost"}, "width": "20%"},
-                          #   ],
-                          # editable=True,
-                          # ),
-                        
-                        html.Div([
-                          html.Div("Unit: Crop Price (ETB/kg), Fertilizer Cost (ETB/N kg), Seed Cost (ETB/kg), Variable Costs (ETB/ha), Fixed Costs (ETB/ha)"),
-                          html.Div("Calculation =>  Gross Margin [ETB/ha] = Revenues [ETB/ha] - Variable Costs [ETB/ha] - Fixed Costs [ETB/ha]"),
-                          html.Ul([
-                            html.Li("Revenues [ETB/ha] = Yield [kg/ha] * Crop Price [ETB/kg]"),
-                            html.Li("Variable costs for fertilizer [ETB/ha] = N Fertilizer amount [N kg/ha] * cost [ETB/N kg]"),
-                            html.Li("Variable costs for seed purchase [ETB/ha]"), # = Planting Density in #9 [plants/m2] *10000 [m2/ha]* Seed Cost [ETB/plant]"),
-                            html.Div("**(reference: the price of hybrid maize seed from the MOA was about 600 ETB/100 kg compared to 50-80 ETB/100 kg for local maize seed purchased in the local market (ETB 7 = US$ 1)."),
-                            html.Li("Other variable costs [ETB/ha] may include pesticide, insurance, labor etc."),
-                            html.Li("Fixed costs [ETB/ha] may include interests for land, machinery etc."),
-                          ]),
-                        ],
-                        className="d-none"
-                        ),
                       ],
                       id="EB-table-Comp", 
                       className="w-100",
@@ -698,33 +639,45 @@ app.layout = html.Div( ## MAIN APP DIV
                 html.Div([
                   html.Div([
                     html.Div([ # ORIGINAL CSV STUFF
-                      html.Br(),
-                      #EJ(6/7/2021) to download each column separately into a csv
-                      dbc.Button(id="btn_csv_yield", 
-                      children="Download CSV for Simulated Yield", 
-                      className="w-75 d-block mx-auto",
-                      color="secondary"
-                      ),
-                      html.Br(),
-                      dbc.Button(id="btn_csv_rain", 
-                      children="Download CSV for Seasonal rainfall", 
-                      className="w-75 d-block mx-auto",
-                      color="secondary"
-                      ),
-                      html.Br(),
-                      dbc.Button(id="btn_csv_Pexe", 
-                      children="Download CSV for Prob. of exceedance", 
-                      className="w-75 d-block mx-auto",
-                      color="secondary"
+                      dbc.Row([
+                        dbc.Col(
+                          dbc.Button(id="btn_csv_yield", 
+                          children="Download CSV for Simulated Yield", 
+                          className="w-100 d-block mx-auto",
+                          color="secondary",
+                          ),
+                        md=4,
+                        ),
+                        dbc.Col(
+                          dbc.Button(id="btn_csv_Pexe", 
+                          children="Download CSV for Prob. of Exceedance", 
+                          className="w-100 d-block mx-auto",
+                          color="secondary",
+                          ),
+                        md=4,
+                        ),
+                        dbc.Col(
+                          dbc.Button(id="btn_csv_rain", 
+                          children="Download CSV for Seasonal Rainfall", 
+                          className="w-100 d-block mx-auto",
+                          color="secondary",
+                          ),
+                        md=4,
+                        ),
+                      ],
+                      className="m-3",
                       ),
                       # dcc.Download(id="download-dataframe-csv"),
                       Download(id="download-dataframe-csv-yield"),
                       Download(id="download-dataframe-csv-rain"),
                       Download(id="download-dataframe-csv-Pexe"),
-                      #end of EJ(6/7/2021) update
-                      html.Div(id="yieldtables-container", 
-                      className="overflow-auto",
-                      style={"height": "20vh"},
+                      html.Div(
+                        dash_table.DataTable(
+                          columns = [{"id": "YEAR", "name": "YEAR"}],
+                          id="yield-table",
+                          style_table = {"height": "10vh"},
+                        ),
+                      id="yieldtables-container", 
                       ),  #yield simulated output
                     ], ),
                   ],
@@ -805,6 +758,7 @@ app.layout = html.Div( ## MAIN APP DIV
               ),
             ], 
             ),
+          className="d-none",
           ),
       
 
@@ -965,7 +919,6 @@ def sort_table(n_clicks, yield_table, multiplier, col_name):
 #     prevent_initial_call=True,
 # )
 # def func(n_clicks, yield_data):
-#     # print(yield_data)
 #     df =pd.DataFrame(yield_data)
 #     return dcc.send_data_frame(df.to_csv, "simulated_yield_sorted.csv")
 #============EJ(6/7/2021)
@@ -1069,7 +1022,6 @@ def set_cultivar_value(available_options):
 #     prevent_initial_call=True,
 # )
 # def func(n_clicks, yield_data):
-#     # print(yield_data)
 #     df =pd.DataFrame(yield_data)
 #     return dcc.send_data_frame(df.to_csv, "simulated_yield.csv")
 #============EJ(6/7/2021)
@@ -1077,11 +1029,10 @@ def set_cultivar_value(available_options):
 @app.callback(
     Output("download-dataframe-csv-yield", "data"),
     Input("btn_csv_yield", "n_clicks"),
-    State("memory-yield-table", "data"),
+    State("yield-table", "data"),
     prevent_initial_call=True,
 )
 def func(n_clicks, yield_data):
-    # print(yield_data)
     df =pd.DataFrame(yield_data)
     col = df.columns  #EJ(6/7/2021)
     col_names = [df.columns[0]]   #list for col names - first column for YEAR
@@ -1104,7 +1055,7 @@ def func(n_clicks, yield_data):
 @app.callback(
     Output("download-dataframe-csv-rain", "data"),
     Input("btn_csv_rain", "n_clicks"),
-    State("memory-yield-table", "data"),
+    State("yield-table", "data"),
     prevent_initial_call=True,
 )
 def func(n_clicks, yield_data):
@@ -1130,7 +1081,7 @@ def func(n_clicks, yield_data):
 @app.callback(
     Output("download-dataframe-csv-Pexe", "data"),
     Input("btn_csv_Pexe", "n_clicks"),
-    State("memory-yield-table", "data"),
+    State("yield-table", "data"),
     prevent_initial_call=True,
 )
 def func(n_clicks, yield_data):
@@ -1160,7 +1111,6 @@ def func(n_clicks, yield_data):
     prevent_initial_call=True,
 )
 def func(n_clicks, EB_data):
-    # print(EB_data)
     df =pd.DataFrame(EB_data)
     return dcc.send_data_frame(df.to_csv, "simulated_yield_EB.csv")
 #=================================================   
@@ -1249,21 +1199,6 @@ def make_sce_table(
     variable_costs,
     sce_in_table
 ):
-    # print(station)  #MELK
-    # print(start_year)  #1981
-    # print(end_year)  #2014
-    # print(planting_date)  #2021-06-15
-    # print(cultivar)  #CIMT01 BH540-Kassie
-    # print(soil_type)  #ETET001_18
-    # print(initial_soil_moisture)  #0.7
-    # print(initial_soil_no3_content)  #H
-    # print(planting_density)  #6
-    # print(scenario)  #scenario name
-    # print(target_year)  #target year as a benchmark
-    # print(station2)  #scenario summary
-    # print(station3)  #fertilizler or no-fertilizer
-    # print(station4)  #fertilizler summary
-    # print("station5:",EB_in_table)  #scenario summary
 
     existing_sces = pd.DataFrame(sce_in_table)
 
@@ -1413,7 +1348,6 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
         # 1) Read saved scenario summaries and get a list of scenarios to run
         # dff = pd.read_json(intermediate, orient="split")
         dff = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
-        # print(dff)
         sce_numbers = len(dff.sce_name.values)
         # Wdir_path = "C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\"
         Wdir_path = DSSAT_FILES_DIR   #for linux system
@@ -1516,11 +1450,7 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
                 doy = repr(PDAT[0])[4:]
                 target = dff.TargetYr[i] + doy
                 yr_index = np.argwhere(PDAT == int(target))
-                # print("target year:", int(dff.TargetYr[i]) )
-                # print("last sim year:", int(dff.LastYear[i]))
-                # print("PDAT:", PDAT)
-                # print("target:", target)
-                # print("yr_index:", yr_index[0][0])
+        
                 TG_yield_temp = HWAM[yr_index[0][0]]
             else: 
                 TG_yield_temp = np.nan
@@ -1540,8 +1470,7 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
         yield_min = np.min(df.HWAM.values)  #to make a consistent yield scale for exceedance curve =>Fig 4,5,6
         yield_max = np.max(df.HWAM.values)
         x_val = np.unique(df.EXPERIMENT.values)
-        # print(df)
-        # print("x_val={}".format(x_val))
+        
         #4) Make a boxplot
         # df = px.data.tips()
         # fig = px.box(df, x="time", y="total_bill")
@@ -1549,24 +1478,24 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
         # fig.update_layout(transition_duration=500)
         # df = px.data.tips()
         # fig = px.box(df, x="Scenario Name", y="Yield [kg/ha]")
-        fig = px.box(df, x="EXPERIMENT", y="HWAM", title="Yield Boxplot")
-        fig.add_scatter(x=x_val,y=TG_yield, mode="markers") #, mode="lines+markers") #"lines")
-        fig.update_xaxes(title= "Scenario Name [*Note:Red dot(s) represents yield(s) based on the weather of target year]")
-        fig.update_yaxes(title= "Yield [kg/ha]")
+        yld_box = px.box(df, x="EXPERIMENT", y="HWAM", title="Yield Boxplot")
+        yld_box.add_scatter(x=x_val,y=TG_yield, mode="markers") #, mode="lines+markers") #"lines")
+        yld_box.update_xaxes(title= "Scenario Name [*Note:Red dot(s) represents yield(s) based on the weather of target year]")
+        yld_box.update_yaxes(title= "Yield [kg/ha]")
         # # return fig
 
-        fig2 = go.Figure()
+        yld_exc = go.Figure()
         for i in x_val:
             x_data = df.HWAM[df["EXPERIMENT"]==i].values
             x_data = np.sort(x_data)
             fx_scf = [1.0/len(x_data)] * len(x_data) #pdf
             Fx_scf= 1.0-np.cumsum(fx_scf)  #for exceedance curve
 
-            fig2.add_trace(go.Scatter(x=x_data, y=Fx_scf,
+            yld_exc.add_trace(go.Scatter(x=x_data, y=Fx_scf,
                         mode="lines+markers",
                         name=i[4:]))
         # Edit the layout
-        fig2.update_layout(title="Yield Exceedance Curve",
+        yld_exc.update_layout(title="Yield Exceedance Curve",
                         xaxis_title="Yield [kg/ha]",
                         yaxis_title="Probability of Exceedance [-]")
 
@@ -1574,10 +1503,10 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
         yr_val = np.unique(df.YEAR.values)
         df_out = pd.DataFrame({"YEAR":yr_val})
 
-        fig3 = go.Figure()
-        fig4 = go.Figure() #yield exceedance curve using only BN category
-        fig5 = go.Figure()  #yield exceedance curve using only NN category
-        fig6 = go.Figure()  #yield exceedance curve using only AN category
+        yld_t_series = go.Figure()
+        BN_exc = go.Figure() #yield exceedance curve using only BN category
+        NN_exc = go.Figure()  #yield exceedance curve using only NN category
+        AN_exc = go.Figure()  #yield exceedance curve using only AN category
         for i in x_val:
             x_data = df.YEAR[df["EXPERIMENT"]==i].values
             y_data = df.HWAM[df["EXPERIMENT"]==i].values
@@ -1593,7 +1522,7 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             df_temp = pd.DataFrame({col_name0:y_data, col_name1:yield_Pexe, col_name2:rain_data})  # EJ(5/18/2021) seasonal rainfall total
             df_out = pd.concat([df_out, df_temp], axis=1)
 
-            fig3.add_trace(go.Scatter(x=x_data, y=y_data,
+            yld_t_series.add_trace(go.Scatter(x=x_data, y=y_data,
                         mode="lines+markers",
                         name=i[4:]))
             #==================================================
@@ -1605,7 +1534,7 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             x_data = np.sort(x_data)
             fx_scf = [1.0/len(x_data)] * len(x_data) #pdf
             Fx_scf= 1.0-np.cumsum(fx_scf)  #for exceedance curve
-            fig4.add_trace(go.Scatter(x=x_data, y=Fx_scf, mode="lines+markers", name=i[4:]))
+            BN_exc.add_trace(go.Scatter(x=x_data, y=Fx_scf, mode="lines+markers", name=i[4:]))
             #2)NN
             mask = np.logical_and(rain_rank > BN_thres, rain_rank <= NN_thres)
             x_data = y_data[mask]
@@ -1613,33 +1542,33 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             x_data = np.sort(x_data)
             fx_scf = [1.0/len(x_data)] * len(x_data) #pdf
             Fx_scf= 1.0-np.cumsum(fx_scf)  #for exceedance curve
-            fig5.add_trace(go.Scatter(x=x_data, y=Fx_scf, mode="lines+markers", name=i[4:]))
+            NN_exc.add_trace(go.Scatter(x=x_data, y=Fx_scf, mode="lines+markers", name=i[4:]))
             #3)AN
             x_data = y_data[rain_rank > NN_thres]
             x_data = np.sort(x_data)
             fx_scf = [1.0/len(x_data)] * len(x_data) #pdf
             Fx_scf= 1.0-np.cumsum(fx_scf)  #for exceedance curve
-            fig6.add_trace(go.Scatter(x=x_data, y=Fx_scf, mode="lines+markers", name=i[4:]))
+            AN_exc.add_trace(go.Scatter(x=x_data, y=Fx_scf, mode="lines+markers", name=i[4:]))
             #====================================================                
         # Edit the layout
-        fig3.update_layout(title="Yield Time-Series",
+        yld_t_series.update_layout(title="Yield Time-Series",
                         xaxis_title="Year",
                         yaxis_title="Yield [kg/ha]")
-        fig4.update_layout(title="Yield Exceedance [Dry category]",
+        BN_exc.update_layout(title="Yield Exceedance [Dry category]",
                         xaxis_title="Yield [kg/ha]",
                         yaxis_title="Probability of Exceedance [-]",
                         legend=dict(yanchor="bottom", y=0.1, xanchor="left", x=0.01))
-        fig4.update_xaxes(range=[yield_min, yield_max])
-        fig5.update_layout(title="Yield Exceedance [Normal category]",
+        BN_exc.update_xaxes(range=[yield_min, yield_max])
+        NN_exc.update_layout(title="Yield Exceedance [Normal category]",
                         xaxis_title="Yield [kg/ha]",
                         yaxis_title="Probability of Exceedance [-]",
                         legend=dict(yanchor="bottom", y=0.1, xanchor="left", x=0.01))
-        fig5.update_xaxes(range=[yield_min, yield_max])
-        fig6.update_layout(title="Yield Exceedance [Wet category]",
+        NN_exc.update_xaxes(range=[yield_min, yield_max])
+        AN_exc.update_layout(title="Yield Exceedance [Wet category]",
                         xaxis_title="Yield [kg/ha]",
                         yaxis_title="Probability of Exceedance [-]",
                         legend=dict(yanchor="bottom", y=0.1, xanchor="left", x=0.01))
-        fig6.update_xaxes(range=[yield_min, yield_max])
+        AN_exc.update_xaxes(range=[yield_min, yield_max])
 
         #save simulated yield outputs into a csv file <<<<<<=======================
         fname = path.join(Wdir_path, "simulated_yield.csv")
@@ -1647,18 +1576,27 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
         #print({"label": i, "value": i} for i in list(df_out.columns))
 
         return [
-            dcc.Graph(id="yield-boxplot",figure=fig), 
-            dcc.Graph(id="yield-exceedance",figure=fig2),
-            dcc.Graph(id="yield-ts",figure=fig3),
-            dcc.Graph(id="yield-BN_exceedance",figure=fig4),
-            dcc.Graph(id="yield-NN_exceedance",figure=fig5),
-            dcc.Graph(id="yield-AN_exceedance",figure=fig6),
-            dash_table.DataTable(columns=[{"name": i, "id": i} for i in df_out.columns],data=df_out.to_dict("records"),
-                style_table={"overflowX": "auto"}, 
-                style_cell={   # all three widths are needed
-                    "minWidth": "10px", "width": "10px", "maxWidth": "30px",
-                    "overflow": "hidden",
-                    "textOverflow": "ellipsis", }),
+            dcc.Graph(id="yield-boxplot",figure=yld_box), 
+            dcc.Graph(id="yield-exceedance",figure=yld_exc),
+            dcc.Graph(id="yield-ts",figure=yld_t_series),
+            dcc.Graph(id="yield-BN_exceedance",figure=BN_exc),
+            dcc.Graph(id="yield-NN_exceedance",figure=NN_exc),
+            dcc.Graph(id="yield-AN_exceedance",figure=AN_exc),
+            dash_table.DataTable(columns = [{"name": i, "id": i} for i in df_out.columns],data=df_out.to_dict("records"),
+              id="yield-table",
+              sort_action = "native",
+              sort_mode = "single",
+              style_table = {
+                "maxHeight": "30vh",
+                "overflow": "auto",
+              },
+              fixed_rows = { "headers": True, "data": 0 },
+              style_cell = {   # all three widths are needed
+                "minWidth": "10px", "width": "10px", "maxWidth": "30px",
+                "overflow": "hidden",
+                "textOverflow": "ellipsis", 
+              }
+            ),
             df_out.to_dict("records"),
             [{"label": i, "value": i} for i in list(df_out.columns)]
             ]
@@ -1680,7 +1618,6 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
     Output("column-dropdown", "value"),
     Input("column-dropdown", "options"))
 def set_column_value(available_options):
-    # print(available_options)
     # return cultivar_options[0]["value"]
     return [available_options[i]["value"] for i in range(len(available_options))]
 
@@ -1702,8 +1639,6 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
     else: 
         # 1) Read saved scenario summaries and get a list of scenarios to run
         dff = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
-        # print("Callback EB_figure:", dff)
-        # print("Callback EB_figure:", sce_in_table)
         sce_numbers = len(dff.sce_name.values)
         # Wdir_path = "C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\"
         Wdir_path = DSSAT_FILES_DIR  #for linux system
@@ -1765,7 +1700,6 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
         # adding column name to the respective columns
         df.columns =["EXPERIMENT", "YEAR","PDAT", "ADAT","HWAM","NICM","GMargin"]
         x_val = np.unique(df.EXPERIMENT.values)
-        # print(df)
         fig = px.box(df, x="EXPERIMENT", y="GMargin", title="Gross Margin Boxplot")
         fig.add_scatter(x=x_val,y=TG_GMargin, mode="markers") #, mode="lines+markers") #"lines")
         fig.update_xaxes(title= "Scenario Name")
@@ -1824,18 +1758,6 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
 # def writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,planting_density,scenario):
 def writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop,cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
                        planting_density,scenario,fert_app, df_fert):    
-    # print("check writeSNX_main")
-    # print(station)  #MELK
-    # print(start_year)  #1981
-    # print(end_year)  #2014
-    # print(planting_date)  #2021-06-15
-    # print(crop)  #MZ crop type
-    # print(cultivar)  #CIMT01 BH540-Kassie
-    # print(soil_type)  #ETET001_18
-    # print(initial_soil_moisture)  #0.7
-    # print(initial_soil_no3_content)  #H
-    # print(planting_density)  #6
-    # print(scenario)  #scenario name
     WSTA = station
     NYERS = repr(int(end_year) - int(start_year) + 1)
     plt_year = start_year
@@ -1843,8 +1765,6 @@ def writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop,
         date_object = date.fromisoformat(planting_date)
         date_string = date_object.strftime("%B %d, %Y")
         plt_doy = date_object.timetuple().tm_yday
-        # print(date_string)  #June 15, 2021 
-        # print(plt_doy)  #166
     PDATE = plt_year[2:] + repr(plt_doy).zfill(3)
         #   IC_date = first_year * 1000 + (plt_doy - 1)
         #   PDATE = repr(first_year)[2:] + repr(plt_doy).zfill(3)
@@ -1976,12 +1896,8 @@ def writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop,
         new_str = temp_str[0:5] + repr(soil_depth[nline]).rjust(3) + " " + SH2O.rjust(5) + temp_str[14:22] + SNO3.rjust(4) + "\n"
         fw.write(new_str)
     fw.write("  \n")
-    # print("ICDAT= {0}".format(ICDAT))  #test here
-    # print("fc[0]= {0}".format(fc[0] ))  #test here
-    # print("test after writing init")  #test here
     for nline in range(0, 10):
         temp_str = fr.readline()
-        # print temp_str
         if temp_str[0:9] == "*PLANTING":
             break
 
@@ -1994,7 +1910,6 @@ def writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop,
     new_str = temp_str[0:3] + PDATE + "   -99" + PPOP.rjust(6) + PPOE.rjust(6) + temp_str[26:]
     fw.write(new_str)
     fw.write("  \n")
-    # print("PPOE = {0}".format(PPOE))  #test here
     # write *IRRIGATION AND WATER MANAGEMENT, if irrigation on reported dates
     # skip irrigation for now   #EJ(1/6/2021) temporary
 
@@ -2003,7 +1918,6 @@ def writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop,
     #use editable datatable https://dash.plotly.com/datatable/editable
     for nline in range(0, 20):
         temp_str = fr.readline()
-        # print temp_str
         if temp_str[0:12] == "*FERTILIZERS":
             break
     fw.write(temp_str)  # *FERTILIZERS (INORGANIC)
@@ -2012,7 +1926,6 @@ def writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop,
     temp_str = fr.readline()  #1     0 FE005 AP001     5    30   -99   -99   -99   -99   -99   -99
 #-0------------        # write *FERTILIZERS (INORGANIC)
     if fert_app == "Fert":
-        # print(df_fert)
         df_fert = df_fert.astype(float)
         df_filtered = df_fert[(df_fert["DAP"] >= 0) & (df_fert["NAmount"] >= 0)]
         fert_count = len(df_filtered)  #Get the number of rows: len(df)  => May need more error-checking
@@ -2039,7 +1952,6 @@ def writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop,
     fw.write("  \n")
     for nline in range(0, 20):
         temp_str = fr.readline()
-        # print temp_str
         if temp_str[0:11] == "*SIMULATION":
             break
     fw.write(temp_str)  # *SIMULATION CONTROLS
