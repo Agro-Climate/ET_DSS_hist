@@ -562,11 +562,6 @@ app.layout = html.Div( ## MAIN APP DIV
                         ],),
                       ],),
                     ], 
-                    spinner_style={
-                      "width": "100%",
-                      "height": "94vh", 
-                      "margin": "auto", 
-                    },
                     size="lg", color="primary", type="border", 
                     ),
                   )
