@@ -559,7 +559,9 @@ app.layout = html.Div( ## MAIN APP DIV
                           dbc.Col(
                             html.Div(id="yield-AN-container"),
                           md=4),
-                        ],),
+                        ],
+                        no_gutters=True,
+                        ),
                       ],),
                     ], 
                     size="lg", color="primary", type="border", 
@@ -1523,12 +1525,12 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
         #print({"label": i, "value": i} for i in list(df_out.columns))
 
         return [
-            dcc.Graph(id="yield-boxplot",figure=yld_box), 
-            dcc.Graph(id="yield-exceedance",figure=yld_exc),
-            dcc.Graph(id="yield-ts",figure=yld_t_series),
-            dcc.Graph(id="yield-BN_exceedance",figure=BN_exc),
-            dcc.Graph(id="yield-NN_exceedance",figure=NN_exc),
-            dcc.Graph(id="yield-AN_exceedance",figure=AN_exc),
+            dcc.Graph(id="yield-boxplot", figure = yld_box, config = {"displaylogo": False}, ), 
+            dcc.Graph(id="yield-exceedance", figure = yld_exc, config = {"displaylogo": False}, ),
+            dcc.Graph(id="yield-ts", figure = yld_t_series, config = {"displaylogo": False}, ),
+            dcc.Graph(id="yield-BN_exceedance", figure = BN_exc, config = {"displaylogo": False}, ),
+            dcc.Graph(id="yield-NN_exceedance", figure = NN_exc, config = {"displaylogo": False}, ),
+            dcc.Graph(id="yield-AN_exceedance", figure = AN_exc, config = {"displaylogo": False}, ),
             dash_table.DataTable(columns = [{"name": i, "id": i} for i in df_out.columns],data=df_out.to_dict("records"),
               id="yield-table",
               sort_action = "native",
@@ -1694,9 +1696,9 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
         fname = path.join(Wdir_path, "simulated_yield_GMargin.csv")
         df_out.to_csv(fname, index=False)
         return [
-            dcc.Graph(id="EB-boxplot",figure=fig), 
-            dcc.Graph(id="EB-exceedance",figure=fig2),
-            dcc.Graph(id="EB-ts",figure=fig3),
+            dcc.Graph(id="EB-boxplot", figure = fig, config = {"displaylogo": False}, ),
+            dcc.Graph(id="EB-exceedance", figure = fig2, config = {"displaylogo": False}, ),
+            dcc.Graph(id="EB-ts", figure = fig3, config = {"displaylogo": False}, ),
             dash_table.DataTable(columns=[{"name": i, "id": i} for i in df_out.columns],
                 data=df_out.to_dict("records"),
                 style_cell={"whiteSpace": "normal","height": "auto",},),
