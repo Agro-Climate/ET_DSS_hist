@@ -446,12 +446,10 @@ app.layout = html.Div( ## MAIN APP DIV
               ),
 
               html.Div([ # SCENARIO TABLE
-                # Deletable summary table : EJ(5/3/2021)
                 html.Header(html.B("Scenarios"), className="card-header",),
                 dbc.FormGroup([ # SUBMIT - ADD SCENARIO
                   dbc.Button(id="write-button-state", 
                   n_clicks=0, 
-                  # type="submit",
                   children="Create or Add a new Scenario", 
                   className="w-75 d-block mx-auto my-3",
                   color="primary"
@@ -498,7 +496,6 @@ app.layout = html.Div( ## MAIN APP DIV
                   "overflow": "hidden",
                   "textOverflow": "ellipsis", 
                 },
-                # editable=True,
                 row_deletable=True
                 )                # end of Deletable summary table : EJ(5/3/2021)
               ]),
@@ -547,31 +544,34 @@ app.layout = html.Div( ## MAIN APP DIV
               html.Div(
                 html.Div([
                   html.Div(
-                    html.Div([
-                      dbc.Spinner(children=[html.Div(id="yieldbox-container")], size="lg", color="primary", type="border", fullscreen=True,),
-                      html.Div(id="yieldcdf-container"),  #exceedance curve
-                      html.Div(id="yieldtimeseries-container"),  #time-series
-                      dbc.Row([
-                        dbc.Col(
-                          html.Div(id="yield-BN-container", 
-                          ),
-                        md=4),
-                        dbc.Col(
-                          html.Div(id="yield-NN-container", 
-                          ),
-                        md=4),
-                        dbc.Col(
-                          html.Div(id="yield-AN-container", 
-                          ),
-                        md=4),
-                      ]),
+                    dbc.Spinner(children=[
+                      html.Div([
+                        html.Div(id="yieldbox-container"),
+                        html.Div(id="yieldcdf-container"),  #exceedance curve
+                        html.Div(id="yieldtimeseries-container"),  #time-series
+                        dbc.Row([
+                          dbc.Col(
+                            html.Div(id="yield-BN-container"),
+                          md=4),
+                          dbc.Col(
+                            html.Div(id="yield-NN-container"),
+                          md=4),
+                          dbc.Col(
+                            html.Div(id="yield-AN-container"),
+                          md=4),
+                        ],),
+                      ],),
                     ], 
-                    className="plot-container plotly"),
-                  className="js-plotly-plot"
+                    spinner_style={
+                      "width": "100%",
+                      "height": "94vh", 
+                      "margin": "auto", 
+                    },
+                    size="lg", color="primary", type="border", 
+                    ),
                   )
                 ], 
                 id="simulation-graphs", 
-                # className="dash-graph ddk-graph", 
                 className="overflow-auto",
                 style={"height": "94vh"},
                 ),
