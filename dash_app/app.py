@@ -22,6 +22,8 @@ import datetime    #to convert date to doy or vice versa
 import calendar
 import re
 
+from navbar import Navbar
+
 app = dash.Dash(
     __name__,
     external_stylesheets=[
@@ -47,9 +49,10 @@ app.scripts.config.serve_locally = True
 app.css.config.serve_locally = True
 
 #column names for scenario summary table:EJ(5/3/2021)
-sce_col_names=["sce_name", "Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","TargetYr",
-                 "Fert_1_DOY","Fert_1_Kg","Fert_2_DOY","Fert_2_Kg","Fert_3_DOY","Fert_3_Kg","Fert_4_DOY","Fert_4_Kg",
-                 "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"]
+sce_col_names=[ "sce_name", "Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","TargetYr",
+                "Fert_1_DOY","Fert_1_Kg","Fert_2_DOY","Fert_2_Kg","Fert_3_DOY","Fert_3_Kg","Fert_4_DOY","Fert_4_Kg",
+                "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"
+]
 
 cultivar_options = {
     # "MZ": ["CIMT01 BH540-Kassie","CIMT02 MELKASA-Kassi","CIMT17 BH660-FAW-40%", "CIMT19 MELKASA2-FAW-40%", "CIMT21 MELKASA-LowY"],
@@ -60,7 +63,7 @@ cultivar_options = {
 # Wdir_path = "C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\"
 Wdir_path = DSSAT_FILES_DIR    #for linux systemn
 
-SIMAGRI_LOGOS = app.get_asset_url("ethioagroclimate.png")
+SIMAGRI_LOGOS = app.get_asset_url("../assets/ethioagroclimate.png")
 
 app.layout = html.Div( ## MAIN APP DIV
 [
@@ -69,36 +72,7 @@ app.layout = html.Div( ## MAIN APP DIV
   dcc.Store(id="memory-EB-table"),  #to save fertilizer application table
 
   # NAVBAR
-  dbc.Navbar([
-    # LOGO & BRAND
-    html.A(
-      # Use row and col to control vertical alignment of logo / brand
-      dbc.Row([
-        dbc.Col(html.Img(src=SIMAGRI_LOGOS)),
-        dbc.Col(dbc.NavbarBrand("SIMAGRI-Ethiopia", className="ml-3 font-weight-bold"),className="my-auto"),
-        #EJ(6/12/2021) added Buttons for the links of Tutorial and Feedback
-        dbc.Col(html.A(html.Button('Tutorial', className="ml-3 font-weight-bold"), href='https://sites.google.com/iri.columbia.edu/simagri-ethiopia/simagri-tutorial'),
-        ),
-        dbc.Col(html.A(html.Button('Feedback', className="ml-3 font-weight-bold"), href='https://sites.google.com/iri.columbia.edu/simagri-ethiopia/user-feedback-survey-form'),
-        ),
-      ],
-      align ="left",
-      no_gutters=True,
-      ),
-    href="#",
-    ),
-    # NAV ITEMS
-    dbc.Nav([
-      dbc.NavItem(dbc.NavLink("Historical Analysis", href="historical", className="d-none", ),),
-      dbc.NavItem(dbc.NavLink("Forecast Analysis", href="forecast", className="d-none", ),),
-      dbc.NavItem(dbc.NavLink("About", href="about", className="d-none", ),),
-    ],
-    navbar=True,
-    ),
-  ],
-  color="white",
-  dark=False
-  ),
+  Navbar(SIMAGRI_LOGOS),
 
   html.Div( ## HISTORICAL: INPUT AND GRAPHS
     dbc.Row([ 
@@ -327,94 +301,69 @@ app.layout = html.Div( ## MAIN APP DIV
                       ),
                       html.Div([ # FERTILIZER INPUT TABLE
                         dbc.Row([
-                          dbc.Col([  
+                          dbc.Col(
                             dbc.Label("Days After Planting", className="text-center", ),
-                            html.Div([
-                              dbc.FormGroup([
-                                dbc.Label("1st", html_for="fert-day1", ),
-                                dbc.Col([
-                                  dbc.Input(type="number", id="fert-day1", value=0, min="0", max="365", required="required", ),
-                                ],
-                                ),
-                              ],
-                              row=True,
-                              ),
-                              dbc.FormGroup([
-                                dbc.Label("2nd", html_for="fert-day2", ),
-                                dbc.Col([
-                                  dbc.Input(type="number", id="fert-day2", value=0, min="0", max="365", required="required", ),
-                                ],
-                                ),
-                              ],
-                              row=True,
-                              ),
-                              dbc.FormGroup([
-                                dbc.Label("3rd", html_for="fert-day3", ),
-                                dbc.Col([
-                                  dbc.Input(type="number", id="fert-day3", value=0, min="0", max="365", required="required", ),
-                                ],
-                                ),
-                              ],
-                              row=True,
-                              ),
-                              dbc.FormGroup([
-                                dbc.Label("4th", html_for="fert-day4", ),
-                                dbc.Col([
-                                  dbc.Input(type="number", id="fert-day4", value=0, min="0", max="365", required="required", ),
-                                ],
-                                ),
-                              ],
-                              row=True,
-                              ),
-                            ],
-                            ),
-                          ],
                           ),
-                          dbc.Col([  
+                          dbc.Col(
                             dbc.Label("Amount of N (kg/ha)", className="text-center", ),
-                            html.Div([
-                              dbc.FormGroup([
-                                dbc.Label("1st", html_for="fert-amt1", ),
-                                dbc.Col([
-                                  dbc.Input(type="number", id="fert-amt1", value=0, min="0", step="0.1", required="required", ),
-                                ],
-                                ),
-                              ],
-                              row=True,
-                              ),
-                              dbc.FormGroup([
-                                dbc.Label("2nd", html_for="fert-amt2", ),
-                                dbc.Col([
-                                  dbc.Input(type="number", id="fert-amt2", value=0, min="0", step="0.1", required="required", ),
-                                ],
-                                ),
-                              ],
-                              row=True,
-                              ),
-                              dbc.FormGroup([
-                                dbc.Label("3rd", html_for="fert-amt3", ),
-                                dbc.Col([
-                                  dbc.Input(type="number", id="fert-amt3", value=0, min="0", step="0.1", required="required", ),
-                                ],
-                                ),
-                              ],
-                              row=True,
-                              ),
-                              dbc.FormGroup([
-                                dbc.Label("4th", html_for="fert-amt4", ),
-                                dbc.Col([
-                                  dbc.Input(type="number", id="fert-amt4", value=0, min="0", step="0.1", required="required", ),
-                                ],
-                                ),
-                              ],
-                              row=True,
-                              ),
-                            ],
-                            ),
-                          ],
                           ),
-                        ],
-                        ), 
+                        ],),
+                        dbc.Row([
+                          dbc.Col(
+                            dbc.FormGroup([
+                              dbc.Label("1st", html_for="fert-day1", ),
+                              dbc.Input(type="number", id="fert-day1", value=0, min="0", max="365", required="required", ),
+                            ],),
+                          ),
+                          dbc.Col(
+                            dbc.FormGroup([
+                              dbc.Label("1st", html_for="fert-amt1", ),
+                              dbc.Input(type="number", id="fert-amt1", value=0, min="0", step="0.1", required="required", ),
+                            ],),
+                          ),
+                        ],),
+                        dbc.Row([
+                          dbc.Col(
+                            dbc.FormGroup([
+                              dbc.Label("2nd", html_for="fert-day2", ),
+                              dbc.Input(type="number", id="fert-day2", value=0, min="0", max="365", required="required", ),
+                            ],),
+                          ),
+                          dbc.Col(
+                            dbc.FormGroup([
+                              dbc.Label("2nd", html_for="fert-amt2", ),
+                              dbc.Input(type="number", id="fert-amt2", value=0, min="0", step="0.1", required="required", ),
+                            ],),
+                          ),
+                        ],),
+                        dbc.Row([
+                          dbc.Col(
+                            dbc.FormGroup([
+                              dbc.Label("3rd", html_for="fert-day3", ),
+                              dbc.Input(type="number", id="fert-day3", value=0, min="0", max="365", required="required", ),
+                            ],),
+                          ),
+                          dbc.Col(
+                            dbc.FormGroup([
+                              dbc.Label("3rd", html_for="fert-amt3", ),
+                              dbc.Input(type="number", id="fert-amt3", value=0, min="0", step="0.1", required="required", ),
+                            ],),
+                          ),
+                        ],),
+                        dbc.Row([
+                          dbc.Col(
+                            dbc.FormGroup([
+                              dbc.Label("4th", html_for="fert-day4", ),
+                              dbc.Input(type="number", id="fert-day4", value=0, min="0", max="365", required="required", ),
+                            ],),
+                          ),
+                          dbc.Col(
+                            dbc.FormGroup([
+                              dbc.Label("4th", html_for="fert-amt4", ),
+                              dbc.Input(type="number", id="fert-amt4", value=0, min="0", step="0.1", required="required", ),
+                            ],),
+                          ),
+                        ],),
                       ],
                       id="fert-table-Comp", 
                       className="w-100",
@@ -549,7 +498,7 @@ app.layout = html.Div( ## MAIN APP DIV
                   "overflow": "hidden",
                   "textOverflow": "ellipsis", 
                 },
-                editable=True,
+                # editable=True,
                 row_deletable=True
                 )                # end of Deletable summary table : EJ(5/3/2021)
               ]),
