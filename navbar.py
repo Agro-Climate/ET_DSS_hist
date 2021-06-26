@@ -1,7 +1,7 @@
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 
-def Navbar(logo):
+def navbar(logo):
     # NAVBAR
     navbar = dbc.Navbar([
         # LOGO & BRAND
@@ -23,9 +23,9 @@ def Navbar(logo):
         ),
         # NAV ITEMS
         dbc.Nav([
-            dbc.NavItem(dbc.NavLink("Historical Analysis", href="/historical", className="d-none", ),),
+            dbc.NavItem(dbc.NavLink("Historical Analysis", href="/historical", ),),
             dbc.NavItem(dbc.NavLink("Forecast Analysis", href="/forecast", className="d-none", ),),
-            dbc.NavItem(dbc.NavLink("About", href="/about", className="d-none", ),),
+            dbc.NavItem(dbc.NavLink("About", href="/about", ),),
         ],
         navbar=True,
         ),
