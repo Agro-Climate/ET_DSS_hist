@@ -423,7 +423,6 @@ def show_hide_EBtable(EB_radio, scenarios):
                 State("target-year", "value"),    #input 11
                 # State("intermediate-value", "children"),  #input 12 scenario summary table
                 State("fert_input", "value"),     ##input 13 fertilizer yes or no
-                # State("fert-table","data"), ###input 14 fert input table
                 State("fert-day1","value"), ###input 14 fert input table
                 State("fert-amt1","value"), ###input 14 fert input table
                 State("fert-day2","value"), ###input 14 fert input table
@@ -433,7 +432,6 @@ def show_hide_EBtable(EB_radio, scenarios):
                 State("fert-day4","value"), ###input 14 fert input table
                 State("fert-amt4","value"), ###input 14 fert input table
                 State("EB_radio", "value"),     ##input 15 Enterprise budgeting yes or no
-                # State("EB-table","data"), #Input 16 Enterprise budget input
                 State("crop-price","value"), #Input 16 Enterprise budget input
                 State("seed-cost","value"), #Input 16 Enterprise budget input
                 State("fert-cost","value"), #Input 16 Enterprise budget input
@@ -445,13 +443,11 @@ def make_sce_table(
     n_clicks, station, start_year, end_year, planting_date, crop, cultivar, soil_type, 
     initial_soil_moisture, initial_soil_no3_content, planting_density, scenario, target_year, 
     fert_app, 
-    # fert_in_table, 
     fd1, fa1,
     fd2, fa2,
     fd3, fa3,
     fd4, fa4,
     EB_radio,
-    # EB_in_table,
     crop_price,
     seed_cost,
     fert_cost,
@@ -512,8 +508,6 @@ def make_sce_table(
     fert_valid = True
     current_fert = pd.DataFrame(columns=["DAP", "NAmount"])
     if fert_app == "Fert":
-        # Read fertilizer application information
-        # currrent_fert = pd.DataFrame(fert_in_table)
         current_fert = pd.DataFrame({
             "DAP": [fd1, fd2, fd3, fd4, ],
             "NAmount": [fa1, fa2, fa3, fa4, ],
@@ -535,9 +529,6 @@ def make_sce_table(
     # #Update dataframe for Enterprise Budgeting inputs
     EB_valid = True
     if EB_radio == "EB_Yes":
-        # Read Enterprise budget input
-        # current_EB = pd.DataFrame(EB_in_table)
-        
         EB_frame =  pd.DataFrame({
             "CropPrice": [crop_price],
             "NFertCost": [seed_cost],
@@ -546,13 +537,6 @@ def make_sce_table(
             "FixedCosts": [variable_costs],
         })
         current_sce.update(EB_frame)
-    # else:
-    #     current_EB = pd.DataFrame(
-    #         columns=["sce_name","Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","plt_density","TargetYr",
-    #             "Fert_1_DOY","Fert_1_Kg","Fert_2_DOY","Fert_2_Kg","Fert_3_DOY","Fert_3_Kg","Fert_4_DOY","Fert_4_Kg",
-    #             "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"
-    #         ]
-    #     )
 
     form_valid = (
             re.match("....", current_sce.sce_name.values[0]) 
@@ -564,9 +548,6 @@ def make_sce_table(
     )
 
     if form_valid:
-        # Read previously saved scenario summaries  https://dash.plotly.com/sharing-data-between-callbacks
-        # all_sces = pd.read_json(intermediate, orient="split")
-            
         if n_clicks == 1 or existing_sces.sce_name.values[0] == "N/A": # overwrite if a row of "N/A" values present. should only happen first time
             data = current_sce.to_dict("rows")
         else:
@@ -577,7 +558,6 @@ def make_sce_table(
                 data = all_sces.to_dict("rows")
         return data
     else:
-        # TODO: Alert about errors in form
         return existing_sces.to_dict("rows")
 
 
