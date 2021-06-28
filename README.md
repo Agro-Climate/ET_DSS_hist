@@ -12,10 +12,40 @@ Actual working version for Ethiopia is hosted [here] (https://simagri-et.herokua
 ## Prerequisites:
 
 - Docker
+- Terraform
 - Heroku
 - VS Code + Docker Extension
 
 ## Steps (Local test) 
+
+# Terraform Setup (Linux)
+
+# get terraform latest version:
+
+curl -s https://api.github.com/repos/hashicorp/terraform/releases/latest | grep tag_name | cut -d: -f2 | tr -d \"\,\v | awk '{$1=$1};1'
+
+# install the latest terraform (currently 1.0.1)
+
+wget https://releases.hashicorp.com/terraform/[version]/terraform_[version]_linux_amd64.zip
+
+mv terraform_[version]_linux_amd64.zip ~
+cd
+
+unzip terraform_[version]_linux_amd64.zip
+
+# install the terraform executable
+sudo mv terraform /usr/local/bin/
+
+# 'terraform -v' should now work
+
+# main.tf contains the terraform configuration
+
+# build terraform infrastructure 
+terraform init
+terraform plan
+terraform apply
+# now you have the docker container for simagri deployed locally with terraform
+
 
 Following are the steps for testing this app on Windows.
 
