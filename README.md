@@ -19,6 +19,9 @@ Actual working version for Ethiopia is hosted [here] (https://simagri-et.herokua
 ## Steps (Local test) 
 
 # Terraform Setup (Linux)
+# https://computingforgeeks.com/how-to-install-terraform-on-ubuntu-centos-7/
+
+# assumes docker is installed
 
 # get terraform latest version:
 

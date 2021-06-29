@@ -6,7 +6,10 @@ import dash_table
 from datetime import date
 from dash_extensions import Download
 
-import form
+sce_col_names=[ "sce_name", "Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","TargetYr",
+                "Fert_1_DOY","Fert_1_Kg","Fert_2_DOY","Fert_2_Kg","Fert_3_DOY","Fert_3_Kg","Fert_4_DOY","Fert_4_Kg",
+                "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"
+]
 
 scenario_name = dbc.FormGroup([ # Scenario
       dbc.Label("1) Scenario Name", html_for="sce-name", sm=3, className="p-0", align="start", ),
@@ -447,7 +450,7 @@ def ET_hist_form():
                 {"id": "FixedCosts", "name": "Fixed Costs"},
             ]),
             data=[
-                dict(**{param: "N/A" for param in form.sce_col_names}) for i in range(1, 2)
+                dict(**{param: "N/A" for param in sce_col_names}) for i in range(1, 2)
             ],
             style_table = {
                 "overflowX": "auto",
@@ -805,7 +808,7 @@ def ET_hist():
                     {"id": "FixedCosts", "name": "Fixed Costs"},
                 ]),
                 data=[
-                    dict(**{param: "N/A" for param in form.sce_col_names}) for i in range(1, 2)
+                    dict(**{param: "N/A" for param in sce_col_names}) for i in range(1, 2)
                 ],
                 style_table = {
                     "overflowX": "auto",
