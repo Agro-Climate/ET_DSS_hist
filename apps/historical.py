@@ -39,6 +39,8 @@ DATA_PATH = pathlib.Path(__file__).parent.joinpath("data").resolve()
 
 DSSAT_FILES_DIR_SHORT = "dssat_files_dir/"  #for linux systemn
 
+# callbacks still do not work!
+# "/../" + 
 DSSAT_FILES_DIR = os.getcwd() + DSSAT_FILES_DIR_SHORT   #for linux systemn
 
 #https://community.plotly.com/t/loading-when-opening-localhost/7284
