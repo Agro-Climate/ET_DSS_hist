@@ -8,24 +8,21 @@ def navbar(logo):
         html.A(
             # Use row and col to control vertical alignment of logo / brand
             dbc.Row([
-            dbc.Col(html.Img(src=logo)),
-            dbc.Col(dbc.NavbarBrand("SIMAGRI-Ethiopia", className="ml-3 font-weight-bold"),className="my-auto"),
-            #EJ(6/12/2021) added Buttons for the links of Tutorial and Feedback
-            dbc.Col(html.A(html.Button('Tutorial', className="ml-3 font-weight-bold"), href='https://sites.google.com/iri.columbia.edu/simagri-ethiopia/simagri-tutorial'),
-            ),
-            dbc.Col(html.A(html.Button('Feedback', className="ml-3 font-weight-bold"), href='https://sites.google.com/iri.columbia.edu/simagri-ethiopia/user-feedback-survey-form'),
-            ),
+                dbc.Col(html.Img(src=logo)),
+                dbc.Col(dbc.NavbarBrand("SIMAGRI-Ethiopia", className="ml-3 font-weight-bold"),className="my-auto"),
             ],
             align ="left",
             no_gutters=True,
             ),
-        href="#",
+        href="/about",
         ),
         # NAV ITEMS
         dbc.Nav([
             dbc.NavItem(dbc.NavLink("Historical Analysis", href="/historical", ),),
             dbc.NavItem(dbc.NavLink("Forecast Analysis", href="/forecast", className="d-none", ),),
             dbc.NavItem(dbc.NavLink("About", href="/about", ),),
+            dbc.NavItem(dbc.NavLink("Tutorial", href="https://sites.google.com/iri.columbia.edu/simagri-ethiopia/simagri-tutorial", ),),
+            dbc.NavItem(dbc.NavLink("Feedback", href="https://sites.google.com/iri.columbia.edu/simagri-ethiopia/user-feedback-survey-form", ),),
         ],
         navbar=True,
         ),
