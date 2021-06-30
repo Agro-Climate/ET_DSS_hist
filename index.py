@@ -9,7 +9,7 @@ from app import app
 from app import server
 
 from navbar import navbar
-from apps import historical, about
+from apps import et_historical, about
 
 SIMAGRI_LOGOS = app.get_asset_url("ethioagroclimate.png")
 
@@ -29,7 +29,7 @@ app.layout = html.Div([navbar(SIMAGRI_LOGOS), body])
 
 def display_page(pathname):
     if pathname == '/historical':
-        return historical.layout
+        return et_historical.layout
     if pathname == '/about':
         return about.layout
     return "Nothing here"
