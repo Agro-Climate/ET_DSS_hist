@@ -20,7 +20,6 @@ def navbar(logo):
         dbc.Nav([
             dbc.NavItem(dbc.NavLink("Historical Analysis", href="/historical", ),),
             dbc.NavItem(dbc.NavLink("Forecast Analysis", href="/forecast", className="d-none", ),),
-            dbc.NavItem(dbc.NavLink("About", href="/about", ),),
             dbc.NavItem(dbc.NavLink("Tutorial", href="https://sites.google.com/iri.columbia.edu/simagri-ethiopia/simagri-tutorial", ),),
             dbc.NavItem(dbc.NavLink("Feedback", href="https://sites.google.com/iri.columbia.edu/simagri-ethiopia/user-feedback-survey-form", ),),
         ],

@@ -8,8 +8,21 @@ import os
 from app import app
 from app import server
 
+
 from navbar import navbar
-from apps import et_historical, about
+from apps import about
+from apps.ethiopia import historical as et_hist
+
+
+# Preparing to use a variable for the country
+country = "ethiopia"
+
+apps = {
+    "ethiopia": { "/about": about.layout, "/historical": et_hist.layout, },
+    # "senegal": { "/about": about.layout, "/historical": sn_hist.layout, },
+    # "colombia": { "/about": about.layout, "/historical": co_hist.layout, },
+}
+
 
 SIMAGRI_LOGOS = app.get_asset_url("ethioagroclimate.png")
 
@@ -28,10 +41,13 @@ app.layout = html.Div([navbar(SIMAGRI_LOGOS), body])
 )
 
 def display_page(pathname):
-    if pathname == '/historical':
-        return et_historical.layout
-    if pathname == '/about':
-        return about.layout
+    if pathname in [*apps[country]]:
+        return apps[country][pathname]
+
+    # if pathname == '/historical':
+    #     return et_hist.layout
+    # if pathname == '/about':
+    #     return about.layout
     return "Nothing here"
 
 port = int(os.environ.get("PORT", 5000))
