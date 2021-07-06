@@ -1500,8 +1500,11 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
         return 
     else: 
         # 1) Read saved scenario summaries and get a list of scenarios to run
-        dff = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
-        sce_numbers = len(dff.sce_name.values)
+        current_sces = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
+
+        EB_sces = current_sces[current_sces["CropPrice"] != "-99"]
+
+        sce_numbers = len(EB_sces.sce_name.values)
         # Wdir_path = "C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\"
         Wdir_path = DSSAT_FILES_DIR  #for linux system
         os.chdir(Wdir_path)  #change directory  #check if needed or not
@@ -1509,10 +1512,10 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
 
         #EJ(5/3/2021) Read DSSAT output for each scenarios
         for i in range(sce_numbers):
-            sname = dff.sce_name.values[i]
-            if dff.Crop[i] == "WH":
+            sname = EB_sces.sce_name.values[i]
+            if EB_sces.Crop[i] == "WH":
                 fout_name = path.join(Wdir_path, "ETWH"+sname+".OSU")
-            elif dff.Crop[i] == "MZ":
+            elif EB_sces.Crop[i] == "MZ":
                 fout_name = path.join(Wdir_path, "ETMZ"+sname+".OSU")
             else:  # SG
                 fout_name = path.join(Wdir_path, "ETSG"+sname+".OSU")
@@ -1529,11 +1532,11 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
             NICM = df_OUT.iloc[:,39].values  #read 40th column only,  #NICM   Tot N app kg/ha Inorganic N applied (kg [N]/ha)
             HWAM[HWAM < 0]=0 #==> if HWAM == -99, consider it as "0" yield (i.e., crop failure)
             #Compute gross margin
-            GMargin=HWAM*float(dff.CropPrice[i])- float(dff.NFertCost[i])*NICM - float(dff.SeedCost[i]) - float(dff.OtherVariableCosts[i]) - float(dff.FixedCosts[i])
+            GMargin=HWAM*float(EB_sces.CropPrice[i])- float(EB_sces.NFertCost[i])*NICM - float(EB_sces.SeedCost[i]) - float(EB_sces.OtherVariableCosts[i]) - float(EB_sces.FixedCosts[i])
             # GMargin_data[0:len(HWAM),x]
-            if int(dff.TargetYr[i]) <= int(dff.LastYear[i]):
+            if int(EB_sces.TargetYr[i]) <= int(EB_sces.LastYear[i]):
                 doy = repr(PDAT[0])[4:]
-                target = dff.TargetYr[i] + doy
+                target = EB_sces.TargetYr[i] + doy
                 yr_index = np.argwhere(PDAT == int(target))
                 TG_GMargin_temp = GMargin[yr_index[0][0]]
             else: 
