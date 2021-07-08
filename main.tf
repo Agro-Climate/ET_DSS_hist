@@ -23,6 +23,6 @@ resource "docker_container" "etdsshist" {
   # }
   ports {
     internal = 5000
-    external = 5100
+    external = 80
   }
 }

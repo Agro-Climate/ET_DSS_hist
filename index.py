@@ -25,9 +25,9 @@ et_apps = base_apps.update({ "/historical": et_hist.layout, })
 
 
 apps = {
-    "ethiopia": { "/about": about.layout, "/tutorial": tutorial.layout, "/feedback": feedback.layout,  "/historical": et_hist.layout, },
-    # "senegal": { "/about": about.layout, "/tutorial": tutorial.layout, "/feedback": feedback.layout,  "/historical": sn_hist.layout, },
-    # "colombia": { "/about": about.layout, "/tutorial": tutorial.layout, "/feedback": feedback.layout,  "/historical": co_hist.layout, },
+    "ethiopia": { "/about": about.layout, "/historical": et_hist.layout, },
+    # "senegal": { "/about": about.layout, "/historical": sn_hist.layout, },
+    # "colombia": { "/about": about.layout, "/historical": co_hist.layout, },
 }
 
 SIMAGRI_LOGOS = app.get_asset_url("ethioagroclimate.png")
