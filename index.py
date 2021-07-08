@@ -12,7 +12,10 @@ from app import server
 
 from navbar import navbar
 from apps import about
+
 from apps.ethiopia import historical as et_hist
+
+from apps.senegal import historical as sn_hist
 
 
 # Preparing to use a variable for the country
@@ -21,13 +24,13 @@ country = sys.argv[1]
 base_apps = { "/about": about.layout }
 
 et_apps = base_apps.update({ "/historical": et_hist.layout, })
-# sn_apps = base_apps.update({ "/historical": sn_hist.layout, })
+sn_apps = base_apps.update({ "/historical": sn_hist.layout, })
 # co_apps = base_apps.update({ "/historical": co_hist.layout, })
 
 
 apps = {
     "ethiopia": { "/about": about.layout, "/historical": et_hist.layout, },
-    # "senegal": { "/about": about.layout, "/historical": sn_hist.layout, },
+    "senegal": { "/about": about.layout, "/historical": sn_hist.layout, },
     # "colombia": { "/about": about.layout, "/historical": co_hist.layout, },
 }
 
