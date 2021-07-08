@@ -23,8 +23,8 @@ resource "docker_container" "sndsshist" {
   # }
   ports {
     internal = 5000
-    # external = 80
+    external = 80
     # external = 5100
-    external = 5200
+    # external = 5200
   }
 }
