@@ -11,7 +11,6 @@ from app import server
 
 
 from navbar import navbar
-from apps import about
 ##########################################################################
 
 
@@ -21,8 +20,10 @@ country = sys.argv[1]
 
 # app will not work if nothing is imported
 if country == "ethiopia":
+    from apps.ethiopia import about
     from apps.ethiopia import historical
 elif country == "senegal":
+    from apps.senegal import about
     from apps.senegal import historical
 elif country == "colombia":
     from apps.colombia import historical
