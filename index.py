@@ -10,7 +10,7 @@ from app import server
 
 
 from navbar import navbar
-from apps import about, tutorial, feedback
+from apps import about
 from apps.ethiopia import historical as et_hist
 
 
