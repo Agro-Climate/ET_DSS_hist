@@ -17,7 +17,7 @@ from apps.ethiopia import historical as et_hist
 # Preparing to use a variable for the country
 country = "ethiopia"
 
-base_apps = { "/about": about.layout, "/tutorial": tutorial.layout, "/feedback": feedback.layout, }
+base_apps = { "/about": about.layout }
 
 et_apps = base_apps.update({ "/historical": et_hist.layout, })
 # sn_apps = base_apps.update({ "/historical": sn_hist.layout, })
