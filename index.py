@@ -4,6 +4,7 @@ import dash_core_components as dcc
 from dash.dependencies import Input, Output, State
 
 import os
+import sys
 
 from app import app
 from app import server
@@ -15,7 +16,7 @@ from apps.ethiopia import historical as et_hist
 
 
 # Preparing to use a variable for the country
-country = "ethiopia"
+country = sys.argv[1]
 
 base_apps = { "/about": about.layout }
 
