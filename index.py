@@ -38,7 +38,7 @@ body = html.Div([
   html.Div(id="page-content")
 ], id="body" )
 
-app.layout = html.Div([navbar(SIMAGRI_LOGOS), body])
+app.layout = html.Div([navbar(SIMAGRI_LOGOS, country.capitalize()), body])
 
 ## URL callback
 ################

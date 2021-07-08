@@ -1,7 +1,7 @@
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 
-def navbar(logo):
+def navbar(logo, country):
     # NAVBAR
     navbar = dbc.Navbar([
         # LOGO & BRAND
@@ -9,7 +9,7 @@ def navbar(logo):
             # Use row and col to control vertical alignment of logo / brand
             dbc.Row([
                 dbc.Col(html.Img(src=logo)),
-                dbc.Col(dbc.NavbarBrand("SIMAGRI-Ethiopia", className="ml-3 font-weight-bold"),className="my-auto"),
+                dbc.Col(dbc.NavbarBrand(f"SIMAGRI-{country}", className="ml-3 font-weight-bold"),className="my-auto"),
             ],
             align ="left",
             no_gutters=True,
