@@ -6,8 +6,14 @@ import dash_table
 from datetime import date
 from dash_extensions import Download
 
+# sce_col_names=[ "sce_name", "Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","TargetYr",
+#                 "Fert_1_DOY","Fert_1_Kg","Fert_2_DOY","Fert_2_Kg","Fert_3_DOY","Fert_3_Kg","Fert_4_DOY","Fert_4_Kg",
+#                 "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"
+# ]
 sce_col_names=[ "sce_name", "Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","TargetYr",
-                "Fert_1_DOY","Fert_1_Kg","Fert_2_DOY","Fert_2_Kg","Fert_3_DOY","Fert_3_Kg","Fert_4_DOY","Fert_4_Kg",
+                "Fert_1_DOY","N_1_Kg","P_1_Kg","K_1_Kg", "Fert_2_DOY","N_2_Kg","P_2_Kg","K_2_Kg","Fert_3_DOY","N_3_Kg","P_3_Kg","K_3_Kg",
+                "Fert_4_DOY","N_4_Kg","P_4_Kg","K_4_Kg","P_level","IR_1_DOY", "IR_1_amt","IR_2_DOY", "IR_2_amt","IR_3_DOY","IR_3_amt", 
+                "IR_4_DOY","IR_4_amt","IR_5_DOY","IR_5_amt","AutoIR_depth","AutoIR_thres", "AutoIR_eff", 
                 "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"
 ]
 

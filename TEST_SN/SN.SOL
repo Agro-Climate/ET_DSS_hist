@@ -1,0 +1,578 @@
+!======================================================================================================
+! Soil data received from Adama @ISRA-Senegal for Peanut
+!======================================================================================================
+*CNCNioro14  Nioro       S        100  Senegal
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ Nioro       Senegal           -99     -99 Nioro14
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .13     6    .4    91     1     1 IB001 IB001 IB001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    10   -99   .04  .082  .401     1    21   1.4   .49   4.4   4.3   -99  .064     7   -99   -99   -99
+    20   -99  .053  .107   .39     1    21   1.4   .45   3.2   9.7   -99  .046     7   -99   -99   -99
+    30   -99  .069  .126  .372  .607  6.11  1.47   .38   3.4  10.3   -99   .05   6.6   -99   -99   -99
+    40   -99  .087  .147  .358  .497  6.11  1.43   .36   3.1   9.2   -99  .042   5.9   -99   -99   -99
+    50   -99  .094  .162  .351  .407  2.59  1.41   .34     4    12   -99  .041   6.6   -99   -99   -99
+   100   -99   .13  .205  .351  .333  2.59  1.15   .17  23.9   4.2   -99  .034   6.5   -99   -99   -99
+   
+*CNNior14_S  Nioro       S        100  Senegal-SRGF adjusted
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ Nioro       Senegal           -99     -99 Nioro14
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .13     6    .4    91     1     1 IB001 IB001 IB001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    10   -99   .04  .082  .401     1    21   1.4   .49   4.4   4.3   -99  .064     7   -99   -99   -99
+    20   -99  .053  .107   .39     1    21   1.4   .45   3.2   9.7   -99  .046     7   -99   -99   -99
+    30   -99  .069  .126  .372  .607  6.11  1.47   .38   3.4  10.3   -99   .05   6.6   -99   -99   -99
+    40   -99  .087  .147  .358  .497  6.11  1.43   .36   3.1   9.2   -99  .042   5.9   -99   -99   -99
+    50   -99  .094  .162  .351  .333  2.59  1.41   .34     4    12   -99  .041   6.6   -99   -99   -99
+   100   -99   .13  .205  .351    0   2.59  1.15   .17  23.9   4.2   -99  .034   6.5   -99   -99   -99
+   
+*CNCNNior15  Nioro       SL       100  Senegal
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ Bambey      Senegal           -99     -99 -99
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+     G   .13     6    .4    81     1     1 IB001 IB001 IB001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    20   -99    .1  0.16   .38     1   -99  1.48   .16   2.8   1.5   -99   .02   6.3   -99   3.4   -99
+    40   -99   .12  0.18   .37  0.54   -99  1.48   .14   3.8   1.7   -99   .02   5.8   -99   2.7   -99
+    60   -99   .13  0.19   .36  0.42   -99  1.47   .13   5.1   1.6   -99   .02   5.8   -99   2.9   -99
+    80   -99   .14   0.2   .38  0.34   -99  1.57  .152   6.2   1.7   -99   .02   5.8   -99   3.4   -99
+   100   -99   .15  0.22   .40  0.30   -99  1.44   .26     7   1.8   -99   .04   5.8   -99   3.6   -99
+   
+*CNNior15_S  Nioro       SL       100  Senegal-SRGF adjusted
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ Bambey      Senegal           -99     -99 -99
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+     G   .13     6    .4    81     1     1 IB001 IB001 IB001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    20   -99    .1  0.16   .38     1   -99  1.48   .16   2.8   1.5   -99   .02   6.3   -99   3.4   -99
+    40   -99   .12  0.18   .37  0.54   -99  1.48   .14   3.8   1.7   -99   .02   5.8   -99   2.7   -99
+    60   -99   .13  0.19   .36  0.42   -99  1.47   .13   5.1   1.6   -99   .02   5.8   -99   2.9   -99
+    80   -99   .14   0.2   .38  0.00   -99  1.57  .152   6.2   1.7   -99   .02   5.8   -99   3.4   -99
+   100   -99   .15  0.22   .40  0.00   -99  1.44   .26     7   1.8   -99   .04   5.8   -99   3.6   -99
+   
+*CNBambey14  Bambey      LS       100  Senegal
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ Bambey      Senegal           -99     -99 -99
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+     G   .13     6    .4    81     1     1 IB001 IB001 IB001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    10     1  .028  .089    .4     1   -99   -99   .16    .4  17.1   -99   .01   7.9   -99     8   -99
+    20     2  .039  .092  .403     1   -99   -99   .33   5.8  15.1   -99   .03   7.8   -99     9   -99
+    30     3  .048  .103  .393     1   -99   -99  .215    .7    15   -99   .01   7.7   -99     9   -99
+    40     4  .048  .103  .393     1   -99   -99  .312   6.2  19.7   -99   .03   6.9   -99    10   -99
+    50     5  .048  .103  .393     1   -99   -99  .273   9.2  20.7   -99   .03   6.6   -99    18   -99
+   100     6  .048  .103  .393     1   -99   -99  .195  15.8  26.2   -99   .01   6.2   -99    21   -99
+   
+*CNBamb14_S  Bambey      LS       100  Senegal-SRGF adjusted
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ Bambey      Senegal           -99     -99 -99
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+     G   .13     6    .4    81     1     1 IB001 IB001 IB001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    10     1  .028  .089    .4     1   -99   -99   .16    .4  17.1   -99   .01   7.9   -99     8   -99
+    20     2  .039  .092  .403     1   -99   -99   .33   5.8  15.1   -99   .03   7.8   -99     9   -99
+    30     3  .048  .103  .393     1   -99   -99  .215    .7    15   -99   .01   7.7   -99     9   -99
+    40     4  .048  .103  .393  0.54   -99   -99  .312   6.2  19.7   -99   .03   6.9   -99    10   -99
+    50     5  .048  .103  .393  0.54   -99   -99  .273   9.2  20.7   -99   .03   6.6   -99    18   -99
+   100     6  .048  .103  .393     0   -99   -99  .195  15.8  26.2   -99   .01   6.2   -99    21   -99
+   
+!======================================================================================================
+! Soil data created for Sorghum simulation based on Ganyo(2019)
+!======================================================================================================
+*SN-N15Rain  Ganyo(2019) S         30  -99
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ Nioro       Senegal         13.75  -15.77 Nioro-rainfed_2015
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .11     6    .5    76     1   .88 IB001 IB001 IB001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    10   -99    .1  .162   .38     1    21  1.44  .636   1.4   3.4     5   .05   5.8   -99   -99   -99
+    20   -99   .12  .188  .373    .9    21  1.48   .58   5.2   3.7     5   .04   5.2   -99   -99   -99
+    30   -99  .133  .195  .358    .8    21  1.47  .615   4.5   2.8     5   .06   5.7   -99   -99   -99
+
+*SN-N15Irrg  Ganyo(2019) S         30  -99
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ Nioro       Senegal         13.75  -15.77 Nioro-irrigated_2015
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .11     6    .5    76     1   .88 IB001 IB001 IB001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    10   -99    .1  .162   .38     1    21  1.43  .748   1.9   3.5     5   .04   6.1   -99   -99   -99
+    20   -99   .12  .188  .373    .9    21  1.46  .595   2.5   4.5     5   .05     6   -99   -99   -99
+    30   -99  .133  .195  .358    .8    21  1.46  .636     4   2.8     5   .05   5.9   -99   -99   -99
+
+*SN-N16Rain  Ganyo(2019) S        160  -99
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ Nioro       Senegal         13.75  -15.77 Nioro-rainfed_2016
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .11     6    .5    76     1   .88 IB001 IB001 IB001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    10   -99  .052  .105  .404     1    21  1.45  .611   2.5   3.8     5   .06     7   -99   -99   -99
+    20   -99  .063  .116  .394     1    21  1.48  .536   5.2   3.7     5   .05     7   -99   -99   -99
+    30   -99  .077  .132  .374  .607  6.11  1.54  .499   8.3   4.6     5   .05   6.6   -99   -99   -99
+    40   -99  .094  .151   .36  .497  6.11  1.58   .49    12   4.7     5   .04   5.9   -99   -99   -99
+    50   -99    .1   .16  .357  .407  2.59  1.59  .466  13.4   5.9     5   .04   6.6   -99   -99   -99
+    60   -99  .126  .186  .351  .333  2.59  1.61  .354  19.3   6.1     5   .03   6.5   -99   -99   -99
+    80   -99   .14  .203  .358  .247   .43  1.59  .392  22.1     6     5   .05   6.2   -99   -99   -99
+   100   -99  .058  .106  .385     0    21  1.51  .359     5   3.6     5   .03   6.4   -99   -99   -99
+   120   -99  .132  .192  .351     0   .43  1.61  .359  20.6   5.2     5   .03   6.4   -99   -99   -99
+   140   -99  .134  .194  .351     0   .43  1.61  .378    21     5     5   .04   6.2   -99   -99   -99
+   160   -99  .127  .186  .348     0  2.59  1.62  .378  19.5   4.8     5   .04   6.2   -99   -99   -99
+
+*SN-N16Irrg  Ganyo(2019) S        120  -99
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ Nioro       Senegal         13.75  -15.77 Nioro-irrigated_2016
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .11     6    .5    76     1   .88 IB001 IB001 IB001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+     5   -99  .048  .096  .398     1    21  1.47   .49   2.2     3     5   .04   6.1   -99   -99   -99
+    10   -99  .046  .098  .401     1    21  1.46  .527   1.7   4.5     5   .06   5.9   -99   -99   -99
+    20   -99  .062  .118  .391     1    21  1.49  .508   5.1   5.8     5   .04   5.5   -99   -99   -99
+    30   -99  .076  .131  .371  .607  6.11  1.55  .457   8.3   4.9     5   .05   5.5   -99   -99   -99
+    40   -99  .079  .133  .368  .497  6.11  1.56  .424   9.2   4.5     5   .04   5.6   -99   -99   -99
+    50   -99  .088  .142  .358  .407  6.11  1.59  .392  11.2   4.4     5   .04     6   -99   -99   -99
+    60   -99  .085  .143  .362  .333  6.11  1.58   .35  10.8     7     5   .03   6.5   -99   -99   -99
+    80   -99  .121  .176  .344    .1  2.59  1.63   .35  18.3   3.8     5   .03   6.5   -99   -99   -99
+   100   -99  .124  .184  .351     0  2.59  1.61  .345    19   5.9     5   .04   6.8   -99   -99   -99
+   120   -99  .137  .194  .348     0   .43  1.62  .345  21.8   3.5     5   .04   6.8   -99   -99   -99
+
+*SN-S15Rain  Ganyo(2019) LS        30  -99
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ Sinth       Senegal         13.75  -15.77 Sinthiou-rainfed_2015
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .11     6    .5    76     1   .88 IB001 IB001 IB001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    10   -99   .07  .129  .371     1  6.11  1.55  .411   7.2   8.4     5   .04   5.7   -99   -99   -99
+    20   -99  .073  .131  .368     1  6.11  1.56  .372   8.1   7.9     5   .04   5.3   -99   -99   -99
+    30   -99  .088  .149  .358  .607  2.59  1.59  .359  11.3   8.5     5   .04   5.5   -99   -99   -99
+
+*SN-S16Rain  Ganyo(2019) LS       160  -99
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ Sinth       Senegal         13.75  -15.77 Sinthiou-rainfed_2015
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .11     6    .5    76     1   .88 IB001 IB001 IB001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    10   -99   .08   .15  .407     1  6.11   1.5  .676   7.2   8.4   -99   .06   6.2   -99   -99   -99
+    20   -99  .082  .149    .4     1  6.11  1.52  .583   8.1   7.9   -99   .05   6.8   -99   -99   -99
+    30   -99  .099  .168  .389  .607  2.59  1.55  .592  11.3   8.5   -99   .03   6.4   -99   -99   -99
+    40   -99  .102  .169  .383  .497  2.59  1.57  .508  12.4   7.8   -99   .04   6.2   -99   -99   -99
+    50   -99  .129  .203  .386  .407  2.59  1.56   .56  17.5   9.1   -99   .04   6.7   -99   -99   -99
+    60   -99  .138  .209   .38  .333   .43  1.58  .396  20.2     9   -99   .06   6.4   -99   -99   -99
+    80   -99  .173  .244  .384  .247   .43  1.57  .396  27.2     7   -99   .06   6.4   -99   -99   -99
+   100   -99  .178  .251  .384     0   .43  1.57  .392  28.2   7.5   -99   .04   6.4   -99   -99   -99
+   120   -99  .162  .234   .38     0   .43  1.58  .392  25.1   7.7   -99   .04   6.4   -99   -99   -99
+   140   -99  .167  .243  .384     0   .43  1.57  .387  26.1   9.6   -99   .04   6.4   -99   -99   -99
+   160   -99  .048  .098  .416     0    21  1.48  .387   2.2     4   -99   .04   6.4   -99   -99   -99
+!======================================================================================================
+! Senegal soil profiles (source:Adiku, Samuel GK, et al. (2015)
+!"Climate change impacts on west african agriculture: an integrated regional assessment (CIWARA)." 
+!======================================================================================================
+
+*SN00840067  Adiku(2015) SL       100  -99
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ Nioro       Senegal         13.75  -15.77 -99
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .11     6    .5    76     1   .88 IB001 IB001 IB001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    20   -99    .1  .162   .38     1  2.59  1.46  .538    14     8    10   -99   5.6   -99   4.9   -99
+    40   -99   .12  .188  .373    .9  2.59  1.48   .64    18     9    10   -99   5.1   -99     5   -99
+    60   -99  .133  .195  .358    .8   .43  1.53  .424    22     7    10   -99   5.1   -99     6   -99
+    80   -99  .143    .2  .375    .5   .43  1.48   .28    25     5    10   -99   5.1   -99     5   -99
+   100   -99  .155  .218  .398     0   .43  1.51   .28    25     5     2   -99   5.1   -99     5   -99
+
+*SN00840080  Adiku(2015) SL       100  -99
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ Nioro       Senegal         13.75  -15.77 -99
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .11     6    .5    76     1   .88 IB001 IB001 IB001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    20   -99  .113  .206  .331     1  2.59  1.34    .8    19    27    28   -99   5.1   -99     4   -99
+    40   -99  .089  .165  .278    .9  2.59  1.46  .715    18    26    34   -99     5   -99     4   -99
+    60   -99  .088   .16  .301    .8  2.59  1.48   .22    18    26    28   -99   5.3   -99   3.8   -99
+    80   -99   .08  .151  .293    .5  2.59  1.51    .2    16    26    28   -99   5.4   -99   3.5   -99
+   100   -99  .053  .101  .298     0  2.59  1.54  .154    15    26    50   -99   5.4   -99     3   -99
+
+*SN00840042  Adiku(2015) SL       100  -99
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ Nioro       Senegal         13.75  -15.77 -99
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .11     6    .5    84     1   .88 IB001 IB001 IB001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    20   -99  .114  .193  .443     1  2.59   1.4  .648    14    12     0   -99   6.1   -99     3   -99
+    40   -99  .167  .253  .452    .9   .43  1.38   .42    26    14     0   -99   5.1   -99     4   -99
+    60   -99  .218  .306  .445    .8   .12   1.4  .437    36    12     0   -99     5   -99     4   -99
+    80   -99  .261   .35   .42    .5   .06  1.47  .362    45    11     0   -99     5   -99     4   -99
+   100   -99   .26  .348  .456     0   .06  1.37   .32    45    11     0   -99     5   -99     4   -99
+
+*SN00840056  Adiku(2015) SL       100  -99
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ Nioro       Senegal         13.75  -15.77 -99
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .11     6    .5    76     1   .88 IB001 IB001 IB001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    20   -99  .072  .147  .396     1  2.59  1.42  .146    10    21    10   -99   6.4   -99     3   -99
+    40   -99   .12  .197  .376    .9  2.59  1.48   .26    20    18    10   -99   6.4   -99     2   -99
+    60   -99   .13  .206  .359    .8   .43  1.53   .31    22    16    10   -99   6.4   -99     2   -99
+    80   -99   .13  .206  .375    .5   .43  1.48   .31    22    16    10   -99   6.4   -99     2   -99
+   100   -99  .167  .248  .352     0   .43   1.5  .295    32    18    14   -99   5.4   -99     3   -99
+!======================================================================================================
+! Senegal soil profiles from WI.SOL
+!======================================================================================================
+
+*WI_CMSN001  WISE        LS       110  WISE DATABASE, SOIL SN001
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal         12.65 -16.583 Gleyic Cambisol (CMg)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .13  8.56   .25    75     1     1 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    20    Ap  .033  .146  .417   .82 13.37  1.44   .79     7    16   -99   .08   5.4   -99     3   -99
+    50    A2  .022  .083  .373    .5 45.86  1.58   .15     7     9   -99   .03   5.7   -99   1.6   -99
+   110    Bg  .115  .201  .361    .2  2.72  1.62   .12    13    11   -99   .02     6   -99   2.6   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+    20   -99  30.6   -99   -99   -99   -99   -99    50   -99   -99   -99    .2    .1   -99   -99   1.3
+    50   -99  14.8   -99   -99   -99   -99   -99    75   -99   -99   -99    .2   -99   -99   -99    .3
+   110   -99   7.9   -99   -99   -99   -99   -99    72   -99   -99   -99     1   -99   -99   -99    .9
+
+*WI_GLSN003  WISE        SL        90  WISE DATABASE, SOIL SN003
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal          12.5 -16.583 Dystric Gleysol (GLd)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .13   8.8   .05    75     1     1 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    35   A1g   .06  .174  .398    .7  6.61   1.5   .49    10    18   -99   .05   5.1   -99   3.1   -99
+    50   A2g  .185  .277  .384   .43   .75  1.55   .15    12    20   -99   .02     5   -99   1.8   -99
+    90   BCg  .214  .298  .368   .25   .34   1.6   .13    15    15   -99   .02   4.8   -99   3.1   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+    35   -99   4.8   -99   -99   -99   -99   -99    15   -99   -99   -99    .1   -99   -99     0    .4
+    50   -99     7   -99   -99   -99   -99   -99    37   -99   -99   -99    .1   -99   -99     0    .5
+    90   -99     7   -99   -99   -99   -99   -99    27   -99   -99   -99    .2    .1   -99     0    .6
+
+*WI_FLSN006  WISE        SL       140  WISE DATABASE, SOIL SN006
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal          12.5 -16.583 Thionic Fluvisol (FLt)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+     G   .13  8.88   .25    75     1     1 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    15     A  .045  .132  .366     1 12.38   1.6    .2    11    10   -99   .04     4   -99   2.1   -99
+    70  CGox  .184  .281  .387   .43   .73  1.54   .15    16    23   -99   .04   3.9   -99   2.8   -99
+   140  CGre  .215  .299  .368   .12   .33   1.6   .18    17    13   -99   .04   3.8   -99   2.9   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+    15   -99   7.9   -99   -99   -99   -99   -99    70   -99   -99    .1    .7    .1   -99   1.2    .6
+    70   -99   6.1   -99   -99   -99   -99   -99    42   -99   -99    .1    .5   -99   -99   1.9    .6
+   140   -99   7.9   -99   -99   -99   -99   -99    44   -99   -99    .2    .1   -99   -99   2.2     1
+
+*WI_FLSN010  WISE        C         80  WISE DATABASE, SOIL SN010
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal          12.5 -16.583 Thionic Fluvisol (FLt)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+     G   .13 11.52   .25    75     1     1 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    15    Ag  .237  .396  .502     1   .29  1.26   .97    44    38   -99   .18     6   -99  14.8   -99
+    45    Cg  .215  .345  .476   .55   .56  1.34   .38    45    44   -99   .08   4.4   -99  12.7   -99
+    80  CGox  .217  .364  .459   .29   .28  1.39    .4    50    45   -99   .08   4.2   -99  13.8   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+    15   -99  14.8   -99   -99   -99   -99   -99    88   -99   -99   1.1   4.9   5.4   -99   1.1   1.5
+    45   -99   7.9   -99   -99   -99   -99   -99    57   -99   -99    .6     3   2.7   -99   1.8     1
+    80   -99  14.8   -99   -99   -99   -99   -99    56   -99   -99    .7   6.1   -99   -99   4.1     1
+
+*WI_GLSN011  WISE        SL       140  WISE DATABASE, SOIL SN011
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal          12.5 -16.583 Dystric Gleysol (GLd)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+     G   .13   9.6   .25    75     1     1 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    15   Apg  .077  .229  .437     1  3.43  1.37   1.5    20    20   -99   .14   4.5   -99   7.1   -99
+    30   A2g  .221  .303  .375   .64   .29   1.6   .32    27     5   -99   .06   5.1   -99   5.6   -99
+    65  Gox-  .024  .095  .422   .39 44.18  1.44   .35     5     4   -99   .04   5.1   -99    .6   -99
+   140   Gox  .035  .159  .411   .13  9.94  1.48   -99    10     4   -99   -99   4.4   -99   -99   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+    15   -99  17.9   -99   -99   -99   -99   -99    34   -99   -99    .1   1.2    .2   -99    .1     1
+    30   -99   9.2   -99   -99   -99   -99   -99    71   -99   -99    .1   2.8    .1   -99     0     1
+    65   -99   9.2   -99   -99   -99   -99   -99    84   -99   -99   -99    .3    .1   -99     0    .1
+   140   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99     0   -99
+
+*WI_FLSN002  WISE        SCL      120  WISE DATABASE, SOIL SN002
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal          12.5 -16.583 Dystric Fluvisol (FLd)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+     G   .13  9.76   .05    75     1     1 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    28    Ap  .154  .323  .494   .76  1.16  1.22  3.93    22    19   -99   .22   4.9   -99  12.4   -99
+    60     A  .179   .35  .453   .41   .35  1.33  3.98    37    42   -99   .23   4.2   -99  15.2   -99
+   120   IIC  .124  .234  .559   .17  7.63  1.05   .53    20    26   -99   .05   4.7   -99     4   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+    28   -99  34.9   -99   -99   -99   -99   -99     8   -99   -99   -99    .2    .1   -99     0    .7
+    60   -99  14.8   -99   -99   -99   -99   -99    20   -99   -99    .1    .9    .2   -99    .2   1.9
+   120   -99  13.1   -99   -99   -99   -99   -99    38   -99   -99   -99    .3    .1   -99     0   1.1
+
+*WI_FLSN004  WISE        S        130  WISE DATABASE, SOIL SN004
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal          12.5 -16.583 Thionic Fluvisol (FLt)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .13  6.65   .25    75     1     1 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    16  Apg-  .028  .108  .403     1 28.18  1.49   .71     7     4   -99   .06     5   -99     2   -99
+    60    A-  .024  .073  .392   .47  70.4  1.53    .2     4     1   -99   .03   7.8   -99     1   -99
+   130  CGox  .019  .086  .405   .15 51.99  1.48   .49     4     2   -99   .05   3.8   -99   1.7   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+    16   -99  28.8   -99   -99   -99   -99   -99    49   -99   -99   -99    .6   -99   -99    .7    .4
+    60   -99  24.9   -99   -99   -99   -99   -99   100   -99   -99    .9    .4    .1   -99    .5   -99
+   130   -99   9.2   -99   -99   -99   -99   -99    67   -99   -99    .1    .7   -99   -99    .9    .3
+
+*WI_FLSN005  WISE        SCL      120  WISE DATABASE, SOIL SN005
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal          12.5 -16.583 Thionic Fluvisol (FLt)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .13  9.68   .01    75     1     1 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    18  -CG0  .061    .2  .409     1  4.16  1.49  1.37    21    12   -99   .09   4.8   -99   5.9   -99
+    70  CGre  .068  .214  .421   .41  3.93  1.42  1.12    19     8   -99    .1   3.2   -99   7.1   -99
+   120  CGre  .038  .167  .394   .15  7.43   1.5  1.09    14     4   -99   .06   3.4   -99     5   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+    18   -99  10.9   -99   -99   -99   -99   -99    63   -99   -99    .3   2.4   -99   -99   4.8    .4
+    70   -99  31.9   -99   -99   -99   -99   -99    12   -99   -99    .1    .6   -99   -99   4.6    .2
+   120   -99   7.9   -99   -99   -99   -99   -99    47   -99   -99    .1   1.1    .8   -99   5.3    .5
+
+*WI_FLSN007  WISE        C        120  WISE DATABASE, SOIL SN007
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal          12.5 -16.583 Thionic Fluvisol (FLt)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .13  6.62   .01    75     1     1 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+     8    Ag  .235  .389  .543     1    .6  1.12  2.47    73    20   -99    .2   5.9   -99  25.6   -99
+    30  CGox  .236  .388  .506   .68   .37  1.25   .93    78    19   -99   .11   6.4   -99  24.2   -99
+    70  Gred  .235  .389  .548   .37   .65   1.1  2.89    75    23   -99   .15   5.5   -99  25.9   -99
+   120  Gred  .186  .355  .587   .15  1.56   .98  4.28    77    16   -99   .19     4   -99  31.3   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+     8   -99    14   -99   -99   -99   -99   -99    92   -99   -99   1.8  12.9   4.7   -99   6.6   4.1
+    30   -99     7   -99   -99   -99   -99   -99    81   -99   -99   2.3  10.9   4.3   -99   5.4   2.2
+    70   -99  20.1   -99   -99   -99   -99   -99    76   -99   -99   2.2    10   3.8   -99   8.3   3.7
+   120   -99  19.2   -99   -99   -99   -99   -99    90   -99   -99   2.2  17.5   4.2   -99  10.8   4.3
+
+*WI_FLSN008  WISE        C         80  WISE DATABASE, SOIL SN008
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal          12.5 -16.583 Thionic Fluvisol (FLt)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .13  7.22   .25    75     1     1 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    10  AGox  .185  .354  .585     1  1.55   .98  4.51    63    26   -99   .22   4.6   -99  25.1   -99
+    40  ox-r  .186  .355  .574   .61   1.4  1.02  3.92    73    21   -99   .17   5.6   -99    32   -99
+    80  Gred  .186  .355  .581    .3  1.49     1  3.98    69    20   -99   .17   3.6   -99  29.5   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+    10   -99     7   -99   -99   -99   -99   -99    93   -99   -99   1.4   7.4  12.3   -99   5.1   2.1
+    40   -99  15.7   -99   -99   -99   -99   -99    98   -99   -99   2.1  13.2  11.2   -99   8.3   4.7
+    80   -99    14   -99   -99   -99   -99   -99    58   -99   -99   1.7   6.5   6.8   -99   8.5   2.1
+
+*WI_FLSN009  WISE        C        125  WISE DATABASE, SOIL SN009
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal          12.5 -16.583 Thionic Fluvisol (FLt)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+     G   .13  6.92   .25    75     1     1 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    15    Ah  .156  .337  .643     1  2.92   .79  8.49    68    25   -99   .37   5.4   -99  33.1   -99
+    55  Gred  .186  .355  .653    .5  2.52   .83   2.9    54    35   -99   .17   6.2   -99  21.7   -99
+   125  Gred  .235  .389   .75   .17  3.06   .58  2.28    69    13   -99   .13   4.4   -99  27.3   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+    15   -99  17.9   -99   -99   -99   -99   -99    39   -99   -99    .7   9.4   -99   -99    21   2.8
+    55   -99    21   -99   -99   -99   -99   -99    94   -99   -99   1.6  13.4   1.5   -99   6.9   5.1
+   125   -99    17   -99   -99   -99   -99   -99    51   -99   -99   2.3   9.3   -99   -99  10.6   2.4
+
+*WI_FLSN012  WISE        C        100  WISE DATABASE, SOIL SN012
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal          12.5 -16.583 Thionic Fluvisol (FLt)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .13  6.62   .25    75     1     1 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    20    Ap  .185  .354  .696   .82  3.31   .69  5.57    73    25   -99    .2     5   -99  29.9   -99
+   100     G  .194  .359  .737    .3  3.91    .6  3.85    78    20   -99   .16   4.9   -99  27.5   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+    20   -99   9.2   -99   -99   -99   -99   -99    63   -99   -99   1.9   6.4    10   -99  17.4    .5
+   100   -99  10.9   -99   -99   -99   -99   -99    58   -99   -99   2.4   2.1    11   -99  18.3    .4
+!======================================================================================================
+! Senegal soil profiles from WI.SOL, but rooting depth was adjusted to 30cm
+!======================================================================================================
+
+*SNsCMSN001  WISE        LS       110  WISE DATABASE, SOIL SN001
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal         12.65 -16.583 Gleyic Cambisol (CMg)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .13  8.56   .25    75     1    .7 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    20    Ap  .033  .146  .417   .82 13.37  1.44   .79     7    16   -99   .08   5.4   -99     3   -99
+    30    Ap  .033  .146  .417   .82 13.37  1.44   .79     7    16   -99   .08   5.4   -99     3   -99
+    50    A2  .022  .083  .373     0 45.86  1.58   .15     7     9   -99   .03   5.7   -99   1.6   -99
+   110    Bg  .115  .201  .361     0  2.72  1.62   .12    13    11   -99   .02     6   -99   2.6   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+    20   -99  30.6   -99   -99   -99   -99   -99    50   -99   -99   -99    .2    .1   -99   -99   1.3
+    30   -99  30.6   -99   -99   -99   -99   -99    50   -99   -99   -99    .2    .1   -99   -99   1.3
+    50   -99  14.8   -99   -99   -99   -99   -99    75   -99   -99   -99    .2   -99   -99   -99    .3
+   110   -99   7.9   -99   -99   -99   -99   -99    72   -99   -99   -99     1   -99   -99   -99    .9
+
+*SNsGLSN003  WISE        SL        90  WISE DATABASE, SOIL SN003
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal          12.5 -16.583 Dystric Gleysol (GLd)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .13   8.8   .05    75     1     1 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    35   A1g   .06  .174  .398    .7  6.61   1.5   .49    10    18   -99   .05   5.1   -99   3.1   -99
+    50   A2g  .185  .277  .384     0   .75  1.55   .15    12    20   -99   .02     5   -99   1.8   -99
+    90   BCg  .214  .298  .368     0   .34   1.6   .13    15    15   -99   .02   4.8   -99   3.1   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+    35   -99   4.8   -99   -99   -99   -99   -99    15   -99   -99   -99    .1   -99   -99     0    .4
+    50   -99     7   -99   -99   -99   -99   -99    37   -99   -99   -99    .1   -99   -99     0    .5
+    90   -99     7   -99   -99   -99   -99   -99    27   -99   -99   -99    .2    .1   -99     0    .6
+
+*SNsFLSN006  WISE        SL       140  WISE DATABASE, SOIL SN006
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal          12.5 -16.583 Thionic Fluvisol (FLt)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+     G   .13  8.88   .25    75     1     1 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    15     A  .045  .132  .366     1 12.38   1.6    .2    11    10   -99   .04     4   -99   2.1   -99
+    30     A  .045  .132  .366    .5 12.38   1.6    .2    11    10   -99   .04     4   -99   2.1   -99
+    70  CGox  .184  .281  .387     0   .73  1.54   .15    16    23   -99   .04   3.9   -99   2.8   -99
+   140  CGre  .215  .299  .368     0   .33   1.6   .18    17    13   -99   .04   3.8   -99   2.9   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+    15   -99   7.9   -99   -99   -99   -99   -99    70   -99   -99    .1    .7    .1   -99   1.2    .6
+    30   -99   7.9   -99   -99   -99   -99   -99    70   -99   -99    .1    .7    .1   -99   1.2    .6
+    70   -99   6.1   -99   -99   -99   -99   -99    42   -99   -99    .1    .5   -99   -99   1.9    .6
+   140   -99   7.9   -99   -99   -99   -99   -99    44   -99   -99    .2    .1   -99   -99   2.2     1
+
+*SNsFLSN010  WISE        C         80  WISE DATABASE, SOIL SN010
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal          12.5 -16.583 Thionic Fluvisol (FLt)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+     G   .13 11.52   .25    75     1     1 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    15    Ag  .237  .396  .502     1   .29  1.26   .97    44    38   -99   .18     6   -99  14.8   -99
+    30    Ag  .237  .396  .502    .5   .29  1.26   .97    44    38   -99   .18     6   -99  14.8   -99
+    45    Cg  .215  .345  .476     0   .56  1.34   .38    45    44   -99   .08   4.4   -99  12.7   -99
+    80  CGox  .217  .364  .459     0   .28  1.39    .4    50    45   -99   .08   4.2   -99  13.8   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+    15   -99  14.8   -99   -99   -99   -99   -99    88   -99   -99   1.1   4.9   5.4   -99   1.1   1.5
+    30   -99  14.8   -99   -99   -99   -99   -99    88   -99   -99   1.1   4.9   5.4   -99   1.1   1.5
+    45   -99   7.9   -99   -99   -99   -99   -99    57   -99   -99    .6     3   2.7   -99   1.8     1
+    80   -99  14.8   -99   -99   -99   -99   -99    56   -99   -99    .7   6.1   -99   -99   4.1     1
+
+*SNsGLSN011  WISE        SL       140  WISE DATABASE, SOIL SN011
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal          12.5 -16.583 Dystric Gleysol (GLd)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+     G   .13   9.6   .25    75     1     1 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    15   Apg  .077  .229  .437     1  3.43  1.37   1.5    20    20   -99   .14   4.5   -99   7.1   -99
+    30   A2g  .221  .303  .375   .64   .29   1.6   .32    27     5   -99   .06   5.1   -99   5.6   -99
+    65  Gox-  .024  .095  .422     0 44.18  1.44   .35     5     4   -99   .04   5.1   -99    .6   -99
+   140   Gox  .035  .159  .411     0  9.94  1.48   -99    10     4   -99   -99   4.4   -99   -99   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+    15   -99  17.9   -99   -99   -99   -99   -99    34   -99   -99    .1   1.2    .2   -99    .1     1
+    30   -99   9.2   -99   -99   -99   -99   -99    71   -99   -99    .1   2.8    .1   -99     0     1
+    65   -99   9.2   -99   -99   -99   -99   -99    84   -99   -99   -99    .3    .1   -99     0    .1
+   140   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99   -99     0   -99
+
+*SNsFLSN002  WISE        SCL      120  WISE DATABASE, SOIL SN002
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal          12.5 -16.583 Dystric Fluvisol (FLd)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+     G   .13  9.76   .05    75     1     1 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    28    Ap  .154  .323  .494   .76  1.16  1.22  3.93    22    19   -99   .22   4.9   -99  12.4   -99
+    60     A  .179   .35  .453     0   .35  1.33  3.98    37    42   -99   .23   4.2   -99  15.2   -99
+   120   IIC  .124  .234  .559     0  7.63  1.05   .53    20    26   -99   .05   4.7   -99     4   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+    28   -99  34.9   -99   -99   -99   -99   -99     8   -99   -99   -99    .2    .1   -99     0    .7
+    60   -99  14.8   -99   -99   -99   -99   -99    20   -99   -99    .1    .9    .2   -99    .2   1.9
+   120   -99  13.1   -99   -99   -99   -99   -99    38   -99   -99   -99    .3    .1   -99     0   1.1
+
+*SNsFLSN004  WISE        S        130  WISE DATABASE, SOIL SN004
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal          12.5 -16.583 Thionic Fluvisol (FLt)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .13  6.65   .25    75     1     1 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    16  Apg-  .028  .108  .403     1 28.18  1.49   .71     7     4   -99   .06     5   -99     2   -99
+    30    A-  .024  .073  .392   .47  70.4  1.53    .2     4     1   -99   .03   7.8   -99     1   -99
+    60    A-  .024  .073  .392     0  70.4  1.53    .2     4     1   -99   .03   7.8   -99     1   -99
+   130  CGox  .019  .086  .405     0 51.99  1.48   .49     4     2   -99   .05   3.8   -99   1.7   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+    16   -99  28.8   -99   -99   -99   -99   -99    49   -99   -99   -99    .6   -99   -99    .7    .4
+    30   -99  24.9   -99   -99   -99   -99   -99   100   -99   -99    .9    .4    .1   -99    .5   -99
+    60   -99  24.9   -99   -99   -99   -99   -99   100   -99   -99    .9    .4    .1   -99    .5   -99
+   130   -99   9.2   -99   -99   -99   -99   -99    67   -99   -99    .1    .7   -99   -99    .9    .3
+
+*SNsFLSN005  WISE        SCL      120  WISE DATABASE, SOIL SN005
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal          12.5 -16.583 Thionic Fluvisol (FLt)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .13  9.68   .01    75     1     1 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    18  -CG0  .061    .2  .409     1  4.16  1.49  1.37    21    12   -99   .09   4.8   -99   5.9   -99
+    30  CGre  .068  .214  .421   .41  3.93  1.42  1.12    19     8   -99    .1   3.2   -99   7.1   -99
+    70  CGre  .068  .214  .421     0  3.93  1.42  1.12    19     8   -99    .1   3.2   -99   7.1   -99
+   120  CGre  .038  .167  .394     0  7.43   1.5  1.09    14     4   -99   .06   3.4   -99     5   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+    18   -99  10.9   -99   -99   -99   -99   -99    63   -99   -99    .3   2.4   -99   -99   4.8    .4
+    30   -99  31.9   -99   -99   -99   -99   -99    12   -99   -99    .1    .6   -99   -99   4.6    .2
+    70   -99  31.9   -99   -99   -99   -99   -99    12   -99   -99    .1    .6   -99   -99   4.6    .2
+   120   -99   7.9   -99   -99   -99   -99   -99    47   -99   -99    .1   1.1    .8   -99   5.3    .5
+
+*SNsFLSN007  WISE        C        120  WISE DATABASE, SOIL SN007
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal          12.5 -16.583 Thionic Fluvisol (FLt)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .13  6.62   .01    75     1     1 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+     8    Ag  .235  .389  .543     1    .6  1.12  2.47    73    20   -99    .2   5.9   -99  25.6   -99
+    30  CGox  .236  .388  .506   .68   .37  1.25   .93    78    19   -99   .11   6.4   -99  24.2   -99
+    70  Gred  .235  .389  .548     0   .65   1.1  2.89    75    23   -99   .15   5.5   -99  25.9   -99
+   120  Gred  .186  .355  .587     0  1.56   .98  4.28    77    16   -99   .19     4   -99  31.3   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+     8   -99    14   -99   -99   -99   -99   -99    92   -99   -99   1.8  12.9   4.7   -99   6.6   4.1
+    30   -99     7   -99   -99   -99   -99   -99    81   -99   -99   2.3  10.9   4.3   -99   5.4   2.2
+    70   -99  20.1   -99   -99   -99   -99   -99    76   -99   -99   2.2    10   3.8   -99   8.3   3.7
+   120   -99  19.2   -99   -99   -99   -99   -99    90   -99   -99   2.2  17.5   4.2   -99  10.8   4.3
+
+*SNsFLSN008  WISE        C         80  WISE DATABASE, SOIL SN008
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal          12.5 -16.583 Thionic Fluvisol (FLt)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .13  7.22   .25    75     1     1 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    10  AGox  .185  .354  .585     1  1.55   .98  4.51    63    26   -99   .22   4.6   -99  25.1   -99
+    30  ox-r  .186  .355  .574   .61   1.4  1.02  3.92    73    21   -99   .17   5.6   -99    32   -99
+    40  ox-r  .186  .355  .574     0   1.4  1.02  3.92    73    21   -99   .17   5.6   -99    32   -99
+    80  Gred  .186  .355  .581     0  1.49     1  3.98    69    20   -99   .17   3.6   -99  29.5   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+    10   -99     7   -99   -99   -99   -99   -99    93   -99   -99   1.4   7.4  12.3   -99   5.1   2.1
+    30   -99  15.7   -99   -99   -99   -99   -99    98   -99   -99   2.1  13.2  11.2   -99   8.3   4.7
+    40   -99  15.7   -99   -99   -99   -99   -99    98   -99   -99   2.1  13.2  11.2   -99   8.3   4.7
+    80   -99    14   -99   -99   -99   -99   -99    58   -99   -99   1.7   6.5   6.8   -99   8.5   2.1
+
+*SNsFLSN009  WISE        C        125  WISE DATABASE, SOIL SN009
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal          12.5 -16.583 Thionic Fluvisol (FLt)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+     G   .13  6.92   .25    75     1     1 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    15    Ah  .156  .337  .643     1  2.92   .79  8.49    68    25   -99   .37   5.4   -99  33.1   -99
+    30  Gred  .186  .355  .653    .5  2.52   .83   2.9    54    35   -99   .17   6.2   -99  21.7   -99
+    55  Gred  .186  .355  .653     0  2.52   .83   2.9    54    35   -99   .17   6.2   -99  21.7   -99
+   125  Gred  .235  .389   .75     0  3.06   .58  2.28    69    13   -99   .13   4.4   -99  27.3   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+    15   -99  17.9   -99   -99   -99   -99   -99    39   -99   -99    .7   9.4   -99   -99    21   2.8
+    30   -99    21   -99   -99   -99   -99   -99    94   -99   -99   1.6  13.4   1.5   -99   6.9   5.1
+    55   -99    21   -99   -99   -99   -99   -99    94   -99   -99   1.6  13.4   1.5   -99   6.9   5.1
+   125   -99    17   -99   -99   -99   -99   -99    51   -99   -99   2.3   9.3   -99   -99  10.6   2.4
+
+*SNsFLSN012  WISE        C        100  WISE DATABASE, SOIL SN012
+@SITE        COUNTRY          LAT     LONG SCS FAMILY
+ -99         Senegal          12.5 -16.583 Thionic Fluvisol (FLt)
+@ SCOM  SALB  SLU1  SLDR  SLRO  SLNF  SLPF  SMHB  SMPX  SMKE
+    BN   .13  6.62   .25    75     1     1 SA001 SA001 SA001
+@  SLB  SLMH  SLLL  SDUL  SSAT  SRGF  SSKS  SBDM  SLOC  SLCL  SLSI  SLCF  SLNI  SLHW  SLHB  SCEC  SADC
+    20    Ap  .185  .354  .696   .82  3.31   .69  5.57    73    25   -99    .2     5   -99  29.9   -99
+    30    Ap  .185  .354  .696   .52  3.31   .69  5.57    73    25   -99    .2     5   -99  29.9   -99
+   100     G  .194  .359  .737     0  3.91    .6  3.85    78    20   -99   .16   4.9   -99  27.5   -99
+@  SLB  SLPX  SLPT  SLPO CACO3  SLAL  SLFE  SLMN  SLBS  SLPA  SLPB  SLKE  SLMG  SLNA  SLSU  SLEC  SLCA
+    20   -99   9.2   -99   -99   -99   -99   -99    63   -99   -99   1.9   6.4    10   -99  17.4    .5
+    30   -99   9.2   -99   -99   -99   -99   -99    63   -99   -99   1.9   6.4    10   -99  17.4    .5
+   100   -99  10.9   -99   -99   -99   -99   -99    58   -99   -99   2.4   2.1    11   -99  18.3    .4

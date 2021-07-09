@@ -11,9 +11,9 @@ provider "docker" {
   host = "unix:///var/run/docker.sock"
 }
 
-resource "docker_container" "sndsshist" {
-  image = "sndsshist:latest"
-  name = "sndsshist"
+resource "docker_container" "etdsshist" {
+  image = "etdsshist:latest"
+  name = "etdsshist"
   restart = "always"
   # volumes {
   #   container_path = "/myapp"
@@ -23,8 +23,6 @@ resource "docker_container" "sndsshist" {
   # }
   ports {
     internal = 5000
-    external = 80
-    # external = 5100
-    # external = 5200
+    external = 5100
   }
 }

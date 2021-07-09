@@ -52,7 +52,7 @@ layout = html.Div([
                   dbc.FormGroup([ # Scenario
                     dbc.Label("1) Scenario Name", html_for="sce-name", sm=3, className="p-0", align="start", ),
                     dbc.Col([
-                      dbc.Input(type="text", id="sce-name", value="", minLength=4, maxLength=4, required="required", ),
+                      dbc.Input(type="text", id="sce-name", value="", minLength=4, maxLength=4, ), #required="required", ),
                     ],
                     xl=9,
                     ),
@@ -123,7 +123,7 @@ layout = html.Div([
                   dbc.FormGroup([ # Start Year
                     dbc.Label("5) Start Year", html_for="year1", sm=3, className="p-0", align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="year1", placeholder="YYYY", value="1981", min=1981, max=2018, required="required", ),
+                      dbc.Input(type="number", id="year1", placeholder="YYYY", value="1981", min=1981, max=2018,), # required="required", ),
                       dbc.FormText("(No earlier than 1981)"),
                     ],
                     xl=9,
@@ -134,7 +134,7 @@ layout = html.Div([
                   dbc.FormGroup([ # End Year
                     dbc.Label("6) End Year", html_for="year2", sm=3, className="p-0", align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="year2", placeholder="YYYY", value="2018", min=1981, max=2018, required="required", ),
+                      dbc.Input(type="number", id="year2", placeholder="YYYY", value="2018", min=1981, max=2018,  ), #required="required", ),
                       dbc.FormText("(No later than 2018)"),
                     ],
                     xl=9,
@@ -145,7 +145,7 @@ layout = html.Div([
                   dbc.FormGroup([ # Year to Highlight
                     dbc.Label("7) Year to Highlight", html_for="target-year", sm=3, className="p-0", align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="target-year", placeholder="YYYY", value="2015",min=1981, max=2018, required="required", ),
+                      dbc.Input(type="number", id="target-year", placeholder="YYYY", value="2015",min=1981, max=2018,  ), # required="required", ),
                       dbc.FormText("Type a specific year you remember (e.g., drought year) and want to compare with a full climatology distribution"),
                     ],
                     xl=9,
@@ -239,7 +239,7 @@ layout = html.Div([
                   dbc.FormGroup([ # Planting Density
                     dbc.Label(["12) Planting Density", html.Span(" (plants/m"), html.Sup("2"), html.Span(")"), ], html_for="plt-density", sm=3, className="p-0", align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="plt-density", value=5, min=1, max=300, step=0.1, required="required", ),
+                      dbc.Input(type="number", id="plt-density", value=5, min=1, max=300, step=0.1,), #required="required", ),
                     ],
                     xl=9,
                     ),
@@ -271,13 +271,13 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Label("1st", html_for="fert-day1", ),
-                              dbc.Input(type="number", id="fert-day1", value=0, min="0", max="365", required="required", ),
+                              dbc.Input(type="number", id="fert-day1", value=0, min="0", max="365", ), #required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Label("1st", html_for="fert-amt1", ),
-                              dbc.Input(type="number", id="fert-amt1", value=0, min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="fert-amt1", value=0, min="0", step="0.1", ), #required="required", ),
                             ],),
                           ),
                         ],),
@@ -285,13 +285,13 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Label("2nd", html_for="fert-day2", ),
-                              dbc.Input(type="number", id="fert-day2", value=0, min="0", max="365", required="required", ),
+                              dbc.Input(type="number", id="fert-day2", value=0, min="0", max="365", ), # required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Label("2nd", html_for="fert-amt2", ),
-                              dbc.Input(type="number", id="fert-amt2", value=0, min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="fert-amt2", value=0, min="0", step="0.1",), # required="required", ),
                             ],),
                           ),
                         ],),
@@ -299,13 +299,13 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Label("3rd", html_for="fert-day3", ),
-                              dbc.Input(type="number", id="fert-day3", value=0, min="0", max="365", required="required", ),
+                              dbc.Input(type="number", id="fert-day3", value=0, min="0", max="365", ), #required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Label("3rd", html_for="fert-amt3", ),
-                              dbc.Input(type="number", id="fert-amt3", value=0, min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="fert-amt3", value=0, min="0", step="0.1", ), #required="required", ),
                             ],),
                           ),
                         ],),
@@ -313,13 +313,13 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Label("4th", html_for="fert-day4", ),
-                              dbc.Input(type="number", id="fert-day4", value=0, min="0", max="365", required="required", ),
+                              dbc.Input(type="number", id="fert-day4", value=0, min="0", max="365", ), #required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Label("4th", html_for="fert-amt4", ),
-                              dbc.Input(type="number", id="fert-amt4", value=0, min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="fert-amt4", value=0, min="0", step="0.1", ), #required="required", ),
                             ],),
                           ),
                         ],),
@@ -351,35 +351,35 @@ layout = html.Div([
                           dbc.Col([  
                             dbc.FormGroup([
                               dbc.Label("Crop Price", html_for="crop-price", style={"height": "7vh"}, align="start", ),
-                              dbc.Input(type="number", id="crop-price", value="0", min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="crop-price", value="0", min="0", step="0.1",), # required="required", ),
                               dbc.FormText("[ETB/kg]"),
                             ]),
                           ],),
                           dbc.Col([  
                             dbc.FormGroup([
                               dbc.Label("Fertilizer Price", html_for="fert-cost", style={"height": "7vh"}, align="start", ),
-                              dbc.Input(type="number", id="fert-cost", value="0", min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="fert-cost", value="0", min="0", step="0.1", ), #required="required", ),
                               dbc.FormText("[ETB/N kg]"),
                             ]),
                           ],),
                           dbc.Col([  
                             dbc.FormGroup([
                               dbc.Label("Seed Cost", html_for="seed-cost", style={"height": "7vh"}, align="start", ),
-                              dbc.Input(type="number", id="seed-cost", value="0", min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="seed-cost", value="0", min="0", step="0.1", ), #required="required", ),
                               dbc.FormText("[ETB/ha]"),
                             ]),
                           ],),
                           dbc.Col([  
                             dbc.FormGroup([
                               dbc.Label("Other Variable Costs", html_for="variable-costs", style={"height": "7vh"}, align="start", ),
-                              dbc.Input(type="number", id="variable-costs", value="0", min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="variable-costs", value="0", min="0", step="0.1",), # required="required", ),
                               dbc.FormText("[ETB/ha]"),
                             ]),
                           ],),
                           dbc.Col([  
                             dbc.FormGroup([
                               dbc.Label("Fixed Costs", html_for="fixed-costs", style={"height": "7vh"}, align="start", ),
-                              dbc.Input(type="number", id="fixed-costs", value="0", min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="fixed-costs", value="0", min="0", step="0.1", ), #required="required", ),
                               dbc.FormText("[ETB/ha]"),
                             ]),
                           ],),
@@ -737,11 +737,11 @@ layout = html.Div([
 # is this needed?
 DATA_PATH = pathlib.Path(__file__).parent.joinpath("data").resolve()
 
-DSSAT_FILES_DIR_SHORT = "/dssat_files_dir/"  #for linux systemn
+# DSSAT_FILES_DIR_SHORT = "/dssat_files_dir/"  #for linux systemn
 
-# callbacks still do not work!
-# "/../" + 
-DSSAT_FILES_DIR = os.getcwd() + DSSAT_FILES_DIR_SHORT   #for linux systemn
+# # callbacks still do not work!
+# # "/../" + 
+# DSSAT_FILES_DIR = os.getcwd() + DSSAT_FILES_DIR_SHORT   #for linux systemn
 
 #https://community.plotly.com/t/loading-when-opening-localhost/7284
 #I suspect that this is related to the JS assets from the CDN not loading properly - perhaps because they are blocked by your firewall or some other reason.
@@ -756,9 +756,8 @@ cultivar_options = {
     "SG": ["IB0020 ESH-1","IB0020 ESH-2","IB0027 Dekeba","IB0027 Melkam","IB0027 Teshale"]
 }
 
-
-# Wdir_path = "C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\"
-Wdir_path = DSSAT_FILES_DIR    #for linux systemn
+Wdir_path = "C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\"
+# Wdir_path = DSSAT_FILES_DIR    #for linux systemn
 
 #==============================================================
 #Dynamic call back for sorting datatable by a column name
@@ -1209,8 +1208,8 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
         # dff = pd.read_json(intermediate, orient="split")
         dff = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
         sce_numbers = len(dff.sce_name.values)
-        # Wdir_path = "C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\"
-        Wdir_path = DSSAT_FILES_DIR   #for linux system
+        Wdir_path = "C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\"
+        # Wdir_path = DSSAT_FILES_DIR   #for linux system
         TG_yield = []
 
         #EJ(5/3/2021) run DSSAT for each scenarios with individual V47
@@ -1257,7 +1256,7 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
                 SNX_fname = path.join(Wdir_path, "ETSG"+sname+".SNX")
 
             # On Linux system, we don"t need to do this:
-            # SNX_fname = SNX_fname.replace("/", "\\")
+            SNX_fname = SNX_fname.replace("/", "\\")
             new_str2 = "{0:<95}{1:4s}".format(SNX_fname, repr(1).rjust(4)) + temp_str[99:]
             fw.write(new_str2)
             fr.close()
@@ -1265,37 +1264,37 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             #=====================================================================
             #3) Run DSSAT executable
             os.chdir(Wdir_path)  #change directory  #check if needed or not
-            # if dff.Crop[i] == "WH":
-            #     args = "DSCSM047.EXE CSCER047 B DSSBatch.v47"
-            #     fout_name = path.join(Wdir_path, "ETWH"+sname+".OSU")
-            # elif dff.Crop[i] == "MZ":
-            #     args = "DSCSM047.EXE MZCER047 B DSSBatch.v47"
-            #     fout_name = path.join(Wdir_path, "ETMZ"+sname+".OSU")
-            # else:  # SG
-            #     args = "DSCSM047.EXE SGCER047 B DSSBatch.v47"
-            #     fout_name = path.join(Wdir_path, "ETSG"+sname+".OSU")
-            # subprocess.call(args) ##Run executable with argument  , stdout=FNULL, stderr=FNULL, shell=False)
-            #===========>for linux system
             if dff.Crop[i] == "WH":
-                args = "./DSCSM047.EXE CSCER047 B DSSBatch.V47"
-                # args = "./DSCSM047.EXE B DSSBatch.V47"
-                fout_name = "ETWH"+sname+".OSU"
-                arg_mv = "cp Summary.OUT "+ "ETWH"+sname+".OSU" #"cp Summary.OUT $fout_name"
-                # fout_name = path.join(Wdir_path, "ETWH"+sname+".OSU")
+                args = "DSCSM047.EXE CSCER047 B DSSBatch.v47"
+                fout_name = path.join(Wdir_path, "ETWH"+sname+".OSU")
             elif dff.Crop[i] == "MZ":
-                args = "./DSCSM047.EXE MZCER047 B DSSBatch.V47"
-                fout_name = "ETMZ"+sname+".OSU"
-                arg_mv = "cp Summary.OUT "+ "ETMZ"+sname+".OSU" #"cp Summary.OUT $fout_name"
-                # fout_name = path.join(Wdir_path, "ETMZ"+sname+".OSU")
+                args = "DSCSM047.EXE MZCER047 B DSSBatch.v47"
+                fout_name = path.join(Wdir_path, "ETMZ"+sname+".OSU")
             else:  # SG
-                args = "./DSCSM047.EXE SGCER047 B DSSBatch.V47"
-                fout_name = "ETSG"+sname+".OSU"
-                arg_mv = "cp Summary.OUT "+ "ETSG"+sname+".OSU"# "cp Summary.OUT $fout_name"
-                # fout_name = path.join(Wdir_path, "ETSG"+sname+".OSU")
+                args = "DSCSM047.EXE SGCER047 B DSSBatch.v47"
+                fout_name = path.join(Wdir_path, "ETSG"+sname+".OSU")
+            subprocess.call(args) ##Run executable with argument  , stdout=FNULL, stderr=FNULL, shell=False)
+            # #===========>for linux system
+            # if dff.Crop[i] == "WH":
+            #     args = "./DSCSM047.EXE CSCER047 B DSSBatch.V47"
+            #     # args = "./DSCSM047.EXE B DSSBatch.V47"
+            #     fout_name = "ETWH"+sname+".OSU"
+            #     arg_mv = "cp Summary.OUT "+ "ETWH"+sname+".OSU" #"cp Summary.OUT $fout_name"
+            #     # fout_name = path.join(Wdir_path, "ETWH"+sname+".OSU")
+            # elif dff.Crop[i] == "MZ":
+            #     args = "./DSCSM047.EXE MZCER047 B DSSBatch.V47"
+            #     fout_name = "ETMZ"+sname+".OSU"
+            #     arg_mv = "cp Summary.OUT "+ "ETMZ"+sname+".OSU" #"cp Summary.OUT $fout_name"
+            #     # fout_name = path.join(Wdir_path, "ETMZ"+sname+".OSU")
+            # else:  # SG
+            #     args = "./DSCSM047.EXE SGCER047 B DSSBatch.V47"
+            #     fout_name = "ETSG"+sname+".OSU"
+            #     arg_mv = "cp Summary.OUT "+ "ETSG"+sname+".OSU"# "cp Summary.OUT $fout_name"
+            #     # fout_name = path.join(Wdir_path, "ETSG"+sname+".OSU")
 
-            os.system(args) 
-            os.system(arg_mv) 
-            #===========>end of for linux system
+            # os.system(args) 
+            # os.system(arg_mv) 
+            # #===========>end of for linux system
 
             #4) read DSSAT output => Read Summary.out from all scenario output
             # fout_name = path.join(Wdir_path, "SUMMARY.OUT")
@@ -1505,8 +1504,8 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
         EB_sces = current_sces[current_sces["CropPrice"] != "-99"]
 
         sce_numbers = len(EB_sces.sce_name.values)
-        # Wdir_path = "C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\"
-        Wdir_path = DSSAT_FILES_DIR  #for linux system
+        Wdir_path = "C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\"
+        # Wdir_path = DSSAT_FILES_DIR  #for linux system
         os.chdir(Wdir_path)  #change directory  #check if needed or not
         TG_GMargin = []
 
