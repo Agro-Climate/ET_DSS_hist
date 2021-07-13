@@ -1,0 +1,11 @@
+$BATCH(PEANUT)
+!
+! Directory    : C:\DSSAT47\Peanut
+! Command Line : C:\DSSAT47\DSCSM047.EXE CRGRO047 B DSSBatch.v47
+! Crop         : Peanut          
+! Experiment   : GHNY9701.PNX
+! ExpNo        : 1
+! Debug        : C:\DSSAT47\DSCSM047.EXE CRGRO047 " B DSSBatch.v47"
+!
+@FILEX                                                                                        TRTNO     RP     SQ     OP     CO
+C:\DSSAT46\maize\CALE1501.MZX                                                                     1      1      0      0      0
