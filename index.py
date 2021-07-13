@@ -26,32 +26,23 @@ elif country == "senegal":
     from apps.senegal import about
     from apps.senegal import historical
 elif country == "colombia":
+    from apps.colombia import about
     from apps.colombia import historical
 else:
     pass
 
-
-# base_apps = { "/about": about.layout }
-
-# et_apps = base_apps.update({ "/historical": historical.layout, })
-# sn_apps = base_apps.update({ "/historical": historical.layout, })
-# co_apps = base_apps.update({ "/historical": historical.layout, })
-
-
 apps = {
-    "ethiopia": { "/about": about.layout, "/historical": historical.layout, },
-    "senegal": { "/about": about.layout, "/historical": historical.layout, },
-    # "colombia": { "/about": about.layout, "/historical": historical.layout, },
+    "ethiopia": { "logo": app.get_asset_url("ethioagroclimate.png"), "/about": about.layout, "/historical": historical.layout, },
+    "senegal":  { "logo": app.get_asset_url("IRI_ISRA_senegal.gif"), "/about": about.layout, "/historical": historical.layout, },
+    # "colombia": { "logo": app.get_asset_url("SIMAGRI_CO_logo.GIF"), "/about": about.layout, "/historical": historical.layout, },
 }
-
-SIMAGRI_LOGOS = app.get_asset_url("ethioagroclimate.png")
 
 body = html.Div([
   dcc.Location(id="url", refresh=False),
   html.Div(id="page-content")
 ], id="body" )
 
-app.layout = html.Div([navbar(SIMAGRI_LOGOS, country.capitalize()), body])
+app.layout = html.Div([navbar(apps[country]["logo"], country.capitalize()), body])
 
 ## URL callback
 ################
