@@ -460,22 +460,17 @@ layout = html.Div([
                         labelStyle = {"display": "inline-block","marginRight": 10},
                         value="P_no",
                       ),
-                      html.Div([ # Phosphorous simualtion
-                        # dbc.Label("Extractrable P level in soil", html_for="extr_P", sm=3, className="p-0", align="start", ),
-                        dbc.Label("Extractrable P level in soil", html_for="extr_P", align="start", ),
-                        dbc.Col([
-                          dcc.Dropdown(
-                            id="extr_P", 
-                            options=[
-                              {"label": "Very Low(2 ppm)", "value": "VL"},
-                              {"label": "Low (7 ppm)", "value": "L"},
-                              {"label": "Medium (12 ppm)", "value": "M"},
-                              {"label": "High (18 ppm)", "value": "H"},
-                            ], 
-                            value="L",
-                          ),                
-                        ],
-                        xl=9,
+                      html.Div([
+                        dbc.Label("Level of extractrable phosphorous in soil", html_for="extr_P", align="start", ),
+                        dcc.Dropdown(
+                          id="extr_P", 
+                          options=[
+                            {"label": "Very Low(2 ppm)", "value": "VL"},
+                            {"label": "Low (7 ppm)", "value": "L"},
+                            {"label": "Medium (12 ppm)", "value": "M"},
+                            {"label": "High (18 ppm)", "value": "H"},
+                          ], 
+                          value="L",
                         ),
                       ],
                       id="P-sim-Comp", 
@@ -488,7 +483,6 @@ layout = html.Div([
                   ],
                   row=True
                   ),
-                  ########=======>Irrigation
                   dbc.FormGroup([ # Irrigation
                     dbc.Label("15) Irrigation", html_for="irrig_input", sm=3, className="p-0", align="start", ),
                     dbc.Col([
@@ -502,23 +496,18 @@ layout = html.Div([
                         labelStyle = {"display": "inline-block","marginRight": 10},
                         value="No_irrig",
                       ),
-                      html.Div([ # "on reported dates "
-                        dbc.Row([  #irrigation method
-                          dbc.Label("Irrigation method", html_for="extr_P", align="start", ),
-                          dbc.Col([
-                            dcc.Dropdown(
-                              id="ir_method", 
-                              options=[
-                                {"label": "Sprinkler", "value": "IR004"},
-                                {"label": "Furrow", "value": "IR001"},
-                                {"label": "Flood", "value": "IR001"},
-                              ], 
-                              value="IR004",
-                            ),                
-                          ],
-                          xl=9,
-                          ),
-                          ],),
+                      html.Div([ # "on reported dates"
+                        #irrigation method
+                        dbc.Label("Irrigation method", html_for="extr_P", align="start", ),
+                        dcc.Dropdown(
+                          id="ir_method", 
+                          options=[
+                            {"label": "Sprinkler", "value": "IR004"},
+                            {"label": "Furrow", "value": "IR001"},
+                            {"label": "Flood", "value": "IR001"},
+                          ], 
+                          value="IR004",
+                        ),      
                         dbc.Row([
                           dbc.Col(
                             dbc.Label("No.", className="text-center", ),
@@ -529,7 +518,9 @@ layout = html.Div([
                           dbc.Col(
                             dbc.Label("Amnt of Water [mm]", className="text-center", ),
                           ),
-                        ],),
+                        ],
+                        className="py-3",
+                        ),
                         dbc.Row([
                           dbc.Col(
                             dbc.Label("1st", className="text-center", ),
