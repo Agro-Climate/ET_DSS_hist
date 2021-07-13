@@ -13,12 +13,10 @@ layout = html.Div(
       html.Br(),
       html.Div(
       children= """
-                  REPLACE FOR SENEGAL
-
                   Smart planning of annual crop production requires consideration of possible scenarios.
                   The CAMDT tool adopts crop simulation models included in the DSSAT package (Decision Support System for Agrotechnology Transfer). 
                   The methodology was developed by the IRI (International Research Institute for Climate and Society / Columbia University) 
-                  in collaboration with the Ethiopian Institute of Agricultural Research (EIAR). 
+                  in collaboration with ISRA (Institut Sénégalais de Recherches Agricoles). 
                   The purpose of this tool is to support decision-making of the producer or technical advisor, which facilitates discussion of optimal production strategies, risks of technology adoption, 
                   and evaluation of long-term effects, considering interactions of various factors.
                 """, 

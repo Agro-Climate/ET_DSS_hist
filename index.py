@@ -32,9 +32,33 @@ else:
     pass
 
 apps = {
-    "ethiopia": { "logo": app.get_asset_url("ethioagroclimate.png"), "/about": about.layout, "/historical": historical.layout, },
-    "senegal":  { "logo": app.get_asset_url("IRI_ISRA_senegal.gif"), "/about": about.layout, "/historical": historical.layout, },
-    # "colombia": { "logo": app.get_asset_url("SIMAGRI_CO_logo.GIF"), "/about": about.layout, "/historical": historical.layout, },
+    "ethiopia": { 
+        "logo": app.get_asset_url("ethioagroclimate.png"),
+        "tutorial": "https://sites.google.com/iri.columbia.edu/simagri-ethiopia/simagri-tutorial",
+        "feedback": "https://sites.google.com/iri.columbia.edu/simagri-ethiopia/user-feedback-survey-form",
+        "paths": {
+            "/about": about.layout,
+            "/historical": historical.layout, 
+        },
+    },
+    "senegal":  { 
+        "logo": app.get_asset_url("IRI_ISRA_senegal.gif"),
+        "tutorial": "https://sites.google.com/iri.columbia.edu/simagri-senegal/simagri-tutorial",
+        "feedback": "https://sites.google.com/iri.columbia.edu/simagri-senegal/user-feedback-survey-form",
+        "paths": {
+            "/about": about.layout,
+            "/historical": historical.layout, 
+        },
+    },
+    # "colombia": { 
+    #     "logo": app.get_asset_url("SIMAGRI_CO_logo.GIF"), 
+    #     "tutorial": "",
+    #     "feedback": "",
+    #     "paths": {
+    #         "/about": about.layout, 
+    #         "/historical": historical.layout, 
+    #     },
+    # },
 }
 
 body = html.Div([
@@ -42,7 +66,7 @@ body = html.Div([
   html.Div(id="page-content")
 ], id="body" )
 
-app.layout = html.Div([navbar(apps[country]["logo"], country.capitalize()), body])
+app.layout = html.Div([navbar(apps[country]["logo"], country.capitalize(), apps[country]["tutorial"], apps[country]["feedback"] ), body])
 
 ## URL callback
 ################
@@ -52,8 +76,8 @@ app.layout = html.Div([navbar(apps[country]["logo"], country.capitalize()), body
 )
 
 def display_page(pathname):
-    if pathname in [*apps[country]]:
-        return apps[country][pathname]
+    if pathname in [*apps[country]["paths"]]:
+        return apps[country]["paths"][pathname]
 
     # if pathname == '/historical':
     #     return historical.layout

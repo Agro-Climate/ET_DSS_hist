@@ -1797,7 +1797,7 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             if i==0:
                 df = temp_df.copy()
             else:
-                df = df.append(temp_df, ignore_index=True)
+                df = temp_df.append(df, ignore_index=True)
                 
             TG_yield.append(TG_yield_temp)
 
