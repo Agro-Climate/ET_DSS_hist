@@ -1562,8 +1562,8 @@ def make_sce_table(
         "Fert_2_DOY": ["-99"], "N_2_Kg": ["-99"], "P_2_Kg": ["-99"], "K_2_Kg": ["-99"], 
         "Fert_3_DOY": ["-99"], "N_3_Kg": ["-99"], "P_3_Kg": ["-99"], "K_3_Kg": ["-99"], 
         "Fert_4_DOY": ["-99"], "N_4_Kg": ["-99"], "P_4_Kg": ["-99"], "K_4_Kg": ["-99"], 
-        "P_level": ["-99"],#P simulation    EJ(7/72021)
-        "IR_method": ["-99"],#Irrigation on reported date
+        "P_level": ["-99"],   #P simulation    EJ(7/72021)
+        "IR_method": ["-99"], #Irrigation on reported date
         "IR_1_DOY": ["-99"], "IR_1_amt": ["-99"],
         "IR_2_DOY": ["-99"], "IR_2_amt": ["-99"],
         "IR_3_DOY": ["-99"], "IR_3_amt": ["-99"],
@@ -1677,38 +1677,38 @@ def make_sce_table(
 def run_create_figure(n_clicks, sce_in_table, slider_range):
     if n_clicks is None:
         raise PreventUpdate
-        return 
     else: 
+
         # 1) Read saved scenario summaries and get a list of scenarios to run
         # dff = pd.read_json(intermediate, orient="split")
-        dff = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
-        sce_numbers = len(dff.sce_name.values)
-        # Wdir_path = "C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\"
-        # Wdir_path = "C:\\IRI\\Python_Dash\\SN_DSS_hist_Keshatemp\\TEST_SN\\"
+        scenarios = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
+        num_sces = len(scenarios.sce_name.values)
         Wdir_path = DSSAT_FILES_DIR   #for linux system
         TG_yield = []
 
         #EJ(5/3/2021) run DSSAT for each scenarios with individual V47
             #EJ(5/18/2021)variables for extracting seasonal total rainfall
-        m1, m2 = slider_range
-        m_doys_list = [1,32,60,91,121,152,182,213,244,274,305,335]
-        m_doye_list = [31,59,90,120,151,181,212,243,273,304,334,365]
-        sdoy = m_doys_list[m1-1]  #first doy of the target season
-        edoy = m_doye_list[m2-1]  #last doy of the target season
+        start_month, end_month = slider_range
+        first_DOYs = [1,32,60,91,121,152,182,213,244,274,305,335]
+        last_DOYs = [31,59,90,120,151,181,212,243,273,304,334,365]
+        season_starts_DOY = first_DOYs[start_month-1]  #first doy of the target season
+        season_ends_DOY = last_DOYs[end_month-1]  #last doy of the target season
 
-        for i in range(sce_numbers):
+        # for each scenario
+        for i in range(num_sces):
+            scenario = scenarios.sce_name.values[i]
             # EJ(5/18/2021) extract seasonal rainfall total
-            firstyear = int(dff.FirstYear[i])
-            lastyear = int(dff.LastYear[i])
-            WTD_fname = path.join(Wdir_path, dff.stn_name[i]+".WTD")
+            firstyear = int(scenarios.FirstYear[i])
+            lastyear = int(scenarios.LastYear[i])
+            WTD_fname = path.join(Wdir_path, scenarios.stn_name[i]+".WTD")
             df_obs = read_WTD(WTD_fname,firstyear, lastyear)  # === Read daily observations into a dataframe (note: Feb 29th was skipped in df_obs)
-            df_season_rain = season_rain_rank(df_obs, sdoy, edoy)  #get indices of the sorted years based on SCF1 => df_season_rain.columns = ["YEAR","season_rain", "Rank"]  
+            df_season_rain = season_rain_rank(df_obs, season_starts_DOY, season_ends_DOY)  #get indices of the sorted years based on SCF1 => df_season_rain.columns = ["YEAR","season_rain", "Rank"]  
             #==============end of # EJ(5/18/2021) extract seasonal rainfall total
 
             # 2) Write V47 file
-            if dff.Crop[i] == "PN":
+            if scenarios.Crop[i] == "PN":
                 temp_dv7 = path.join(Wdir_path, "DSSBatch_template_PN.V47")
-            elif dff.Crop[i] == "ML":
+            elif scenarios.Crop[i] == "ML":
                 temp_dv7 = path.join(Wdir_path, "DSSBatch_template_ML.V47")
             else:  # SG
                 temp_dv7 = path.join(Wdir_path, "DSSBatch_template_SG.V47")
@@ -1718,18 +1718,17 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             fw = open(dv7_fname, "w")
             # read template and write lines
             for line in range(0, 10):
-                temp_str = fr.readline()
-                fw.write(temp_str)
+                line = fr.readline()
+                fw.write(line)
 
             temp_str = fr.readline()
-            sname = dff.sce_name.values[i]
-            # SNX_fname = path.join(Wdir_path, "ETMZ"+sname+".SNX")
-            if dff.Crop[i] == "PN":
-                SNX_fname = path.join(Wdir_path, "SNPN"+sname+".SNX")
-            elif dff.Crop[i] == "ML":
-                SNX_fname = path.join(Wdir_path, "SNML"+sname+".SNX")
+            # SNX_fname = path.join(Wdir_path, "ETMZ"+scenario+".SNX")
+            if scenarios.Crop[i] == "PN":
+                SNX_fname = path.join(Wdir_path, "SNPN"+scenario+".SNX")
+            elif scenarios.Crop[i] == "ML":
+                SNX_fname = path.join(Wdir_path, "SNML"+scenario+".SNX")
             else:  # SG
-                SNX_fname = path.join(Wdir_path, "SNSG"+sname+".SNX")
+                SNX_fname = path.join(Wdir_path, "SNSG"+scenario+".SNX")
 
             # On Linux system, we don"t need to do this:
             # SNX_fname = SNX_fname.replace("/", "\\")
@@ -1740,35 +1739,35 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             #=====================================================================
             #3) Run DSSAT executable
             os.chdir(Wdir_path)  #change directory  #check if needed or not
-            # if dff.Crop[i] == "PN":
+            # if scenarios.Crop[i] == "PN":
             #     args = "DSCSM047.EXE CRGRO047 B DSSBatch.v47"
-            #     fout_name = path.join(Wdir_path, "SNPN"+sname+".OSU")
-            # elif dff.Crop[i] == "ML":
+            #     fout_name = path.join(Wdir_path, "SNPN"+scenario+".OSU")
+            # elif scenarios.Crop[i] == "ML":
             #     args = "DSCSM047.EXE MLCER047 B DSSBatch.v47"
-            #     fout_name = path.join(Wdir_path, "SNML"+sname+".OSU")
+            #     fout_name = path.join(Wdir_path, "SNML"+scenario+".OSU")
             # else:  # SG
             #     args = "DSCSM047.EXE SGCER047 B DSSBatch.v47"
-            #     fout_name = path.join(Wdir_path, "SNSG"+sname+".OSU")
+            #     fout_name = path.join(Wdir_path, "SNSG"+scenario+".OSU")
             # subprocess.call(args) ##Run executable with argument  , stdout=FNULL, stderr=FNULL, shell=False)
             # #===========>for linux system
-            if dff.Crop[i] == "PN":
+            if scenarios.Crop[i] == "PN":
                 args = "./DSCSM047.EXE CRGRO047 B DSSBatch.V47"
                 # args = "./DSCSM047.EXE B DSSBatch.V47"
-                fout_name = "SNPN"+sname+".OSU"
-                arg_mv = "cp Summary.OUT "+ "SNPN"+sname+".OSU" #"cp Summary.OUT $fout_name"
-                # fout_name = path.join(Wdir_path, "SNPN"+sname+".OSU")
-            elif dff.Crop[i] == "ML":
+                fout_name = "SNPN"+scenario+".OSU"
+                arg_mv = "cp Summary.OUT "+ "SNPN"+scenario+".OSU" #"cp Summary.OUT $fout_name"
+                # fout_name = path.join(Wdir_path, "SNPN"+scenario+".OSU")
+            elif scenarios.Crop[i] == "ML":
                 args = "./DSCSM047.EXE MLCER047 B DSSBatch.V47"
-                fout_name = "SNML"+sname+".OSU"
-                arg_mv = "cp Summary.OUT "+ "SNML"+sname+".OSU" #"cp Summary.OUT $fout_name"
-                # fout_name = path.join(Wdir_path, "SNML"+sname+".OSU")
+                fout_name = "SNML"+scenario+".OSU"
+                arg_mv = "cp Summary.OUT "+ "SNML"+scenario+".OSU" #"cp Summary.OUT $fout_name"
+                # fout_name = path.join(Wdir_path, "SNML"+scenario+".OSU")
             else:  # SG
                 args = "./DSCSM047.EXE SGCER047 B DSSBatch.V47"
-                fout_name = "SNSG"+sname+".OSU"
-                arg_mv = "cp Summary.OUT "+ "SNSG"+sname+".OSU"# "cp Summary.OUT $fout_name"
-                # fout_name = path.join(Wdir_path, "SNSG"+sname+".OSU")
+                fout_name = "SNSG"+scenario+".OSU"
+                arg_mv = "cp Summary.OUT "+ "SNSG"+scenario+".OSU"# "cp Summary.OUT $fout_name"
+                # fout_name = path.join(Wdir_path, "SNSG"+scenario+".OSU")
 
-            os.system(args) 
+            os.system(args)
             os.system(arg_mv) 
             # #===========>end of for linux system
 
@@ -1781,9 +1780,9 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             ADAT = df_OUT.iloc[:,15].values  #read 14th column only
             MDAT = df_OUT.iloc[:,16].values  #read 14th column only    
             YEAR = df_OUT.iloc[:,13].values//1000
-            if int(dff.TargetYr[i]) <= int(dff.LastYear[i]):
+            if int(scenarios.TargetYr[i]) <= int(scenarios.LastYear[i]):
                 doy = repr(PDAT[0])[4:]
-                target = dff.TargetYr[i] + doy
+                target = scenarios.TargetYr[i] + doy
                 yr_index = np.argwhere(PDAT == int(target))
         
                 TG_yield_temp = HWAM[yr_index[0][0]]
@@ -1805,10 +1804,6 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
         yield_min = np.min(df.HWAM.values)  #to make a consistent yield scale for exceedance curve =>Fig 4,5,6
         yield_max = np.max(df.HWAM.values)
         x_val = np.unique(df.EXPERIMENT.values)
-        # print('TG_yield=')
-        # print(TG_yield)
-        # print(df.head())
-        # print(x_val)
         #4) Make a boxplot
         # df = px.data.tips()
         # fig = px.box(df, x="time", y="total_bill")
@@ -1820,7 +1815,6 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
         yld_box.add_scatter(x=x_val,y=TG_yield, mode="markers") #, mode="lines+markers") #"lines")
         yld_box.update_xaxes(title= "Scenario Name [*Note:Red dot(s) represents yield(s) based on the weather of target year]")
         yld_box.update_yaxes(title= "Yield [kg/ha]")
-        # # return fig
 
         yld_exc = go.Figure()
         for i in x_val:
@@ -2301,7 +2295,6 @@ def writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop,
 
     for nline in range(0, 10):
         temp_str = fr.readline()
-        # print temp_str
         if temp_str[0:9] == '*PLANTING':
             break
 

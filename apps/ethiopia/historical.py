@@ -1207,8 +1207,8 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
     else: 
         # 1) Read saved scenario summaries and get a list of scenarios to run
         # dff = pd.read_json(intermediate, orient="split")
-        dff = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
-        sce_numbers = len(dff.sce_name.values)
+        scenarios = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
+        sce_numbers = len(scenarios.sce_name.values)
         # Wdir_path = "C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\"
         Wdir_path = DSSAT_FILES_DIR   #for linux system
         TG_yield = []
@@ -1222,18 +1222,19 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
         edoy = m_doye_list[m2-1]  #last doy of the target season
 
         for i in range(sce_numbers):
+            scenario = scenarios.sce_name.values[i]
             # EJ(5/18/2021) extract seasonal rainfall total
-            firstyear = int(dff.FirstYear[i])
-            lastyear = int(dff.LastYear[i])
-            WTD_fname = path.join(Wdir_path, dff.stn_name[i]+".WTD")
+            firstyear = int(scenarios.FirstYear[i])
+            lastyear = int(scenarios.LastYear[i])
+            WTD_fname = path.join(Wdir_path, scenarios.stn_name[i]+".WTD")
             df_obs = read_WTD(WTD_fname,firstyear, lastyear)  # === Read daily observations into a dataframe (note: Feb 29th was skipped in df_obs)
             df_season_rain = season_rain_rank(df_obs, sdoy, edoy)  #get indices of the sorted years based on SCF1 => df_season_rain.columns = ["YEAR","season_rain", "Rank"]  
             #==============end of # EJ(5/18/2021) extract seasonal rainfall total
 
             # 2) Write V47 file
-            if dff.Crop[i] == "WH":
+            if scenarios.Crop[i] == "WH":
                 temp_dv7 = path.join(Wdir_path, "DSSBatch_template_WH.V47")
-            elif dff.Crop[i] == "MZ":
+            elif scenarios.Crop[i] == "MZ":
                 temp_dv7 = path.join(Wdir_path, "DSSBatch_template_MZ.V47")
             else:  # SG
                 temp_dv7 = path.join(Wdir_path, "DSSBatch_template_SG.V47")
@@ -1247,14 +1248,13 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
                 fw.write(temp_str)
 
             temp_str = fr.readline()
-            sname = dff.sce_name.values[i]
-            # SNX_fname = path.join(Wdir_path, "ETMZ"+sname+".SNX")
-            if dff.Crop[i] == "WH":
-                SNX_fname = path.join(Wdir_path, "ETWH"+sname+".SNX")
-            elif dff.Crop[i] == "MZ":
-                SNX_fname = path.join(Wdir_path, "ETMZ"+sname+".SNX")
+            # SNX_fname = path.join(Wdir_path, "ETMZ"+scenario+".SNX")
+            if scenarios.Crop[i] == "WH":
+                SNX_fname = path.join(Wdir_path, "ETWH"+scenario+".SNX")
+            elif scenarios.Crop[i] == "MZ":
+                SNX_fname = path.join(Wdir_path, "ETMZ"+scenario+".SNX")
             else:  # SG
-                SNX_fname = path.join(Wdir_path, "ETSG"+sname+".SNX")
+                SNX_fname = path.join(Wdir_path, "ETSG"+scenario+".SNX")
 
             # On Linux system, we don"t need to do this:
             # SNX_fname = SNX_fname.replace("/", "\\")
@@ -1265,33 +1265,33 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             #=====================================================================
             #3) Run DSSAT executable
             os.chdir(Wdir_path)  #change directory  #check if needed or not
-            # if dff.Crop[i] == "WH":
+            # if scenarios.Crop[i] == "WH":
             #     args = "DSCSM047.EXE CSCER047 B DSSBatch.v47"
-            #     fout_name = path.join(Wdir_path, "ETWH"+sname+".OSU")
-            # elif dff.Crop[i] == "MZ":
+            #     fout_name = path.join(Wdir_path, "ETWH"+scenario+".OSU")
+            # elif scenarios.Crop[i] == "MZ":
             #     args = "DSCSM047.EXE MZCER047 B DSSBatch.v47"
-            #     fout_name = path.join(Wdir_path, "ETMZ"+sname+".OSU")
+            #     fout_name = path.join(Wdir_path, "ETMZ"+scenario+".OSU")
             # else:  # SG
             #     args = "DSCSM047.EXE SGCER047 B DSSBatch.v47"
-            #     fout_name = path.join(Wdir_path, "ETSG"+sname+".OSU")
+            #     fout_name = path.join(Wdir_path, "ETSG"+scenario+".OSU")
             # subprocess.call(args) ##Run executable with argument  , stdout=FNULL, stderr=FNULL, shell=False)
             #===========>for linux system
-            if dff.Crop[i] == "WH":
+            if scenarios.Crop[i] == "WH":
                 args = "./DSCSM047.EXE CSCER047 B DSSBatch.V47"
                 # args = "./DSCSM047.EXE B DSSBatch.V47"
-                fout_name = "ETWH"+sname+".OSU"
-                arg_mv = "cp Summary.OUT "+ "ETWH"+sname+".OSU" #"cp Summary.OUT $fout_name"
-                # fout_name = path.join(Wdir_path, "ETWH"+sname+".OSU")
-            elif dff.Crop[i] == "MZ":
+                fout_name = "ETWH"+scenario+".OSU"
+                arg_mv = "cp Summary.OUT "+ "ETWH"+scenario+".OSU" #"cp Summary.OUT $fout_name"
+                # fout_name = path.join(Wdir_path, "ETWH"+scenario+".OSU")
+            elif scenarios.Crop[i] == "MZ":
                 args = "./DSCSM047.EXE MZCER047 B DSSBatch.V47"
-                fout_name = "ETMZ"+sname+".OSU"
-                arg_mv = "cp Summary.OUT "+ "ETMZ"+sname+".OSU" #"cp Summary.OUT $fout_name"
-                # fout_name = path.join(Wdir_path, "ETMZ"+sname+".OSU")
+                fout_name = "ETMZ"+scenario+".OSU"
+                arg_mv = "cp Summary.OUT "+ "ETMZ"+scenario+".OSU" #"cp Summary.OUT $fout_name"
+                # fout_name = path.join(Wdir_path, "ETMZ"+scenario+".OSU")
             else:  # SG
                 args = "./DSCSM047.EXE SGCER047 B DSSBatch.V47"
-                fout_name = "ETSG"+sname+".OSU"
-                arg_mv = "cp Summary.OUT "+ "ETSG"+sname+".OSU"# "cp Summary.OUT $fout_name"
-                # fout_name = path.join(Wdir_path, "ETSG"+sname+".OSU")
+                fout_name = "ETSG"+scenario+".OSU"
+                arg_mv = "cp Summary.OUT "+ "ETSG"+scenario+".OSU"# "cp Summary.OUT $fout_name"
+                # fout_name = path.join(Wdir_path, "ETSG"+scenario+".OSU")
 
             os.system(args) 
             os.system(arg_mv) 
@@ -1308,7 +1308,7 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             YEAR = df_OUT.iloc[:,13].values//1000
             
             doy = repr(PDAT[0])[4:]
-            target = dff.TargetYr[i] + doy
+            target = scenarios.TargetYr[i] + doy
             yr_index = np.argwhere(PDAT == int(target))
     
             TG_yield_temp = HWAM[yr_index[0][0]]

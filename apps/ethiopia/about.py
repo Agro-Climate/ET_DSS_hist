@@ -22,6 +22,18 @@ layout = html.Div(
                 """, 
       ),
       html.Br(),
+      html.Div("""
+          Credits:
+          
+          Eunjin Han, Ph.D. at IRI
+          Walter Baethgen, Ph.D. at IRI
+          James Hansen, Ph.D. at IRI
+          Kesha Kumshayev, at IRI 
+          Jemal Seid Ahmed, at EIAR
+          Kindie Tesfaye, Ph.D. at CIMMYT
+          Dawit Solomon, Ph.D. at CCAFS
+      """
+      ),
     ],
     className="text-center"
     )
