@@ -1798,7 +1798,7 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             else:
                 df = temp_df.append(df, ignore_index=True)
                 
-            TG_yield.append(TG_yield_temp)
+            TG_yield = [TG_yield_temp]+TG_yield
 
         df = df.round({"RAIN": 0})  #Round a DataFrame to a variable number of decimal places.
         yield_min = np.min(df.HWAM.values)  #to make a consistent yield scale for exceedance curve =>Fig 4,5,6

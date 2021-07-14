@@ -1310,9 +1310,9 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             doy = repr(PDAT[0])[4:]
             target = scenarios.TargetYr[i] + doy
             yr_index = np.argwhere(PDAT == int(target))
-    
+
             TG_yield_temp = HWAM[yr_index[0][0]]
-            
+
             # Make a new dataframe for plotting
             data = {"EXPERIMENT":EXPERIMENT, "YEAR":YEAR, "PDAT": PDAT, "ADAT":ADAT, "HWAM":HWAM,"RAIN":df_season_rain.season_rain.values,"RANK":df_season_rain.Rank.values}
             temp_df = pd.DataFrame (data, columns = ["EXPERIMENT","YEAR", "PDAT","ADAT","HWAM", "RAIN", "RANK"])
@@ -1321,14 +1321,14 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
                 df = temp_df.copy()
             else:
                 df = temp_df.append(df, ignore_index=True)
-                
-            TG_yield.append(TG_yield_temp)
+
+            TG_yield = [TG_yield_temp]+TG_yield
 
         df = df.round({"RAIN": 0})  #Round a DataFrame to a variable number of decimal places.
         yield_min = np.min(df.HWAM.values)  #to make a consistent yield scale for exceedance curve =>Fig 4,5,6
         yield_max = np.max(df.HWAM.values)
         x_val = np.unique(df.EXPERIMENT.values)
-        
+
         #4) Make a boxplot
         # df = px.data.tips()
         # fig = px.box(df, x="time", y="total_bill")
