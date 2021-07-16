@@ -60,7 +60,7 @@ layout = html.Div([
                   dbc.FormGroup([ # Scenario
                     dbc.Label("1) Scenario Name", html_for="sce-name", sm=3, className="p-0", align="start", ),
                     dbc.Col([
-                      dbc.Input(type="text", id="sce-name", value="", minLength=4, maxLength=4,), # required="required", ),
+                      dbc.Input(type="text", id="sce-name", value="", minLength=4, maxLength=4, required="required", ),
                     ],
                     xl=9,
                     ),
@@ -78,6 +78,7 @@ layout = html.Div([
                         {"label": "Sinthiou Malem", "value": "SNTH"}
                       ],
                       value="CNRA",
+                      clearable=False,
                       ),
                     ],
                     xl=9,
@@ -117,6 +118,7 @@ layout = html.Div([
                           {"label": "IB0071 Faourou-D", "value": "IB0071 Faourou-D"},
                           {"label": "CIMT21 MELKASA-LowY", "value": "CIMT21 MELKASA-LowY"},],
                         value="IB0066 Fadda-D",
+                        clearable=False,
                       ),
                     ],
                     xl=9,
@@ -127,7 +129,7 @@ layout = html.Div([
                   dbc.FormGroup([ # Start Year
                     dbc.Label("5) Start Year", html_for="year1", sm=3, className="p-0", align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="year1", placeholder="YYYY", value="1981", min=1981, max=2015,), # required="required", ),
+                      dbc.Input(type="number", id="year1", placeholder="YYYY", value="1981", min=1981, max=2015, required="required", ),
                       dbc.FormText("(No earlier than 1981)"),
                     ],
                     xl=9,
@@ -138,7 +140,7 @@ layout = html.Div([
                   dbc.FormGroup([ # End Year
                     dbc.Label("6) End Year", html_for="year2", sm=3, className="p-0", align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="year2", placeholder="YYYY", value="2015", min=1981, max=2015,  ), # required="required", ),
+                      dbc.Input(type="number", id="year2", placeholder="YYYY", value="2015", min=1981, max=2015,   required="required", ),
                       dbc.FormText("(No later than 2015)"),
                     ],
                     xl=9,
@@ -149,7 +151,7 @@ layout = html.Div([
                   dbc.FormGroup([ # Year to Highlight
                     dbc.Label("7) Year to Highlight", html_for="target-year", sm=3, className="p-0", align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="target-year", placeholder="YYYY", value="2015",min=1981, max=2018,  ), # required="required", ),
+                      dbc.Input(type="number", id="target-year", placeholder="YYYY", value="2015",min=1981, max=2018,   required="required", ),
                       dbc.FormText("Type a specific year you remember (e.g., drought year) and want to compare with a full climatology distribution"),
                     ],
                     xl=9,
@@ -176,6 +178,7 @@ layout = html.Div([
                           {"label": "ET00920067(KOBO,CL)", "value": "SN00840056"},
                         ],
                         value="SN-N15Rain",
+                        clearable=False,
                       ),
                     ],
                     xl=9,
@@ -201,6 +204,7 @@ layout = html.Div([
                           {"label": "100% of AWC", "value": "1.0"},
                         ], 
                         value="0.5",
+                        clearable=False,
                       ),
                     ],
                     xl=9,
@@ -228,7 +232,7 @@ layout = html.Div([
                   dbc.FormGroup([ # Initial NO3 Condition
                     dbc.Label(["10) Initial Soil NO3 Condition", html.Span("  ([N kg/ha] in top 30cm soil)"), ],html_for="ini-NO3", sm=3, className="p-0", align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="ini-NO3", value="20.1",min=1, max=150, step=0.1,), # required="required", ),
+                      dbc.Input(type="number", id="ini-NO3", value="20.1",min=1, max=150, step=0.1, required="required", ),
                       dbc.FormText("[Reference] Low Nitrate: 20 N kg/ha (~ 4.8 ppm), High Nitrate: 85 N kg/ha (~20 ppm)"),
                     ],
                     xl=9,
@@ -257,7 +261,7 @@ layout = html.Div([
                   dbc.FormGroup([ # Planting Density
                     dbc.Label(["12) Planting Density", html.Span(" (plants/m"), html.Sup("2"), html.Span(")"), ], html_for="plt-density", sm=3, className="p-0", align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="plt-density", value=5, min=1, max=300, step=0.1,), # required="required", ),
+                      dbc.Input(type="number", id="plt-density", value=5, min=1, max=300, step=0.1, required="required", ),
                     ],
                     xl=9,
                     ),
@@ -304,31 +308,31 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("1st", html_for="fert-day1", ),
-                              dbc.Input(type="number", id="fert-day1", value=0, min="0", max="365",), # required="required", ),
+                              dbc.Input(type="number", id="fert-day1", value=0, min="0", max="365", required="required", ),
                             ],),
                           ),
                           # dbc.Col(
                           #   dbc.FormGroup([
                           #     # dbc.Label("1st", html_for="depth1", ),
-                          #     dbc.Input(type="number", id="depth1", value=0, min="0", step="0.1",), # required="required", ),
+                          #     dbc.Input(type="number", id="depth1", value=0, min="0", step="0.1", required="required", ),
                           #   ],),
                           # ),
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("1st", html_for="N-amt1", ),
-                              dbc.Input(type="number", id="N-amt1", value=0, min="0", step="0.1",), # required="required", ),
+                              dbc.Input(type="number", id="N-amt1", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("1st", html_for="P-amt1", ),
-                              dbc.Input(type="number", id="P-amt1", value=0, min="0", step="0.1",), # required="required", ),
+                              dbc.Input(type="number", id="P-amt1", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("1st", html_for="K-amt1", ),
-                              dbc.Input(type="number", id="K-amt1", value=0, min="0", step="0.1",), # required="required", ),
+                              dbc.Input(type="number", id="K-amt1", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                         ],),
@@ -339,31 +343,31 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("2nd", html_for="fert-day2", ),
-                              dbc.Input(type="number", id="fert-day2", value=0, min="0", max="365",), # required="required", ),
+                              dbc.Input(type="number", id="fert-day2", value=0, min="0", max="365", required="required", ),
                             ],),
                           ),
                           # dbc.Col(
                           #   dbc.FormGroup([
                           #     # dbc.Label("2nd", html_for="depth2", ),
-                          #     dbc.Input(type="number", id="depth2", value=0, min="0", step="0.1",), # required="required", ),
+                          #     dbc.Input(type="number", id="depth2", value=0, min="0", step="0.1", required="required", ),
                           #   ],),
                           # ),
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("2nd", html_for="N-amt2", ),
-                              dbc.Input(type="number", id="N-amt2", value=0, min="0", step="0.1",), # required="required", ),
+                              dbc.Input(type="number", id="N-amt2", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("2nd", html_for="P-amt2", ),
-                              dbc.Input(type="number", id="P-amt2", value=0, min="0", step="0.1",), # required="required", ),
+                              dbc.Input(type="number", id="P-amt2", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("2nd", html_for="K-amt2", ),
-                              dbc.Input(type="number", id="K-amt2", value=0, min="0", step="0.1",), # required="required", ),
+                              dbc.Input(type="number", id="K-amt2", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                         ],),
@@ -374,31 +378,31 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("3rd", html_for="fert-day3", ),
-                              dbc.Input(type="number", id="fert-day3", value=0, min="0", max="365",), # required="required", ),
+                              dbc.Input(type="number", id="fert-day3", value=0, min="0", max="365", required="required", ),
                             ],),
                           ),
                           # dbc.Col(
                           #   dbc.FormGroup([
                           #     # dbc.Label("3rd", html_for="depth3", ),
-                          #     dbc.Input(type="number", id="depth3", value=0, min="0", step="0.1",), # required="required", ),
+                          #     dbc.Input(type="number", id="depth3", value=0, min="0", step="0.1", required="required", ),
                           #   ],),
                           # ),
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("3rd", html_for="N-amt3", ),
-                              dbc.Input(type="number", id="N-amt3", value=0, min="0", step="0.1",), # required="required", ),
+                              dbc.Input(type="number", id="N-amt3", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("3rd", html_for="P-amt3", ),
-                              dbc.Input(type="number", id="P-amt3", value=0, min="0", step="0.1",), # required="required", ),
+                              dbc.Input(type="number", id="P-amt3", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("3rd", html_for="K-amt3", ),
-                              dbc.Input(type="number", id="K-amt3", value=0, min="0", step="0.1",), # required="required", ),
+                              dbc.Input(type="number", id="K-amt3", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                         ],),
@@ -409,31 +413,31 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("4th", html_for="fert-day4", ),
-                              dbc.Input(type="number", id="fert-day4", value=0, min="0", max="365",), # required="required", ),
+                              dbc.Input(type="number", id="fert-day4", value=0, min="0", max="365", required="required", ),
                             ],),
                           ),
                           # dbc.Col(
                           #   dbc.FormGroup([
                           #     # dbc.Label("4th", html_for="depth4", ),
-                          #     dbc.Input(type="number", id="depth4", value=0, min="0", step="0.1",), # required="required", ),
+                          #     dbc.Input(type="number", id="depth4", value=0, min="0", step="0.1", required="required", ),
                           #   ],),
                           # ),
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("4th", html_for="N-amt4", ),
-                              dbc.Input(type="number", id="N-amt4", value=0, min="0", step="0.1",), # required="required", ),
+                              dbc.Input(type="number", id="N-amt4", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("4th", html_for="P-amt4", ),
-                              dbc.Input(type="number", id="P-amt4", value=0, min="0", step="0.1",), # required="required", ),
+                              dbc.Input(type="number", id="P-amt4", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("4th", html_for="K-amt4", ),
-                              dbc.Input(type="number", id="K-amt4", value=0, min="0", step="0.1",), # required="required", ),
+                              dbc.Input(type="number", id="K-amt4", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                         ],),
@@ -471,6 +475,7 @@ layout = html.Div([
                             {"label": "High (18 ppm)", "value": "H"},
                           ], 
                           value="L",
+                          clearable=False,
                         ),
                       ],
                       id="P-sim-Comp", 
@@ -507,6 +512,7 @@ layout = html.Div([
                             {"label": "Flood", "value": "IR001"},
                           ], 
                           value="IR004",
+                          clearable=False,
                         ),      
                         dbc.Row([
                           dbc.Col(
@@ -528,13 +534,13 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("1st", html_for="irrig-day1", ),
-                              dbc.Input(type="number", id="irrig-day1", value=0, min="0", max="365",), # required="required", ),
+                              dbc.Input(type="number", id="irrig-day1", value=0, min="0", max="365", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("1st", html_for="irrig-mt1", ),
-                              dbc.Input(type="number", id="irrig-amt1", value=0, min="0", step="0.1",), # required="required", ),
+                              dbc.Input(type="number", id="irrig-amt1", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                         ],),
@@ -545,13 +551,13 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("2nd", html_for="irrig-day2", ),
-                              dbc.Input(type="number", id="irrig-day2", value=0, min="0", max="365",), # required="required", ),
+                              dbc.Input(type="number", id="irrig-day2", value=0, min="0", max="365", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("2nd", html_for="irrig-amt2", ),
-                              dbc.Input(type="number", id="irrig-amt2", value=0, min="0", step="0.1",), # required="required", ),
+                              dbc.Input(type="number", id="irrig-amt2", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                         ],),
@@ -562,13 +568,13 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("3rd", html_for="irrig-day3", ),
-                              dbc.Input(type="number", id="irrig-day3", value=0, min="0", max="365",), # required="required", ),
+                              dbc.Input(type="number", id="irrig-day3", value=0, min="0", max="365", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("3rd", html_for="irrig-amt3", ),
-                              dbc.Input(type="number", id="irrig-amt3", value=0, min="0", step="0.1",), # required="required", ),
+                              dbc.Input(type="number", id="irrig-amt3", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                         ],),
@@ -579,13 +585,13 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("4th", html_for="irrig-day4", ),
-                              dbc.Input(type="number", id="irrig-day4", value=0, min="0", max="365",), # required="required", ),
+                              dbc.Input(type="number", id="irrig-day4", value=0, min="0", max="365", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("4th", html_for="irrig-amt4", ),
-                              dbc.Input(type="number", id="irrig-amt4", value=0, min="0", step="0.1",), # required="required", ),
+                              dbc.Input(type="number", id="irrig-amt4", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                         ],),
@@ -596,13 +602,13 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("5th", html_for="irrig-day5", ),
-                              dbc.Input(type="number", id="irrig-day5", value=0, min="0", max="365",), # required="required", ),
+                              dbc.Input(type="number", id="irrig-day5", value=0, min="0", max="365", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
                               # dbc.Label("5th", html_for="irrig-amt5", ),
-                              dbc.Input(type="number", id="irrig-amt5", value=0, min="0", step="0.1",), # required="required", ),
+                              dbc.Input(type="number", id="irrig-amt5", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                         ],),
@@ -616,7 +622,7 @@ layout = html.Div([
                         dbc.Row([  #irrigation depth
                           dbc.Label("Management soil depth [cm]", html_for="ir_depth", align="start", ),
                           dbc.Col([
-                            dbc.Input(type="number", id="ir_depth", value=30, min=1, max=100, step=0.1,), # required="required", ),
+                            dbc.Input(type="number", id="ir_depth", value=30, min=1, max=100, step=0.1, required="required", ),
                             ], ),               
                           ],
                           ),
@@ -624,14 +630,14 @@ layout = html.Div([
                           dbc.Label("Threshold", html_for="ir_threshold", align="start", ),
                           dbc.FormText("(% of max available water trigging irrigation)"),
                           dbc.Col([
-                            dbc.Input(type="number", id="ir_threshold", value=50, min=1, max=100, step=0.1,), # required="required", ),
+                            dbc.Input(type="number", id="ir_threshold", value=50, min=1, max=100, step=0.1, required="required", ),
                             ], ),               
                           ],
                           ),
                         dbc.Row([  #efficiency fraction
                           dbc.Label("Irrigation efficiency fraction [0 ~ 1]", html_for="ir_eff", align="start", ),
                           dbc.Col([
-                            dbc.Input(type="number", id="ir_eff", value=0.9, min=0.1, max=1, step=0.1,), # required="required", ),
+                            dbc.Input(type="number", id="ir_eff", value=0.9, min=0.1, max=1, step=0.1, required="required", ),
                             ], ),                
                           ],
                           ),
@@ -666,35 +672,35 @@ layout = html.Div([
                           dbc.Col([  
                             dbc.FormGroup([
                               dbc.Label("Crop Price", html_for="crop-price", style={"height": "7vh"}, align="start", ),
-                              dbc.Input(type="number", id="crop-price", value="0", min="0", step="0.1",), # required="required", ),
+                              dbc.Input(type="number", id="crop-price", value="0", min="0", step="0.1", required="required", ),
                               dbc.FormText("[CFA/kg]"),
                             ]),
                           ],),
                           dbc.Col([  
                             dbc.FormGroup([
                               dbc.Label("Fertilizer Price", html_for="fert-cost", style={"height": "7vh"}, align="start", ),
-                              dbc.Input(type="number", id="fert-cost", value="0", min="0", step="0.1",), # required="required", ),
+                              dbc.Input(type="number", id="fert-cost", value="0", min="0", step="0.1", required="required", ),
                               dbc.FormText("[CFA/N kg]"),
                             ]),
                           ],),
                           dbc.Col([  
                             dbc.FormGroup([
                               dbc.Label("Seed Cost", html_for="seed-cost", style={"height": "7vh"}, align="start", ),
-                              dbc.Input(type="number", id="seed-cost", value="0", min="0", step="0.1",), # required="required", ),
+                              dbc.Input(type="number", id="seed-cost", value="0", min="0", step="0.1", required="required", ),
                               dbc.FormText("[CFA/ha]"),
                             ]),
                           ],),
                           dbc.Col([  
                             dbc.FormGroup([
                               dbc.Label("Other Variable Costs", html_for="variable-costs", style={"height": "7vh"}, align="start", ),
-                              dbc.Input(type="number", id="variable-costs", value="0", min="0", step="0.1",), # required="required", ),
+                              dbc.Input(type="number", id="variable-costs", value="0", min="0", step="0.1", required="required", ),
                               dbc.FormText("[CFA/ha]"),
                             ]),
                           ],),
                           dbc.Col([  
                             dbc.FormGroup([
                               dbc.Label("Fixed Costs", html_for="fixed-costs", style={"height": "7vh"}, align="start", ),
-                              dbc.Input(type="number", id="fixed-costs", value="0", min="0", step="0.1",), # required="required", ),
+                              dbc.Input(type="number", id="fixed-costs", value="0", min="0", step="0.1", required="required", ),
                               dbc.FormText("[CFA/ha]"),
                             ]),
                           ],),
@@ -950,7 +956,7 @@ layout = html.Div([
                       html.Br(),
                       html.Div([
                         html.Span("(i) Select a column name to sort: "),
-                        html.Div([dcc.Dropdown(id="column-dropdown", options=[{"label": "YEAR", "value": "YEAR"},],value="YEAR")]),
+                        html.Div([dcc.Dropdown(id="column-dropdown", options=[{"label": "YEAR", "value": "YEAR"},],value="YEAR", clearable=False, )]),
                       ],
                       ),
                       html.Br(),
@@ -1405,7 +1411,10 @@ def show_hide_EBtable(EB_radio, scenarios):
     if EB_radio == "EB_Yes":
         return {}
     else:
-        return {"display": "none"} if existing_sces.sce_name.values[0] == "N/A" or set(existing_sces.CropPrice.values) == {"-99"} else {}
+        if existing_sces.empty:
+            return {"display": "none"}
+        else:
+            return {"display": "none"} if existing_sces.sce_name.values[0] == "N/A" or set(existing_sces.CropPrice.values) == {"-99"} else {}
 
 #==============================================================
 @app.callback(Output("scenario-table", "data"),
@@ -1513,9 +1522,6 @@ def make_sce_table(
             ) 
         )
         or (
-                p_sim == "P_yes" and p_level == None
-        )
-        or (
                 irrig_app == "repr_irrig" 
             and (
                     irrig_method == None 
@@ -1530,7 +1536,7 @@ def make_sce_table(
                 irrig_app == "auto_irrig" 
             and (
                     ir_depth == None 
-                or  ir_threshold== None 
+                or  ir_threshold == None
                 or  ir_eff == None
             ) 
         )
@@ -1610,10 +1616,27 @@ def make_sce_table(
             "IR_5_DOY": [ird5], "IR_5_amt": [iramt5],
         })
         current_sce.update(irrig_frame)
+
+        if (
+                (ird1 < 0 or 365 < ird1) or iramt1 < 0
+            or  (ird2 < 0 or 365 < ird2) or iramt2 < 0
+            or  (ird3 < 0 or 365 < ird3) or iramt3 < 0
+            or  (ird4 < 0 or 365 < ird4) or iramt4 < 0
+            or  (ird5 < 0 or 365 < ird5) or iramt5 < 0
+        ):
+            IR_reported_valid = False
     if irrig_app == "auto_irrig":       
       current_sce.loc[0,"AutoIR_depth"] = ir_depth   #check index 0
       current_sce.loc[0,"AutoIR_thres"] = ir_threshold
       current_sce.loc[0,"AutoIR_eff"] = ir_eff
+
+      if (
+              (ir_depth < 1 or 100 < ir_depth)
+          or  (ir_threshold < 1 or 100 < ir_threshold)
+          or  (ir_eff < 0.1 or 1 < ir_eff)
+      ):
+          IR_reported_valid = False
+
     #=====================================================================
     # Write SNX file
     writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3,
@@ -1631,24 +1654,52 @@ def make_sce_table(
         })
         current_sce.update(EB_frame)
 
+    # validate planting date
+    planting_date_valid = True
+    pl_date_split = planting_date.split("-")
+    if not len(pl_date_split) == 3:
+        planting_date_valid = False
+    else:
+        yyyy = pl_date_split[0]
+        mm = pl_date_split[1]
+        dd = pl_date_split[2]
+
+        long_months = [1,3,5,7,8,10,12]
+        short_months = [2,4,6,9,11]
+
+        if not (re.match("\d\d", dd) and re.match("\d\d", mm) and re.match("2021", yyyy)):
+            planting_date_valid = False
+        else:
+            if int(mm) in long_months:
+                if int(dd) < 1 or 31 < int(dd):
+                    planting_date_valid = False
+            if int(mm) in short_months:
+                if int(dd) < 1 or 30 < int(dd):
+                    planting_date_valid = False 
+            if int(mm) == 2:
+                if int(dd) < 1 or 28 < int(dd):
+                    planting_date_valid = False
+
+    # required="required" triggers tooltips. This validation actually prevents improper forms being submitted. BOTH are necessary
     form_valid = (
-            re.match("....", current_sce.sce_name.values[0]) 
-        and int(current_sce.FirstYear.values[0]) >= 1981 and int(current_sce.FirstYear.values[0]) <= 2018 
-        and int(current_sce.LastYear.values[0]) >= 1981 and int(current_sce.LastYear.values[0]) <= 2018 
-        and int(current_sce.TargetYr.values[0]) >= 1981 and int(current_sce.TargetYr.values[0]) <= 2018 
+            re.match("....", current_sce.sce_name.values[0])
+        and int(current_sce.FirstYear.values[0]) >= 1981 and int(current_sce.FirstYear.values[0]) <= 2018
+        and int(current_sce.LastYear.values[0]) >= 1981 and int(current_sce.LastYear.values[0]) <= 2018
+        and int(current_sce.TargetYr.values[0]) >= 1981 and int(current_sce.TargetYr.values[0]) <= 2018
         and float(current_sce.plt_density.values[0]) >= 1 and float(current_sce.plt_density.values[0]) <= 300
-        and fert_valid and EB_valid
+        and planting_date_valid and fert_valid and IR_reported_valid and EB_valid
     )
 
     if form_valid:
-        if n_clicks == 1 or existing_sces.sce_name.values[0] == "N/A": # overwrite if a row of "N/A" values present. should only happen first time
+        if existing_sces.empty: # overwrite if empty
             data = current_sce.to_dict("rows")
         else:
-            if scenario in existing_sces.sce_name.values: # prevent adding scenarios with the same name.
+            if existing_sces.sce_name.values[0] == "N/A": # overwrite if "N/A"
+                data = current_sce.to_dict("rows")
+            elif scenario in existing_sces.sce_name.values: # no duplicate scenario names
                 data = existing_sces.to_dict("rows")
             else:
-                # all_sces = current_sce.append(existing_sces, ignore_index=True)
-                all_sces = existing_sces.append(current_sce, ignore_index=True) #EJ(7/8/2021) put the first generated scenario on top=> boxplot and scatter plot shoudl be in right order
+                all_sces = current_sce.append(existing_sces, ignore_index=True) # otherwise append new entry
                 data = all_sces.to_dict("rows")
         return data
     else:
