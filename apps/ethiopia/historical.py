@@ -74,6 +74,7 @@ layout = html.Div([
                         {"label": "Kobo", "value": "KOBO"}
                       ],
                       value="MELK",
+                      clearable=False,
                       ),
                     ],
                     xl=9,
@@ -113,6 +114,7 @@ layout = html.Div([
                           {"label": "CIMT19 MELKASA2-FAW-40%", "value": "CIMT19 MELKASA2-FAW-40%"},
                           {"label": "CIMT21 MELKASA-LowY", "value": "CIMT21 MELKASA-LowY"},], 
                         value="CIMT19 MELKASA2-FAW-40%",
+                        clearable=False,
                       ),
                     ],
                     xl=9,
@@ -175,6 +177,7 @@ layout = html.Div([
                           {"label": "ETET001_22(MIES, C, shallow", "value": "ETET001_22"},
                         ],
                         value="ETET001_18",
+                        clearable=False,
                       ),
                     ],
                     xl=9,
@@ -194,6 +197,7 @@ layout = html.Div([
                           {"label": "100% of AWC", "value": "1.0"},
                         ], 
                         value="0.5",
+                        clearable=False,
                       ),
                     ],
                     xl=9,
@@ -211,6 +215,7 @@ layout = html.Div([
                           {"label": "Low(23 N kg/ha)", "value": "L"},
                         ], 
                         value="L",
+                        clearable=False,
                       ),                
                     ],
                     xl=9,
@@ -1022,7 +1027,10 @@ def show_hide_EBtable(EB_radio, scenarios):
     if EB_radio == "EB_Yes":
         return {}
     else:
-        return {"display": "none"} if existing_sces.sce_name.values[0] == "N/A" or set(existing_sces.CropPrice.values) == {"-99"} else {}
+        if existing_sces.empty:
+            return {"display": "none"}
+        else:
+            return {"display": "none"} if existing_sces.sce_name.values[0] == "N/A" or set(existing_sces.CropPrice.values) == {"-99"} else {}
 
 #==============================================================
 @app.callback(Output("scenario-table", "data"),
@@ -1125,8 +1133,8 @@ def make_sce_table(
 
     #=====================================================================
     # #Update dataframe for fertilizer inputs
-    fert_valid = True
     current_fert = pd.DataFrame(columns=["DAP", "NAmount"])
+    fert_valid = True
     if fert_app == "Fert":
         current_fert = pd.DataFrame({
             "DAP": [fd1, fd2, fd3, fd4, ],
@@ -1140,6 +1148,14 @@ def make_sce_table(
             "Fert_4_DOY": [fd4], "Fert_4_Kg": [fa4],
         })
         current_sce.update(fert_frame)
+
+        if (
+                (fd1 < 0 or 365 < fd1) or fa1 < 0
+            or  (fd2 < 0 or 365 < fd2) or fa2 < 0
+            or  (fd3 < 0 or 365 < fd3) or fa3 < 0
+            or  (fd4 < 0 or 365 < fd4) or fa4 < 0
+        ):
+            fert_valid = False
 
     #=====================================================================
     # Write SNX file
@@ -1158,23 +1174,61 @@ def make_sce_table(
         })
         current_sce.update(EB_frame)
 
+        if (
+                crop_price < 0
+            or  seed_cost < 0
+            or  fert_cost < 0
+            or  fixed_costs < 0
+            or  variable_costs < 0
+        ):
+            EB_valid = False          
+
+    # validate planting date
+    planting_date_valid = True
+    pl_date_split = planting_date.split("-")
+    if not len(pl_date_split) == 3:
+        planting_date_valid = False
+    else:
+        yyyy = pl_date_split[0]
+        mm = pl_date_split[1]
+        dd = pl_date_split[2]
+
+        long_months = [1,3,5,7,8,10,12]
+        short_months = [2,4,6,9,11]
+
+        if not (re.match("\d\d", dd) and re.match("\d\d", mm) and re.match("2021", yyyy)):
+            planting_date_valid = False
+        else:
+            if int(mm) in long_months:
+                if int(dd) < 1 or 31 < int(dd):
+                    planting_date_valid = False
+            if int(mm) in short_months:
+                if int(dd) < 1 or 30 < int(dd):
+                    planting_date_valid = False 
+            if int(mm) == 2:
+                if int(dd) < 1 or 28 < int(dd):
+                    planting_date_valid = False
+
+    # required="required" triggers tooltips. This validation actually prevents improper forms being submitted. BOTH are necessary
     form_valid = (
-            re.match("....", current_sce.sce_name.values[0]) 
-        and int(current_sce.FirstYear.values[0]) >= 1981 and int(current_sce.FirstYear.values[0]) <= 2018 
-        and int(current_sce.LastYear.values[0]) >= 1981 and int(current_sce.LastYear.values[0]) <= 2018 
-        and int(current_sce.TargetYr.values[0]) >= 1981 and int(current_sce.TargetYr.values[0]) <= 2018 
+            re.match("....", current_sce.sce_name.values[0])
+        and int(current_sce.FirstYear.values[0]) >= 1981 and int(current_sce.FirstYear.values[0]) <= 2018
+        and int(current_sce.LastYear.values[0]) >= 1981 and int(current_sce.LastYear.values[0]) <= 2018
+        and int(current_sce.TargetYr.values[0]) >= 1981 and int(current_sce.TargetYr.values[0]) <= 2018
         and float(current_sce.plt_density.values[0]) >= 1 and float(current_sce.plt_density.values[0]) <= 300
-        and fert_valid and EB_valid
+        and planting_date_valid and fert_valid and EB_valid
     )
 
     if form_valid:
-        if n_clicks == 1 or existing_sces.sce_name.values[0] == "N/A": # overwrite if a row of "N/A" values present. should only happen first time
+        if existing_sces.empty: # overwrite if empty
             data = current_sce.to_dict("rows")
         else:
-            if scenario in existing_sces.sce_name.values: # prevent adding scenarios with the same name.
+            if existing_sces.sce_name.values[0] == "N/A": # overwrite if "N/A"
+                data = current_sce.to_dict("rows")
+            elif scenario in existing_sces.sce_name.values: # no duplicate scenario names
                 data = existing_sces.to_dict("rows")
             else:
-                all_sces = current_sce.append(existing_sces, ignore_index=True)
+                all_sces = current_sce.append(existing_sces, ignore_index=True) # otherwise append new entry
                 data = all_sces.to_dict("rows")
         return data
     else:
@@ -1193,8 +1247,6 @@ def make_sce_table(
                 Output("memory-yield-table", "data"),
                 Output("column-dropdown", "options"), #EJ(5/19/2021) update dropdown list for sorting a datatable
                 Input("simulate-button-state", "n_clicks"),
-                # State("target-year", "value"),       #input 11
-                # State("intermediate-value", "children") #scenario summary table
                 State("scenario-table","data"), ### scenario summary table
                 State("season-slider", "value"), #EJ (5/13/2021) for seasonal total rainfall
                 prevent_initial_call=True,
