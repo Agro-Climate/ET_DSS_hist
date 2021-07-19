@@ -582,7 +582,7 @@ layout = html.Div([
           html.Div( # ORIGINAL CSV
             html.Div([
               html.Header(
-                html.B("Simulated Yield Original CSV"),
+                html.B("Download Simulated Yield CSV"),
               className=" card-header"
               ),
               html.Div(
@@ -592,30 +592,33 @@ layout = html.Div([
                       dbc.Row([
                         dbc.Col(
                           dbc.Button(id="btn_csv_yield", 
-                          children="Download CSV for Simulated Yield", 
-                          className="w-100 d-block mx-auto",
+                          children="Simulated Yield", 
+                          className="d-block mx-auto",
                           color="secondary",
                           ),
                         xs=4,
+                        className="p-2"
                         ),
                         dbc.Col(
                           dbc.Button(id="btn_csv_Pexe", 
-                          children="Download CSV for Prob. of Exceedance", 
-                          className="w-100 d-block mx-auto",
+                          children="Prob. of Exceedance", 
+                          className="d-block mx-auto",
                           color="secondary",
                           ),
                         xs=4,
+                        className="p-2"
                         ),
                         dbc.Col(
                           dbc.Button(id="btn_csv_rain", 
-                          children="Download CSV for Seasonal Rainfall", 
-                          className="w-100 d-block mx-auto",
+                          children="Seasonal Rainfall", 
+                          className="d-block mx-auto",
                           color="secondary",
                           ),
                         xs=4,
+                        className="p-2"
                         ),
                       ],
-                      className="m-3",
+                      className="m-1",
                       ),
                       # dcc.Download(id="download-dataframe-csv"),
                       Download(id="download-dataframe-csv-yield"),
