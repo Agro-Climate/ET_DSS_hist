@@ -596,6 +596,7 @@ layout = html.Div([
                           className="w-100 d-block mx-auto",
                           color="secondary",
                           ),
+                        xs=4,
                         ),
                         dbc.Col(
                           dbc.Button(id="btn_csv_Pexe", 
@@ -603,6 +604,7 @@ layout = html.Div([
                           className="w-100 d-block mx-auto",
                           color="secondary",
                           ),
+                        xs=4,
                         ),
                         dbc.Col(
                           dbc.Button(id="btn_csv_rain", 
@@ -610,6 +612,7 @@ layout = html.Div([
                           className="w-100 d-block mx-auto",
                           color="secondary",
                           ),
+                        xs=4,
                         ),
                       ],
                       className="m-3",
