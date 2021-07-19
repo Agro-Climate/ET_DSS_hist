@@ -58,17 +58,18 @@ layout = html.Div([
               html.Div( # SCROLLABLE FORM
                 html.Div([ # FORM START
                   dbc.FormGroup([ # Scenario
-                    dbc.Label("1) Scenario Name", html_for="sce-name", sm=3, className="p-0", align="start", ),
+                    dbc.Label("1) Scenario Name", html_for="sce-name", sm=3, align="start", ),
                     dbc.Col([
                       dbc.Input(type="text", id="sce-name", value="", minLength=4, maxLength=4, required="required", ),
                     ],
+                    className="py-2",
                     xl=9,
                     ),
                   ],
                   row=True
                   ),
                   dbc.FormGroup([ # Station
-                    dbc.Label("2) Station", html_for="SNstation", sm=3, className="p-0", align="start", ),
+                    dbc.Label("2) Station", html_for="SNstation", sm=3, align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
                       id="SNstation",
@@ -81,13 +82,14 @@ layout = html.Div([
                       clearable=False,
                       ),
                     ],
+                    className="py-2",
                     xl=9,
                     ),
                   ],
                   row=True
                   ),
                   dbc.FormGroup([ # Crop
-                    dbc.Label("3) Crop", html_for="crop-radio", sm=3, className="p-0", align="start", ),
+                    dbc.Label("3) Crop", html_for="crop-radio", sm=3, align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                       id="crop-radio",
@@ -101,13 +103,14 @@ layout = html.Div([
                       value="SG",
                       ),
                     ],
+                    className="py-2",
                     xl=9,
                     ),
                   ],
                   row=True
                   ),
                   dbc.FormGroup([ # Cultivar
-                    dbc.Label("4) Cultivar", html_for="cultivar-dropdown", sm=3, className="p-0", align="start", ),
+                    dbc.Label("4) Cultivar", html_for="cultivar-dropdown", sm=3, align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
                         id="cultivar-dropdown", 
@@ -121,46 +124,50 @@ layout = html.Div([
                         clearable=False,
                       ),
                     ],
+                    className="py-2",
                     xl=9,
                     ),
                   ],
                   row=True
                   ),
                   dbc.FormGroup([ # Start Year
-                    dbc.Label("5) Start Year", html_for="year1", sm=3, className="p-0", align="start", ),
+                    dbc.Label("5) Start Year", html_for="year1", sm=3, align="start", ),
                     dbc.Col([
                       dbc.Input(type="number", id="year1", placeholder="YYYY", value="1981", min=1981, max=2015, required="required", ),
                       dbc.FormText("(No earlier than 1981)"),
                     ],
+                    className="py-2",
                     xl=9,
                     ),
                   ],
                   row=True
                   ),
                   dbc.FormGroup([ # End Year
-                    dbc.Label("6) End Year", html_for="year2", sm=3, className="p-0", align="start", ),
+                    dbc.Label("6) End Year", html_for="year2", sm=3, align="start", ),
                     dbc.Col([
                       dbc.Input(type="number", id="year2", placeholder="YYYY", value="2015", min=1981, max=2015,   required="required", ),
                       dbc.FormText("(No later than 2015)"),
                     ],
+                    className="py-2",
                     xl=9,
                     ),
                   ],
                   row=True
                   ),
                   dbc.FormGroup([ # Year to Highlight
-                    dbc.Label("7) Year to Highlight", html_for="target-year", sm=3, className="p-0", align="start", ),
+                    dbc.Label("7) Year to Highlight", html_for="target-year", sm=3, align="start", ),
                     dbc.Col([
                       dbc.Input(type="number", id="target-year", placeholder="YYYY", value="2015",min=1981, max=2018,   required="required", ),
                       dbc.FormText("Type a specific year you remember (e.g., drought year) and want to compare with a full climatology distribution"),
                     ],
+                    className="py-2",
                     xl=9,
                     ),
                   ],
                   row=True
                   ),
                   dbc.FormGroup([ # Soil Type
-                    dbc.Label("8) Soil Type", html_for="SNsoil", sm=3, className="p-0", align="start", ),
+                    dbc.Label("8) Soil Type", html_for="SNsoil", sm=3, align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
                         id="SNsoil", 
@@ -181,13 +188,14 @@ layout = html.Div([
                         clearable=False,
                       ),
                     ],
+                    className="py-2",
                     xl=9,
                     ),
                   ],
                   row=True
                   ),
                   dbc.FormGroup([ # Initial Soil Water Condition
-                    dbc.Label("9) Initial Soil Water Condition", html_for="ini-H2O", sm=3, className="p-0", align="start", ),
+                    dbc.Label("9) Initial Soil Water Condition", html_for="ini-H2O", sm=3, align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
                         id="ini-H2O", 
@@ -207,13 +215,14 @@ layout = html.Div([
                         clearable=False,
                       ),
                     ],
+                    className="py-2",
                     xl=9,
                     ),
                   ],
                   row=True
                   ),
                   # dbc.FormGroup([ # Initial NO3 Condition
-                  #   dbc.Label("10) Initial Soil NO3 Condition", html_for="ini-NO3", sm=3, className="p-0", align="start", ),
+                  #   dbc.Label("10) Initial Soil NO3 Condition", html_for="ini-NO3", sm=3, align="start", ),
                   #   dbc.Col([
                   #     dcc.Dropdown(
                   #       id="ini-NO3", 
@@ -224,24 +233,26 @@ layout = html.Div([
                   #       value="L",
                   #     ),                
                   #   ],
+                  #   className="py-2",
                   #   xl=9,
                   #   ),
                   # ],
                   # row=True
                   # ),
                   dbc.FormGroup([ # Initial NO3 Condition
-                    dbc.Label(["10) Initial Soil NO3 Condition", html.Span("  ([N kg/ha] in top 30cm soil)"), ],html_for="ini-NO3", sm=3, className="p-0", align="start", ),
+                    dbc.Label(["10) Initial Soil NO3 Condition", html.Span("  ([N kg/ha] in top 30cm soil)"), ],html_for="ini-NO3", sm=3, align="start", ),
                     dbc.Col([
                       dbc.Input(type="number", id="ini-NO3", value="20.1",min=1, max=150, step=0.1, required="required", ),
                       dbc.FormText("[Reference] Low Nitrate: 20 N kg/ha (~ 4.8 ppm), High Nitrate: 85 N kg/ha (~20 ppm)"),
                     ],
+                    className="py-2",
                     xl=9,
                     ),
                   ],
                   row=True
                   ),
                   dbc.FormGroup([ # Planting Date
-                    dbc.Label("11) Planting Date", html_for="plt-date-picker", sm=3, className="p-0", align="start", ),
+                    dbc.Label("11) Planting Date", html_for="plt-date-picker", sm=3, align="start", ),
                     dbc.Col([
                       dcc.DatePickerSingle(
                       id="plt-date-picker",
@@ -253,23 +264,25 @@ layout = html.Div([
                       ),
                       dbc.FormText("Only Month and Date are counted"),
                     ],
+                    className="py-2",
                     xl=9,
                     ),
                   ],
                   row=True
                   ),
                   dbc.FormGroup([ # Planting Density
-                    dbc.Label(["12) Planting Density", html.Span(" (plants/m"), html.Sup("2"), html.Span(")"), ], html_for="plt-density", sm=3, className="p-0", align="start", ),
+                    dbc.Label(["12) Planting Density", html.Span(" (plants/m"), html.Sup("2"), html.Span(")"), ], html_for="plt-density", sm=3, align="start", ),
                     dbc.Col([
                       dbc.Input(type="number", id="plt-density", value=5, min=1, max=300, step=0.1, required="required", ),
                     ],
+                    className="py-2",
                     xl=9,
                     ),
                   ],
                   row=True
                   ),
                   dbc.FormGroup([ # Fertilizer Application
-                    dbc.Label("13) N Fertilizer Application", html_for="fert_input", sm=3, className="p-0", align="start", ),
+                    dbc.Label("13) N Fertilizer Application", html_for="fert_input", sm=3, align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                         id="fert_input",
@@ -447,13 +460,14 @@ layout = html.Div([
                       style={"display": "none"},
                       ),
                     ],
+                    className="py-2",
                     xl=9,
                     ),
                   ],
                   row=True
                   ),
                   dbc.FormGroup([ # Phosphorous simualtion
-                    dbc.Label("14) Phosphorous simualtion?", html_for="P_input", sm=3, className="p-0", align="start", ),
+                    dbc.Label("14) Phosphorous simualtion?", html_for="P_input", sm=3, align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                         id="P_input",
@@ -483,13 +497,14 @@ layout = html.Div([
                       style={"display": "none"},
                       ),
                     ],
+                    className="py-2",
                     xl=9,
                     ),
                   ],
                   row=True
                   ),
                   dbc.FormGroup([ # Irrigation
-                    dbc.Label("15) Irrigation", html_for="irrig_input", sm=3, className="p-0", align="start", ),
+                    dbc.Label("15) Irrigation", html_for="irrig_input", sm=3, align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                         id="irrig_input",
@@ -498,165 +513,177 @@ layout = html.Div([
                           {"label": " On Reported Dates", "value": "repr_irrig"},
                           {"label": " Automatic when required", "value": "auto_irrig"}
                         ],
-                        labelStyle = {"display": "inline-block","marginRight": 10},
+                        labelStyle = {"display": "block","marginRight": 10},
                         value="No_irrig",
                       ),
-                      html.Div([ # "on reported dates"
-                        #irrigation method
-                        dbc.Label("Irrigation method", html_for="extr_P", align="start", ),
-                        dcc.Dropdown(
-                          id="ir_method", 
-                          options=[
-                            {"label": "Sprinkler", "value": "IR004"},
-                            {"label": "Furrow", "value": "IR001"},
-                            {"label": "Flood", "value": "IR001"},
-                          ], 
-                          value="IR004",
-                          clearable=False,
-                        ),      
-                        dbc.Row([
-                          dbc.Col(
-                            dbc.Label("No.", className="text-center", ),
+                      html.Div([
+                        html.Div([ # "on reported dates"
+                          #irrigation method
+                          dbc.Label("Irrigation method", html_for="extr_P", align="start", ),
+                          dcc.Dropdown(
+                            id="ir_method", 
+                            options=[
+                              {"label": "Sprinkler", "value": "IR004"},
+                              {"label": "Furrow", "value": "IR001"},
+                              {"label": "Flood", "value": "IR001"},
+                            ], 
+                            value="IR004",
+                            clearable=False,
+                          ),      
+                          html.Div([
+                            dbc.Row([
+                              dbc.Col(
+                                dbc.Label("No.", className="text-center", ),
+                              ),
+                              dbc.Col(
+                                dbc.Label("Days After Planting", className="text-center", ),
+                              ),
+                              dbc.Col(
+                                dbc.Label("Amount of Water [mm]", className="text-center", ),
+                              ),
+                            ],
+                            className="py-3",
+                            ),
+                            dbc.Row([
+                              dbc.Col(
+                                dbc.Label("1st", className="text-center", ),
+                              ),
+                              dbc.Col(
+                                dbc.FormGroup([
+                                  # dbc.Label("1st", html_for="irrig-day1", ),
+                                  dbc.Input(type="number", id="irrig-day1", value=0, min="0", max="365", required="required", ),
+                                ],),
+                              ),
+                              dbc.Col(
+                                dbc.FormGroup([
+                                  # dbc.Label("1st", html_for="irrig-mt1", ),
+                                  dbc.Input(type="number", id="irrig-amt1", value=0, min="0", step="0.1", required="required", ),
+                                ],),
+                              ),
+                            ],),
+                            dbc.Row([
+                              dbc.Col(
+                                dbc.Label("2nd", className="text-center", ),
+                              ),
+                              dbc.Col(
+                                dbc.FormGroup([
+                                  # dbc.Label("2nd", html_for="irrig-day2", ),
+                                  dbc.Input(type="number", id="irrig-day2", value=0, min="0", max="365", required="required", ),
+                                ],),
+                              ),
+                              dbc.Col(
+                                dbc.FormGroup([
+                                  # dbc.Label("2nd", html_for="irrig-amt2", ),
+                                  dbc.Input(type="number", id="irrig-amt2", value=0, min="0", step="0.1", required="required", ),
+                                ],),
+                              ),
+                            ],),
+                            dbc.Row([
+                              dbc.Col(
+                                dbc.Label("3rd", className="text-center", ),
+                              ),
+                              dbc.Col(
+                                dbc.FormGroup([
+                                  # dbc.Label("3rd", html_for="irrig-day3", ),
+                                  dbc.Input(type="number", id="irrig-day3", value=0, min="0", max="365", required="required", ),
+                                ],),
+                              ),
+                              dbc.Col(
+                                dbc.FormGroup([
+                                  # dbc.Label("3rd", html_for="irrig-amt3", ),
+                                  dbc.Input(type="number", id="irrig-amt3", value=0, min="0", step="0.1", required="required", ),
+                                ],),
+                              ),
+                            ],),
+                            dbc.Row([
+                              dbc.Col(
+                                dbc.Label("4th", className="text-center", ),
+                              ),
+                              dbc.Col(
+                                dbc.FormGroup([
+                                  # dbc.Label("4th", html_for="irrig-day4", ),
+                                  dbc.Input(type="number", id="irrig-day4", value=0, min="0", max="365", required="required", ),
+                                ],),
+                              ),
+                              dbc.Col(
+                                dbc.FormGroup([
+                                  # dbc.Label("4th", html_for="irrig-amt4", ),
+                                  dbc.Input(type="number", id="irrig-amt4", value=0, min="0", step="0.1", required="required", ),
+                                ],),
+                              ),
+                            ],),
+                            dbc.Row([
+                              dbc.Col(
+                                dbc.Label("5th", className="text-center", ),
+                              ),
+                              dbc.Col(
+                                dbc.FormGroup([
+                                  # dbc.Label("5th", html_for="irrig-day5", ),
+                                  dbc.Input(type="number", id="irrig-day5", value=0, min="0", max="365", required="required", ),
+                                ],),
+                              ),
+                              dbc.Col(
+                                dbc.FormGroup([
+                                  # dbc.Label("5th", html_for="irrig-amt5", ),
+                                  dbc.Input(type="number", id="irrig-amt5", value=0, min="0", step="0.1", required="required", ),
+                                ],),
+                              ),
+                            ],),
+                          ],),
+                        ],
+                        id="irrig-table-Comp", 
+                        className="w-100",
+                        style={"display": "none"},
+                        ),
+                        html.Div([ # "Automatic when required"
+                          dbc.Row([  #irrigation depth
+                            dbc.Col(
+                              dbc.Label("Management soil depth", html_for="ir_depth", ),
+                            ),
+                            dbc.Col([
+                              dbc.Input(type="number", id="ir_depth", value=30, min=1, max=100, step=0.1, required="required", ),
+                              dbc.FormText("[cm]"),
+                            ],),
+                          ],
+                          className="py-2",
                           ),
-                          dbc.Col(
-                            dbc.Label("Days After Planting", className="text-center", ),
+                          dbc.Row([  #irrigation threshold
+                            dbc.Col(
+                              dbc.Label("Threshold", html_for="ir_threshold", ),
+                            ),
+                            dbc.Col([
+                              dbc.Input(type="number", id="ir_threshold", value=50, min=1, max=100, step=0.1, required="required", ),
+                              dbc.FormText("(% of max available water trigging irrigation)"),
+                            ],),
+                          ],
+                          className="py-2",
                           ),
-                          dbc.Col(
-                            dbc.Label("Amnt of Water [mm]", className="text-center", ),
+                          dbc.Row([  #efficiency fraction
+                            dbc.Col(
+                              dbc.Label("Irrigation efficiency fraction", html_for="ir_eff", ),
+                            ),
+                            dbc.Col([
+                              dbc.Input(type="number", id="ir_eff", value=0.9, min=0.1, max=1, step=0.1, required="required", ),
+                              dbc.FormText("[0 ~ 1]"),
+                            ],), 
+                          ],
+                          className="py-2",
                           ),
                         ],
-                        className="py-3",
+                        id="autoirrig-table-Comp", 
+                        className="w-100",
+                        style={"display": "none"},
                         ),
-                        dbc.Row([
-                          dbc.Col(
-                            dbc.Label("1st", className="text-center", ),
-                          ),
-                          dbc.Col(
-                            dbc.FormGroup([
-                              # dbc.Label("1st", html_for="irrig-day1", ),
-                              dbc.Input(type="number", id="irrig-day1", value=0, min="0", max="365", required="required", ),
-                            ],),
-                          ),
-                          dbc.Col(
-                            dbc.FormGroup([
-                              # dbc.Label("1st", html_for="irrig-mt1", ),
-                              dbc.Input(type="number", id="irrig-amt1", value=0, min="0", step="0.1", required="required", ),
-                            ],),
-                          ),
-                        ],),
-                        dbc.Row([
-                          dbc.Col(
-                            dbc.Label("2nd", className="text-center", ),
-                          ),
-                          dbc.Col(
-                            dbc.FormGroup([
-                              # dbc.Label("2nd", html_for="irrig-day2", ),
-                              dbc.Input(type="number", id="irrig-day2", value=0, min="0", max="365", required="required", ),
-                            ],),
-                          ),
-                          dbc.Col(
-                            dbc.FormGroup([
-                              # dbc.Label("2nd", html_for="irrig-amt2", ),
-                              dbc.Input(type="number", id="irrig-amt2", value=0, min="0", step="0.1", required="required", ),
-                            ],),
-                          ),
-                        ],),
-                        dbc.Row([
-                          dbc.Col(
-                            dbc.Label("3rd", className="text-center", ),
-                          ),
-                          dbc.Col(
-                            dbc.FormGroup([
-                              # dbc.Label("3rd", html_for="irrig-day3", ),
-                              dbc.Input(type="number", id="irrig-day3", value=0, min="0", max="365", required="required", ),
-                            ],),
-                          ),
-                          dbc.Col(
-                            dbc.FormGroup([
-                              # dbc.Label("3rd", html_for="irrig-amt3", ),
-                              dbc.Input(type="number", id="irrig-amt3", value=0, min="0", step="0.1", required="required", ),
-                            ],),
-                          ),
-                        ],),
-                        dbc.Row([
-                          dbc.Col(
-                            dbc.Label("4th", className="text-center", ),
-                          ),
-                          dbc.Col(
-                            dbc.FormGroup([
-                              # dbc.Label("4th", html_for="irrig-day4", ),
-                              dbc.Input(type="number", id="irrig-day4", value=0, min="0", max="365", required="required", ),
-                            ],),
-                          ),
-                          dbc.Col(
-                            dbc.FormGroup([
-                              # dbc.Label("4th", html_for="irrig-amt4", ),
-                              dbc.Input(type="number", id="irrig-amt4", value=0, min="0", step="0.1", required="required", ),
-                            ],),
-                          ),
-                        ],),
-                        dbc.Row([
-                          dbc.Col(
-                            dbc.Label("5th", className="text-center", ),
-                          ),
-                          dbc.Col(
-                            dbc.FormGroup([
-                              # dbc.Label("5th", html_for="irrig-day5", ),
-                              dbc.Input(type="number", id="irrig-day5", value=0, min="0", max="365", required="required", ),
-                            ],),
-                          ),
-                          dbc.Col(
-                            dbc.FormGroup([
-                              # dbc.Label("5th", html_for="irrig-amt5", ),
-                              dbc.Input(type="number", id="irrig-amt5", value=0, min="0", step="0.1", required="required", ),
-                            ],),
-                          ),
-                        ],),
-                      ],
-                      id="irrig-table-Comp", 
-                      className="w-100",
-                      style={"display": "none"},
-                      ),
-                    #auto irrigation
-                      html.Div([ # "Automatic when required "
-                        dbc.Row([  #irrigation depth
-                          dbc.Label("Management soil depth [cm]", html_for="ir_depth", align="start", ),
-                          dbc.Col([
-                            dbc.Input(type="number", id="ir_depth", value=30, min=1, max=100, step=0.1, required="required", ),
-                            ], ),               
-                          ],
-                          ),
-                        dbc.Row([  #irrigation threshold
-                          dbc.Label("Threshold", html_for="ir_threshold", align="start", ),
-                          dbc.FormText("(% of max available water trigging irrigation)"),
-                          dbc.Col([
-                            dbc.Input(type="number", id="ir_threshold", value=50, min=1, max=100, step=0.1, required="required", ),
-                            ], ),               
-                          ],
-                          ),
-                        dbc.Row([  #efficiency fraction
-                          dbc.Label("Irrigation efficiency fraction [0 ~ 1]", html_for="ir_eff", align="start", ),
-                          dbc.Col([
-                            dbc.Input(type="number", id="ir_eff", value=0.9, min=0.1, max=1, step=0.1, required="required", ),
-                            ], ),                
-                          ],
-                          ),
-                         # ],),
-                      ],
-                      id="autoirrig-table-Comp", 
-                      className="w-100",
-                      style={"display": "none"},
-                      ),
-                    #end of auto irrigation
+                      ]),
                     ],
+                    className="py-2",
                     xl=9,
                     ),
                   ],
                   row=True
                   ),
-                  ########End of Irrigaiton
                   dbc.FormGroup([ # Enterprise Budgeting?
-                    dbc.Label("16) Enterprise Budgeting?", html_for="EB_radio", sm=3, className="p-0", align="start", ),
+                    dbc.Label("16) Enterprise Budgeting?", html_for="EB_radio", sm=3, align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                         id="EB_radio",
@@ -667,51 +694,77 @@ layout = html.Div([
                         labelStyle = {"display": "inline-block","marginRight": 10},
                         value="EB_No",
                       ),
-                      html.Div([ # ENTERPRISE BUDGETING TABLE
+                      html.Div([ # ENTERPRISE BUDGETING FORM
                         dbc.Row([
-                          dbc.Col([  
+                          dbc.Col(
+                            dbc.Label("Crop Price", html_for="crop-price", className="text-center", ),
+                          ),
+                          dbc.Col(
                             dbc.FormGroup([
-                              dbc.Label("Crop Price", html_for="crop-price", style={"height": "7vh"}, align="start", ),
                               dbc.Input(type="number", id="crop-price", value="0", min="0", step="0.1", required="required", ),
-                              dbc.FormText("[CFA/kg]"),
-                            ]),
-                          ],),
-                          dbc.Col([  
-                            dbc.FormGroup([
-                              dbc.Label("Fertilizer Price", html_for="fert-cost", style={"height": "7vh"}, align="start", ),
-                              dbc.Input(type="number", id="fert-cost", value="0", min="0", step="0.1", required="required", ),
-                              dbc.FormText("[CFA/N kg]"),
-                            ]),
-                          ],),
-                          dbc.Col([  
-                            dbc.FormGroup([
-                              dbc.Label("Seed Cost", html_for="seed-cost", style={"height": "7vh"}, align="start", ),
-                              dbc.Input(type="number", id="seed-cost", value="0", min="0", step="0.1", required="required", ),
-                              dbc.FormText("[CFA/ha]"),
-                            ]),
-                          ],),
-                          dbc.Col([  
-                            dbc.FormGroup([
-                              dbc.Label("Other Variable Costs", html_for="variable-costs", style={"height": "7vh"}, align="start", ),
-                              dbc.Input(type="number", id="variable-costs", value="0", min="0", step="0.1", required="required", ),
-                              dbc.FormText("[CFA/ha]"),
-                            ]),
-                          ],),
-                          dbc.Col([  
-                            dbc.FormGroup([
-                              dbc.Label("Fixed Costs", html_for="fixed-costs", style={"height": "7vh"}, align="start", ),
-                              dbc.Input(type="number", id="fixed-costs", value="0", min="0", step="0.1", required="required", ),
-                              dbc.FormText("[CFA/ha]"),
-                            ]),
-                          ],),
+                              dbc.FormText("[ETB/kg]"),
+                            ],),
+                          ),
                         ],),
-                        dbc.FormText("See the Tutorial for more details of calculation"),
+                        dbc.Row([
+                          dbc.Col(
+                            dbc.Label("Fertilizer Price", html_for="fert-cost", className="text-center", ),
+                          ),
+                          dbc.Col(
+                            dbc.FormGroup([
+                              dbc.Input(type="number", id="fert-cost", value="0", min="0", step="0.1", required="required", ),
+                              dbc.FormText("[ETB/N kg]"),
+                            ],),
+                          ),
+                        ],),
+                        dbc.Row([
+                          dbc.Col(
+                            dbc.Label("Seed Cost", html_for="seed-cost", className="text-center", ),
+                          ),
+                          dbc.Col(
+                            dbc.FormGroup([
+                              dbc.Input(type="number", id="seed-cost", value="0", min="0", step="0.1", required="required", ),
+                              dbc.FormText("[ETB/ha]"),
+                            ],),
+                          ),
+                        ],),
+                        dbc.Row([
+                          dbc.Col(
+                            dbc.Label("Other Variable Costs", html_for="variable-costs", className="text-center", ),
+                          ),
+                          dbc.Col(
+                            dbc.FormGroup([
+                              dbc.Input(type="number", id="variable-costs", value="0", min="0", step="0.1", required="required", ),
+                              dbc.FormText("[ETB/ha]"),
+                            ],),
+                          ),
+                        ],),
+                        dbc.Row([
+                          dbc.Col(
+                            dbc.Label("Fixed Costs", html_for="fixed-costs", className="text-center", ),
+                          ),
+                          dbc.Col(
+                            dbc.FormGroup([
+                              dbc.Input(type="number", id="fixed-costs", value="0", min="0", step="0.1", required="required", ),
+                              dbc.FormText("[ETB/ha]"),
+                            ],),
+                          ),
+                        ],),
+                        # Tutorial link here is hardcoded
+                        dbc.FormText(
+                          html.Span([
+                            "See the ",
+                            html.A("Tutorial", target="_blank", href="https://sites.google.com/iri.columbia.edu/simagri-senegal/simagri-tutorial"),
+                            " for more details of calculation"
+                          ])
+                        ),
                       ],
                       id="EB-table-Comp", 
                       className="w-100",
                       style={"display": "none"},
                       ),
                     ],
+                    className="py-2",
                     xl=9,
                     ),
                   ],
@@ -806,7 +859,7 @@ layout = html.Div([
 
             html.Div([ # AFTER SCENARIO TABLE
               dbc.FormGroup([ # Approximate Growing Season
-                dbc.Label("15) Critical growing period to relate rainfall amount with crop yield", html_for="season-slider"),
+                dbc.Label("17) Critical growing period to relate rainfall amount with crop yield", html_for="season-slider"),
                 dbc.FormText("Selected period is used to sort drier/wetter years based on the seasonal total rainfall"),
                 dcc.RangeSlider(
                   id="season-slider",
@@ -884,7 +937,7 @@ layout = html.Div([
           html.Div( # ORIGINAL CSV
             html.Div([
               html.Header(
-                html.B("Simulated Yield Original CSV"),
+                html.B("Download Simulated Yield CSV"),
               className=" card-header"
               ),
               html.Div(
@@ -894,27 +947,30 @@ layout = html.Div([
                       dbc.Row([
                         dbc.Col(
                           dbc.Button(id="btn_csv_yield", 
-                          children="Download CSV for Simulated Yield", 
+                          children="Simulated Yield", 
                           className="w-100 d-block mx-auto",
                           color="secondary",
                           ),
-                        md=4,
+                        xs=4,
+                        className="p-2"
                         ),
                         dbc.Col(
                           dbc.Button(id="btn_csv_Pexe", 
-                          children="Download CSV for Prob. of Exceedance", 
+                          children="Prob. of Exceedance", 
                           className="w-100 d-block mx-auto",
                           color="secondary",
                           ),
-                        md=4,
+                        xs=4,
+                        className="p-2"
                         ),
                         dbc.Col(
                           dbc.Button(id="btn_csv_rain", 
-                          children="Download CSV for Seasonal Rainfall", 
+                          children="Seasonal Rainfall", 
                           className="w-100 d-block mx-auto",
                           color="secondary",
                           ),
-                        md=4,
+                        xs=4,
+                        className="p-2"
                         ),
                       ],
                       className="m-3",
@@ -1367,18 +1423,18 @@ def func(n_clicks, EB_data):
               Input("fert_input", component_property="value"))
 def show_hide_table(visibility_state):
     if visibility_state == "Fert":
-        return {"width": "30%","display": "block"}  #{"display": "block"}   
+        return {}
     if visibility_state == "No_fert":
-        return {"width": "30%","display": "none"} #"display": "none"} 
+        return {"display": "none"}
 #==============================================================
 #call back to "show/hide" Phosphorus Simulation option
 @app.callback(Output("P-sim-Comp", component_property="style"),
               Input("P_input", component_property="value"))
 def show_hide_table(visibility_state):
     if visibility_state == "P_yes":
-        return {"width": "30%","display": "block"}  #{"display": "block"}   
+        return {}
     if visibility_state == "P_no":
-        return {"width": "30%","display": "none"} #"display": "none"} 
+        return {"display": "none"}
 #==============================================================
 #call back to "show/hide" irrigation options
 @app.callback([Output("irrig-table-Comp", component_property="style"),
@@ -1386,20 +1442,20 @@ def show_hide_table(visibility_state):
               Input("irrig_input", component_property="value"))
 def show_hide_table(visibility_state):
     if visibility_state == "repr_irrig":
-        return [{"width": "30%","display": "block"}, {"width": "30%","display": "none"}]  #{"display": "block"}   
+        return [{}, {"display": "none"}]
     if visibility_state =="auto_irrig":
-        return [{"width": "30%","display": "none"}, {"width": "30%","display": "block"}] #"display": "none"} 
+        return [{"display": "none"}, {}]
     if visibility_state =="No_irrig":
-        return [{"width": "30%","display": "none"}, {"width": "30%","display": "none"}] #"display": "none"} 
+        return [{"display": "none"}, {"display": "none"}]
 #==============================================================
 #call back to "show/hide" Enterprise Budgetting input table
 @app.callback(Output("EB-table-Comp", component_property="style"),
               Input("EB_radio", component_property="value"))
 def show_hide_EBtable(visibility_state):
     if visibility_state == "EB_Yes":
-        return {"width": "80%","display": "block"}  #{"display": "block"}   
+        return {}
     if visibility_state == "EB_No":
-        return {"width": "80%","display": "none"} #"display": "none"} 
+        return {"display": "none"}
 #==============================================================
 #call back to "show/hide" Enterprise Budgetting graphs
 @app.callback(Output("EB-figures", component_property="style"),
