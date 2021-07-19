@@ -1882,15 +1882,13 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             ADAT = df_OUT.iloc[:,15].values  #read 14th column only
             MDAT = df_OUT.iloc[:,16].values  #read 14th column only    
             YEAR = df_OUT.iloc[:,13].values//1000
-            if int(scenarios.TargetYr[i]) <= int(scenarios.LastYear[i]):
-                doy = repr(PDAT[0])[4:]
-                target = scenarios.TargetYr[i] + doy
-                yr_index = np.argwhere(PDAT == int(target))
-        
-                TG_yield_temp = HWAM[yr_index[0][0]]
-            else: 
-                TG_yield_temp = np.nan
-
+            
+            doy = repr(PDAT[0])[4:]
+            target = scenarios.TargetYr[i] + doy
+            yr_index = np.argwhere(PDAT == int(target))
+    
+            TG_yield_temp = HWAM[yr_index[0][0]]
+            
             # Make a new dataframe for plotting
             data = {"EXPERIMENT":EXPERIMENT, "YEAR":YEAR, "PDAT": PDAT, "ADAT":ADAT, "HWAM":HWAM,"RAIN":df_season_rain.season_rain.values,"RANK":df_season_rain.Rank.values}
             temp_df = pd.DataFrame (data, columns = ["EXPERIMENT","YEAR", "PDAT","ADAT","HWAM", "RAIN", "RANK"])
