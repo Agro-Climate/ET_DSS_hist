@@ -1131,7 +1131,7 @@ layout = html.Div([
 # is this needed?
 DATA_PATH = pathlib.Path(__file__).parent.joinpath("data").resolve()
 
-DSSAT_FILES_DIR_SHORT = "/dssat_files_dir/"  #for linux systemn
+DSSAT_FILES_DIR_SHORT = "/DSSAT/dssat-base-files"  #for linux systemn
 
 # callbacks still do not work!
 # "/../" + 
@@ -1161,8 +1161,6 @@ soil_options = {
           "SN00840067(SL)", "SN00840080(SL)", "SN00840042(SL)", "SN00840056(SL)"]
 }
 
-# Wdir_path = "C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\"
-# Wdir_path = "C:\\IRI\\Python_Dash\\SN_DSS_hist_Keshatemp\\TEST_SN\\"
 Wdir_path = DSSAT_FILES_DIR    #for linux systemn
 
 #==============================================================
@@ -1841,30 +1839,19 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             #=====================================================================
             #3) Run DSSAT executable
             os.chdir(Wdir_path)  #change directory  #check if needed or not
-            # if scenarios.Crop[i] == "PN":
-            #     args = "DSCSM047.EXE CRGRO047 B DSSBatch.v47"
-            #     fout_name = path.join(Wdir_path, "SNPN"+scenario+".OSU")
-            # elif scenarios.Crop[i] == "ML":
-            #     args = "DSCSM047.EXE MLCER047 B DSSBatch.v47"
-            #     fout_name = path.join(Wdir_path, "SNML"+scenario+".OSU")
-            # else:  # SG
-            #     args = "DSCSM047.EXE SGCER047 B DSSBatch.v47"
-            #     fout_name = path.join(Wdir_path, "SNSG"+scenario+".OSU")
-            # subprocess.call(args) ##Run executable with argument  , stdout=FNULL, stderr=FNULL, shell=False)
-            # #===========>for linux system
             if scenarios.Crop[i] == "PN":
-                args = "./DSCSM047.EXE CRGRO047 B DSSBatch.V47"
-                # args = "./DSCSM047.EXE B DSSBatch.V47"
+                args = "./dscsm047 CRGRO047 B DSSBatch.V47"
+                # args = "./dscsm047 B DSSBatch.V47"
                 fout_name = "SNPN"+scenario+".OSU"
                 arg_mv = "cp Summary.OUT "+ "SNPN"+scenario+".OSU" #"cp Summary.OUT $fout_name"
                 # fout_name = path.join(Wdir_path, "SNPN"+scenario+".OSU")
             elif scenarios.Crop[i] == "ML":
-                args = "./DSCSM047.EXE MLCER047 B DSSBatch.V47"
+                args = "./dscsm047 MLCER047 B DSSBatch.V47"
                 fout_name = "SNML"+scenario+".OSU"
                 arg_mv = "cp Summary.OUT "+ "SNML"+scenario+".OSU" #"cp Summary.OUT $fout_name"
                 # fout_name = path.join(Wdir_path, "SNML"+scenario+".OSU")
             else:  # SG
-                args = "./DSCSM047.EXE SGCER047 B DSSBatch.V47"
+                args = "./dscsm047 SGCER047 B DSSBatch.V47"
                 fout_name = "SNSG"+scenario+".OSU"
                 arg_mv = "cp Summary.OUT "+ "SNSG"+scenario+".OSU"# "cp Summary.OUT $fout_name"
                 # fout_name = path.join(Wdir_path, "SNSG"+scenario+".OSU")
@@ -2077,7 +2064,6 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
         EB_sces = current_sces[current_sces["CropPrice"] != "-99"]
 
         sce_numbers = len(EB_sces.sce_name.values)
-        # Wdir_path = "C:\\IRI\\Python_Dash\\SN_DSS_hist_Keshatemp\\TEST_SN\\"
         Wdir_path = DSSAT_FILES_DIR  #for linux system
         os.chdir(Wdir_path)  #change directory  #check if needed or not
         TG_GMargin = []
@@ -2203,8 +2189,7 @@ def writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop,
     NYERS = repr(int(end_year) - int(start_year) + 1)
     plt_year = start_year
     if planting_date is not None:
-        date_object = date.fromisoformat(planting_date)
-        # date_string = date_object.strftime("%B %d, %Y")
+        date_object = datetime.datetime.strptime(planting_date, '%Y-%m-%d').date()
         plt_doy = date_object.timetuple().tm_yday
     PDATE = plt_year[2:] + repr(plt_doy).zfill(3)
         #   IC_date = first_year * 1000 + (plt_doy - 1)

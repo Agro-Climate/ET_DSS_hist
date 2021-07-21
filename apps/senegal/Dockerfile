@@ -1,14 +1,14 @@
-FROM eusojk/dssatv47-ubuntu:v0.0.2.2020
+FROM ubuntu:18.04
+RUN apt-get update; apt-get install python3.8 python3-pip make ca-certificates cmake gfortran -y
 
-RUN mkdir -p /home/SN_DSS_HIST/dssat_files_dir  
-RUN mkdir -p /home/SN_DSS_HIST/data  
-RUN cp -r /home/dssat-base-files/* /home/SN_DSS_HIST/dssat_files_dir 
+COPY . /home/SIMAGRI/
+WORKDIR /home/SIMAGRI/DSSAT/dssat-csm-os/build
+RUN cmake -DCMAKE_INSTALL_PREFIX=/home/SIMAGRI/DSSAT/dssat-base-files -DCMAKE_BUILD_TYPE=RELEASE ..; 
+RUN make; make install
 
-COPY . /home/SN_DSS_HIST/  
-COPY ./TEST_SN/* /home/SN_DSS_HIST/dssat_files_dir/ 
+WORKDIR /home/SIMAGRI/
+RUN mv TEST_SN/* DSSAT/dssat-base-files
 
-WORKDIR /home/SN_DSS_HIST/
-
+WORKDIR /home/SIMAGRI/
 RUN pip3 install -r requirements.txt
-
 CMD ["python3", "index.py", "senegal"]

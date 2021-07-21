@@ -795,7 +795,7 @@ layout = html.Div([
 # is this needed?
 DATA_PATH = pathlib.Path(__file__).parent.joinpath("data").resolve()
 
-DSSAT_FILES_DIR_SHORT = "/dssat_files_dir/"  #for linux systemn
+DSSAT_FILES_DIR_SHORT = "/DSSAT/dssat-base-files"  #for linux systemn
 
 # callbacks still do not work!
 # "/../" + 
@@ -1369,33 +1369,22 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             fw.close()
             #=====================================================================
             #3) Run DSSAT executable
-            os.chdir(Wdir_path)  #change directory  #check if needed or not
-            # if scenarios.Crop[i] == "WH":
-            #     args = "DSCSM047.EXE CSCER047 B DSSBatch.v47"
-            #     fout_name = path.join(Wdir_path, "ETWH"+scenario+".OSU")
-            # elif scenarios.Crop[i] == "MZ":
-            #     args = "DSCSM047.EXE MZCER047 B DSSBatch.v47"
-            #     fout_name = path.join(Wdir_path, "ETMZ"+scenario+".OSU")
-            # else:  # SG
-            #     args = "DSCSM047.EXE SGCER047 B DSSBatch.v47"
-            #     fout_name = path.join(Wdir_path, "ETSG"+scenario+".OSU")
-            # subprocess.call(args) ##Run executable with argument  , stdout=FNULL, stderr=FNULL, shell=False)
-            #===========>for linux system
+            os.chdir(Wdir_path)  #change directory
             if scenarios.Crop[i] == "WH":
-                args = "./DSCSM047.EXE CSCER047 B DSSBatch.V47"
-                # args = "./DSCSM047.EXE B DSSBatch.V47"
+                args = "./dscsm047 CSCER047 B DSSBatch.V47"
+                # args = "./dscsm047 B DSSBatch.V47"
                 fout_name = "ETWH"+scenario+".OSU"
-                arg_mv = "cp Summary.OUT "+ "ETWH"+scenario+".OSU" #"cp Summary.OUT $fout_name"
+                arg_mv = "cp Summary.OUT "+ fout_name #"cp Summary.OUT $fout_name"
                 # fout_name = path.join(Wdir_path, "ETWH"+scenario+".OSU")
             elif scenarios.Crop[i] == "MZ":
-                args = "./DSCSM047.EXE MZCER047 B DSSBatch.V47"
+                args = "./dscsm047 MZCER047 B DSSBatch.V47"
                 fout_name = "ETMZ"+scenario+".OSU"
-                arg_mv = "cp Summary.OUT "+ "ETMZ"+scenario+".OSU" #"cp Summary.OUT $fout_name"
+                arg_mv = "cp Summary.OUT "+ fout_name #"cp Summary.OUT $fout_name"
                 # fout_name = path.join(Wdir_path, "ETMZ"+scenario+".OSU")
             else:  # SG
-                args = "./DSCSM047.EXE SGCER047 B DSSBatch.V47"
+                args = "./dscsm047 SGCER047 B DSSBatch.V47"
                 fout_name = "ETSG"+scenario+".OSU"
-                arg_mv = "cp Summary.OUT "+ "ETSG"+scenario+".OSU"# "cp Summary.OUT $fout_name"
+                arg_mv = "cp Summary.OUT "+ fout_name # "cp Summary.OUT $fout_name"
                 # fout_name = path.join(Wdir_path, "ETSG"+scenario+".OSU")
 
             os.system(args) 
@@ -1730,8 +1719,7 @@ def writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop,
     NYERS = repr(int(end_year) - int(start_year) + 1)
     plt_year = start_year
     if planting_date is not None:
-        date_object = date.fromisoformat(planting_date)
-        date_string = date_object.strftime("%B %d, %Y")
+        date_object = datetime.datetime.strptime(planting_date, '%Y-%m-%d').date()
         plt_doy = date_object.timetuple().tm_yday
     PDATE = plt_year[2:] + repr(plt_doy).zfill(3)
         #   IC_date = first_year * 1000 + (plt_doy - 1)
