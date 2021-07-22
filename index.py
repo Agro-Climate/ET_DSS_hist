@@ -50,15 +50,15 @@ apps = {
             "/historical": historical.layout, 
         },
     },
-    # "colombia": { 
-    #     "logo": app.get_asset_url("SIMAGRI_CO_logo.GIF"), 
-    #     "tutorial": "",
-    #     "feedback": "",
-    #     "paths": {
-    #         "/about": about.layout, 
-    #         "/historical": historical.layout, 
-    #     },
-    # },
+    "colombia": { 
+        "logo": app.get_asset_url("SIMAGRI_CO_logo.GIF"), 
+        "tutorial": "https://sites.google.com/iri.columbia.edu/simagri-colombia/home",
+        "feedback": "https://sites.google.com/iri.columbia.edu/simagri-colombia/user-feedback-survey-form",
+        "paths": {
+            "/about": about.layout, 
+            "/historical": historical.layout, 
+        },
+    },
 }
 
 body = html.Div([
