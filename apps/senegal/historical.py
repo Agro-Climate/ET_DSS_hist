@@ -1806,12 +1806,7 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             #==============end of # EJ(5/18/2021) extract seasonal rainfall total
 
             # 2) Write V47 file
-            if scenarios.Crop[i] == "PN":
-                temp_dv7 = path.join(Wdir_path, "DSSBatch_template_PN.V47")
-            elif scenarios.Crop[i] == "ML":
-                temp_dv7 = path.join(Wdir_path, "DSSBatch_template_ML.V47")
-            else:  # SG
-                temp_dv7 = path.join(Wdir_path, "DSSBatch_template_SG.V47")
+            temp_dv7 = path.join(Wdir_path, f"DSSBatch_template_{scenarios.Crop[i]}.V47")
 
             dv7_fname = path.join(Wdir_path, "DSSBatch.V47")
             fr = open(temp_dv7, "r")  # opens temp DV4 file to read
@@ -1823,12 +1818,7 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
 
             temp_str = fr.readline()
             # SNX_fname = path.join(Wdir_path, "ETMZ"+scenario+".SNX")
-            if scenarios.Crop[i] == "PN":
-                SNX_fname = path.join(Wdir_path, "SNPN"+scenario+".SNX")
-            elif scenarios.Crop[i] == "ML":
-                SNX_fname = path.join(Wdir_path, "SNML"+scenario+".SNX")
-            else:  # SG
-                SNX_fname = path.join(Wdir_path, "SNSG"+scenario+".SNX")
+            SNX_fname = path.join(Wdir_path, f"SN{scenarios.Crop[i]}"+scenario+".SNX")
 
             # On Linux system, we don"t need to do this:
             # SNX_fname = SNX_fname.replace("/", "\\")
@@ -1842,19 +1832,14 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             if scenarios.Crop[i] == "PN":
                 args = "./dscsm047 CRGRO047 B DSSBatch.V47"
                 # args = "./dscsm047 B DSSBatch.V47"
-                fout_name = "SNPN"+scenario+".OSU"
-                arg_mv = "cp Summary.OUT "+ "SNPN"+scenario+".OSU" #"cp Summary.OUT $fout_name"
-                # fout_name = path.join(Wdir_path, "SNPN"+scenario+".OSU")
             elif scenarios.Crop[i] == "ML":
                 args = "./dscsm047 MLCER047 B DSSBatch.V47"
-                fout_name = "SNML"+scenario+".OSU"
-                arg_mv = "cp Summary.OUT "+ "SNML"+scenario+".OSU" #"cp Summary.OUT $fout_name"
-                # fout_name = path.join(Wdir_path, "SNML"+scenario+".OSU")
             else:  # SG
                 args = "./dscsm047 SGCER047 B DSSBatch.V47"
-                fout_name = "SNSG"+scenario+".OSU"
-                arg_mv = "cp Summary.OUT "+ "SNSG"+scenario+".OSU"# "cp Summary.OUT $fout_name"
-                # fout_name = path.join(Wdir_path, "SNSG"+scenario+".OSU")
+
+            fout_name = f"SN{scenarios.Crop[i]}"+scenario+".OSU"
+            arg_mv = "cp Summary.OUT "+ f"SN{scenarios.Crop[i]}"+scenario+".OSU" #"cp Summary.OUT $fout_name"
+            # fout_name = path.join(Wdir_path, "SNPN"+scenario+".OSU")
 
             os.system(args)
             os.system(arg_mv) 
@@ -2071,12 +2056,7 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
         #EJ(5/3/2021) Read DSSAT output for each scenarios
         for i in range(sce_numbers):
             sname = EB_sces.sce_name.values[i]
-            if EB_sces.Crop[i] == "PN":
-                fout_name = path.join(Wdir_path, "SNPN"+sname+".OSU")
-            elif EB_sces.Crop[i] == "ML":
-                fout_name = path.join(Wdir_path, "SNML"+sname+".OSU")
-            else:  # SG
-                fout_name = path.join(Wdir_path, "SNSG"+sname+".OSU")
+            fout_name = path.join(Wdir_path, f"SN{EB_sces.Crop[i]}"+sname+".OSU")
 
             #4) read DSSAT output => Read Summary.out from all scenario output
             df_OUT=pd.read_csv(fout_name,delim_whitespace=True ,skiprows=3)
@@ -2219,18 +2199,9 @@ def writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop,
         FERTI = 'N'
 
     #1) make SNX
-    if crop == "PN":
-        temp_snx = path.join(Wdir_path, "SNPNTEMP.SNX")
-        snx_name = "SNPN"+scenario[:4]+".SNX"
-    elif crop == "ML":
-        temp_snx = path.join(Wdir_path, "SNMLTEMP.SNX")
-        snx_name = "SNML"+scenario[:4]+".SNX"
-    else:  # SG
-        temp_snx = path.join(Wdir_path, "SNSGTEMP.SNX")
-        snx_name = "SNSG"+scenario[:4]+".SNX"
-    # # temp_snx = path.join(Wdir_path, "ETMZTEMP.SNX")
-    # temp_snx = path.join(Wdir_path, "TEMP_ETMZ.SNX")
-    # snx_name = "ETMZ"+scenario[:4]+".SNX"
+    temp_snx = path.join(Wdir_path, f"SN{crop}TEMP.SNX")
+    snx_name = f"SN{crop}"+scenario[:4]+".SNX"
+
     SNX_fname = path.join(Wdir_path, snx_name)
     fr = open(temp_snx, "r")  # opens temp SNX file to read
     fw = open(SNX_fname, "w")  # opens SNX file to write

@@ -19,5 +19,4 @@ COPY ./data /home/SIMAGRI/data
 COPY ./TEST_CO/* DSSAT/dssat-base-files
 
 WORKDIR /home/SIMAGRI/
-RUN pip3 install -r requirements.txt
 CMD ["python3", "index.py", "colombia"]
