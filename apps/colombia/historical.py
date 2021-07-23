@@ -1836,15 +1836,11 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
                 args = "./dscsm047 CRGRO047 B DSSBatch.v47"
                 # args = "./DSCSM047.EXE CRGRO047 B DSSBatch.V47"
                 # args = "./dscsm047 B DSSBatch.V47"
-                fout_name = "COBN"+scenario+".OSU"
-                # fout_name = path.join(Wdir_path, "SNPN"+scenario+".OSU")
-                arg_mv = "cp Summary.OUT "+ "COBN"+scenario+".OSU" #"cp Summary.OUT $fout_name"
             else: # scenarios.Crop[i] == "MZ":
                 args = "./dscsm047 MZCER047 B DSSBatch.v47"
                 # args = "./DSCSM047.EXE MZCER047 B DSSBatch.V47"
-                fout_name = "COMZ"+scenario+".OSU"
-                # fout_name = path.join(Wdir_path, "SNML"+scenario+".OSU")
-                arg_mv = "cp Summary.OUT "+ "COMZ"+scenario+".OSU" #"cp Summary.OUT $fout_name"
+            fout_name = f"CO{scenarios.Crop[i]}"+scenario+".OSU"
+            arg_mv = f"mv Summary.OUT {fout_name}"
             
 
             os.system(args)

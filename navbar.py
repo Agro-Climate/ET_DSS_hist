@@ -2,8 +2,8 @@ import dash_html_components as html
 import dash_bootstrap_components as dbc
 
 def navbar(logo, country, tutorial, feedback):
-    tutorial = dbc.NavItem(dbc.NavLink("Tutorial", href=tutorial, ),)
-    feedback = dbc.NavItem(dbc.NavLink("Feedback", href=feedback, ),)
+    tutorial = dbc.NavItem(dbc.NavLink("Tutorial", target="_blank", href=tutorial, ),)
+    feedback = dbc.NavItem(dbc.NavLink("Feedback", target="_blank", href=feedback, ),)
     # NAVBAR
     navbar = dbc.Navbar([
         # LOGO & BRAND

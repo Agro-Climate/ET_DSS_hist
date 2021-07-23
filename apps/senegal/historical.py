@@ -1838,9 +1838,8 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
                 args = "./dscsm047 SGCER047 B DSSBatch.V47"
 
             fout_name = f"SN{scenarios.Crop[i]}"+scenario+".OSU"
-            arg_mv = "cp Summary.OUT "+ f"SN{scenarios.Crop[i]}"+scenario+".OSU" #"cp Summary.OUT $fout_name"
-            # fout_name = path.join(Wdir_path, "SNPN"+scenario+".OSU")
-
+            arg_mv = f"mv Summary.OUT {fout_name}"
+            
             os.system(args)
             os.system(arg_mv) 
             # #===========>end of for linux system
