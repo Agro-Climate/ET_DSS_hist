@@ -1,3 +1,3 @@
 build:
   docker:
-    web: apps/colombia/Dockerfile
+    web: Dockerfile_co_heroku

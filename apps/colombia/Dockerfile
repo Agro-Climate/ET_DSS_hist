@@ -12,14 +12,11 @@
 
 FROM irikesha/simagridssat:latest
 
-WORKDIR /home/SIMAGRI/
-RUN mkdir apps/
-RUN mkdir assets/
-RUN mkdir data/
 COPY ./*.py /home/SIMAGRI/
 COPY ./apps/ /home/SIMAGRI/apps/
 COPY ./assets/ /home/SIMAGRI/assets/
 COPY ./data/ /home/SIMAGRI/data/
 COPY ./TEST_CO/* DSSAT/dssat-base-files/
 
+WORKDIR /home/SIMAGRI/
 CMD ["python3", "index.py", "colombia"]
