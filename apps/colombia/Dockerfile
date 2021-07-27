@@ -12,8 +12,8 @@
 
 FROM irikesha/simagridssat:latest
 
-WORKDIR /home/SIMAGRI/
 COPY . /home/SIMAGRI/
-COPY ./TEST_CO/* DSSAT/dssat-base-files/
+COPY ./TEST_CO/* /home/SIMAGRI/DSSAT/dssat-base-files/
 
+WORKDIR /home/SIMAGRI/
 CMD ["python3", "index.py", "colombia"]
