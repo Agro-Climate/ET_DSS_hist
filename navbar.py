@@ -21,7 +21,8 @@ def navbar(logo, country, tutorial, feedback):
         # NAV ITEMS
         dbc.Nav([
             dbc.NavItem(dbc.NavLink("Historical Analysis", href="/historical", ),),
-            dbc.NavItem(dbc.NavLink("Forecast Analysis", href="/forecast", className="d-none", ),),
+            # dbc.NavItem(dbc.NavLink("Forecast Analysis", href="/forecast", className="d-none", ),),
+            dbc.NavItem(dbc.NavLink("Forecast Analysis", href="/forecast", ),), #EJ(7/27/2021)
             tutorial,
             feedback,
         ],

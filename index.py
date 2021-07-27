@@ -22,6 +22,7 @@ country = sys.argv[1]
 if country == "ethiopia":
     from apps.ethiopia import about
     from apps.ethiopia import historical
+    from apps.ethiopia import forecast   #EJ(7/25/2021)
 elif country == "senegal":
     from apps.senegal import about
     from apps.senegal import historical
@@ -39,6 +40,7 @@ apps = {
         "paths": {
             "/about": about.layout,
             "/historical": historical.layout, 
+            "/forecast": forecast.layout,  #EJ(7/25/2021)
         },
     },
     "senegal":  { 
@@ -76,6 +78,8 @@ app.layout = html.Div([navbar(apps[country]["logo"], country.capitalize(), apps[
 )
 
 def display_page(pathname):
+    print("test")
+    print(pathname)
     if pathname in [*apps[country]["paths"]]:
         return apps[country]["paths"][pathname]
 
