@@ -678,10 +678,9 @@ layout = html.Div([
                   ],
                   row=True
                   ),
-                  html.Br(),
                   dbc.Button(id="EB-button-state", 
                   children="Display figures for Enterprise Budgets", 
-                  className="w-75 d-block mx-auto",
+                  className="w-75 d-block mx-auto my-3",
                   color="danger"
                   ),
                 ],
@@ -855,8 +854,6 @@ def func(n_clicks, yield_data):
         df_out.iloc[:,k]=temp.values
         k=k+1 #column index for a new df
     return dcc.send_data_frame(df_out.to_csv, "prob_of_exceedance.csv")
-#============end of EJ(6/7/2021)
-#=================================================    
 #==============================================================
 #call back to save Enterprise Budgeting df into a csv file
 @app.callback(
@@ -904,7 +901,6 @@ def show_hide_EBtable(EB_radio, scenarios):
 
 #==============================================================
 @app.callback(Output("scenario-table", "data"),
-                # Output("intermediate-value", "children"),
                 Input("write-button-state", "n_clicks"),
                 State("ETstation", "value"),
                 State("year1", "value"),
@@ -1368,10 +1364,8 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
         return 
     else:
         # 1) Read saved scenario summaries and get a list of scenarios to run
-        current_sces = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
-
+        current_sces = pd.DataFrame(sce_in_table)
         EB_sces = current_sces[current_sces["CropPrice"] != "-99"]
-
         sce_numbers = len(EB_sces.sce_name.values)
 
         if multiplier == None:
@@ -1380,7 +1374,6 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
             if multiplier < 0 or 2 < multiplier or sce_numbers == 0:
                 return [html.Div(""),html.Div(""),html.Div(""),html.Div(""),]
 
-        # Wdir_path = "C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\"
         Wdir_path = DSSAT_FILES_DIR  #for linux system
         os.chdir(Wdir_path)  #change directory  #check if needed or not
         TG_GMargin = []
@@ -1403,7 +1396,7 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
             HWAM[HWAM < 0]=0 #==> if HWAM == -99, consider it as "0" yield (i.e., crop failure)
             #Compute gross margin
             GMargin=HWAM*float(EB_sces.CropPrice[i])- float(EB_sces.NFertCost[i])*NICM - float(EB_sces.SeedCost[i]) - float(EB_sces.OtherVariableCosts[i]) - float(EB_sces.FixedCosts[i])
-            # GMargin_data[0:len(HWAM),x]
+
             TG_GMargin_temp = np.nan
             if int(EB_sces.TargetYr[i]) <= int(EB_sces.LastYear[i]):
                 doy = repr(PDAT[0])[4:]

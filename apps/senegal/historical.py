@@ -216,24 +216,6 @@ layout = html.Div([
                   ],
                   row=True
                   ),
-                  # dbc.FormGroup([ # Initial NO3 Condition
-                  #   dbc.Label("10) Initial Soil NO3 Condition", html_for="ini-NO3", sm=3, align="start", ),
-                  #   dbc.Col([
-                  #     dcc.Dropdown(
-                  #       id="ini-NO3", 
-                  #       options=[
-                  #         {"label": "High(65 N kg/ha)", "value": "H"},
-                  #         {"label": "Low(23 N kg/ha)", "value": "L"},
-                  #       ], 
-                  #       value="L",
-                  #     ),                
-                  #   ],
-                  #   className="py-2",
-                  #   xl=9,
-                  #   ),
-                  # ],
-                  # row=True
-                  # ),
                   dbc.FormGroup([ # Initial NO3 Condition
                     dbc.Label(["10) Initial Soil NO3 Condition", html.Span("  ([N kg/ha] in top 30cm soil)"), ],html_for="ini-NO3", sm=3, align="start", ),
                     dbc.Col([
@@ -993,77 +975,6 @@ layout = html.Div([
             ], 
             ),
           ),
-          
-          html.Div( # SORTED CSV
-            html.Div([
-              html.Header(
-                html.B("Simulated Yield Sorted CSV"),
-              className=" card-header"
-              ),
-              html.Div(
-                html.Div([
-                  html.Div([
-                    html.Div([ # SORTING CONTROLS AND BUTTON
-                      html.Br(),
-                      html.Div([
-                        html.Span("(i) Select a column name to sort: "),
-                        html.Div([dcc.Dropdown(id="column-dropdown", options=[{"label": "YEAR", "value": "YEAR"},],value="YEAR", clearable=False, )]),
-                      ],
-                      ),
-                      html.Br(),
-                      html.Div([
-                        html.Span("(ii) Yield adjustment factor: "),
-                        dbc.Input(id="yield-multiplier", type="text", placeholder="Enter ", value = "1"),
-                        html.Span(" (e.g., 90% reduction => 0.9)"),  
-                      ]),
-                      html.Br(),
-                      dbc.Button(id="btn_table_sort", 
-                      children="Click to update and sort the Datatable by the selected column name", 
-                      className="w-75 d-block mx-auto",
-                      color="info"
-                      ),
-                      html.Br(),   
-                      #EJ(6/7/2021) to download each column separately into a csv
-                      dbc.Button(id="btn_csv2_yield", 
-                      children="Download CSV for SORTED simulated Yield", 
-                      className="w-75 d-block mx-auto",
-                      color="secondary"
-                      ),
-                      html.Br(),
-                      dbc.Button(id="btn_csv2_rain", 
-                      children="Download CSV for SORTED seasonal rainfall", 
-                      className="w-75 d-block mx-auto",
-                      color="secondary"
-                      ),
-                      html.Br(),
-                      dbc.Button(id="btn_csv2_Pexe", 
-                      children="Download CSV for SORTED prob. of exceedance", 
-                      className="w-75 d-block mx-auto",
-                      color="secondary"
-                      ),
-                      #   Download(id="download-dataframe-csv2"),
-                      Download(id="download-dataframe-csv2-yield"),
-                      Download(id="download-dataframe-csv2-rain"),
-                      Download(id="download-dataframe-csv2-Pexe"),
-                    
-                      #end of EJ(6/7/2021) update
-                      html.Div(id="yieldtables-container2", 
-                      className="overflow-auto",
-                      style={"height": "20vh"},
-                      ),  #sorted yield simulated output
-                    ],
-                    ),
-                  ],
-                  ),
-                ], 
-                id="sorted-yield-csv-table", className="dash-table-container"
-                ),
-              ),
-            ], 
-            ),
-          className="d-none",
-          ),
-      
 
           html.Div( # ENTERPRISE BUDGETING
             html.Div([
@@ -1072,11 +983,26 @@ layout = html.Div([
               className=" card-header",
               ),
               html.Div([
-                html.Br(),
-                dbc.Button(id="EB-button-state", 
-                children="Display figures for Enterprise Budgets", 
-                className="w-75 d-block mx-auto",
-                color="danger"
+                dbc.Form([ # EB FIGURES
+                  dbc.FormGroup([ # Enterprise Budgeting Yield Adjustment Factor
+                    dbc.Label("Enterprise Budgeting Yield Adjustment Factor", html_for="yield-multiplier", sm=3, className="p-2", align="start", ),
+                    dbc.Col([
+                      dbc.Input(type="number", id="yield-multiplier", value=1, min=0, max=2, step=0.1, required="required", ),
+                      dbc.FormText("Enter a multiplier to account for a margin of error."),
+                    ],
+                    className="py-2",
+                    xl=9,
+                    ),
+                  ],
+                  row=True
+                  ),
+                  dbc.Button(id="EB-button-state", 
+                  children="Display figures for Enterprise Budgets", 
+                  className="w-75 d-block mx-auto my-3",
+                  color="danger"
+                  ),
+                ],
+                className="p-3",
                 ),
 
                 html.Div([
@@ -1095,12 +1021,17 @@ layout = html.Div([
                 className="overflow-auto",
                 style={"height": "94vh"},
                 ),
-
+              ]),
+              html.Div([
+                html.Header(
+                  html.B("Download Enterprise Budgeting CSV"),
+                className=" card-header"
+                ),
                 html.Div([
                   html.Br(),
                   dbc.Button(id="btn_csv_EB", 
-                  children="Download CSV file for Enterprise Budgeting", 
-                  className="w-75 d-block mx-auto",
+                  children="Download", 
+                  className="w-50 d-block mx-auto m-1",
                   color="secondary"
                   ),
                   # dcc.Download(id="download-dataframe-csv"),
@@ -1164,126 +1095,6 @@ soil_options = {
 Wdir_path = DSSAT_FILES_DIR    #for linux systemn
 
 #==============================================================
-#Dynamic call back for sorting datatable by a column name
-@app.callback(Output(component_id="yieldtables-container2", component_property="children"),
-                Output("memory-sorted-yield-table", "data"),
-                # Input("column-dropdown", "value"),
-                Input("btn_table_sort", "n_clicks"),
-                State("memory-yield-table", "data"),
-                State("yield-multiplier", "value"),
-                State("column-dropdown", "value"),
-                prevent_initial_call=True,
-            )
-def sort_table(n_clicks, yield_table, multiplier, col_name):
-    if n_clicks: 
-        df =pd.DataFrame(yield_table)
-        df_out = df.sort_values(by=[col_name])
-        col = df_out.columns
-        for i in range(1,len(col),3):
-            temp=df_out.iloc[:,[i]].mul(float(multiplier))  #multiply yield adjustment factor
-            temp=temp.astype(int)
-            # temp.round(0)  #Round a DataFrame to a variable number of decimal places.
-            df_out.iloc[:,i]=temp.values
-        return [
-            dash_table.DataTable(columns=[{"name": i, "id": i} for i in df_out.columns],data=df_out.to_dict("records"),
-                style_table={"overflowX": "auto"}, 
-                style_cell={   # all three widths are needed
-                    "minWidth": "10px", "width": "10px", "maxWidth": "30px",
-                    "overflow": "hidden",
-                    "textOverflow": "ellipsis", }),
-            df_out.to_dict("records")
-            ]
-
-# #call back to save df into a csv file
-# @app.callback(
-#     Output("download-dataframe-csv2", "data"),
-#     Input("btn_csv2", "n_clicks"),
-#     State("memory-sorted-yield-table", "data"),
-#     prevent_initial_call=True,
-# )
-# def func(n_clicks, yield_data):
-#     df =pd.DataFrame(yield_data)
-#     return dcc.send_data_frame(df.to_csv, "simulated_yield_sorted.csv")
-#============EJ(6/7/2021)
-#1) for yield - call back to save df into a csv file
-@app.callback(
-    Output("download-dataframe-csv2-yield", "data"),
-    Input("btn_csv2_yield", "n_clicks"),
-    State("memory-sorted-yield-table", "data"),
-    prevent_initial_call=True,
-)
-def func(n_clicks, yield_data):
-    df =pd.DataFrame(yield_data)
-    col = df.columns  #EJ(6/7/2021)
-    col_names = [df.columns[0]]   #list for col names - first column for YEAR
-    for i in range(1,len(col),3):  
-        col_names.append(df.columns[i])
-      
-    #make a new filtered dataframe to save into a csv
-    df_out = pd.DataFrame(columns = col_names)
-    # df_out.iloc[:,0]=df.iloc[:,[0]].values  #first column for YEAR
-    df_out.iloc[:,0] = df.iloc[:,0].values  #first column for YEAR
-    k=1
-    for i in range(1,len(col),3):  #for YIELD
-        temp=df.iloc[:,i]
-        temp=temp.astype(int)
-        df_out.iloc[:,k]=temp.values
-        k=k+1 #column index for a new df
-    return dcc.send_data_frame(df_out.to_csv, "simulated_yield_sorted.csv")
-#==============================================================
-#2) for rainfall - call back to save df into a csv file
-@app.callback(
-    Output("download-dataframe-csv2-rain", "data"),
-    Input("btn_csv2_rain", "n_clicks"),
-    State("memory-sorted-yield-table", "data"),
-    prevent_initial_call=True,
-)
-def func(n_clicks, yield_data):
-    df =pd.DataFrame(yield_data)
-    col = df.columns  #EJ(6/7/2021) 
-    col_names = [df.columns[0]]   #first column for YEAR
-    for i in range(3,len(col),3):  
-        col_names.append(df.columns[i])
-      
-    #make a new filtered dataframe to save into a csv
-    df_out = pd.DataFrame(columns = col_names)
-    df_out.iloc[:,0] = df.iloc[:,0].values  #first column for YEAR
-    k=1
-    for i in range(3,len(col),3):  #for YIELD
-        # temp=df.iloc[:,[i]]
-        temp=df.iloc[:,i]
-        temp=temp.astype(int)
-        df_out.iloc[:,k]=temp.values
-        k=k+1 #column index for a new df
-    return dcc.send_data_frame(df_out.to_csv, "seasonal_rainfall_sorted.csv")
-#=================================================    
-#3) for prob of exceedance - call back to save df into a csv file
-@app.callback(
-    Output("download-dataframe-csv2-Pexe", "data"),
-    Input("btn_csv2_Pexe", "n_clicks"),
-    State("memory-sorted-yield-table", "data"),
-    prevent_initial_call=True,
-)
-def func(n_clicks, yield_data):
-    df =pd.DataFrame(yield_data)
-    col = df.columns  #EJ(6/7/2021) 
-    col_names = [df.columns[0]]   #first column for YEAR
-    for i in range(2,len(col),3):  
-        col_names.append(df.columns[i])
-      
-    #make a new filtered dataframe to save into a csv
-    df_out = pd.DataFrame(columns = col_names)
-    df_out.iloc[:,0] = df.iloc[:,0].values  #first column for YEAR
-    k=1
-    for i in range(2,len(col),3):  #for YIELD
-        temp=df.iloc[:,i]
-        df_out.iloc[:,k]=temp.values
-        k=k+1 #column index for a new df
-    return dcc.send_data_frame(df_out.to_csv, "prob_of_exceedance_sorted.csv")
-#============end of EJ(6/7/2021)
-#=================================================    
-#==============================================================
-#==============================================================
 #Dynamic call back for different cultivars for a selected target crop
 @app.callback(
     Output("cultivar-dropdown", "options"),
@@ -1310,18 +1121,6 @@ def set_soil_options(selected_crop):
 def set_cultivar_value(available_options):
     return available_options[0]["value"]
 #==============================================================
-#==============================================================
-# #call back to save df into a csv file
-# @app.callback(
-#     Output("download-dataframe-csv", "data"),
-#     Input("btn_csv", "n_clicks"),
-#     State("memory-yield-table", "data"),
-#     prevent_initial_call=True,
-# )
-# def func(n_clicks, yield_data):
-#     df =pd.DataFrame(yield_data)
-#     return dcc.send_data_frame(df.to_csv, "simulated_yield.csv")
-#============EJ(6/7/2021)
 #1) for yield - call back to save df into a csv file
 @app.callback(
     Output("download-dataframe-csv-yield", "data"),
@@ -1397,8 +1196,6 @@ def func(n_clicks, yield_data):
         df_out.iloc[:,k]=temp.values
         k=k+1 #column index for a new df
     return dcc.send_data_frame(df_out.to_csv, "prob_of_exceedance.csv")
-#============end of EJ(6/7/2021)
-#=================================================    
 #==============================================================
 #call back to save Enterprise Budgeting df into a csv file
 @app.callback(
@@ -1467,43 +1264,40 @@ def show_hide_EBtable(EB_radio, scenarios):
 
 #==============================================================
 @app.callback(Output("scenario-table", "data"),
-                # Output("intermediate-value", "children"),
                 Input("write-button-state", "n_clicks"),
-                State("SNstation", "value"),  #input 1
-                State("year1", "value"),      #input 2
-                State("year2", "value"),      #input 3
-                State("plt-date-picker", "date"),  #input 4
-                # State("ETMZcultivar", "value"),   #input 5
-                State("crop-radio", "value"),  #input 50
-                State("cultivar-dropdown", "value"),   #input 5
-                State("SNsoil", "value"),         #input 6
-                State("ini-H2O", "value"),        #input 7           
-                State("ini-NO3", "value"),        #input 8
-                State("plt-density", "value"),    #input 9
-                State("sce-name", "value"),       #input 10
-                State("target-year", "value"),    #input 11
-                # State("intermediate-value", "children"),  #input 12 scenario summary table
-                State("fert_input", "value"),     ##input 13 fertilizer yes or no
-                State("fert-day1","value"), 
-                State("N-amt1","value"), 
-                State("P-amt1","value"), 
+                State("SNstation", "value"),
+                State("year1", "value"),
+                State("year2", "value"),
+                State("plt-date-picker", "date"),
+                State("crop-radio", "value"),
+                State("cultivar-dropdown", "value"),
+                State("SNsoil", "value"),
+                State("ini-H2O", "value"),
+                State("ini-NO3", "value"),
+                State("plt-density", "value"),
+                State("sce-name", "value"),
+                State("target-year", "value"),
+                State("fert_input", "value"),
+                State("fert-day1","value"),
+                State("N-amt1","value"),
+                State("P-amt1","value"),
                 State("K-amt1","value"),
-                State("fert-day2","value"), 
-                State("N-amt2","value"), 
-                State("P-amt2","value"), 
-                State("K-amt2","value"), 
-                State("fert-day3","value"), 
-                State("N-amt3","value"), 
-                State("P-amt3","value"), 
-                State("K-amt3","value"), 
-                State("fert-day4","value"), 
-                State("N-amt4","value"), 
-                State("P-amt4","value"), 
-                State("K-amt4","value"), 
-                State("P_input", "value"),     ## Phosphorous simualtion
-                State("extr_P", "value"),     ## Extractrable P level in soil"
-                State("irrig_input", "value"),     ## irrigation option
-                State("ir_method", "value"),     ##irrigation method in case "on reported date"
+                State("fert-day2","value"),
+                State("N-amt2","value"),
+                State("P-amt2","value"),
+                State("K-amt2","value"),
+                State("fert-day3","value"),
+                State("N-amt3","value"),
+                State("P-amt3","value"),
+                State("K-amt3","value"),
+                State("fert-day4","value"),
+                State("N-amt4","value"),
+                State("P-amt4","value"),
+                State("K-amt4","value"),
+                State("P_input", "value"),
+                State("extr_P", "value"),
+                State("irrig_input", "value"),
+                State("ir_method", "value"),
                 State("irrig-day1", "value"),
                 State("irrig-amt1", "value"),
                 State("irrig-day2", "value"),
@@ -1514,16 +1308,16 @@ def show_hide_EBtable(EB_radio, scenarios):
                 State("irrig-amt4", "value"),
                 State("irrig-day5", "value"),
                 State("irrig-amt5", "value"),
-                State("ir_depth", "value"), #autmomatic irrigaiton 
+                State("ir_depth", "value"),
                 State("ir_threshold", "value"),
                 State("ir_eff", "value"),
-                State("EB_radio", "value"),     ##input 15 Enterprise budgeting yes or no
-                State("crop-price","value"), #Input 16 Enterprise budget input
-                State("seed-cost","value"), #Input 16 Enterprise budget input
-                State("fert-cost","value"), #Input 16 Enterprise budget input
-                State("fixed-costs","value"), #Input 16 Enterprise budget input
-                State("variable-costs","value"), #Input 16 Enterprise budget input
-                State("scenario-table","data") ###input 17 scenario summary table
+                State("EB_radio", "value"),
+                State("crop-price","value"),
+                State("seed-cost","value"),
+                State("fert-cost","value"),
+                State("fixed-costs","value"),
+                State("variable-costs","value"),
+                State("scenario-table","data")
             )
 def make_sce_table(
     n_clicks, station, start_year, end_year, planting_date, crop, cultivar, soil_type, 
@@ -1765,10 +1559,7 @@ def make_sce_table(
                 Output(component_id="yield-AN-container", component_property="children"),
                 Output(component_id="yieldtables-container", component_property="children"),
                 Output("memory-yield-table", "data"),
-                Output("column-dropdown", "options"), #EJ(5/19/2021) update dropdown list for sorting a datatable
                 Input("simulate-button-state", "n_clicks"),
-                # State("target-year", "value"),       #input 11
-                # State("intermediate-value", "children") #scenario summary table
                 State("scenario-table","data"), ### scenario summary table
                 State("season-slider", "value"), #EJ (5/13/2021) for seasonal total rainfall
                 prevent_initial_call=True,
@@ -1976,7 +1767,6 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
         #save simulated yield outputs into a csv file <<<<<<=======================
         fname = path.join(Wdir_path, "simulated_yield.csv")
         df_out.to_csv(fname, index=False)
-        #print({"label": i, "value": i} for i in list(df_out.columns))
 
         return [
             dcc.Graph(id="yield-boxplot", figure = yld_box, config = graph.config, ), 
@@ -2003,29 +1793,7 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
               }
             ),
             df_out.to_dict("records"),
-            [{"label": i, "value": i} for i in list(df_out.columns)]
-            ]
-#==============================================================
-#==============================================================
-#Dynamic call back for update dropdown values, before datatable filtering by col name
-# @app.callback(
-#     Output("column-dropdown", "options"),
-#     Input("btn_table_sort", "n_clicks"),
-#     State("memory-yield-table", "data"),
-#     prevent_initial_call=True,
-#     )
-# def set_column_options(n_clicks, yield_table):
-#     df =pd.DataFrame(yield_table)
-#     return [{"label": i, "value": i} for i in list(df.columns)]
-#==============================================================
-#==============================================================
-@app.callback(
-    Output("column-dropdown", "value"),
-    Input("column-dropdown", "options"))
-def set_column_value(available_options):
-    # return cultivar_options[0]["value"]
-    return [available_options[i]["value"] for i in range(len(available_options))]
-
+        ]
 #Last callback to create figures for Enterprise budgeting
 @app.callback(Output(component_id="EBbox-container", component_property="children"),
                 Output(component_id="EBcdf-container", component_property="children"),
@@ -2043,11 +1811,16 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
         return 
     else: 
         # 1) Read saved scenario summaries and get a list of scenarios to run
-        current_sces = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
-
+        current_sces = pd.DataFrame(sce_in_table)
         EB_sces = current_sces[current_sces["CropPrice"] != "-99"]
-
         sce_numbers = len(EB_sces.sce_name.values)
+
+        if multiplier == None:
+            return [html.Div(""),html.Div(""),html.Div(""),html.Div(""),]
+        else:
+            if multiplier < 0 or 2 < multiplier or sce_numbers == 0:
+                return [html.Div(""),html.Div(""),html.Div(""),html.Div(""),]
+
         Wdir_path = DSSAT_FILES_DIR  #for linux system
         os.chdir(Wdir_path)  #change directory  #check if needed or not
         TG_GMargin = []
@@ -2070,34 +1843,23 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
             HWAM[HWAM < 0]=0 #==> if HWAM == -99, consider it as "0" yield (i.e., crop failure)
             #Compute gross margin
             GMargin=HWAM*float(EB_sces.CropPrice[i])- float(EB_sces.NFertCost[i])*NICM - float(EB_sces.SeedCost[i]) - float(EB_sces.OtherVariableCosts[i]) - float(EB_sces.FixedCosts[i])
-            # GMargin_data[0:len(HWAM),x]
+            
+            TG_GMargin_temp = np.nan
             if int(EB_sces.TargetYr[i]) <= int(EB_sces.LastYear[i]):
                 doy = repr(PDAT[0])[4:]
                 target = EB_sces.TargetYr[i] + doy
                 yr_index = np.argwhere(PDAT == int(target))
                 TG_GMargin_temp = GMargin[yr_index[0][0]]
-            else: 
-                TG_GMargin_temp = np.nan
-
-            # # Make a new dataframe for plotting
-            # df1 = pd.DataFrame({"EXPERIMENT":EXPERIMENT})
-            # df2 = pd.DataFrame({"PDAT":PDAT})
-            # df3 = pd.DataFrame({"ADAT":ADAT})
-            # df4 = pd.DataFrame({"HWAM":HWAM})
-            # df5 = pd.DataFrame({"YEAR":YEAR})
-            # df6 = pd.DataFrame({"NICM":NICM})
-            # df7 = pd.DataFrame({"GMargin":GMargin})
-            # temp_df = pd.concat([df1.EXPERIMENT,df5.YEAR, df2.PDAT, df3.ADAT, df4.HWAM, df6.NICM, df7.GMargin], ignore_index=True, axis=1)
-
+            
             data = {"EXPERIMENT":EXPERIMENT, "YEAR":YEAR, "PDAT": PDAT, "ADAT":ADAT, "HWAM":HWAM,"NICM":NICM, "GMargin":GMargin}  #EJ(6/5/2021) fixed
             temp_df = pd.DataFrame (data, columns = ["EXPERIMENT","YEAR", "PDAT","ADAT","HWAM","NICM","GMargin"])  #EJ(6/5/2021) fixed
 
             if i==0:
                 df = temp_df.copy()
             else:
-                df = df.append(temp_df, ignore_index=True)
+                df = temp_df.append(df, ignore_index=True)
 
-            TG_GMargin.append(TG_GMargin_temp)
+            TG_GMargin = [TG_GMargin_temp]+TG_GMargin
 
         # adding column name to the respective columns
         df.columns =["EXPERIMENT", "YEAR","PDAT", "ADAT","HWAM","NICM","GMargin"]
@@ -2157,9 +1919,6 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
             ]
 
 # =============================================
-# def writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,cultivar,soil_type,initial_soil_moisture,initial_soil_no3,planting_density,scenario):
-# def writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop,cultivar,soil_type,initial_soil_moisture,initial_soil_no3,
-#                        planting_density,scenario,fert_app, df_fert):    
 def writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3,
                         planting_density,scenario,fert_app, df_fert, 
                         p_sim, p_level, irrig_app, irrig_method, df_irrig, ir_depth,ir_threshold, ir_eff):
