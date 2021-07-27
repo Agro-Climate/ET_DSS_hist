@@ -1061,11 +1061,7 @@ layout = html.Div([
 
 # is this needed?
 DATA_PATH = pathlib.Path(__file__).parent.joinpath("data").resolve()
-
 DSSAT_FILES_DIR_SHORT = "/DSSAT/dssat-base-files"  #for linux systemn
-
-# callbacks still do not work!
-# "/../" + 
 DSSAT_FILES_DIR = os.getcwd() + DSSAT_FILES_DIR_SHORT   #for linux systemn
 
 #https://community.plotly.com/t/loading-when-opening-localhost/7284
@@ -1608,8 +1604,7 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
                 fw.write(line)
 
             temp_str = fr.readline()
-            # SNX_fname = path.join(Wdir_path, "ETMZ"+scenario+".SNX")
-            SNX_fname = path.join(Wdir_path, f"SN{scenarios.Crop[i]}"+scenario+".SNX")
+            SNX_fname = path.join(Wdir_path, f"SN{scenarios.Crop[i]}{scenario}.SNX")
 
             # On Linux system, we don"t need to do this:
             # SNX_fname = SNX_fname.replace("/", "\\")
@@ -1628,7 +1623,7 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
             else:  # SG
                 args = "./dscsm047 SGCER047 B DSSBatch.V47"
 
-            fout_name = f"SN{scenarios.Crop[i]}"+scenario+".OSU"
+            fout_name = f"SN{scenarios.Crop[i]}{scenario}.OSU"
             arg_mv = f"mv Summary.OUT {fout_name}"
             
             os.system(args)

@@ -1157,7 +1157,7 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
                 fw.write(temp_str)
 
             temp_str = fr.readline()
-            # SNX_fname = path.join(Wdir_path, "ETMZ"+scenario+".SNX")
+            # SNX_fname = path.join(Wdir_path, "ETMZ{scenario}.SNX")
             SNX_fname = path.join(Wdir_path, f"ET{scenarios.Crop[i]}{scenario}.SNX")
 
             # On Linux system, we don"t need to do this:
