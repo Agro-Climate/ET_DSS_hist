@@ -13,9 +13,9 @@
 FROM irikesha/simagridssat:latest
 
 COPY ./*.py /home/SIMAGRI/
-COPY ./apps /home/SIMAGRI/apps/
-COPY ./assets /home/SIMAGRI/assets/
-COPY ./data /home/SIMAGRI/data/
+COPY ./apps/ /home/SIMAGRI/apps/
+COPY ./assets/ /home/SIMAGRI/assets/
+COPY ./data/ /home/SIMAGRI/data/
 COPY ./TEST_ET/* DSSAT/dssat-base-files/
 
 WORKDIR /home/SIMAGRI/
