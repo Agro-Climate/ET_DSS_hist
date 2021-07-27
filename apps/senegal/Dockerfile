@@ -12,11 +12,11 @@
 
 FROM irikesha/simagridssat:latest
 
-COPY ./*.py /home/SIMAGRI
-COPY ./apps /home/SIMAGRI/apps
-COPY ./assets /home/SIMAGRI/assets
-COPY ./data /home/SIMAGRI/data
-COPY ./TEST_SN/* DSSAT/dssat-base-files
+COPY ./*.py /home/SIMAGRI/
+COPY ./apps /home/SIMAGRI/apps/
+COPY ./assets /home/SIMAGRI/assets/
+COPY ./data /home/SIMAGRI/data/
+COPY ./TEST_SN/* DSSAT/dssat-base-files/
 
 WORKDIR /home/SIMAGRI/
 CMD ["python3", "index.py", "senegal"]
