@@ -9,7 +9,6 @@ import sys
 from app import app
 from app import server
 
-
 from navbar import navbar
 ##########################################################################
 
@@ -22,7 +21,7 @@ country = sys.argv[1]
 if country == "ethiopia":
     from apps.ethiopia import about
     from apps.ethiopia import historical
-    from apps.ethiopia import forecast   #EJ(7/25/2021)
+    # from apps.ethiopia import forecast
 elif country == "senegal":
     from apps.senegal import about
     from apps.senegal import historical
@@ -40,7 +39,7 @@ apps = {
         "paths": {
             "/about": about.layout,
             "/historical": historical.layout, 
-            "/forecast": forecast.layout,  #EJ(7/25/2021)
+            # "/forecast": forecast.layout,
         },
     },
     "senegal":  { 
@@ -78,15 +77,8 @@ app.layout = html.Div([navbar(apps[country]["logo"], country.capitalize(), apps[
 )
 
 def display_page(pathname):
-    print("test")
-    print(pathname)
     if pathname in [*apps[country]["paths"]]:
         return apps[country]["paths"][pathname]
-
-    # if pathname == '/historical':
-    #     return historical.layout
-    # if pathname == '/about':
-    #     return about.layout
     return "Nothing here"
 
 port = int(os.environ.get("PORT", 5000))

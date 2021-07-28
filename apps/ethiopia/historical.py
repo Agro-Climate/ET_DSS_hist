@@ -458,17 +458,17 @@ layout = html.Div([
               className="overflow-auto",
               style={"height": "63vh"},
               ),
+              html.Header(html.B("Scenarios"), className="card-header",),
+              dbc.FormGroup([ # SUBMIT - ADD SCENARIO
+                dbc.Button(id="write-button-state", 
+                n_clicks=0, 
+                children="Create or Add a new Scenario", 
+                className="w-75 d-block mx-auto my-3",
+                color="primary"
+                ),
+              ]),  
 
               html.Div([ # SCENARIO TABLE
-                html.Header(html.B("Scenarios"), className="card-header",),
-                dbc.FormGroup([ # SUBMIT - ADD SCENARIO
-                  dbc.Button(id="write-button-state", 
-                  n_clicks=0, 
-                  children="Create or Add a new Scenario", 
-                  className="w-75 d-block mx-auto my-3",
-                  color="primary"
-                  ),
-                ]),
                 dash_table.DataTable(
                 id="scenario-table",
                 columns=([
@@ -513,6 +513,68 @@ layout = html.Div([
                 row_deletable=True
                 ),
               ]),
+            ]),
+
+            # FORM END
+            html.Div([
+              dbc.Row([ # IMPORT/DOWNLOAD SCENARIOS
+                dbc.Col(
+                  dcc.Upload([
+                    html.Div([
+                      html.Div(html.B("Import Scenarios:")),
+                      "Drag and Drop or ",
+                      dcc.Link("Select a File", href="", )
+                    ],
+                    className="d-block mx-auto text-center p-2"
+                    )
+                  ],
+                  id="import-sce", 
+                  className="w-75 d-block mx-auto m-3",
+                  style={
+                      "borderWidth": "1px",
+                      "borderStyle": "dashed",
+                      "borderRadius": "5px",
+                      # "textAlign": "center",
+                      "background-color": "lightgray"
+                  },
+                  ),
+                ),
+                dbc.Col([
+                  dbc.Button(
+                    "Download Scenarios",
+                  id="download-btn-sce", 
+                  n_clicks=0, 
+                  className="w-75 h-50 d-block mx-auto m-4",
+                  color="secondary"
+                  ),
+                  dcc.Download(id="download-sce")
+                ],),
+              ],
+              className="mx-3", 
+              no_gutters=True
+              ),
+              html.Div( # IMPORT/DOWNLOAD ERROR MESSAGES
+                dbc.Row([
+                  dbc.Col(
+                    html.Div("",
+                    id="import-sce-error",
+                    style={"display": "none"},
+                    ),
+                  ),
+                  dbc.Col([
+                    html.Div(
+                      html.Div("Nothing to Download",
+                      className="d-block mx-auto m-2", 
+                      style={"color": "red"},
+                      ),
+                    id="download-sce-error",
+                    style={"display": "none"}, 
+                    ),
+                  ]),
+                ]),
+              className="text-center mx-3",
+              # style={"display": "none"},
+              ),
             ]),
 
             html.Div([ # AFTER SCENARIO TABLE
