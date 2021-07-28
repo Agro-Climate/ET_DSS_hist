@@ -1252,11 +1252,13 @@ def show_hide_EBtable(EB_radio, scenarios):
     existing_sces = pd.DataFrame(scenarios)
     if EB_radio == "EB_Yes":
         return {}
+    if existing_sces.empty:
+        return {"display": "none"}
     else:
-        if existing_sces.empty:
+        if existing_sces.sce_name.values[0] == "N/A" or set(existing_sces.CropPrice.values) == {"-99"}:
             return {"display": "none"}
         else:
-            return {"display": "none"} if existing_sces.sce_name.values[0] == "N/A" or set(existing_sces.CropPrice.values) == {"-99"} else {}
+            return {}
 
 #==============================================================
 @app.callback(Output("scenario-table", "data"),
