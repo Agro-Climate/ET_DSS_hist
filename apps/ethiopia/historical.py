@@ -467,7 +467,10 @@ layout = html.Div([
                 color="primary"
                 ),
               ]),  
+            ]),
 
+            # FORM END
+            html.Div([
               html.Div([ # SCENARIO TABLE
                 dash_table.DataTable(
                 id="scenario-table",
@@ -513,10 +516,6 @@ layout = html.Div([
                 row_deletable=True
                 ),
               ]),
-            ]),
-
-            # FORM END
-            html.Div([
               dbc.Row([ # IMPORT/DOWNLOAD SCENARIOS
                 dbc.Col(
                   dcc.Upload([
@@ -573,7 +572,6 @@ layout = html.Div([
                   ]),
                 ]),
               className="text-center mx-3",
-              # style={"display": "none"},
               ),
             ]),
 
@@ -804,9 +802,7 @@ layout = html.Div([
 
 # is this needed?
 DATA_PATH = pathlib.Path(__file__).parent.joinpath("data").resolve()
-
 DSSAT_FILES_DIR_SHORT = "/DSSAT/dssat-base-files"  #for linux systemn
-
 DSSAT_FILES_DIR = os.getcwd() + DSSAT_FILES_DIR_SHORT   #for linux systemn
 
 #https://community.plotly.com/t/loading-when-opening-localhost/7284
@@ -822,10 +818,7 @@ cultivar_options = {
     "SG": ["IB0020 ESH-1","IB0020 ESH-2","IB0027 Dekeba","IB0027 Melkam","IB0027 Teshale"]
 }
 
-
-# Wdir_path = "C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\"
-Wdir_path = DSSAT_FILES_DIR    #for linux systemn
-
+Wdir_path = DSSAT_FILES_DIR    #for linux system
 #==============================================================
 #Dynamic call back for different cultivars for a selected target crop
 @app.callback(
@@ -954,12 +947,31 @@ def show_hide_EBtable(EB_radio, scenarios):
     existing_sces = pd.DataFrame(scenarios)
     if EB_radio == "EB_Yes":
         return {}
+    if existing_sces.empty:
+        return {"display": "none"}
     else:
-        if existing_sces.empty:
+        if existing_sces.sce_name.values[0] == "N/A" or set(existing_sces.CropPrice.values) == {"-99"}:
             return {"display": "none"}
         else:
-            return {"display": "none"} if existing_sces.sce_name.values[0] == "N/A" or set(existing_sces.CropPrice.values) == {"-99"} else {}
-
+            return {}
+#==============================================================
+# callback for downloading scenarios
+@app.callback(Output("download-sce", "data"),
+              Output("download-sce-error", component_property="style"),
+              Input("download-btn-sce", "n_clicks"),
+              State("scenario-table","data"),
+)
+def download_scenarios(n_clicks, scenario_table):
+    scenarios = pd.DataFrame(scenario_table)
+    # first validate that there is relevant data in the scenario table
+    if scenarios.empty:
+        return [None, {}]
+    else:
+        if scenarios.sce_name.values[0] == "N/A":
+            return [None, {}]
+    # otherwise take timestamp and download as csv
+    timestamp = datetime.datetime.now().strftime("%d-%m-%Y_%H:%M:%S")
+    return [dcc.send_data_frame(scenarios.to_csv, f"simagri_ET_scenarios_{timestamp}.csv"), {"display": "none"}]
 #==============================================================
 @app.callback(Output("scenario-table", "data"),
                 Input("write-button-state", "n_clicks"),
