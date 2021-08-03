@@ -21,7 +21,7 @@ country = sys.argv[1]
 if country == "ethiopia":
     from apps.ethiopia import about
     from apps.ethiopia import historical
-    # from apps.ethiopia import forecast
+    from apps.ethiopia import forecast_FResampler as forecast
 elif country == "senegal":
     from apps.senegal import about
     from apps.senegal import historical
@@ -39,7 +39,7 @@ apps = {
         "paths": {
             "/about": about.layout,
             "/historical": historical.layout, 
-            # "/forecast": forecast.layout,
+            "/forecast": forecast.layout,
         },
     },
     "senegal":  { 

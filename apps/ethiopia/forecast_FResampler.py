@@ -28,7 +28,7 @@ import graph
 
 from apps.ethiopia.write_SNX import writeSNX_clim, writeSNX_frst_FR 
 #from write_SNX import writeSNX_main_hist, writeSNX_main_frst  #EJ(7/26/2021) This is not working!!!
-from apps.ethiopia.run_WGEN import run_WGEN  # Downscaling method 1) WGEN (weather generator) to make 100 synthetic daily weather data
+# from apps.ethiopia.run_WGEN import run_WGEN  # Downscaling method 1) WGEN (weather generator) to make 100 synthetic daily weather data
 from apps.ethiopia.write_WTH import write_WTH   #save WTH from the output fo WGEN
 from apps.ethiopia.run_FResampler import run_FResampler  # Downscaling method 1) FResampler 
 from apps.ethiopia.write_WTH_FR import write_WTH_FR   #save WTH from the output fo FREsampler
@@ -125,96 +125,104 @@ layout = html.Div([
                     dbc.Label("3) Seasonal Climate Forecast", html_for="SCF", sm=3, className="p-0", align="start", ),
                     dbc.Col([
                       html.Div([ # SEASONAL CLIMATE FORECAST
-                        dbc.Row([
-                          dbc.Col(
-                            dbc.Label("1st trimester:", html_for="trimester1", sm=3, className="p-0", align="start", ),
-                          ),
-                          dbc.Col(
-                            dcc.Dropdown(
-                              id="trimester1",
-                              options=[
-                                {"label": "JFM", "value": "JFM"},
-                                {"label": "FMA", "value": "FMA"},
-                                {"label": "MAM", "value": "MAM"},
-                                {"label": "AMJ", "value": "AMJ"},
-                                {"label": "MJJ", "value": "MJJ"},
-                                {"label": "JJA", "value": "JJA"},
-                                {"label": "JAS", "value": "JAS"},
-                                {"label": "ASO", "value": "ASO"},
-                                {"label": "SON", "value": "SON"},
-                                {"label": "OND", "value": "OND"},
-                                {"label": "NDJ", "value": "NDJ"},
-                                {"label": "DJF", "value": "DJF"}
-                              ],
+                        html.Div([ # 1st trimester
+                          dbc.Row([
+                            dbc.Col(
+                              dbc.Label("1st trimester:", html_for="trimester1", className="p-2", align="start", ),
+                            ),
+                            dbc.Col(
+                              dcc.Dropdown(
+                                id="trimester1",
+                                options=[
+                                  {"label": "JFM", "value": "JFM"},
+                                  {"label": "FMA", "value": "FMA"},
+                                  {"label": "MAM", "value": "MAM"},
+                                  {"label": "AMJ", "value": "AMJ"},
+                                  {"label": "MJJ", "value": "MJJ"},
+                                  {"label": "JJA", "value": "JJA"},
+                                  {"label": "JAS", "value": "JAS"},
+                                  {"label": "ASO", "value": "ASO"},
+                                  {"label": "SON", "value": "SON"},
+                                  {"label": "OND", "value": "OND"},
+                                  {"label": "NDJ", "value": "NDJ"},
+                                  {"label": "DJF", "value": "DJF"}
+                                ],
                               value="JJA",
                               clearable=False,
                               ),
-                          ),
-                        ],),
-                        dbc.Row([
-                          dbc.Col(
-                            dbc.Label("AN", className="text-center", ),
-                          ),
-                          dbc.Col(
-                            dbc.Label("BN", className="text-center", ),
-                          ),
-                          dbc.Col(
-                            dbc.Label("NN", className="text-center", ),
-                          ),
-                        ],),
-                        dbc.Row([
-                          dbc.Col(
-                            dbc.FormGroup([
-                              dbc.Input(type="number", id="AN1", value=40, min="0", max="100", required="required", ),
+                            ),
+                          ],),
+                          html.Div([
+                            dbc.Row([
+                              dbc.Col(
+                                dbc.Label("AN", className="text-center", ),
+                              ),
+                              dbc.Col(
+                                dbc.Label("BN", className="text-center", ),
+                              ),
+                              dbc.Col(
+                                dbc.Label("NN", className="text-center", ),
+                              ),
                             ],),
-                          ),
-                          dbc.Col(
-                            dbc.FormGroup([
-                              dbc.Input(type="number", id="BN1", value=20, min="0", max="100", required="required", ),
+                            dbc.Row([
+                              dbc.Col(
+                                dbc.FormGroup([
+                                  dbc.Input(type="number", id="AN1", value=40, min="0", max="100", required="required", ),
+                                ],),
+                              ),
+                              dbc.Col(
+                                dbc.FormGroup([
+                                  dbc.Input(type="number", id="BN1", value=20, min="0", max="100", required="required", ),
+                                ],),
+                              ),
+                              dbc.Col(
+                                dbc.FormGroup([
+                                  dbc.Input(type="number", id="NN1", value=40, disabled="disabled", required="required", ),
+                                ],),
+                              ),
                             ],),
-                          ),
-                          dbc.Col(
-                            dbc.FormGroup([
-                              dbc.Input(type="number", id="NN1", value=40, disabled="disabled", required="required", ),
+                          ]),
+                        ]),
+                        html.Div([ # 2nd trimester
+                          dbc.Row([
+                            dbc.Col(
+                              dbc.Label("2nd trimester:", html_for="SCF2", className="p-2", align="start", ),
+                            ),
+                            dbc.Col(
+                              dbc.Input(type="text", id="trimester2", value="SON", disabled="disabled", required="required", ),
+                            ),
+                          ],),
+                          html.Div([
+                            dbc.Row([
+                              dbc.Col(
+                                dbc.Label("AN", className="text-center", ),
+                              ),
+                              dbc.Col(
+                                dbc.Label("BN", className="text-center", ),
+                              ),
+                              dbc.Col(
+                                dbc.Label("NN", className="text-center", ),
+                              ),
                             ],),
-                          ),
-                        ],),
-                        dbc.Row([
-                          dbc.Col(
-                            dbc.Label("2nd trimester:", html_for="SCF2", sm=3, className="p-2", align="start", ),
-                          ),
-                          dbc.Col(
-                            dbc.Input(type="text", id="trimester2",value="SON", disabled="disabled", required="required", ),
-                          ),
-                        ],),
-                        dbc.Row([
-                          dbc.Col(
-                            dbc.Label("AN", className="text-center", ),
-                          ),
-                          dbc.Col(
-                            dbc.Label("BN", className="text-center", ),
-                          ),
-                          dbc.Col(
-                            dbc.Label("NN", className="text-center", ),
-                          ),
-                        ],),
-                        dbc.Row([
-                          dbc.Col(
-                            dbc.FormGroup([
-                              dbc.Input(type="number", id="AN2", value=33, min="0", max="100", step="0.1", required="required", ),
+                            dbc.Row([
+                              dbc.Col(
+                                dbc.FormGroup([
+                                  dbc.Input(type="number", id="AN2", value=33, min="0", max="100", step="0.1", required="required", ),
+                                ],),
+                              ),
+                              dbc.Col(
+                                dbc.FormGroup([
+                                  dbc.Input(type="number", id="BN2", value=33, min="0", max="100", step="0.1", required="required", ),
+                                ],),
+                              ),
+                              dbc.Col(
+                                dbc.FormGroup([
+                                  dbc.Input(type="number", id="NN2", value=34, disabled="disabled", required="required", ),
+                                ],),
+                              ),
                             ],),
-                          ),
-                          dbc.Col(
-                            dbc.FormGroup([
-                              dbc.Input(type="number", id="BN2", value=33, min="0", max="100", step="0.1", required="required", ),
-                            ],),
-                          ),
-                          dbc.Col(
-                            dbc.FormGroup([
-                              dbc.Input(type="number", id="NN2", value=34, disabled="disabled", required="required", ),
-                            ],),
-                          ),
-                        ],),
+                          ]),
+                        ]),
                       ],
                       id="scf-table-Comp", 
                       className="w-100",
