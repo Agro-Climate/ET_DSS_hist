@@ -26,7 +26,7 @@ import time
 
 import graph
 
-from apps.ethiopia.write_SNX import writeSNX_clim, writeSNX_frst_FR 
+from apps.ethiopia.write_SNX import writeSNX_clim, writeSNX_frst 
 #from write_SNX import writeSNX_main_hist, writeSNX_main_frst  #EJ(7/26/2021) This is not working!!!
 from apps.ethiopia.run_WGEN import run_WGEN  # Downscaling method 1) WGEN (weather generator) to make 100 synthetic daily weather data
 from apps.ethiopia.write_WTH import write_WTH   #save WTH from the output fo WGEN
@@ -64,7 +64,7 @@ layout = html.Div([
                   dbc.FormGroup([ # Scenario
                     dbc.Label("1) Scenario Name", html_for="sce-name_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
-                      dbc.Input(type="text", id="sce-name_frst", value="", minLength=4, maxLength=4, required="required", ),
+                      dbc.Input(type="text", id="sce-name_frst", value="", minLength=4, maxLength=4,required="required", ),
                     ],
                     className="py-2",
                     xl=9,
@@ -165,12 +165,12 @@ layout = html.Div([
                         dbc.Row([
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="AN1", value=40, min="0", max="100", required="required", ),
+                              dbc.Input(type="number", id="AN1", value=40, min="0", max="100",required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="BN1", value=20, min="0", max="100", required="required", ),
+                              dbc.Input(type="number", id="BN1", value=20, min="0", max="100",required="required", ),
                             ],),
                           ),
                           dbc.Col(
@@ -422,7 +422,7 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="fert-amt2_frst", value=0, min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="fert-amt2_frst", value=0, min="0", step="0.1", equired="required", ),
                             ],),
                           ),
                         ],),
@@ -1589,11 +1589,7 @@ def make_sce_table(
     #                     planting_density,scenario,fert_app, current_fert)
     writeSNX_clim(Wdir_path,station,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
                         planting_density,scenario,fert_app, current_fert, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)  #This is differnt from writeSNX_main_hist in the historical analysis
-    # #1)for WGEN
-    # writeSNX_frst_(Wdir_path,station,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
-    #                     planting_density,scenario,fert_app, current_fert, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)
-    #2) for FResampler
-    writeSNX_frst_FR(Wdir_path,station,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
+    writeSNX_frst(Wdir_path,station,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
                         planting_density,scenario,fert_app, current_fert, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)
     #=====================================================================
     # #Update dataframe for Enterprise Budgeting inputs
@@ -1729,31 +1725,31 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
             # # EJ(7/27/2021) RUN WEATHER GENERATOR TO MAKE SYNTHETIC WEATHER REALIZATION
             # i) check if station name and target trimester is repeated or not
             if i ==0:
-              # #1)WGEN
-              # df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)  #pass subset of summary table => NOTE: the scenario names are in reverse order and thus last scenario is selected first
-              # write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)   #by taking into account planting and approximate harvesting dates
-              #2)FResampler
-              df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
-              write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)  
+              #1)WGEN
+              df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)  #pass subset of summary table => NOTE: the scenario names are in reverse order and thus last scenario is selected first
+              write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)   #by taking into account planting and approximate harvesting dates
+            #   #2)FResampler
+            #   df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
+            #   write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)  
             else:
               if station == scenarios.stn_name.values[i-1] and trimester == scenarios.Trimester1.values[i-1]:
                 if AN1 == scenarios.AN1.values[i-1] and BN1 == scenarios.BN1.values[i-1] and AN2 == scenarios.AN2.values[i-1] and BN2 == scenarios.BN2.values[i-1]:
                   #No need to run WGEN again => use df_wgen from previous scenario
                   write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path) 
                 else:
-                  # #1)WGEN
-                  # df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)
-                  # write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)
-                  #2)FResampler
-                  df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
-                  write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)  
+                  #1)WGEN
+                  df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)
+                  write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)
+                #   #2)FResampler
+                #   df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
+                #   write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)  
               else:
-                # #1)WGEN
-                # df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)
-                # write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)
-                #2)FResampler
-                df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
-                write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path) 
+                #1)WGEN
+                df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)
+                write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)
+                # #2)FResampler
+                # df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
+                # write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path) 
             # # EJ(7/27/2021) end of RUN WEATHER GENERATOR TO MAKE SYNTHETIC WEATHER REALIZATION
             #=====================================================================
             # 1) Write V47 file for climatolgoy
@@ -1861,10 +1857,10 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
                 df = temp_df.copy()
             else:
                 df = temp_df.append(df, ignore_index=True)
-            print("read DSSAT output and make a df")
-            print(df)
+        #     print("read DSSAT output and make a df")
+        #     print(df)
 
-        print("after for (sce_number) loop ")
+        # print("after for (sce_number) loop ")
         # df = df.round({"RAIN": 0})  #Round a DataFrame to a variable number of decimal places.
         # yield_min = np.min(df.HWAM.values)  #to make a consistent yield scale for exceedance curve =>Fig 4,5,6
         # yield_max = np.max(df.HWAM.values)
