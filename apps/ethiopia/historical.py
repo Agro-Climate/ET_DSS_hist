@@ -966,13 +966,14 @@ def show_hide_EBtable(EB_radio, scenarios):
 )
 def download_scenarios(n_clicks, scenario_table):
     scenarios = pd.DataFrame(scenario_table)
-    # first validate that there is relevant data in the scenario table
+    # first validate that there is relevant data in the scenario table. TODO: finish validation
     if scenarios.empty:
         return [None, {}]
     else:
         if scenarios.sce_name.values[0] == "N/A":
             return [None, {}]
-    # otherwise take timestamp and download as csv
+
+    # take timestamp and download as csv
     timestamp = datetime.datetime.now().strftime("%d-%m-%Y_%H:%M:%S")
     return [dcc.send_data_frame(scenarios.to_csv, f"simagri_ET_scenarios_{timestamp}.csv"), {"display": "none"}]
 #==============================================================
@@ -1044,10 +1045,10 @@ def make_sce_table(
             try:
                 if filename.split(".")[-1] == "csv":
                     # Assume that the user uploaded a CSV file
-                    csv_df = pd.read_csv(io.StringIO(decoded.decode('utf-8')))
-                    print("csv read successully")
-                    print(csv_df)
-                    print("\n")
+                    csv_df = pd.read_csv(io.StringIO(decoded.decode("utf-8")))
+                    # Remove 'Unnamed: 0' index column
+                    csv_df = csv_df.drop(columns=["Unnamed: 0"])
+
                 # elif filename.split(".")[-1] == "xls":
                 #     # Assume that the user uploaded an excel file
                 #     csv_df = pd.read_excel(io.BytesIO(decoded))
@@ -1068,12 +1069,9 @@ def make_sce_table(
                     csv_df = csv_df[csv_df["sce_name"].isin(shared_scenarios) == False]
                     updated_sces = csv_df.append(existing_sces, ignore_index=True)
                     duplicates = ", ".join(f"'{s}'" for s in shared_scenarios)
-                    return [updated_sces.to_dict("rows"), {"color": "red"}, f"Could not import scenarios: {duplicates}."]
+                    return [updated_sces.to_dict("rows"), {"color": "red"}, f"Could not import scenarios: {duplicates} because they already exist in the table"]
                 else:
                     updated_sces = csv_df.append(existing_sces, ignore_index=True) # otherwise append new entry
-                    print("scenarios updated successully")
-                    print(updated_sces)
-                    print("\n")
                     return [updated_sces.to_dict("rows"), {"display": "none"}, ""]
         else:
             print("File contents were None")
@@ -1239,7 +1237,7 @@ def make_sce_table(
                 Output(component_id="yieldtables-container", component_property="children"),
                 Output("memory-yield-table", "data"),
                 Input("simulate-button-state", "n_clicks"),
-                State("scenario-table","data"), ### scenario summary table
+                Input("scenario-table","data"), ### scenario summary table
                 State("season-slider", "value"), #EJ (5/13/2021) for seasonal total rainfall
                 prevent_initial_call=True,
               )
@@ -1309,6 +1307,7 @@ def run_create_figure(n_clicks, sce_in_table, slider_range):
 
             fout_name = f"ET{scenarios.Crop[i]}{scenario}.OSU"
             arg_mv = f"mv Summary.OUT {fout_name}"
+
 
             os.system(args) 
             os.system(arg_mv) 
