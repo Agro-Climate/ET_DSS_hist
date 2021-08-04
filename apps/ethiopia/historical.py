@@ -113,11 +113,11 @@ layout = html.Div([
                       dcc.Dropdown(
                         id="cultivar-dropdown", 
                         options=[
-                          {"label": "CIMT01 BH540", "value": "CIMT01 BH540-Kassie"},
-                          {"label": "CIMT02 MELKASA-1", "value": "CIMT02 MELKASA-Kassi"},
-                          {"label": "CIMT17 BH660-FAW-40%", "value": "CIMT17 BH660-FAW-40%"},
-                          {"label": "CIMT19 MELKASA2-FAW-40%", "value": "CIMT19 MELKASA2-FAW-40%"},
-                          {"label": "CIMT21 MELKASA-LowY", "value": "CIMT21 MELKASA-LowY"},], 
+                          {"label": "BH540", "value": "CIMT01 BH540-Kassie"},
+                          {"label": "MELKASA-1", "value": "CIMT02 MELKASA-Kassi"},
+                          {"label": "BH660-FAW-40%", "value": "CIMT17 BH660-FAW-40%"},
+                          {"label": "MELKASA2-FAW-40%", "value": "CIMT19 MELKASA2-FAW-40%"},
+                          {"label": "MELKASA-LowY", "value": "CIMT21 MELKASA-LowY"},], 
                         value="CIMT19 MELKASA2-FAW-40%",
                         clearable=False,
                       ),
@@ -829,7 +829,7 @@ Wdir_path = DSSAT_FILES_DIR    #for linux system
     Output("cultivar-dropdown", "options"),
     Input("crop-radio", "value"))
 def set_cultivar_options(selected_crop):
-    return [{"label": i, "value": i} for i in cultivar_options[selected_crop]]
+    return [{"label": i[7:], "value": i} for i in cultivar_options[selected_crop]]
 
 @app.callback(
     Output("cultivar-dropdown", "value"),
@@ -1259,7 +1259,7 @@ def make_sce_table(
 
         # Make a new dataframe to return to scenario-summary table
         current_sce = pd.DataFrame({
-            "sce_name": [scenario], "Crop": [crop], "Cultivar": [cultivar[7:]], "stn_name": [station], "PltDate": [planting_date[5:]], 
+            "sce_name": [scenario], "Crop": [crop], "Cultivar": [cultivar], "stn_name": [station], "PltDate": [planting_date[5:]], 
             "FirstYear": [start_year], "LastYear": [end_year], "soil": [soil_type], "iH2O": [initial_soil_moisture], 
             "iNO3": [initial_soil_no3_content], "plt_density": [planting_density], "TargetYr": [target_year],
             "Fert_1_DOY": ["-99"], "Fert_1_Kg": ["-99"], "Fert_2_DOY": ["-99"], "Fert_2_Kg": ["-99"], 
