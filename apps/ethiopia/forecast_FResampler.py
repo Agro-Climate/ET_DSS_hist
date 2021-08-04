@@ -97,7 +97,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Observed data => Not for user's input
-                    dbc.Label("Observed Weather", html_for="ETstation_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("3) Observed Weather", html_for="ETstation_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                         dbc.Row([
                           dbc.Col(
@@ -122,7 +122,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Seasonal climate forecast EJ(7/25/2021)
-                    dbc.Label("3) Seasonal Climate Forecast", html_for="SCF", sm=3, className="p-0", align="start", ),
+                    dbc.Label("4) Seasonal Climate Forecast", html_for="SCF", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       html.Div([ # SEASONAL CLIMATE FORECAST
                         html.Div([ # 1st trimester
@@ -180,6 +180,14 @@ layout = html.Div([
                                   dbc.Input(type="number", id="NN1", value=40, disabled="disabled", required="required", ),
                                 ],),
                               ),
+                              dbc.Row([
+                                dbc.FormText([
+                                  ""
+                                ],
+                                id="trimester1-error-msg",
+                                style= {"display": "none"}
+                                ),
+                              ]),
                             ],),
                           ]),
                         ]),
@@ -221,6 +229,14 @@ layout = html.Div([
                                 ],),
                               ),
                             ],),
+                            dbc.Row([
+                              dbc.FormText([
+                                ""
+                              ],
+                              id="trimester2-error-msg",
+                              style= {"display": "none"}
+                              ),
+                            ]),
                           ]),
                         ]),
                       ],
@@ -888,7 +904,7 @@ layout = html.Div([
                         html.Div(id="yieldcdf-container_frst"),  #exceedance curve
                         html.Div( #interactive graph for CDF curve like flexible forecast
                           dbc.FormGroup([ # individual cdf graph comparison (climatology vs. forecast)
-                            dbc.Label("      Scenario Name", html_for="sname_cdf", sm=3, className="p-2", ), #align="start", ),
+                            dbc.Label("Scenario Name", html_for="sname_cdf", sm=3, align="start", ),
                             dbc.Col([
                               dcc.Dropdown(
                               id="sname_cdf",
@@ -899,17 +915,18 @@ layout = html.Div([
                             xl=9,
                             ),
                           ],
-                          row=True
+                          row=True,
+                          className="m-2",
                           ),                        
                         ),  
                         html.Div(id="yieldcdf-container_indiv"),  #interactive individual cdf graph
                         dbc.Row([
                           dbc.Col(
                             html.Div(id="rain_trimester1"),
-                          md=4),
+                          md=6),
                           dbc.Col(
                             html.Div(id="rain_trimester2"),
-                          md=4),
+                          md=6),
                         ],
                         no_gutters=True,
                         ),
@@ -974,14 +991,14 @@ layout = html.Div([
                       Download(id="download-dataframe-csv-yield_frst"),
                       # Download(id="download-dataframe-csv-rain"),
                       # Download(id="download-dataframe-csv-Pexe"),
-                      # html.Div(
-                      #   dash_table.DataTable(
-                      #     columns = [{"id": "YEAR", "name": "YEAR"}],
-                      #     id="yield-table",
-                      #     style_table = {"height": "10vh"},
-                      #   ),
-                      # id="yieldtables-container", 
-                      # ),  #yield simulated output
+                      html.Div(
+                        dash_table.DataTable(
+                          columns = [{"id": "YEAR", "name": "YEAR"}],
+                          id="yield-table",
+                          style_table = {"height": "10vh"},
+                        ),
+                      id="fcst-yieldtables-container", 
+                      ),  #yield simulated output
                     ], ),
                   ],
                   ),
@@ -1080,9 +1097,9 @@ layout = html.Div([
 # # is this needed?
 # DATA_PATH = pathlib.Path(__file__).parent.joinpath("data").resolve()
 
-# DSSAT_FILES_DIR_SHORT = "/DSSAT/dssat-base-files"  #for linux systemn
+DSSAT_FILES_DIR_SHORT = "/DSSAT/dssat-base-files"  #for linux systemn
 
-# DSSAT_FILES_DIR = os.getcwd() + DSSAT_FILES_DIR_SHORT   #for linux systemn
+DSSAT_FILES_DIR = os.getcwd() + DSSAT_FILES_DIR_SHORT   #for linux systemn
 
 #https://community.plotly.com/t/loading-when-opening-localhost/7284
 #I suspect that this is related to the JS assets from the CDN not loading properly - perhaps because they are blocked by your firewall or some other reason.
@@ -1098,8 +1115,8 @@ cultivar_options = {
 }
 
 
-Wdir_path = "C:\\IRI\\Dash_ET_forecast\\ET_forecast_windows\\TEST_ET\\"
-# Wdir_path = DSSAT_FILES_DIR    #for linux systemn
+# Wdir_path = "C:\\IRI\\Dash_ET_forecast\\ET_forecast_windows\\TEST_ET\\"
+Wdir_path = DSSAT_FILES_DIR    #for linux systemn
 
 #==============================================================
 #call back to update the first & last weather observed dates
@@ -1687,7 +1704,7 @@ def make_sce_table(
                 # Output(component_id="yield-BN-container_frst", component_property="children"),
                 # Output(component_id="yield-NN-container", component_property="children"),
                 # Output(component_id="yield-AN-container", component_property="children"),
-                # Output(component_id="yieldtables-container", component_property="children"),
+                Output(component_id="fcst-yieldtables-container", component_property="children"),
                 Output("sname_cdf", "options"),
                 Output("memory-yield-table_frst", "data"),
                 Input("simulate-button-state_frst", "n_clicks"),
@@ -1705,8 +1722,8 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
         # dff = pd.read_json(intermediate, orient="split")
         scenarios = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
         sce_numbers = len(scenarios.sce_name.values)
-        Wdir_path = "C:\\IRI\\Dash_ET_forecast\\ET_forecast_windows\\TEST_ET\\"  #for windows
-        # Wdir_path = DSSAT_FILES_DIR   #for linux system
+        # Wdir_path = "C:\\IRI\\Dash_ET_forecast\\ET_forecast_windows\\TEST_ET\\"  #for windows
+        Wdir_path = DSSAT_FILES_DIR   #for linux system
         TG_yield = []
 
         #compute seasonal rainfall total for each trimester EJ(7/27/2021)
@@ -1781,8 +1798,9 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
             SNX_fname2 = path.join(Wdir_path, f"FC{scenarios.Crop[i]}{scenario}.SNX")  #forecast run <<<<<<<====================
 
             # On Linux system, we don"t need to do this:
-            SNX_fname = SNX_fname.replace("/", "\\")    #===========>for windows
-            SNX_fname2 = SNX_fname2.replace("/", "\\")  #===========>for windows
+            # SNX_fname = SNX_fname.replace("/", "\\")    #===========>for windows
+            # SNX_fname2 = SNX_fname2.replace("/", "\\")  #===========>for windows
+            
             new_str = "{0:<95}{1:4s}".format(SNX_fname, repr(1).rjust(4)) + temp_str[99:]
             fw.write(new_str)
             new_str2 = "{0:<95}{1:4s}".format(SNX_fname2, repr(1).rjust(4)) + temp_str[99:]
@@ -1793,24 +1811,24 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
             #1-1) Run DSSAT executable for BOTh climatolgoy & forecast => Simulation resutls from both runs are in one Summary.out file
             os.chdir(Wdir_path)  #change directory
             if scenarios.Crop[i] == "WH":
-                # args = "./dscsm047 CSCER047 B DSSBatch.V47"  #===========>for linux system
-                args = "DSCSM047.EXE CSCER047 B DSSBatch.v47"  #===========>for windows
+                args = "./dscsm047 CSCER047 B DSSBatch.V47"  #===========>for linux system
+                # args = "DSCSM047.EXE CSCER047 B DSSBatch.v47"  #===========>for windows
                 # fout_name = path.join(Wdir_path, "ETWH"+scenario+".OSU")   #===========>for windows
             elif scenarios.Crop[i] == "MZ":
-                # args = "./dscsm047 MZCER047 B DSSBatch.V47" #===========>for linux system
-                args = "DSCSM047.EXE MZCER047 B DSSBatch.v47" #===========>for windows
+                args = "./dscsm047 MZCER047 B DSSBatch.V47" #===========>for linux system
+                # args = "DSCSM047.EXE MZCER047 B DSSBatch.v47" #===========>for windows
                 # fout_name = path.join(Wdir_path, "ETMZ"+scenario+".OSU") #===========>for windows
             else:  # SG
-                # args = "./dscsm047 SGCER047 B DSSBatch.V47" #===========>for linux system
-                args = "DSCSM047.EXE SGCER047 B DSSBatch.v47"  #===========>for windows
+                args = "./dscsm047 SGCER047 B DSSBatch.V47" #===========>for linux system
+                # args = "DSCSM047.EXE SGCER047 B DSSBatch.v47"  #===========>for windows
                 # fout_name = path.join(Wdir_path, "ETSG"+scenario+".OSU")  #===========>for windows
 
             #fout_name = f"ET{scenarios.Crop[i]}{scenario}.OSU"  #Q: Do we need this?
-            # arg_mv = f"mv Summary.OUT {fout_name}"   #Q: Do we need this?
             fout_name = f"CL{scenarios.Crop[i]}{scenario}.OSU"  #simulation start for climatolgoy first
+            arg_mv = f"mv Summary.OUT {fout_name}"   #Q: Do we need this? Yes we need this.
 
             os.system(args) 
-            # os.system(arg_mv)  #Q: Do we need this?
+            os.system(arg_mv)  #Q: Do we need this? Yes we need this.
             #=====================================================================
             #=====================================================================
 
@@ -1914,6 +1932,24 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
         return [
             dcc.Graph(id="yield-boxplot", figure = yld_box, config = graph.config, ), 
             dcc.Graph(id="yield-exceedance", figure = yld_exc, config = graph.config, ),
+            # fcst-yieldtables-container
+            dash_table.DataTable(columns = [{"name": i, "id": i} for i in df.columns],data=df.to_dict("records"),
+              id="yield-table",
+              sort_action = "native",
+              sort_mode = "single",
+              style_table = {
+                "maxHeight": "30vh",
+                "overflow": "auto",
+                "minWidth": "100%",
+              },
+              fixed_rows = { "headers": True, "data": 0 },
+              fixed_columns = { "headers": True, "data": 1 },
+              style_cell = {   # all three widths are needed
+                "minWidth": "120px", "width": "120px", "maxWidth": "150px",
+                "overflow": "hidden",
+                "textOverflow": "ellipsis", 
+              }
+            ),            
             dic_sname, #EJ(7/27/2021)
             df.to_dict("records"),   #df_out.to_dict("records"),    #EJ(7/27/2021) check 
         ]
