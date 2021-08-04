@@ -1292,6 +1292,14 @@ def make_sce_table(
                 or  (fd4 < 0 or 365 < fd4) or fa4 < 0
             ):
                 fert_valid = False
+            else:
+                if not (
+                        float(fd1).is_integer() and (fa1*10.0).is_integer()
+                    and float(fd2).is_integer() and (fa2*10.0).is_integer()
+                    and float(fd3).is_integer() and (fa3*10.0).is_integer()
+                    and float(fd4).is_integer() and (fa4*10.0).is_integer()
+                ):
+                    fert_valid = False
 
         #=====================================================================
         # Write SNX file
@@ -1318,6 +1326,15 @@ def make_sce_table(
                 or  variable_costs < 0
             ):
                 EB_valid = False          
+            else:
+                if not (
+                        (crop_price*10.0).is_integer()
+                    and  (seed_cost*10.0).is_integer()
+                    and  (fert_cost*10.0).is_integer()
+                    and  (fixed_costs*10.0).is_integer()
+                    and  (variable_costs*10.0).is_integer()
+                ):
+                    EB_valid = False          
 
         # validate planting date
         planting_date_valid = True
