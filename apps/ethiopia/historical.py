@@ -453,8 +453,6 @@ layout = html.Div([
                   ],
                   row=True
                   ),
-
-                  # INPUT FORM END
                 ], 
                 className="p-3"
                 ),
@@ -520,63 +518,65 @@ layout = html.Div([
                 row_deletable=True
                 ),
               ]),
-              dbc.Row([ # IMPORT/DOWNLOAD SCENARIOS
-                dbc.Col(
-                  dcc.Upload([
-                    html.Div([
-                      html.Div(html.B("Import Scenarios:")),
-                      "Drag and Drop or ",
-                      dcc.Link("Select a File", href="", )
-                    ],
-                    className="d-block mx-auto text-center p-2"
-                    )
-                  ],
-                  id="import-sce", 
-                  className="w-75 d-block mx-auto m-3",
-                  style={
-                      "borderWidth": "1px",
-                      "borderStyle": "dashed",
-                      "borderRadius": "5px",
-                      # "textAlign": "center",
-                      "background-color": "lightgray"
-                  },
-                  ),
-                ),
-                dbc.Col([
-                  dbc.Button(
-                    "Download Scenarios",
-                  id="download-btn-sce", 
-                  n_clicks=0, 
-                  className="w-75 h-50 d-block mx-auto m-4",
-                  color="secondary"
-                  ),
-                  dcc.Download(id="download-sce")
-                ],),
-              ],
-              className="mx-3", 
-              no_gutters=True
-              ),
-              html.Div( # IMPORT/DOWNLOAD ERROR MESSAGES
-                dbc.Row([
+              html.Div([
+                dbc.Row([ # IMPORT/DOWNLOAD SCENARIOS
                   dbc.Col(
-                    html.Div("",
-                    id="import-sce-error",
-                    style={"display": "none"},
+                    dcc.Upload([
+                      html.Div([
+                        html.Div(html.B("Import Scenarios:")),
+                        "Drag and Drop or ",
+                        dcc.Link("Select a File", href="", )
+                      ],
+                      className="d-block mx-auto text-center p-2"
+                      )
+                    ],
+                    id="import-sce", 
+                    className="w-75 d-block mx-auto m-3",
+                    style={
+                        "borderWidth": "1px",
+                        "borderStyle": "dashed",
+                        "borderRadius": "5px",
+                        # "textAlign": "center",
+                        "background-color": "lightgray"
+                    },
                     ),
                   ),
                   dbc.Col([
-                    html.Div(
-                      html.Div("Nothing to Download",
-                      className="d-block mx-auto m-2", 
-                      style={"color": "red"},
-                      ),
-                    id="download-sce-error",
-                    style={"display": "none"}, 
+                    dbc.Button(
+                      "Download Scenarios",
+                    id="download-btn-sce", 
+                    n_clicks=0, 
+                    className="w-75 h-50 d-block mx-auto m-4",
+                    color="secondary"
                     ),
+                    dcc.Download(id="download-sce")
+                  ],),
+                ],
+                className="mx-3", 
+                no_gutters=True
+                ),
+                html.Div( # IMPORT/DOWNLOAD ERROR MESSAGES
+                  dbc.Row([
+                    dbc.Col(
+                      html.Div("",
+                      id="import-sce-error",
+                      style={"display": "none"},
+                      ),
+                    ),
+                    dbc.Col([
+                      html.Div(
+                        html.Div("Nothing to Download",
+                        className="d-block mx-auto m-2", 
+                        style={"color": "red"},
+                        ),
+                      id="download-sce-error",
+                      style={"display": "none"}, 
+                      ),
+                    ]),
                   ]),
-                ]),
-              className="text-center mx-3",
-              ),
+                className="text-center mx-3",
+                ),
+              ]),
             ]),
 
             html.Div([ # AFTER SCENARIO TABLE

@@ -4,7 +4,10 @@ import plotly.express as px
 import plotly.graph_objects as go
 import pathlib
 import re
+import base64
+import io
 
+import dash
 import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
@@ -26,7 +29,7 @@ import bisect   # an element into sorted list
 
 import graph
 
-sce_col_names=[ "sce_name", "Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","TargetYr",
+sce_col_names=[ "sce_name", "Crop", "Cultivar","stn_name", "PltDate", "FirstYear", "LastYear", "soil","iH2O","iNO3","TargetYr",
                 "Fert_1_DOY","N_1_Kg","P_1_Kg","K_1_Kg", "Fert_2_DOY","N_2_Kg","P_2_Kg","K_2_Kg","Fert_3_DOY","N_3_Kg","P_3_Kg","K_3_Kg",
                 "Fert_4_DOY","N_4_Kg","P_4_Kg","K_4_Kg","P_level","IR_1_DOY", "IR_1_amt","IR_2_DOY", "IR_2_amt","IR_3_DOY","IR_3_amt", 
                 "IR_4_DOY","IR_4_amt","IR_5_DOY","IR_5_amt","AutoIR_depth","AutoIR_thres", "AutoIR_eff", 
@@ -110,11 +113,11 @@ layout = html.Div([
                       dcc.Dropdown(
                         id="cultivar-dropdown", 
                         options=[
-                          {"label": "IB0066 Fadda-D", "value": "IB0066 Fadda-D"},
-                          {"label": "IB0069 IS15401-D", "value": "IB0069 IS15401-D"},
-                          {"label": "IB0070 Soumba-D", "value": "IB0070 Soumba-D"},
-                          {"label": "IB0071 Faourou-D", "value": "IB0071 Faourou-D"},
-                          {"label": "CIMT21 MELKASA-LowY", "value": "CIMT21 MELKASA-LowY"},],
+                          {"label": "Fadda-D", "value": "IB0066 Fadda-D"},
+                          {"label": "IS15401-D", "value": "IB0069 IS15401-D"},
+                          {"label": "Soumba-D", "value": "IB0070 Soumba-D"},
+                          {"label": "Faourou-D", "value": "IB0071 Faourou-D"},
+                          {"label": "MELKASA-LowY", "value": "CIMT21 MELKASA-LowY"},],
                         value="IB0066 Fadda-D",
                         clearable=False,
                       ),
@@ -229,10 +232,10 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Planting Date
-                    dbc.Label("11) Planting Date", html_for="plt-date-picker", sm=3, align="start", ),
+                    dbc.Label("11) Planting Date", html_for="PltDate-picker", sm=3, align="start", ),
                     dbc.Col([
                       dcc.DatePickerSingle(
-                      id="plt-date-picker",
+                      id="PltDate-picker",
                       min_date_allowed=date(2021, 1, 1),
                       max_date_allowed=date(2021, 12, 31),
                       initial_visible_month=date(2021, 6, 5),
@@ -747,25 +750,26 @@ layout = html.Div([
                   ],
                   row=True
                   ),
-
-                  # INPUT FORM END
                 ], 
                 className="p-3"
                 ),
               className="overflow-auto",
               style={"height": "63vh"},
               ),
+              html.Header(html.B("Scenarios"), className="card-header",),
+              dbc.FormGroup([ # SUBMIT - ADD SCENARIO
+                dbc.Button(id="write-button-state", 
+                n_clicks=0, 
+                children="Create or Add a new Scenario", 
+                className="w-75 d-block mx-auto my-3",
+                color="primary"
+                ),
+              ]),
+            ]),
+            # FORM END
 
+            html.Div([
               html.Div([ # SCENARIO TABLE
-                html.Header(html.B("Scenarios"), className="card-header",),
-                dbc.FormGroup([ # SUBMIT - ADD SCENARIO
-                  dbc.Button(id="write-button-state", 
-                  n_clicks=0, 
-                  children="Create or Add a new Scenario", 
-                  className="w-75 d-block mx-auto my-3",
-                  color="primary"
-                  ),
-                ]),
                 dash_table.DataTable(
                 id="scenario-table",
                 columns=([
@@ -773,7 +777,7 @@ layout = html.Div([
                     {"id": "Crop", "name": "Crop"},
                     {"id": "Cultivar", "name": "Cultivar"},
                     {"id": "stn_name", "name": "Station"},
-                    {"id": "Plt-date", "name": "Planting Date"},
+                    {"id": "PltDate", "name": "Planting Date"},
                     {"id": "FirstYear", "name": "First Year"},
                     {"id": "LastYear", "name": "Last Year"},
                     {"id": "soil", "name": "Soil Type"},
@@ -830,6 +834,64 @@ layout = html.Div([
                     "textOverflow": "ellipsis", 
                 },
                 row_deletable=True
+                ),
+              ]),
+              html.Div([
+                dbc.Row([ # IMPORT/DOWNLOAD SCENARIOS
+                  dbc.Col(
+                    dcc.Upload([
+                      html.Div([
+                        html.Div(html.B("Import Scenarios:")),
+                        "Drag and Drop or ",
+                        dcc.Link("Select a File", href="", )
+                      ],
+                      className="d-block mx-auto text-center p-2"
+                      )
+                    ],
+                    id="import-sce", 
+                    className="w-75 d-block mx-auto m-3",
+                    style={
+                        "borderWidth": "1px",
+                        "borderStyle": "dashed",
+                        "borderRadius": "5px",
+                        "background-color": "lightgray"
+                    },
+                    ),
+                  ),
+                  dbc.Col([
+                    dbc.Button(
+                      "Download Scenarios",
+                    id="download-btn-sce", 
+                    n_clicks=0, 
+                    className="w-75 h-50 d-block mx-auto m-4",
+                    color="secondary"
+                    ),
+                    dcc.Download(id="download-sce")
+                  ],),
+                ],
+                className="mx-3", 
+                no_gutters=True
+                ),
+                html.Div( # IMPORT/DOWNLOAD ERROR MESSAGES
+                  dbc.Row([
+                    dbc.Col(
+                      html.Div("",
+                      id="import-sce-error",
+                      style={"display": "none"},
+                      ),
+                    ),
+                    dbc.Col([
+                      html.Div(
+                        html.Div("Nothing to Download",
+                        className="d-block mx-auto m-2", 
+                        style={"color": "red"},
+                        ),
+                      id="download-sce-error",
+                      style={"display": "none"}, 
+                      ),
+                    ]),
+                  ]),
+                className="text-center mx-3",
                 ),
               ]),
             ]),
@@ -1096,7 +1158,7 @@ Wdir_path = DSSAT_FILES_DIR    #for linux systemn
     Output("cultivar-dropdown", "options"),
     Input("crop-radio", "value"))
 def set_cultivar_options(selected_crop):
-    return [{"label": i, "value": i} for i in cultivar_options[selected_crop]]
+    return [{"label": i[7:], "value": i} for i in cultivar_options[selected_crop]]
 
 @app.callback(
     Output("cultivar-dropdown", "value"),
@@ -1259,66 +1321,89 @@ def show_hide_EBtable(EB_radio, scenarios):
             return {"display": "none"}
         else:
             return {}
-
 #==============================================================
+# callback for downloading scenarios
+@app.callback(Output("download-sce", "data"),
+              Output("download-sce-error", component_property="style"),
+              Input("download-btn-sce", "n_clicks"),
+              State("scenario-table","data"),
+)
+def download_scenarios(n_clicks, scenario_table):
+    scenarios = pd.DataFrame(scenario_table)
+    # first validate that there is relevant data in the scenario table. TODO: finish validation
+    if scenarios.empty:
+        return [None, {}]
+    else:
+        if scenarios.sce_name.values[0] == "N/A":
+            return [None, {}]
+
+    # take timestamp and download as csv
+    timestamp = datetime.datetime.now().strftime("%d-%m-%Y_%H:%M:%S")
+    return [dcc.send_data_frame(scenarios.to_csv, f"simagri_SN_scenarios_{timestamp}.csv"), {"display": "none"}]
+#==============================================================
+# submit to scenario table or import CSV
 @app.callback(Output("scenario-table", "data"),
-                Input("write-button-state", "n_clicks"),
-                State("SNstation", "value"),
-                State("year1", "value"),
-                State("year2", "value"),
-                State("plt-date-picker", "date"),
-                State("crop-radio", "value"),
-                State("cultivar-dropdown", "value"),
-                State("SNsoil", "value"),
-                State("ini-H2O", "value"),
-                State("ini-NO3", "value"),
-                State("plt-density", "value"),
-                State("sce-name", "value"),
-                State("target-year", "value"),
-                State("fert_input", "value"),
-                State("fert-day1","value"),
-                State("N-amt1","value"),
-                State("P-amt1","value"),
-                State("K-amt1","value"),
-                State("fert-day2","value"),
-                State("N-amt2","value"),
-                State("P-amt2","value"),
-                State("K-amt2","value"),
-                State("fert-day3","value"),
-                State("N-amt3","value"),
-                State("P-amt3","value"),
-                State("K-amt3","value"),
-                State("fert-day4","value"),
-                State("N-amt4","value"),
-                State("P-amt4","value"),
-                State("K-amt4","value"),
-                State("P_input", "value"),
-                State("extr_P", "value"),
-                State("irrig_input", "value"),
-                State("ir_method", "value"),
-                State("irrig-day1", "value"),
-                State("irrig-amt1", "value"),
-                State("irrig-day2", "value"),
-                State("irrig-amt2", "value"),
-                State("irrig-day3", "value"),
-                State("irrig-amt3", "value"),
-                State("irrig-day4", "value"),
-                State("irrig-amt4", "value"),
-                State("irrig-day5", "value"),
-                State("irrig-amt5", "value"),
-                State("ir_depth", "value"),
-                State("ir_threshold", "value"),
-                State("ir_eff", "value"),
-                State("EB_radio", "value"),
-                State("crop-price","value"),
-                State("seed-cost","value"),
-                State("fert-cost","value"),
-                State("fixed-costs","value"),
-                State("variable-costs","value"),
-                State("scenario-table","data")
-            )
+              Output("import-sce-error","style"),
+              Output("import-sce-error","children"),
+              Input("write-button-state", "n_clicks"),
+              Input("import-sce", "contents"),
+              State("import-sce", "filename"),
+              State("SNstation", "value"),
+              State("year1", "value"),
+              State("year2", "value"),
+              State("PltDate-picker", "date"),
+              State("crop-radio", "value"),
+              State("cultivar-dropdown", "value"),
+              State("SNsoil", "value"),
+              State("ini-H2O", "value"),
+              State("ini-NO3", "value"),
+              State("plt-density", "value"),
+              State("sce-name", "value"),
+              State("target-year", "value"),
+              State("fert_input", "value"),
+              State("fert-day1","value"),
+              State("N-amt1","value"),
+              State("P-amt1","value"),
+              State("K-amt1","value"),
+              State("fert-day2","value"),
+              State("N-amt2","value"),
+              State("P-amt2","value"),
+              State("K-amt2","value"),
+              State("fert-day3","value"),
+              State("N-amt3","value"),
+              State("P-amt3","value"),
+              State("K-amt3","value"),
+              State("fert-day4","value"),
+              State("N-amt4","value"),
+              State("P-amt4","value"),
+              State("K-amt4","value"),
+              State("P_input", "value"),
+              State("extr_P", "value"),
+              State("irrig_input", "value"),
+              State("ir_method", "value"),
+              State("irrig-day1", "value"),
+              State("irrig-amt1", "value"),
+              State("irrig-day2", "value"),
+              State("irrig-amt2", "value"),
+              State("irrig-day3", "value"),
+              State("irrig-amt3", "value"),
+              State("irrig-day4", "value"),
+              State("irrig-amt4", "value"),
+              State("irrig-day5", "value"),
+              State("irrig-amt5", "value"),
+              State("ir_depth", "value"),
+              State("ir_threshold", "value"),
+              State("ir_eff", "value"),
+              State("EB_radio", "value"),
+              State("crop-price","value"),
+              State("seed-cost","value"),
+              State("fert-cost","value"),
+              State("fixed-costs","value"),
+              State("variable-costs","value"),
+              State("scenario-table","data")
+)
 def make_sce_table(
-    n_clicks, station, start_year, end_year, planting_date, crop, cultivar, soil_type, 
+    n_clicks, file_contents, filename, station, start_year, end_year, planting_date, crop, cultivar, soil_type, 
     initial_soil_moisture, initial_soil_no3, planting_density, scenario, target_year, 
     fert_app, 
     # fd1, fa1,
@@ -1345,207 +1430,460 @@ def make_sce_table(
 ):
 
     existing_sces = pd.DataFrame(sce_in_table)
-
-    if ( # first check that all required inputs have been given
-            scenario == None
-        or  start_year == None
-        or  end_year == None
-        or  target_year == None
-        or  planting_date == None
-        or  planting_density == None
-        or (
-                fert_app == "Fert"
-            and (
-                    fd1 == None or fN1 == None  or fP1 == None  or fK1== None 
-                or  fd2 == None or fN2 == None  or fP2 == None  or fK2== None 
-                or  fd3 == None or fN3 == None  or fP3 == None  or fK3== None 
-                or  fd4 == None or fN4 == None  or fP4 == None  or fK4== None 
-            ) 
-        )
-        or (
-                irrig_app == "repr_irrig" 
-            and (
-                    irrig_method == None 
-                or  ird1 == None  or iramt1 == None
-                or  ird2 == None  or iramt2 == None
-                or  ird3 == None  or iramt3 == None
-                or  ird4 == None  or iramt4 == None
-                or  ird5 == None  or iramt5 == None
-            ) 
-        )
-        or (
-                irrig_app == "auto_irrig" 
-            and (
-                    ir_depth == None 
-                or  ir_threshold == None
-                or  ir_eff == None
-            ) 
-        )
-        or (
-                EB_radio == "EB_Yes"
-            and (
-                    crop_price == None
-                or  seed_cost == None
-                or  fert_cost == None
-                or  fixed_costs == None
-                or  variable_costs == None
-            )
-        )        
-    ):
-        return existing_sces
-
-    # convert integer inputs to string
-    start_year = str(start_year)
-    end_year = str(end_year)
-    target_year = str(target_year)
-    planting_density = str(planting_density)
-
-    # Make a new dataframe to return to scenario-summary table
-    current_sce = pd.DataFrame({
-        "sce_name": [scenario], "Crop": [crop], "Cultivar": [cultivar[7:]], "stn_name": [station], "Plt-date": [planting_date[5:]], 
-        "FirstYear": [start_year], "LastYear": [end_year], "soil": [soil_type], "iH2O": [initial_soil_moisture], 
-        "iNO3": [initial_soil_no3], "plt_density": [planting_density], "TargetYr": [target_year], 
-        "Fert_1_DOY": ["-99"], "N_1_Kg": ["-99"], "P_1_Kg": ["-99"], "K_1_Kg": ["-99"], 
-        "Fert_2_DOY": ["-99"], "N_2_Kg": ["-99"], "P_2_Kg": ["-99"], "K_2_Kg": ["-99"], 
-        "Fert_3_DOY": ["-99"], "N_3_Kg": ["-99"], "P_3_Kg": ["-99"], "K_3_Kg": ["-99"], 
-        "Fert_4_DOY": ["-99"], "N_4_Kg": ["-99"], "P_4_Kg": ["-99"], "K_4_Kg": ["-99"], 
-        "P_level": ["-99"],   #P simulation    EJ(7/72021)
-        "IR_method": ["-99"], #Irrigation on reported date
-        "IR_1_DOY": ["-99"], "IR_1_amt": ["-99"],
-        "IR_2_DOY": ["-99"], "IR_2_amt": ["-99"],
-        "IR_3_DOY": ["-99"], "IR_3_amt": ["-99"],
-        "IR_4_DOY": ["-99"], "IR_4_amt": ["-99"],
-        "IR_5_DOY": ["-99"], "IR_5_amt": ["-99"],
-        "AutoIR_depth":  ["-99"], "AutoIR_thres": ["-99"], "AutoIR_eff": ["-99"], #Irrigation automatic
-        "CropPrice": ["-99"], "NFertCost": ["-99"], "SeedCost": ["-99"], "OtherVariableCosts": ["-99"], "FixedCosts": ["-99"],  
-    })
-
-    #=====================================================================
-    # #Update dataframe for fertilizer inputs
-    fert_valid = True
-    current_fert = pd.DataFrame(columns=["DAP", "FDEP", "NAmount", "PAmount", "KAmount"])
-    if fert_app == "Fert":
-        current_fert = pd.DataFrame({
-            "DAP": [fd1, fd2, fd3, fd4, ],
-            "NAmount": [fN1, fN2, fN3, fN4, ],
-            "PAmount": [fP1, fP2, fP3, fP4, ],
-            "KAmount": [fK1, fK2, fK3, fK4, ],
-        })
-
-        fert_frame =  pd.DataFrame({
-            "Fert_1_DOY": [fd1], "N_1_Kg": [fN1],"P_1_Kg": [fP1],"K_1_Kg": [fK1],
-            "Fert_2_DOY": [fd2], "N_2_Kg": [fN2],"P_2_Kg": [fP2],"K_2_Kg": [fK2],
-            "Fert_3_DOY": [fd3], "N_3_Kg": [fN3],"P_3_Kg": [fP3],"K_3_Kg": [fK3],
-            "Fert_4_DOY": [fd4], "N_4_Kg": [fN4],"P_4_Kg": [fP4],"K_4_Kg": [fK4],
-        })
-        current_sce.update(fert_frame)
-    #=====================================================================
-    # #Update dataframe for irrigation (on reported date) inputs
-    IR_reported_valid = True
-    current_irrig = pd.DataFrame(columns=["DAP", "WAmount"])
-    if irrig_app == "repr_irrig":
-        current_irrig = pd.DataFrame({
-            "DAP": [ird1, ird2, ird3, ird4, ird5,],
-            "WAmount": [iramt1, iramt2, iramt3, iramt4,iramt5,],
-        })
-
-        irrig_frame =  pd.DataFrame({
-            "IR_1_DOY": [ird1], "IR_1_amt": [iramt1],
-            "IR_2_DOY": [ird2], "IR_2_amt": [iramt2],
-            "IR_3_DOY": [ird3], "IR_3_amt": [iramt3],
-            "IR_4_DOY": [ird4], "IR_4_amt": [iramt4],
-            "IR_5_DOY": [ird5], "IR_5_amt": [iramt5],
-        })
-        current_sce.update(irrig_frame)
-
-        if (
-                (ird1 < 0 or 365 < ird1) or iramt1 < 0
-            or  (ird2 < 0 or 365 < ird2) or iramt2 < 0
-            or  (ird3 < 0 or 365 < ird3) or iramt3 < 0
-            or  (ird4 < 0 or 365 < ird4) or iramt4 < 0
-            or  (ird5 < 0 or 365 < ird5) or iramt5 < 0
-        ):
-            IR_reported_valid = False
-    if irrig_app == "auto_irrig":       
-      current_sce.loc[0,"AutoIR_depth"] = ir_depth   #check index 0
-      current_sce.loc[0,"AutoIR_thres"] = ir_threshold
-      current_sce.loc[0,"AutoIR_eff"] = ir_eff
-
-      if (
-              (ir_depth < 1 or 100 < ir_depth)
-          or  (ir_threshold < 1 or 100 < ir_threshold)
-          or  (ir_eff < 0.1 or 1 < ir_eff)
-      ):
-          IR_reported_valid = False
-
-    #=====================================================================
-    # Write SNX file
-    writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3,
-                        planting_density,scenario,fert_app, current_fert, p_sim, p_level, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)
-    #=====================================================================
-    # #Update dataframe for Enterprise Budgeting inputs
-    EB_valid = True
-    if EB_radio == "EB_Yes":
-        EB_frame =  pd.DataFrame({
-            "CropPrice": [crop_price],
-            "NFertCost": [seed_cost],
-            "SeedCost": [fert_cost],
-            "OtherVariableCosts": [fixed_costs],
-            "FixedCosts": [variable_costs],
-        })
-        current_sce.update(EB_frame)
-
-    # validate planting date
-    planting_date_valid = True
-    pl_date_split = planting_date.split("-")
-    if not len(pl_date_split) == 3:
-        planting_date_valid = False
+    ctx = dash.callback_context
+    if not ctx.triggered:
+        triggered_by = "Not triggered"
     else:
-        yyyy = pl_date_split[0]
-        mm = pl_date_split[1]
-        dd = pl_date_split[2]
+        triggered_by = ctx.triggered[0]["prop_id"].split(".")[0]
 
-        long_months = [1,3,5,7,8,10,12]
-        short_months = [2,4,6,9,11]
+    if triggered_by == "import-sce":
+        if file_contents is not None:
+            content_type, content_string = file_contents.split(",")
+            decoded = base64.b64decode(content_string)
 
-        if not (re.match("\d\d", dd) and re.match("\d\d", mm) and re.match("2021", yyyy)):
+            csv_df = None
+            try:
+                if filename.split(".")[-1] == "csv":
+                    # Assume that the user uploaded a CSV file
+                    csv_df = pd.read_csv(io.StringIO(decoded.decode("utf-8")))
+                    # Remove 'Unnamed: 0' index column
+                    csv_df = csv_df.drop(columns=["Unnamed: 0"])
+            except Exception as e:
+                print(e)
+                return [sce_in_table, {"color": "red"}, "There was an error processing this file."]
+
+            # if user deleted all rows from scenario table reassign column names
+            if not list(existing_sces):
+                existing_sces = pd.DataFrame(columns=sce_col_names)
+
+            if list(csv_df) != list(existing_sces):
+                return [sce_in_table, {"color": "red"}, "The columns in the CSV are invalid."]
+
+            # IF all columns match up
+            shared_scenarios = list(set(csv_df.sce_name.values) & set(existing_sces.sce_name.values))
+            val_csv = pd.DataFrame()
+            for i in range(len(csv_df)):
+                scenario = csv_df.sce_name[i] # str
+                station = csv_df.stn_name[i] # str                
+                start_year = str(csv_df.FirstYear[i]) # str (original: int)
+                end_year = str(csv_df.LastYear[i]) # str (original: int)
+                planting_date = csv_df.PltDate[i] # str
+                crop = csv_df.Crop[i] # str
+                cultivar = csv_df.Cultivar[i] # str
+                soil_type = csv_df.soil[i] # str
+                initial_soil_moisture = csv_df.iH2O[i] # str
+                initial_soil_no3_content = csv_df.iNO3[i] # str
+                planting_density = str(csv_df.plt_density[i]) # str (original: float)
+                target_year = str(csv_df.TargetYr[i]) # str (original: int)
+
+                fd1 = int(csv_df.Fert_1_DOY[i]) # int
+                fa1 = float(csv_df.Fert_1_Kg[i]) # float
+                fd2 = int(csv_df.Fert_2_DOY[i]) # int
+                fa2 = float(csv_df.Fert_2_Kg[i]) # float
+                fd3 = int(csv_df.Fert_3_DOY[i]) # int
+                fa3 = float(csv_df.Fert_3_Kg[i]) # float
+                fd4 = int(csv_df.Fert_4_DOY[i]) # int
+                fa4 = float(csv_df.Fert_4_Kg[i]) # float
+                current_fert = pd.DataFrame({
+                    "DAP": [fd1, fd2, fd3, fd4, ],
+                    "NAmount": [fa1, fa2, fa3, fa4, ],
+                })
+
+                crop_price = float(csv_df.CropPrice[i]) # float
+                seed_cost = float(csv_df.NFertCost[i]) # float
+                fert_cost = float(csv_df.SeedCost[i]) # float
+                fixed_costs = float(csv_df.OtherVariableCosts[i]) # float
+                variable_costs = float(csv_df.FixedCosts[i]) # float
+                #################################################
+                # Validate data
+                
+                if ( # first check that all required inputs have been given
+                        scenario == None
+                    or  start_year == None
+                    or  end_year == None
+                    or  target_year == None
+                    or  planting_date == None
+                    or  planting_density == None
+                    or (
+                            fd1 == None or fa1 == None
+                        or  fd2 == None or fa2 == None
+                        or  fd3 == None or fa3 == None
+                        or  fd4 == None or fa4 == None
+                    )
+                    or (
+                            crop_price == None
+                        or  seed_cost == None
+                        or  fert_cost == None
+                        or  fixed_costs == None
+                        or  variable_costs == None
+                    )        
+                ):
+                    return [sce_in_table, {"color": "red"}, f"Scenario '{scenario}' is missing data."]
+
+                csv_sce_valid = True
+
+                fert_valid = True
+                if (
+                        (fd1 < 0 or 365 < fd1) or fa1 < 0
+                    or  (fd2 < 0 or 365 < fd2) or fa2 < 0
+                    or  (fd3 < 0 or 365 < fd3) or fa3 < 0
+                    or  (fd4 < 0 or 365 < fd4) or fa4 < 0
+                ):
+                    if not (
+                            fd1 == -99 and fa1 == -99
+                        and fd2 == -99 and fa2 == -99
+                        and fd3 == -99 and fa3 == -99
+                        and fd4 == -99 and fa4 == -99
+                    ):
+                        fert_valid = False
+                else:
+                    if not (
+                            float(fd1).is_integer() and (fa1*10.0).is_integer()
+                        and float(fd2).is_integer() and (fa2*10.0).is_integer()
+                        and float(fd3).is_integer() and (fa3*10.0).is_integer()
+                        and float(fd4).is_integer() and (fa4*10.0).is_integer()
+                    ):
+                        fert_valid = False
+
+                EB_valid = True
+                if (
+                        crop_price < 0
+                    or  seed_cost < 0
+                    or  fert_cost < 0
+                    or  fixed_costs < 0
+                    or  variable_costs < 0
+                ):
+                    if not (
+                            crop_price == -99
+                        and seed_cost == -99
+                        and fert_cost == -99
+                        and fixed_costs == -99
+                        and variable_costs == -99
+                    ):
+                        EB_valid = False
+                else:
+                    if not (
+                            (crop_price*10.0).is_integer()
+                        and  (seed_cost*10.0).is_integer()
+                        and  (fert_cost*10.0).is_integer()
+                        and  (fixed_costs*10.0).is_integer()
+                        and  (variable_costs*10.0).is_integer()
+                    ):
+                        EB_valid = False          
+
+                # validate planting date
+                planting_date_valid = True
+                pl_date_split = planting_date.split("-")
+                if not len(pl_date_split) == 2:
+                    planting_date_valid = False
+                else:
+                    mm = pl_date_split[0]
+                    dd = pl_date_split[1]
+
+                    long_months = [1,3,5,7,8,10,12]
+                    short_months = [2,4,6,9,11]
+
+                    if int(mm) in long_months:
+                        if int(dd) < 1 or 31 < int(dd):
+                            planting_date_valid = False
+                    if int(mm) in short_months:
+                        if int(dd) < 1 or 30 < int(dd):
+                            planting_date_valid = False 
+                    if int(mm) == 2:
+                        if int(dd) < 1 or 28 < int(dd):
+                            planting_date_valid = False
+
+                csv_sce_valid = (
+                        re.match("....", scenario)
+                    and int(start_year) >= 1981 and int(start_year) <= 2018
+                    and int(end_year) >= 1981 and int(end_year) <= 2018
+                    and int(target_year) >= 1981 and int(target_year) <= 2018
+                    and float(planting_density) >= 1 and float(planting_density) <= 300
+                    and planting_date_valid and fert_valid and EB_valid
+                )
+
+                if csv_sce_valid:
+                    df = pd.DataFrame({
+                        "sce_name": [scenario], "Crop": [crop], "Cultivar": [cultivar], "stn_name": [station], "PltDate": [planting_date], 
+                        "FirstYear": [start_year], "LastYear": [end_year], "soil": [soil_type], "iH2O": [initial_soil_moisture], 
+                        "iNO3": [initial_soil_no3_content], "plt_density": [planting_density], "TargetYr": [target_year],
+                        "Fert_1_DOY": [fd1], "Fert_1_Kg": [fa1], "Fert_2_DOY": [fd2], "Fert_2_Kg": [fa2], 
+                        "Fert_3_DOY": [fd3], "Fert_3_Kg": [fa3], "Fert_4_DOY": [fd4], "Fert_4_Kg": [fa4], 
+                        "CropPrice": [crop_price], "NFertCost": [fert_cost], "SeedCost": [seed_cost], "OtherVariableCosts": [variable_costs], "FixedCosts": [fixed_costs],  
+                    })
+                    val_csv = val_csv.append(df, ignore_index=True)
+                else:
+                    return [sce_in_table, {"color": "red"}, f"Scenario '{scenario}' contains invalid data."]
+
+                #=====================================================================
+                # Write SNX file
+                writeSNX_main_hist(Wdir_path,station,start_year,end_year,f"2021-{planting_date}",crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
+                                    planting_density,scenario,fert_app, current_fert)
+
+            updated_sces = existing_sces
+            if existing_sces.empty: # overwrite if empty
+                return [val_csv.to_dict("rows"), {"display": "none"}, ""]
+            else:
+                if existing_sces.sce_name.values[0] == "N/A": # overwrite if "N/A"
+                    return [val_csv.to_dict("rows"), {"display": "none"}, ""]                    
+                if bool(shared_scenarios): # duplicate scenario names exist
+                    updated_sces = val_csv.append(existing_sces, ignore_index=True)
+                    duplicates = ", ".join(f"'{s}'" for s in shared_scenarios)
+                    return [updated_sces.to_dict("rows"), {"color": "red"}, f"Could not import scenarios: {duplicates} because they already exist in the table"]
+                else: # no duplicate scenario names exist
+                    updated_sces = val_csv.append(existing_sces, ignore_index=True) # otherwise append new entry
+                    return [updated_sces.to_dict("rows"), {"display": "none"}, ""]
+        else:
+            print("File contents were None")
+            return [sce_in_table, {"color": "red"}, "Empty file provided"]
+
+    if triggered_by == "write-button-state":
+        if ( # first check that all required inputs have been given
+                scenario == None
+            or  start_year == None
+            or  end_year == None
+            or  target_year == None
+            or  planting_date == None
+            or  planting_density == None
+            or (
+                    fert_app == "Fert"
+                and (
+                        fd1 == None or fN1 == None  or fP1 == None  or fK1== None 
+                    or  fd2 == None or fN2 == None  or fP2 == None  or fK2== None 
+                    or  fd3 == None or fN3 == None  or fP3 == None  or fK3== None 
+                    or  fd4 == None or fN4 == None  or fP4 == None  or fK4== None 
+                ) 
+            )
+            or (
+                    irrig_app == "repr_irrig" 
+                and (
+                        irrig_method == None 
+                    or  ird1 == None  or iramt1 == None
+                    or  ird2 == None  or iramt2 == None
+                    or  ird3 == None  or iramt3 == None
+                    or  ird4 == None  or iramt4 == None
+                    or  ird5 == None  or iramt5 == None
+                ) 
+            )
+            or (
+                    irrig_app == "auto_irrig" 
+                and (
+                        ir_depth == None 
+                    or  ir_threshold == None
+                    or  ir_eff == None
+                ) 
+            )
+            or (
+                    EB_radio == "EB_Yes"
+                and (
+                        crop_price == None
+                    or  seed_cost == None
+                    or  fert_cost == None
+                    or  fixed_costs == None
+                    or  variable_costs == None
+                )
+            )        
+        ):
+            return [sce_in_table, {"display": "none"}, ""]
+
+        # convert integer inputs to string
+        start_year = str(start_year)
+        end_year = str(end_year)
+        target_year = str(target_year)
+        planting_density = str(planting_density)
+
+        # Make a new dataframe to return to scenario-summary table
+        current_sce = pd.DataFrame({
+            "sce_name": [scenario], "Crop": [crop], "Cultivar": [cultivar[7:]], "stn_name": [station], "PltDate": [planting_date[5:]], 
+            "FirstYear": [start_year], "LastYear": [end_year], "soil": [soil_type], "iH2O": [initial_soil_moisture], 
+            "iNO3": [initial_soil_no3], "plt_density": [planting_density], "TargetYr": [target_year], 
+            "Fert_1_DOY": ["-99"], "N_1_Kg": ["-99"], "P_1_Kg": ["-99"], "K_1_Kg": ["-99"], 
+            "Fert_2_DOY": ["-99"], "N_2_Kg": ["-99"], "P_2_Kg": ["-99"], "K_2_Kg": ["-99"], 
+            "Fert_3_DOY": ["-99"], "N_3_Kg": ["-99"], "P_3_Kg": ["-99"], "K_3_Kg": ["-99"], 
+            "Fert_4_DOY": ["-99"], "N_4_Kg": ["-99"], "P_4_Kg": ["-99"], "K_4_Kg": ["-99"], 
+            "P_level": ["-99"],   #P simulation    EJ(7/72021)
+            "IR_method": ["-99"], #Irrigation on reported date
+            "IR_1_DOY": ["-99"], "IR_1_amt": ["-99"],
+            "IR_2_DOY": ["-99"], "IR_2_amt": ["-99"],
+            "IR_3_DOY": ["-99"], "IR_3_amt": ["-99"],
+            "IR_4_DOY": ["-99"], "IR_4_amt": ["-99"],
+            "IR_5_DOY": ["-99"], "IR_5_amt": ["-99"],
+            "AutoIR_depth":  ["-99"], "AutoIR_thres": ["-99"], "AutoIR_eff": ["-99"], #Irrigation automatic
+            "CropPrice": ["-99"], "NFertCost": ["-99"], "SeedCost": ["-99"], "OtherVariableCosts": ["-99"], "FixedCosts": ["-99"],  
+        })
+
+        #=====================================================================
+        # #Update dataframe for fertilizer inputs
+        fert_valid = True
+        current_fert = pd.DataFrame(columns=["DAP", "FDEP", "NAmount", "PAmount", "KAmount"])
+        if fert_app == "Fert":
+            current_fert = pd.DataFrame({
+                "DAP": [fd1, fd2, fd3, fd4, ],
+                "NAmount": [fN1, fN2, fN3, fN4, ],
+                "PAmount": [fP1, fP2, fP3, fP4, ],
+                "KAmount": [fK1, fK2, fK3, fK4, ],
+            })
+
+            fert_frame =  pd.DataFrame({
+                "Fert_1_DOY": [fd1], "N_1_Kg": [fN1],"P_1_Kg": [fP1],"K_1_Kg": [fK1],
+                "Fert_2_DOY": [fd2], "N_2_Kg": [fN2],"P_2_Kg": [fP2],"K_2_Kg": [fK2],
+                "Fert_3_DOY": [fd3], "N_3_Kg": [fN3],"P_3_Kg": [fP3],"K_3_Kg": [fK3],
+                "Fert_4_DOY": [fd4], "N_4_Kg": [fN4],"P_4_Kg": [fP4],"K_4_Kg": [fK4],
+            })
+            current_sce.update(fert_frame)
+
+            # TODO: validation fert
+            # if (
+            #         (fd1 < 0 or 365 < fd1) or fa1 < 0
+            #     or  (fd2 < 0 or 365 < fd2) or fa2 < 0
+            #     or  (fd3 < 0 or 365 < fd3) or fa3 < 0
+            #     or  (fd4 < 0 or 365 < fd4) or fa4 < 0
+            # ):
+            #     fert_valid = False
+            # else:
+            #     if not (
+            #             float(fd1).is_integer() and (fa1*10.0).is_integer()
+            #         and float(fd2).is_integer() and (fa2*10.0).is_integer()
+            #         and float(fd3).is_integer() and (fa3*10.0).is_integer()
+            #         and float(fd4).is_integer() and (fa4*10.0).is_integer()
+            #     ):
+            #         fert_valid = False
+
+
+        #=====================================================================
+        # #Update dataframe for irrigation (on reported date) inputs
+        IR_reported_valid = True
+        current_irrig = pd.DataFrame(columns=["DAP", "WAmount"])
+        if irrig_app == "repr_irrig":
+            current_irrig = pd.DataFrame({
+                "DAP": [ird1, ird2, ird3, ird4, ird5,],
+                "WAmount": [iramt1, iramt2, iramt3, iramt4,iramt5,],
+            })
+
+            irrig_frame =  pd.DataFrame({
+                "IR_1_DOY": [ird1], "IR_1_amt": [iramt1],
+                "IR_2_DOY": [ird2], "IR_2_amt": [iramt2],
+                "IR_3_DOY": [ird3], "IR_3_amt": [iramt3],
+                "IR_4_DOY": [ird4], "IR_4_amt": [iramt4],
+                "IR_5_DOY": [ird5], "IR_5_amt": [iramt5],
+            })
+            current_sce.update(irrig_frame)
+
+            if (
+                    (ird1 < 0 or 365 < ird1) or iramt1 < 0
+                or  (ird2 < 0 or 365 < ird2) or iramt2 < 0
+                or  (ird3 < 0 or 365 < ird3) or iramt3 < 0
+                or  (ird4 < 0 or 365 < ird4) or iramt4 < 0
+                or  (ird5 < 0 or 365 < ird5) or iramt5 < 0
+            ):
+                IR_reported_valid = False
+            else:
+                if not (
+                        float(ird1).is_integer() and (iramt1*10.0).is_integer()
+                    and float(ird2).is_integer() and (iramt2*10.0).is_integer()
+                    and float(ird3).is_integer() and (iramt3*10.0).is_integer()
+                    and float(ird4).is_integer() and (iramt4*10.0).is_integer()
+                    and float(ird5).is_integer() and (iramt5*10.0).is_integer()
+                ):
+                    IR_reported_valid = False
+
+        if irrig_app == "auto_irrig":       
+          current_sce.loc[0,"AutoIR_depth"] = ir_depth   #check index 0
+          current_sce.loc[0,"AutoIR_thres"] = ir_threshold
+          current_sce.loc[0,"AutoIR_eff"] = ir_eff
+
+          if (
+                  (ir_depth < 1 or 100 < ir_depth)
+              or  (ir_threshold < 1 or 100 < ir_threshold)
+              or  (ir_eff < 0.1 or 1 < ir_eff)
+          ):
+              IR_reported_valid = False
+
+        #=====================================================================
+        # Write SNX file
+        writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3,
+                            planting_density,scenario,fert_app, current_fert, p_sim, p_level, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)
+        #=====================================================================
+        # #Update dataframe for Enterprise Budgeting inputs
+        EB_valid = True
+        if EB_radio == "EB_Yes":
+            EB_frame =  pd.DataFrame({
+                "CropPrice": [crop_price],
+                "NFertCost": [seed_cost],
+                "SeedCost": [fert_cost],
+                "OtherVariableCosts": [fixed_costs],
+                "FixedCosts": [variable_costs],
+            })
+            current_sce.update(EB_frame)
+
+            if (
+                    crop_price < 0
+                or  seed_cost < 0
+                or  fert_cost < 0
+                or  fixed_costs < 0
+                or  variable_costs < 0
+            ):
+                EB_valid = False          
+            else:
+                if not (
+                        (crop_price*10.0).is_integer()
+                    and  (seed_cost*10.0).is_integer()
+                    and  (fert_cost*10.0).is_integer()
+                    and  (fixed_costs*10.0).is_integer()
+                    and  (variable_costs*10.0).is_integer()
+                ):
+                    EB_valid = False          
+
+        # validate planting date
+        planting_date_valid = True
+        pl_date_split = planting_date.split("-")
+        if not len(pl_date_split) == 3:
             planting_date_valid = False
         else:
-            if int(mm) in long_months:
-                if int(dd) < 1 or 31 < int(dd):
-                    planting_date_valid = False
-            if int(mm) in short_months:
-                if int(dd) < 1 or 30 < int(dd):
-                    planting_date_valid = False 
-            if int(mm) == 2:
-                if int(dd) < 1 or 28 < int(dd):
-                    planting_date_valid = False
+            yyyy = pl_date_split[0]
+            mm = pl_date_split[1]
+            dd = pl_date_split[2]
 
-    # required="required" triggers tooltips. This validation actually prevents improper forms being submitted. BOTH are necessary
-    form_valid = (
-            re.match("....", current_sce.sce_name.values[0])
-        and int(current_sce.FirstYear.values[0]) >= 1981 and int(current_sce.FirstYear.values[0]) <= 2018
-        and int(current_sce.LastYear.values[0]) >= 1981 and int(current_sce.LastYear.values[0]) <= 2018
-        and int(current_sce.TargetYr.values[0]) >= 1981 and int(current_sce.TargetYr.values[0]) <= 2018
-        and float(current_sce.plt_density.values[0]) >= 1 and float(current_sce.plt_density.values[0]) <= 300
-        and planting_date_valid and fert_valid and IR_reported_valid and EB_valid
-    )
+            long_months = [1,3,5,7,8,10,12]
+            short_months = [2,4,6,9,11]
 
-    if form_valid:
-        if existing_sces.empty: # overwrite if empty
-            data = current_sce.to_dict("rows")
-        else:
-            if existing_sces.sce_name.values[0] == "N/A": # overwrite if "N/A"
-                data = current_sce.to_dict("rows")
-            elif scenario in existing_sces.sce_name.values: # no duplicate scenario names
-                data = existing_sces.to_dict("rows")
+            if not (re.match("\d\d", dd) and re.match("\d\d", mm) and re.match("2021", yyyy)):
+                planting_date_valid = False
             else:
-                all_sces = current_sce.append(existing_sces, ignore_index=True) # otherwise append new entry
-                data = all_sces.to_dict("rows")
-        return data
-    else:
-        return existing_sces.to_dict("rows")
+                if int(mm) in long_months:
+                    if int(dd) < 1 or 31 < int(dd):
+                        planting_date_valid = False
+                if int(mm) in short_months:
+                    if int(dd) < 1 or 30 < int(dd):
+                        planting_date_valid = False 
+                if int(mm) == 2:
+                    if int(dd) < 1 or 28 < int(dd):
+                        planting_date_valid = False
 
+        # required="required" triggers tooltips. This validation actually prevents improper forms being submitted. BOTH are necessary
+        form_valid = (
+                re.match("....", current_sce.sce_name.values[0])
+            and int(current_sce.FirstYear.values[0]) >= 1981 and int(current_sce.FirstYear.values[0]) <= 2018
+            and int(current_sce.LastYear.values[0]) >= 1981 and int(current_sce.LastYear.values[0]) <= 2018
+            and int(current_sce.TargetYr.values[0]) >= 1981 and int(current_sce.TargetYr.values[0]) <= 2018
+            and float(current_sce.plt_density.values[0]) >= 1 and float(current_sce.plt_density.values[0]) <= 300
+            and planting_date_valid and fert_valid and IR_reported_valid and EB_valid
+        )
+
+        if form_valid:
+            if existing_sces.empty: # overwrite if empty
+                data = current_sce.to_dict("rows")
+            else:
+                if existing_sces.sce_name.values[0] == "N/A": # overwrite if "N/A"
+                    data = current_sce.to_dict("rows")
+                elif scenario in existing_sces.sce_name.values: # no duplicate scenario names
+                    data = existing_sces.to_dict("rows")
+                else:
+                    all_sces = current_sce.append(existing_sces, ignore_index=True) # otherwise append new entry
+                    data = all_sces.to_dict("rows")
+            return [data, {"display": "none"}, ""]
+        else:
+            return [sce_in_table, {"display": "none"}, ""]
 
 #===============================
 #2nd callback to run ALL scenarios

@@ -39,7 +39,7 @@ apps = {
         "paths": {
             "/about": about.layout,
             "/historical": historical.layout, 
-            "/forecast": forecast.layout,
+            # "/forecast": forecast.layout,
         },
     },
     "senegal":  { 
