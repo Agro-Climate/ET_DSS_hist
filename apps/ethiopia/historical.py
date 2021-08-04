@@ -1137,6 +1137,14 @@ def make_sce_table(
                         and fd4 == -99 and fa4 == -99
                     ):
                         fert_valid = False
+                else:
+                    if not (
+                            float(fd1).is_integer() and (fa1*10.0).is_integer()
+                        and float(fd2).is_integer() and (fa2*10.0).is_integer()
+                        and float(fd3).is_integer() and (fa3*10.0).is_integer()
+                        and float(fd4).is_integer() and (fa4*10.0).is_integer()
+                    ):
+                        fert_valid = False
 
                 EB_valid = True
                 if (
@@ -1152,6 +1160,15 @@ def make_sce_table(
                         and fert_cost == -99
                         and fixed_costs == -99
                         and variable_costs == -99
+                    ):
+                        EB_valid = False
+                else:
+                    if not (
+                            (crop_price*10.0).is_integer()
+                        and  (seed_cost*10.0).is_integer()
+                        and  (fert_cost*10.0).is_integer()
+                        and  (fixed_costs*10.0).is_integer()
+                        and  (variable_costs*10.0).is_integer()
                     ):
                         EB_valid = False          
 
