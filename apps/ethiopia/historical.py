@@ -28,7 +28,7 @@ import calendar
 
 import graph
 
-sce_col_names=[ "sce_name", "Crop", "Cultivar","stn_name", "Plt-date", "FirstYear", "LastYear", "soil","iH2O","iNO3","TargetYr",
+sce_col_names=[ "sce_name", "Crop", "Cultivar","stn_name", "PltDate", "FirstYear", "LastYear", "soil","iH2O","iNO3", "plt_density", "TargetYr",
                 "Fert_1_DOY","Fert_1_Kg","Fert_2_DOY","Fert_2_Kg","Fert_3_DOY","Fert_3_Kg","Fert_4_DOY","Fert_4_Kg",
                 "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"
 ]
@@ -236,10 +236,10 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Planting Date
-                    dbc.Label("11) Planting Date", html_for="plt-date-picker", sm=3, className="p-2", align="start", ),
+                    dbc.Label("11) Planting Date", html_for="pltDate-picker", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.DatePickerSingle(
-                      id="plt-date-picker",
+                      id="pltDate-picker",
                       min_date_allowed=date(2021, 1, 1),
                       max_date_allowed=date(2021, 12, 31),
                       initial_visible_month=date(2021, 6, 5),
@@ -482,12 +482,13 @@ layout = html.Div([
                     {"id": "Crop", "name": "Crop"},
                     {"id": "Cultivar", "name": "Cultivar"},
                     {"id": "stn_name", "name": "Station"},
-                    {"id": "Plt-date", "name": "Planting Date"},
+                    {"id": "PltDate", "name": "Planting Date"},
                     {"id": "FirstYear", "name": "First Year"},
                     {"id": "LastYear", "name": "Last Year"},
                     {"id": "soil", "name": "Soil Type"},
                     {"id": "iH2O", "name": "Initial Soil Water Content"},
                     {"id": "iNO3", "name": "Initial Soil Nitrate Content"},
+                    {"id": "plt_density", "name": "Planting Density"},
                     {"id": "TargetYr", "name": "Target Year"},
                     {"id": "Fert_1_DOY", "name": "DOY 1st Fertilizer Applied"},
                     {"id": "Fert_1_Kg", "name": "1st Amount Applied (Kg/ha)"},
@@ -987,7 +988,7 @@ def download_scenarios(n_clicks, scenario_table):
               State("ETstation", "value"),
               State("year1", "value"),
               State("year2", "value"),
-              State("plt-date-picker", "date"),
+              State("pltDate-picker", "date"),
               State("crop-radio", "value"),
               State("cultivar-dropdown", "value"),
               State("ETsoil", "value"),
@@ -1048,30 +1049,173 @@ def make_sce_table(
                     csv_df = pd.read_csv(io.StringIO(decoded.decode("utf-8")))
                     # Remove 'Unnamed: 0' index column
                     csv_df = csv_df.drop(columns=["Unnamed: 0"])
-
-                # elif filename.split(".")[-1] == "xls":
-                #     # Assume that the user uploaded an excel file
-                #     csv_df = pd.read_excel(io.BytesIO(decoded))
             except Exception as e:
                 print(e)
                 return [sce_in_table, {"color": "red"}, "There was an error processing this file."]
 
-            # csv_df MUST be validated at this point to not be empty
+            # if user deleted all rows from scenario table reassign column names
+            if not list(existing_sces):
+                existing_sces = pd.DataFrame(columns=sce_col_names)
+
+            if list(csv_df) != list(existing_sces):
+                return [sce_in_table, {"color": "red"}, "The columns in the CSV are invalid."]
+
+            # IF all columns match up
             shared_scenarios = list(set(csv_df.sce_name.values) & set(existing_sces.sce_name.values))
+            val_csv = pd.DataFrame()
+            for i in range(len(csv_df)):
+                scenario = csv_df.sce_name[i] # str
+                station = csv_df.stn_name[i] # str                
+                start_year = str(csv_df.FirstYear[i]) # str (original: int)
+                end_year = str(csv_df.LastYear[i]) # str (original: int)
+                planting_date = csv_df.PltDate[i] # str
+                crop = csv_df.Crop[i] # str
+                cultivar = csv_df.Cultivar[i] # str
+                soil_type = csv_df.soil[i] # str
+                initial_soil_moisture = csv_df.iH2O[i] # str
+                initial_soil_no3_content = csv_df.iNO3[i] # str
+                planting_density = str(csv_df.plt_density[i]) # str (original: float)
+                target_year = str(csv_df.TargetYr[i]) # str (original: int)
+
+                fd1 = int(csv_df.Fert_1_DOY[i]) # int
+                fa1 = float(csv_df.Fert_1_Kg[i]) # float
+                fd2 = int(csv_df.Fert_2_DOY[i]) # int
+                fa2 = float(csv_df.Fert_2_Kg[i]) # float
+                fd3 = int(csv_df.Fert_3_DOY[i]) # int
+                fa3 = float(csv_df.Fert_3_Kg[i]) # float
+                fd4 = int(csv_df.Fert_4_DOY[i]) # int
+                fa4 = float(csv_df.Fert_4_Kg[i]) # float
+                current_fert = pd.DataFrame({
+                    "DAP": [fd1, fd2, fd3, fd4, ],
+                    "NAmount": [fa1, fa2, fa3, fa4, ],
+                })
+
+                crop_price = float(csv_df.CropPrice[i]) # float
+                seed_cost = float(csv_df.NFertCost[i]) # float
+                fert_cost = float(csv_df.SeedCost[i]) # float
+                fixed_costs = float(csv_df.OtherVariableCosts[i]) # float
+                variable_costs = float(csv_df.FixedCosts[i]) # float
+                #################################################
+                # Validate data
+                
+                if ( # first check that all required inputs have been given
+                        scenario == None
+                    or  start_year == None
+                    or  end_year == None
+                    or  target_year == None
+                    or  planting_date == None
+                    or  planting_density == None
+                    or (
+                            fd1 == None or fa1 == None
+                        or  fd2 == None or fa2 == None
+                        or  fd3 == None or fa3 == None
+                        or  fd4 == None or fa4 == None
+                    )
+                    or (
+                            crop_price == None
+                        or  seed_cost == None
+                        or  fert_cost == None
+                        or  fixed_costs == None
+                        or  variable_costs == None
+                    )        
+                ):
+                    return [sce_in_table, {"color": "red"}, f"Scenario '{scenario}' is missing data."]
+
+                csv_sce_valid = True
+
+                fert_valid = True
+                if (
+                        (fd1 < 0 or 365 < fd1) or fa1 < 0
+                    or  (fd2 < 0 or 365 < fd2) or fa2 < 0
+                    or  (fd3 < 0 or 365 < fd3) or fa3 < 0
+                    or  (fd4 < 0 or 365 < fd4) or fa4 < 0
+                ):
+                    if not (
+                            fd1 == -99 and fa1 == -99
+                        and fd2 == -99 and fa2 == -99
+                        and fd3 == -99 and fa3 == -99
+                        and fd4 == -99 and fa4 == -99
+                    ):
+                        fert_valid = False
+
+                EB_valid = True
+                if (
+                        crop_price < 0
+                    or  seed_cost < 0
+                    or  fert_cost < 0
+                    or  fixed_costs < 0
+                    or  variable_costs < 0
+                ):
+                    if not (
+                            crop_price == -99
+                        and seed_cost == -99
+                        and fert_cost == -99
+                        and fixed_costs == -99
+                        and variable_costs == -99
+                    ):
+                        EB_valid = False          
+
+                # validate planting date
+                planting_date_valid = True
+                pl_date_split = planting_date.split("-")
+                if not len(pl_date_split) == 2:
+                    planting_date_valid = False
+                else:
+                    mm = pl_date_split[0]
+                    dd = pl_date_split[1]
+
+                    long_months = [1,3,5,7,8,10,12]
+                    short_months = [2,4,6,9,11]
+
+                    if int(mm) in long_months:
+                        if int(dd) < 1 or 31 < int(dd):
+                            planting_date_valid = False
+                    if int(mm) in short_months:
+                        if int(dd) < 1 or 30 < int(dd):
+                            planting_date_valid = False 
+                    if int(mm) == 2:
+                        if int(dd) < 1 or 28 < int(dd):
+                            planting_date_valid = False
+
+                csv_sce_valid = (
+                        re.match("....", scenario)
+                    and int(start_year) >= 1981 and int(start_year) <= 2018
+                    and int(end_year) >= 1981 and int(end_year) <= 2018
+                    and int(target_year) >= 1981 and int(target_year) <= 2018
+                    and float(planting_density) >= 1 and float(planting_density) <= 300
+                    and planting_date_valid and fert_valid and EB_valid
+                )
+
+                if csv_sce_valid:
+                    df = pd.DataFrame({
+                        "sce_name": [scenario], "Crop": [crop], "Cultivar": [cultivar], "stn_name": [station], "PltDate": [planting_date], 
+                        "FirstYear": [start_year], "LastYear": [end_year], "soil": [soil_type], "iH2O": [initial_soil_moisture], 
+                        "iNO3": [initial_soil_no3_content], "plt_density": [planting_density], "TargetYr": [target_year],
+                        "Fert_1_DOY": [fd1], "Fert_1_Kg": [fa1], "Fert_2_DOY": [fd2], "Fert_2_Kg": [fa2], 
+                        "Fert_3_DOY": [fd3], "Fert_3_Kg": [fa3], "Fert_4_DOY": [fd4], "Fert_4_Kg": [fa4], 
+                        "CropPrice": [crop_price], "NFertCost": [fert_cost], "SeedCost": [seed_cost], "OtherVariableCosts": [variable_costs], "FixedCosts": [fixed_costs],  
+                    })
+                    val_csv = val_csv.append(df, ignore_index=True)
+                else:
+                    return [sce_in_table, {"color": "red"}, f"Scenario '{scenario}' contains invalid data."]
+
+                #=====================================================================
+                # Write SNX file
+                writeSNX_main_hist(Wdir_path,station,start_year,end_year,f"2021-{planting_date}",crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
+                                    planting_density,scenario,fert_app, current_fert)
 
             updated_sces = existing_sces
             if existing_sces.empty: # overwrite if empty
-                return [csv_df.to_dict("rows"), {"display": "none"}, ""]
+                return [val_csv.to_dict("rows"), {"display": "none"}, ""]
             else:
                 if existing_sces.sce_name.values[0] == "N/A": # overwrite if "N/A"
-                    return [csv_df.to_dict("rows"), {"display": "none"}, ""]
-                elif bool(shared_scenarios): # no duplicate scenario names
-                    csv_df = csv_df[csv_df["sce_name"].isin(shared_scenarios) == False]
-                    updated_sces = csv_df.append(existing_sces, ignore_index=True)
+                    return [val_csv.to_dict("rows"), {"display": "none"}, ""]                    
+                if bool(shared_scenarios): # duplicate scenario names exist
+                    updated_sces = val_csv.append(existing_sces, ignore_index=True)
                     duplicates = ", ".join(f"'{s}'" for s in shared_scenarios)
                     return [updated_sces.to_dict("rows"), {"color": "red"}, f"Could not import scenarios: {duplicates} because they already exist in the table"]
-                else:
-                    updated_sces = csv_df.append(existing_sces, ignore_index=True) # otherwise append new entry
+                else: # no duplicate scenario names exist
+                    updated_sces = val_csv.append(existing_sces, ignore_index=True) # otherwise append new entry
                     return [updated_sces.to_dict("rows"), {"display": "none"}, ""]
         else:
             print("File contents were None")
@@ -1115,9 +1259,9 @@ def make_sce_table(
 
         # Make a new dataframe to return to scenario-summary table
         current_sce = pd.DataFrame({
-            "sce_name": [scenario], "Crop": [crop], "Cultivar": [cultivar[7:]], "stn_name": [station], "Plt-date": [planting_date[5:]], 
+            "sce_name": [scenario], "Crop": [crop], "Cultivar": [cultivar[7:]], "stn_name": [station], "PltDate": [planting_date[5:]], 
             "FirstYear": [start_year], "LastYear": [end_year], "soil": [soil_type], "iH2O": [initial_soil_moisture], 
-            "iNO3": [initial_soil_no3_content], "plt_density": [planting_density], "TargetYr": [target_year], 
+            "iNO3": [initial_soil_no3_content], "plt_density": [planting_density], "TargetYr": [target_year],
             "Fert_1_DOY": ["-99"], "Fert_1_Kg": ["-99"], "Fert_2_DOY": ["-99"], "Fert_2_Kg": ["-99"], 
             "Fert_3_DOY": ["-99"], "Fert_3_Kg": ["-99"], "Fert_4_DOY": ["-99"], "Fert_4_Kg": ["-99"], 
             "CropPrice": ["-99"], "NFertCost": ["-99"], "SeedCost": ["-99"], "OtherVariableCosts": ["-99"], "FixedCosts": ["-99"],  
