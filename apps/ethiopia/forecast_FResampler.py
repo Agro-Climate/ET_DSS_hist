@@ -167,12 +167,12 @@ layout = html.Div([
                             dbc.Row([
                               dbc.Col(
                                 dbc.FormGroup([
-                                  dbc.Input(type="number", id="AN1", value=40, min="0", max="100", required="required", ),
+                                  dbc.Input(type="number", id="AN1", value=40, min="0", max="100", step="0.1", required="required", ),
                                 ],),
                               ),
                               dbc.Col(
                                 dbc.FormGroup([
-                                  dbc.Input(type="number", id="BN1", value=20, min="0", max="100", required="required", ),
+                                  dbc.Input(type="number", id="BN1", value=20, min="0", max="100", step="0.1", required="required", ),
                                 ],),
                               ),
                               dbc.Col(
@@ -180,15 +180,15 @@ layout = html.Div([
                                   dbc.Input(type="number", id="NN1", value=40, disabled="disabled", required="required", ),
                                 ],),
                               ),
-                              dbc.Row([
-                                dbc.FormText([
-                                  ""
-                                ],
-                                id="trimester1-error-msg",
-                                style= {"display": "none"}
-                                ),
-                              ]),
                             ],),
+                            dbc.Row([
+                              dbc.FormText([
+                                ""
+                              ],
+                              id="trimester1-error-msg",
+                              style= {"display": "none"}
+                              ),
+                            ]),
                           ]),
                         ]),
                         html.Div([ # 2nd trimester
