@@ -8,16 +8,16 @@
 ##NOTE: 
 ##==============
 import numpy as np
-import matplotlib.pyplot as plt
 import calendar
-from scipy import stats
 import pandas as pd
 import os
 from os import path 
-from apps.ethiopia.exp_mixture_model import EMM, EMMs  
-from apps.ethiopia.exp_mixture_model import generate_emm
+# from apps.ethiopia.exp_mixture_model import EMM, EMMs  
+# from apps.ethiopia.exp_mixture_model import generate_emm
 # from exp_mixture_model import EMM, EMMs
 # from exp_mixture_model import generate_emm
+from exp_mixture_model import EMM, EMMs  
+from exp_mixture_model import generate_emm 
 
 #=================================================================
 #Fourier series with two harmonics

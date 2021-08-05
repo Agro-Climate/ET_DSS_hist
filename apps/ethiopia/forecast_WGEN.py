@@ -1070,11 +1070,11 @@ layout = html.Div([
 ])
 
 # # is this needed?
-# DATA_PATH = pathlib.Path(__file__).parent.joinpath("data").resolve()
+DATA_PATH = pathlib.Path(__file__).parent.joinpath("data").resolve()
 
-# DSSAT_FILES_DIR_SHORT = "/DSSAT/dssat-base-files"  #for linux systemn
+DSSAT_FILES_DIR_SHORT = "/DSSAT/dssat-base-files"  #for linux systemn
 
-# DSSAT_FILES_DIR = os.getcwd() + DSSAT_FILES_DIR_SHORT   #for linux systemn
+DSSAT_FILES_DIR = os.getcwd() + DSSAT_FILES_DIR_SHORT   #for linux systemn
 
 #https://community.plotly.com/t/loading-when-opening-localhost/7284
 #I suspect that this is related to the JS assets from the CDN not loading properly - perhaps because they are blocked by your firewall or some other reason.
@@ -1090,8 +1090,8 @@ cultivar_options = {
 }
 
 
-Wdir_path = "C:\\IRI\\Dash_ET_forecast\\ET_forecast_windows\\TEST_ET\\"
-# Wdir_path = DSSAT_FILES_DIR    #for linux systemn
+# Wdir_path = "C:\\IRI\\Dash_ET_forecast\\ET_forecast_windows\\TEST_ET\\"
+Wdir_path = DSSAT_FILES_DIR    #for linux systemn
 
 #==============================================================
 #call back to update the first & last weather observed dates
@@ -1693,8 +1693,8 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
         # dff = pd.read_json(intermediate, orient="split")
         scenarios = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
         sce_numbers = len(scenarios.sce_name.values)
-        Wdir_path = "C:\\IRI\\Dash_ET_forecast\\ET_forecast_windows\\TEST_ET\\"  #for windows
-        # Wdir_path = DSSAT_FILES_DIR   #for linux system
+        # Wdir_path = "C:\\IRI\\Dash_ET_forecast\\ET_forecast_windows\\TEST_ET\\"  #for windows
+        Wdir_path = DSSAT_FILES_DIR   #for linux system
         TG_yield = []
 
         #compute seasonal rainfall total for each trimester EJ(7/27/2021)
@@ -1769,8 +1769,8 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
             SNX_fname2 = path.join(Wdir_path, f"FC{scenarios.Crop[i]}{scenario}.SNX")  #forecast run <<<<<<<====================
 
             # On Linux system, we don"t need to do this:
-            SNX_fname = SNX_fname.replace("/", "\\")    #===========>for windows
-            SNX_fname2 = SNX_fname2.replace("/", "\\")  #===========>for windows
+            # SNX_fname = SNX_fname.replace("/", "\\")    #===========>for windows
+            # SNX_fname2 = SNX_fname2.replace("/", "\\")  #===========>for windows
             new_str = "{0:<95}{1:4s}".format(SNX_fname, repr(1).rjust(4)) + temp_str[99:]
             fw.write(new_str)
             new_str2 = "{0:<95}{1:4s}".format(SNX_fname2, repr(1).rjust(4)) + temp_str[99:]
@@ -1781,24 +1781,23 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
             #1-1) Run DSSAT executable for BOTh climatolgoy & forecast => Simulation resutls from both runs are in one Summary.out file
             os.chdir(Wdir_path)  #change directory
             if scenarios.Crop[i] == "WH":
-                # args = "./dscsm047 CSCER047 B DSSBatch.V47"  #===========>for linux system
-                args = "DSCSM047.EXE CSCER047 B DSSBatch.v47"  #===========>for windows
+                args = "./dscsm047 CSCER047 B DSSBatch.V47"  #===========>for linux system
+                # args = "DSCSM047.EXE CSCER047 B DSSBatch.v47"  #===========>for windows
                 # fout_name = path.join(Wdir_path, "ETWH"+scenario+".OSU")   #===========>for windows
             elif scenarios.Crop[i] == "MZ":
-                # args = "./dscsm047 MZCER047 B DSSBatch.V47" #===========>for linux system
-                args = "DSCSM047.EXE MZCER047 B DSSBatch.v47" #===========>for windows
-                # fout_name = path.join(Wdir_path, "ETMZ"+scenario+".OSU") #===========>for windows
+                args = "./dscsm047 MZCER047 B DSSBatch.V47" #===========>for linux system
+                # args = "DSCSM047.EXE MZCER047 B DSSBatch.v47" #===========>for windows
+                # # fout_name = path.join(Wdir_path, "ETMZ"+scenario+".OSU") #===========>for windows
             else:  # SG
-                # args = "./dscsm047 SGCER047 B DSSBatch.V47" #===========>for linux system
-                args = "DSCSM047.EXE SGCER047 B DSSBatch.v47"  #===========>for windows
+                args = "./dscsm047 SGCER047 B DSSBatch.V47" #===========>for linux system
+                # args = "DSCSM047.EXE SGCER047 B DSSBatch.v47"  #===========>for windows
                 # fout_name = path.join(Wdir_path, "ETSG"+scenario+".OSU")  #===========>for windows
 
-            #fout_name = f"ET{scenarios.Crop[i]}{scenario}.OSU"  #Q: Do we need this?
-            # arg_mv = f"mv Summary.OUT {fout_name}"   #Q: Do we need this?
             fout_name = f"CL{scenarios.Crop[i]}{scenario}.OSU"  #simulation start for climatolgoy first
+            arg_mv = f"mv Summary.OUT {fout_name}"   #Q: Do we need this? => Yes, DSSAT-Linux does not allow FNAME=Y, and generate only summary.out
 
             os.system(args) 
-            # os.system(arg_mv)  #Q: Do we need this?
+            os.system(arg_mv) 
             #=====================================================================
             #=====================================================================
 
@@ -1816,7 +1815,7 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
             #============================================================
             # ===compute seasonal rainfall total from climatolgoy for trimester 1 & 2
             # WTD_fname = path.join(Wdir_path, scenarios.stn_name[i]+".WTD")
-            WTH_fname = path.join(Wdir_path, scenarios.sce_name[i]+repr(scenarios.Plt_date[i])[3:5] +"99.WTH")  # e.g., aaaa2199.WTH
+            WTH_fname = path.join(Wdir_path, scenarios.sce_name[i]+ '_all.WTH') #+repr(scenarios.Plt_date[i])[3:5] +"99.WTH")  # e.g., aaaa2199.WTH
             if i ==0:
               df_FC = Rain_trimester_gen(WTH_fname, tri_doylist)
               df_CL = Rain_trimester_obs(WTD_fname, tri_doylist)
@@ -2203,7 +2202,7 @@ def Rain_trimester_gen(fname,tri_doylist):  #sname=> scenario name to make a col
     data = {"RainT1": np.array(sum_T1), "RainT2": np.array(sum_T2),}
     df_out = pd.DataFrame(data)
     # #write dataframe into CSV file for debugging
-    df_out.to_csv("C:\\IRI\\Dash_ET_forecast\\ET_forecast_windows\\TEST_ET\\trimester_rain_frst.csv", index=False)
+    # df_out.to_csv("C:\\IRI\\Dash_ET_forecast\\ET_forecast_windows\\TEST_ET\\trimester_rain_frst.csv", index=False)
     return df_out
 #====================================================================
 # End of reading observations (WTD file) into a matrix 

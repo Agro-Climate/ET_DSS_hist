@@ -97,7 +97,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Observed data => Not for user's input
-                    dbc.Label("3) Observed Weather", html_for="ETstation_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("Observed Weather", html_for="ETstation_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                         dbc.Row([
                           dbc.Col(
@@ -122,7 +122,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Seasonal climate forecast EJ(7/25/2021)
-                    dbc.Label("4) Seasonal Climate Forecast", html_for="SCF", sm=3, className="p-2", align="start", ),
+                    dbc.Label("3) Seasonal Climate Forecast", html_for="SCF", sm=3, className="p-0", align="start", ),
                     dbc.Col([
                       html.Div([ # SEASONAL CLIMATE FORECAST
                         html.Div([ # 1st trimester
@@ -167,12 +167,12 @@ layout = html.Div([
                             dbc.Row([
                               dbc.Col(
                                 dbc.FormGroup([
-                                  dbc.Input(type="number", id="AN1", value=40, min="0", max="100", step="0.1", required="required", ),
+                                  dbc.Input(type="number", id="AN1", value=40, min="0", max="100", required="required", ),
                                 ],),
                               ),
                               dbc.Col(
                                 dbc.FormGroup([
-                                  dbc.Input(type="number", id="BN1", value=20, min="0", max="100", step="0.1", required="required", ),
+                                  dbc.Input(type="number", id="BN1", value=20, min="0", max="100", required="required", ),
                                 ],),
                               ),
                               dbc.Col(
@@ -181,14 +181,6 @@ layout = html.Div([
                                 ],),
                               ),
                             ],),
-                            dbc.Row([
-                              dbc.FormText([
-                                ""
-                              ],
-                              id="trimester1-error-msg",
-                              style= {"display": "none"}
-                              ),
-                            ]),
                           ]),
                         ]),
                         html.Div([ # 2nd trimester
@@ -229,14 +221,6 @@ layout = html.Div([
                                 ],),
                               ),
                             ],),
-                            dbc.Row([
-                              dbc.FormText([
-                                ""
-                              ],
-                              id="trimester2-error-msg",
-                              style= {"display": "none"}
-                              ),
-                            ]),
                           ]),
                         ]),
                       ],
@@ -904,7 +888,7 @@ layout = html.Div([
                         html.Div(id="yieldcdf-container_frst"),  #exceedance curve
                         html.Div( #interactive graph for CDF curve like flexible forecast
                           dbc.FormGroup([ # individual cdf graph comparison (climatology vs. forecast)
-                            dbc.Label("Scenario Name", html_for="sname_cdf", sm=3, align="start", ),
+                            dbc.Label("      Scenario Name", html_for="sname_cdf", sm=3, className="p-2", ), #align="start", ),
                             dbc.Col([
                               dcc.Dropdown(
                               id="sname_cdf",
@@ -915,18 +899,17 @@ layout = html.Div([
                             xl=9,
                             ),
                           ],
-                          row=True,
-                          className="m-2",
+                          row=True
                           ),                        
                         ),  
                         html.Div(id="yieldcdf-container_indiv"),  #interactive individual cdf graph
                         dbc.Row([
                           dbc.Col(
                             html.Div(id="rain_trimester1"),
-                          md=6),
+                          md=4),
                           dbc.Col(
                             html.Div(id="rain_trimester2"),
-                          md=6),
+                          md=4),
                         ],
                         no_gutters=True,
                         ),
@@ -991,14 +974,14 @@ layout = html.Div([
                       Download(id="download-dataframe-csv-yield_frst"),
                       # Download(id="download-dataframe-csv-rain"),
                       # Download(id="download-dataframe-csv-Pexe"),
-                      html.Div(
-                        dash_table.DataTable(
-                          columns = [{"id": "YEAR", "name": "YEAR"}],
-                          id="yield-table",
-                          style_table = {"height": "10vh"},
-                        ),
-                      id="fcst-yieldtables-container", 
-                      ),  #yield simulated output
+                      # html.Div(
+                      #   dash_table.DataTable(
+                      #     columns = [{"id": "YEAR", "name": "YEAR"}],
+                      #     id="yield-table",
+                      #     style_table = {"height": "10vh"},
+                      #   ),
+                      # id="yieldtables-container", 
+                      # ),  #yield simulated output
                     ], ),
                   ],
                   ),
@@ -1095,7 +1078,7 @@ layout = html.Div([
 ])
 
 # # is this needed?
-# DATA_PATH = pathlib.Path(__file__).parent.joinpath("data").resolve()
+DATA_PATH = pathlib.Path(__file__).parent.joinpath("data").resolve()
 
 DSSAT_FILES_DIR_SHORT = "/DSSAT/dssat-base-files"  #for linux systemn
 
@@ -1704,7 +1687,7 @@ def make_sce_table(
                 # Output(component_id="yield-BN-container_frst", component_property="children"),
                 # Output(component_id="yield-NN-container", component_property="children"),
                 # Output(component_id="yield-AN-container", component_property="children"),
-                Output(component_id="fcst-yieldtables-container", component_property="children"),
+                # Output(component_id="yieldtables-container", component_property="children"),
                 Output("sname_cdf", "options"),
                 Output("memory-yield-table_frst", "data"),
                 Input("simulate-button-state_frst", "n_clicks"),
@@ -1757,7 +1740,9 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
               # #1)WGEN
               # df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)  #pass subset of summary table => NOTE: the scenario names are in reverse order and thus last scenario is selected first
               # write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)   #by taking into account planting and approximate harvesting dates
-              #2)FResampler
+              #2)FResampler\
+              print("before calling run_FResampler")
+              print(Wdir_path)
               df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
               write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)  
             else:
@@ -1800,7 +1785,6 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
             # On Linux system, we don"t need to do this:
             # SNX_fname = SNX_fname.replace("/", "\\")    #===========>for windows
             # SNX_fname2 = SNX_fname2.replace("/", "\\")  #===========>for windows
-            
             new_str = "{0:<95}{1:4s}".format(SNX_fname, repr(1).rjust(4)) + temp_str[99:]
             fw.write(new_str)
             new_str2 = "{0:<95}{1:4s}".format(SNX_fname2, repr(1).rjust(4)) + temp_str[99:]
@@ -1825,10 +1809,10 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
 
             #fout_name = f"ET{scenarios.Crop[i]}{scenario}.OSU"  #Q: Do we need this?
             fout_name = f"CL{scenarios.Crop[i]}{scenario}.OSU"  #simulation start for climatolgoy first
-            arg_mv = f"mv Summary.OUT {fout_name}"   #Q: Do we need this? Yes we need this.
+            arg_mv = f"mv Summary.OUT {fout_name}"   #Q: Do we need this? => Yes, DSSAT-Linux does not allow FNAME=Y, and generate only summary.out
 
             os.system(args) 
-            os.system(arg_mv)  #Q: Do we need this? Yes we need this.
+            os.system(arg_mv) 
             #=====================================================================
             #=====================================================================
 
@@ -1846,7 +1830,7 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
             #============================================================
             # ===compute seasonal rainfall total from climatolgoy for trimester 1 & 2
             # WTD_fname = path.join(Wdir_path, scenarios.stn_name[i]+".WTD")
-            WTH_fname = path.join(Wdir_path, scenarios.sce_name[i]+repr(scenarios.Plt_date[i])[3:5] +"99.WTH")  # e.g., aaaa2199.WTH
+            WTH_fname = path.join(Wdir_path, scenarios.sce_name[i] + '_all.WTH') #+repr(scenarios.Plt_date[i])[3:5] +"99.WTH")  # e.g., aaaa2199.WTH
             if i ==0:
               df_FC = Rain_trimester_gen(WTH_fname, tri_doylist)
               df_CL = Rain_trimester_obs(WTD_fname, tri_doylist)
@@ -1932,24 +1916,6 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
         return [
             dcc.Graph(id="yield-boxplot", figure = yld_box, config = graph.config, ), 
             dcc.Graph(id="yield-exceedance", figure = yld_exc, config = graph.config, ),
-            # fcst-yieldtables-container
-            dash_table.DataTable(columns = [{"name": i, "id": i} for i in df.columns],data=df.to_dict("records"),
-              id="yield-table",
-              sort_action = "native",
-              sort_mode = "single",
-              style_table = {
-                "maxHeight": "30vh",
-                "overflow": "auto",
-                "minWidth": "100%",
-              },
-              fixed_rows = { "headers": True, "data": 0 },
-              fixed_columns = { "headers": True, "data": 1 },
-              style_cell = {   # all three widths are needed
-                "minWidth": "120px", "width": "120px", "maxWidth": "150px",
-                "overflow": "hidden",
-                "textOverflow": "ellipsis", 
-              }
-            ),            
             dic_sname, #EJ(7/27/2021)
             df.to_dict("records"),   #df_out.to_dict("records"),    #EJ(7/27/2021) check 
         ]
@@ -2155,7 +2121,7 @@ def Rain_trimester_obs(fname,tri_doylist):  #sname=> scenario name to make a col
     data = {"RainT1": np.array(sum_T1), "RainT2": np.array(sum_T2),}
     df_out = pd.DataFrame(data)
     # #write dataframe into CSV file for debugging
-    df_out.to_csv("C:\\IRI\\Dash_ET_forecast\\ET_forecast_windows\\TEST_ET\\trimester_rain_clim.csv", index=False)
+    # df_out.to_csv("C:\\IRI\\Dash_ET_forecast\\ET_forecast_windows\\TEST_ET\\trimester_rain_clim.csv", index=False)
     return df_out
 #====================================================================
 # End of computing seasonal total rainfall of climatology
@@ -2251,7 +2217,7 @@ def Rain_trimester_gen(fname,tri_doylist):  #sname=> scenario name to make a col
     data = {"RainT1": np.array(sum_T1), "RainT2": np.array(sum_T2),}
     df_out = pd.DataFrame(data)
     # #write dataframe into CSV file for debugging
-    df_out.to_csv("C:\\IRI\\Dash_ET_forecast\\ET_forecast_windows\\TEST_ET\\trimester_rain_frst.csv", index=False)
+    # df_out.to_csv("C:\\IRI\\Dash_ET_forecast\\ET_forecast_windows\\TEST_ET\\trimester_rain_frst.csv", index=False)
     return df_out
 #====================================================================
 # End of reading observations (WTD file) into a matrix 

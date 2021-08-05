@@ -18,9 +18,9 @@
 ##NOTE: here I assume that *.WTD file has data from doy = 1 to doy = 365
 ##==============
 import numpy as np
-import matplotlib.pyplot as plt
-import math
-import calendar
+# import matplotlib.pyplot as plt
+# import math
+# import calendar
 from scipy import stats
 from scipy.stats import kurtosis, skew
 from numpy.linalg import inv
@@ -32,7 +32,8 @@ import sys
 import os
 from os import path # path
 from apps.ethiopia.exp_mixture_model import EMM, EMMs  
-# from exp_mixture_model import EMM, EMMs
+from exp_mixture_model import EMM, EMMs  
+from exp_mixture_model import generate_emm 
 
 def progressbar(it, prefix="", size=60, file=sys.stdout):
     #https://stackoverflow.com/questions/3160699/python-progress-bar

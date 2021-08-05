@@ -13,7 +13,9 @@ start_time = time.process_time()
 
 def run_FResampler(df_tab, tri_doylist, Wdir_path):   
     WSTA =df_tab.stn_name.values[0] 
+    print("inside run_FResampler")
     WTD_fname = path.join(Wdir_path, WSTA+".WTD")
+    print(WTD_fname)
     trimester1 = df_tab.Trimester1.values[0]  #"JJA followed by SON"
     planting_date = df_tab.Plt_date.values[0]
     plt_year = planting_date[:4] 
@@ -208,6 +210,7 @@ def run_FResampler(df_tab, tri_doylist, Wdir_path):
 #===============================================================
 # === Read daily observations into a dataframe (note: Feb 29th was skipped in df_obs)
 def read_WTD(fname):
+    print(fname)
     #1) Read daily observations into a matrix (note: Feb 29th was skipped)
     # WTD_fname = r'C:\Users\Eunjin\IRI\Hybrid_WGEN\CNRA.WTD'
     #1) read observed weather *.WTD (skip 1st row - heading)
