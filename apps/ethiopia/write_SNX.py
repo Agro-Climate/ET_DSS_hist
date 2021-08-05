@@ -425,12 +425,19 @@ def writeSNX_frst(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initi
     soil_depth, wp, fc, nlayer, SLTX = get_soil_IC(SOL_file, ID_SOIL)
     SLDP = repr(soil_depth[-1])
     ID_FIELD = scenario[:4] + "0001"
-    WSTA_ID =  scenario[:4]+ plt_year[2:] +"99"  #EJ(7/27/2021) generated weather are stored in ONE long WTH file for the next 100 yr simulations
+    # WSTA_ID =  scenario[:4]+ plt_year[2:] +"99"  #EJ(7/27/2021) generated weather are stored in ONE long WTH file for the next 100 yr simulations
+    # # This line must not be changed for Linux version - DSSAt seems to be sensitive to spacing
+    # fw.write(
+    #     "{0:2s} {1:8s} {2:8s}{3:36s} {4:4s}  {5:4s}  {6:10s}{7:4s}".format(FL.rjust(2), ID_FIELD, WSTA_ID,
+    #                                                                     "   -99   -99   -99   -99   -99   -99",
+    #                                                                     SLTX.rjust(4), SLDP.rjust(4), ID_SOIL,
+    #                                                                     " -99"))
+    WSTA_ID = scenario[:4].upper()
     # This line must not be changed for Linux version - DSSAt seems to be sensitive to spacing
     fw.write(
-        "{0:2s} {1:8s} {2:8s}{3:36s} {4:4s}  {5:4s}  {6:10s}{7:4s}".format(FL.rjust(2), ID_FIELD, WSTA_ID,
-                                                                        "   -99   -99   -99   -99   -99   -99",
-                                                                        SLTX.rjust(4), SLDP.rjust(4), ID_SOIL,
+        "{0:2s} {1:8s}{2:5s}{3:3s}{4:6s}{5:4s}  {6:10s}{7:4s}".format(FL.rjust(2), ID_FIELD, WSTA_ID.rjust(5),
+                                                                        "       -99   -99   -99   -99   -99   -99 ",
+                                                                        SLTX.ljust(6), SLDP.rjust(4), ID_SOIL,
                                                                         " -99"))
     fw.write(" \n")
     temp_str = fr.readline()  # 1 -99      CCER       -99   -99 DR000   -99   -99
@@ -709,12 +716,19 @@ def writeSNX_frst_FR(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,in
     soil_depth, wp, fc, nlayer, SLTX = get_soil_IC(SOL_file, ID_SOIL)
     SLDP = repr(soil_depth[-1])
     ID_FIELD = scenario[:4] + "0001"
-    WSTA_ID =  scenario[:4]+ plt_year[2:] +"99"  #EJ(7/27/2021) generated weather are stored in ONE long WTH file for the next 100 yr simulations
+    # WSTA_ID =  scenario[:4]+ plt_year[2:] +"99"  #EJ(7/27/2021) generated weather are stored in ONE long WTH file for the next 100 yr simulations
+    # # This line must not be changed for Linux version - DSSAt seems to be sensitive to spacing
+    # fw.write(
+    #     "{0:2s} {1:8s} {2:8s}{3:36s} {4:4s}  {5:4s}  {6:10s}{7:4s}".format(FL.rjust(2), ID_FIELD, WSTA_ID,
+    #                                                                     "   -99   -99   -99   -99   -99   -99",
+    #                                                                     SLTX.rjust(4), SLDP.rjust(4), ID_SOIL,
+    #                                                                     " -99"))
+    WSTA_ID = scenario[:4].upper()
     # This line must not be changed for Linux version - DSSAt seems to be sensitive to spacing
     fw.write(
-        "{0:2s} {1:8s} {2:8s}{3:36s} {4:4s}  {5:4s}  {6:10s}{7:4s}".format(FL.rjust(2), ID_FIELD, WSTA_ID,
-                                                                        "   -99   -99   -99   -99   -99   -99",
-                                                                        SLTX.rjust(4), SLDP.rjust(4), ID_SOIL,
+        "{0:2s} {1:8s}{2:5s}{3:3s}{4:6s}{5:4s}  {6:10s}{7:4s}".format(FL.rjust(2), ID_FIELD, WSTA_ID.rjust(5),
+                                                                        "       -99   -99   -99   -99   -99   -99 ",
+                                                                        SLTX.ljust(6), SLDP.rjust(4), ID_SOIL,
                                                                         " -99"))
     fw.write(" \n")
     temp_str = fr.readline()  # 1 -99      CCER       -99   -99 DR000   -99   -99

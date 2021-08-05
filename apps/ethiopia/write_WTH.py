@@ -109,16 +109,16 @@ def write_WTH_ensemble(IC_date, df_gen, Wdir_path, LAT, LONG, ELEV, TAV, AMP, sc
         print( '**ERROR in def write_WTH_ensemble: planting year does not match with the year WGEN generated ')
         os.system('pause')
 
-    fout_WTH = path.join(Wdir_path, sce_name + repr(plt_year)[2:4]+'99'+'.WTH') 
-    # fout_WTH = Wdir_path.replace("/","\\") + '\\' + sce_name + repr(plt_year)[2:4]+'99'+'.WTH'
-    f_rz = open(fout_WTH,"w") #opens file
-    f_rz.write("*WEATHER DATA : "+sce_name + "\n")
-    f_rz.write(" \n")
-    f_rz.write("@ INSI      LAT     LONG  ELEV   TAV   AMP REFHT WNDHT \n")
-    f_rz.write('{0:s} {1:4s} {2:8.3f} {3:8.3f} {4:5.1f} {5:5.1f} {6:5.1f} {7:5.1f} {8:5.1f}'.format(' ', sce_name,   
+    #EJ(8/4/2021) make ONE WTH file which contains long gerated weather data
+    fout_WTH = path.join(Wdir_path, sce_name + '_all.WTH') 
+    f1_rz = open(fout_WTH,"w") #opens file
+    f1_rz.write("*WEATHER DATA : "+sce_name + "\n")
+    f1_rz.write(" \n")
+    f1_rz.write("@ INSI      LAT     LONG  ELEV   TAV   AMP REFHT WNDHT \n")
+    f1_rz.write('{0:s} {1:4s} {2:8.3f} {3:8.3f} {4:5.1f} {5:5.1f} {6:5.1f} {7:5.1f} {8:5.1f}'.format(' ', sce_name,   
                 LAT, LONG, ELEV, TAV, AMP, REFHT, WNDHT))         
-    f_rz.write(" \n")  
-    f_rz.write("@DATE  SRAD  TMAX  TMIN  RAIN  DEWP  WIND   PAR  EVAP  RHUM  \n")
+    f1_rz.write(" \n")  
+    f1_rz.write("@DATE  SRAD  TMAX  TMIN  RAIN  DEWP  WIND   PAR  EVAP  RHUM  \n")
    
     if calendar.isleap(plt_year):  
         ndays = 366
@@ -148,13 +148,36 @@ def write_WTH_ensemble(IC_date, df_gen, Wdir_path, LAT, LONG, ELEV, TAV, AMP, sc
         
         if calendar.isleap(iyear):  
             if calendar.isleap(plt_year):
+                #=========write header
+                fout_WTH = path.join(Wdir_path, sce_name.upper() + repr(plt_year+ii)[2:4]+'01.WTH') 
+                f_rz = open(fout_WTH,"w") #opens file
+                f_rz.write("*WEATHER DATA : "+sce_name + "\n")
+                f_rz.write(" \n")
+                f_rz.write("@ INSI      LAT     LONG  ELEV   TAV   AMP REFHT WNDHT \n")
+                f_rz.write('{0:s} {1:4s} {2:8.3f} {3:8.3f} {4:5.1f} {5:5.1f} {6:5.1f} {7:5.1f} {8:5.1f}'.format(' ', sce_name,   
+                            LAT, LONG, ELEV, TAV, AMP, REFHT, WNDHT))         
+                f_rz.write(" \n")  
+                f_rz.write("@DATE  SRAD  TMAX  TMIN  RAIN  DEWP  WIND   PAR  EVAP  RHUM  \n")
+                #=========write header
                 df2array = df.values  #convert datafrme to numpy array
                 fmt = '%5s %5.1f %5.1f %5.1f %5.1f'
                 fmt = '\n'.join([fmt]*df2array.shape[0])
                 data = fmt % tuple(df2array.ravel())   
                 f_rz.write(data)
                 f_rz.write(" \n")
+                f_rz.close
             else:
+                #=========write header
+                fout_WTH = path.join(Wdir_path, sce_name.upper() + repr(plt_year+ii)[2:4]+'01.WTH') 
+                f_rz = open(fout_WTH,"w") #opens file
+                f_rz.write("*WEATHER DATA : "+sce_name + "\n")
+                f_rz.write(" \n")
+                f_rz.write("@ INSI      LAT     LONG  ELEV   TAV   AMP REFHT WNDHT \n")
+                f_rz.write('{0:s} {1:4s} {2:8.3f} {3:8.3f} {4:5.1f} {5:5.1f} {6:5.1f} {7:5.1f} {8:5.1f}'.format(' ', sce_name,   
+                            LAT, LONG, ELEV, TAV, AMP, REFHT, WNDHT))         
+                f_rz.write(" \n")  
+                f_rz.write("@DATE  SRAD  TMAX  TMIN  RAIN  DEWP  WIND   PAR  EVAP  RHUM  \n")
+                #=========write header
                 df2array = df.values
                 df2array = np.vstack([df2array, df2array[-1,:]])  #copy data from 365 and make a data for DOY=366 in case of a leap year
                 df2array[-1,0]= df2array[-1,0][:2] + '366'   #replace 365 with 366
@@ -163,24 +186,96 @@ def write_WTH_ensemble(IC_date, df_gen, Wdir_path, LAT, LONG, ELEV, TAV, AMP, sc
                 data = fmt % tuple(df2array.ravel())   
                 f_rz.write(data)  #check
                 f_rz.write(" \n")
+                f_rz.close
         else:
             if calendar.isleap(plt_year):
+                #=========write header
+                fout_WTH = path.join(Wdir_path, sce_name.upper() + repr(plt_year+ii)[2:4]+'01.WTH') 
+                f_rz = open(fout_WTH,"w") #opens file
+                f_rz.write("*WEATHER DATA : "+sce_name + "\n")
+                f_rz.write(" \n")
+                f_rz.write("@ INSI      LAT     LONG  ELEV   TAV   AMP REFHT WNDHT \n")
+                f_rz.write('{0:s} {1:4s} {2:8.3f} {3:8.3f} {4:5.1f} {5:5.1f} {6:5.1f} {7:5.1f} {8:5.1f}'.format(' ', sce_name,   
+                            LAT, LONG, ELEV, TAV, AMP, REFHT, WNDHT))         
+                f_rz.write(" \n")  
+                f_rz.write("@DATE  SRAD  TMAX  TMIN  RAIN  DEWP  WIND   PAR  EVAP  RHUM  \n")
+                #=========write header
                 df2array = df.values[:-1,:] #check => remove DOY=366
                 fmt = '%5s %5.1f %5.1f %5.1f %5.1f'
                 fmt = '\n'.join([fmt]*df2array.shape[0])
                 data = fmt % tuple(df2array.ravel())   
                 f_rz.write(data)  #check
                 f_rz.write(" \n")
+                f_rz.close
             else:
+                #=========write header
+                fout_WTH = path.join(Wdir_path, sce_name.upper() + repr(plt_year+ii)[2:4]+'01.WTH') 
+                f_rz = open(fout_WTH,"w") #opens file
+                f_rz.write("*WEATHER DATA : "+sce_name + "\n")
+                f_rz.write(" \n")
+                f_rz.write("@ INSI      LAT     LONG  ELEV   TAV   AMP REFHT WNDHT \n")
+                f_rz.write('{0:s} {1:4s} {2:8.3f} {3:8.3f} {4:5.1f} {5:5.1f} {6:5.1f} {7:5.1f} {8:5.1f}'.format(' ', sce_name,   
+                            LAT, LONG, ELEV, TAV, AMP, REFHT, WNDHT))         
+                f_rz.write(" \n")  
+                f_rz.write("@DATE  SRAD  TMAX  TMIN  RAIN  DEWP  WIND   PAR  EVAP  RHUM  \n")
+                #=========write header
                 df2array = df.values
                 fmt = '%5s %5.1f %5.1f %5.1f %5.1f'
                 fmt = '\n'.join([fmt]*df2array.shape[0])
                 data = fmt % tuple(df2array.ravel())   
                 f_rz.write(data)
                 f_rz.write(" \n")
-
+                f_rz.close
         start_date = start_date + ndays  #move to next realizations for writing another new year
-    f_rz.close  #end of writing 100 years repeatedly 
+    #==============================================
+    #EJ(8/4/2021)write one WTH file for 100 consecutive years => this file is ued for computing seasonal total rainfall "Rain_trimester_gen"
+    start_date = 0  #EJ (6/15/2020): strt to write from DOY=1 of the year
+    for ii in range(0,nrealiz):      
+        #second, write ensemble weather realizations
+        #This is much time-efficient
+        #source: https://stackoverflow.com/questions/53820891/speed-of-writing-a-numpy-array-to-a-text-file
+        iyear = df_gen["YEAR2"].values[ndays*(ii)]  #one of the future generated years
+        df_temp = df_gen.iloc[start_date:ndays*(ii+1)].copy()
+        df = pd.DataFrame({'YYDOY':df_temp.YEAR2[:].astype(str).str.slice(start=2)+df_temp.DOY[:],
+                    'SRAD':df_temp.SRAD.values,
+                    'TMAX':df_temp.TMAX.values,
+                    'TMIN':df_temp.TMIN.values,
+                    'RAIN':df_temp.RAIN.values})
+        
+        if calendar.isleap(iyear):  
+            if calendar.isleap(plt_year):
+                df2array = df.values  #convert datafrme to numpy array
+                fmt = '%5s %5.1f %5.1f %5.1f %5.1f'
+                fmt = '\n'.join([fmt]*df2array.shape[0])
+                data = fmt % tuple(df2array.ravel())   
+                f1_rz.write(data)
+                f1_rz.write(" \n")
+            else:
+                df2array = df.values
+                df2array = np.vstack([df2array, df2array[-1,:]])  #copy data from 365 and make a data for DOY=366 in case of a leap year
+                df2array[-1,0]= df2array[-1,0][:2] + '366'   #replace 365 with 366
+                fmt = '%5s %5.1f %5.1f %5.1f %5.1f'
+                fmt = '\n'.join([fmt]*df2array.shape[0])
+                data = fmt % tuple(df2array.ravel())   
+                f1_rz.write(data)  #check
+                f1_rz.write(" \n")
+        else:
+            if calendar.isleap(plt_year):
+                df2array = df.values[:-1,:] #check => remove DOY=366
+                fmt = '%5s %5.1f %5.1f %5.1f %5.1f'
+                fmt = '\n'.join([fmt]*df2array.shape[0])
+                data = fmt % tuple(df2array.ravel())   
+                f1_rz.write(data)  #check
+                f1_rz.write(" \n")
+            else:
+                df2array = df.values
+                fmt = '%5s %5.1f %5.1f %5.1f %5.1f'
+                fmt = '\n'.join([fmt]*df2array.shape[0])
+                data = fmt % tuple(df2array.ravel())   
+                f1_rz.write(data)
+                f1_rz.write(" \n")
+        start_date = start_date + ndays  #move to next realizations for writing another new year
+    f1_rz.close  #end of writing 100 years repeatedly 
 
 
 #frst_date1 [YYYYDOY format]=> the first date of SCF window
@@ -197,16 +292,16 @@ def write_WTH_obs_ensemble(IC_date, frst_date1, WTD_df, df_gen, Wdir_path, LAT, 
         print( '**ERROR in def write_WTH_ensemble: planting year does not match with the year WGEN generated ')
         os.system('pause')
 
-    fout_WTH = path.join(Wdir_path, sce_name + repr(plt_year)[2:4]+'99'+'.WTH') 
-    # fout_WTH = Wdir_path.replace("/","\\") + '\\' + sce_name + repr(plt_year)[2:4]+'99'+'.WTH'
-    f_rz = open(fout_WTH,"w") #opens file
-    f_rz.write("*WEATHER DATA : "+sce_name + "\n")
-    f_rz.write(" \n")
-    f_rz.write("@ INSI      LAT     LONG  ELEV   TAV   AMP REFHT WNDHT \n")
-    f_rz.write('{0:s} {1:4s} {2:8.3f} {3:8.3f} {4:5.1f} {5:5.1f} {6:5.1f} {7:5.1f} {8:5.1f}'.format(' ', sce_name,   
+    #EJ(8/4/2021) make ONE WTH file which contains long gerated weather data
+    fout_WTH = path.join(Wdir_path, sce_name + '_all.WTH') 
+    f1_rz = open(fout_WTH,"w") #opens file
+    f1_rz.write("*WEATHER DATA : "+sce_name + "\n")
+    f1_rz.write(" \n")
+    f1_rz.write("@ INSI      LAT     LONG  ELEV   TAV   AMP REFHT WNDHT \n")
+    f1_rz.write('{0:s} {1:4s} {2:8.3f} {3:8.3f} {4:5.1f} {5:5.1f} {6:5.1f} {7:5.1f} {8:5.1f}'.format(' ', sce_name,   
                 LAT, LONG, ELEV, TAV, AMP, REFHT, WNDHT))         
-    f_rz.write(" \n")  
-    f_rz.write("@DATE  SRAD  TMAX  TMIN  RAIN  DEWP  WIND   PAR  EVAP  RHUM  \n")
+    f1_rz.write(" \n")  
+    f1_rz.write("@DATE  SRAD  TMAX  TMIN  RAIN  DEWP  WIND   PAR  EVAP  RHUM  \n")
    
 
     if calendar.isleap(frst_date1//1000):  
@@ -236,7 +331,7 @@ def write_WTH_obs_ensemble(IC_date, frst_date1, WTD_df, df_gen, Wdir_path, LAT, 
                 'TMIN':WTD_df2.TMIN.values,
                 'RAIN':WTD_df2.RAIN.values})
     
-    #write one WTH file for 100 consecutive years
+    #write 100 separate WTH files for 100 consecutive years
     for ii in range(0,nrealiz):
         iyear = df_gen["YEAR2"].values[ndays*(ii)]  #one of the future generated years
         #1) from DOY=1 to IC_date, write generate weather from climatology
@@ -266,17 +361,40 @@ def write_WTH_obs_ensemble(IC_date, frst_date1, WTD_df, df_gen, Wdir_path, LAT, 
         #concatenate 3 df
         df = df1.append(df_obs, ignore_index=True)
         df = df.append(df2, ignore_index=True)
-        print(df)
+        # print(df)
 
         if calendar.isleap(iyear):  
             if calendar.isleap(plt_year):
+                #=========write header
+                fout_WTH = path.join(Wdir_path, sce_name.upper() + repr(plt_year+ii)[2:4]+'01.WTH') 
+                f_rz = open(fout_WTH,"w") #opens file
+                f_rz.write("*WEATHER DATA : "+sce_name + "\n")
+                f_rz.write(" \n")
+                f_rz.write("@ INSI      LAT     LONG  ELEV   TAV   AMP REFHT WNDHT \n")
+                f_rz.write('{0:s} {1:4s} {2:8.3f} {3:8.3f} {4:5.1f} {5:5.1f} {6:5.1f} {7:5.1f} {8:5.1f}'.format(' ', sce_name,   
+                            LAT, LONG, ELEV, TAV, AMP, REFHT, WNDHT))         
+                f_rz.write(" \n")  
+                f_rz.write("@DATE  SRAD  TMAX  TMIN  RAIN  DEWP  WIND   PAR  EVAP  RHUM  \n")
+                #=========write header
                 df2array = df.values  #convert datafrme to numpy array
                 fmt = '%5s %5.1f %5.1f %5.1f %5.1f'
                 fmt = '\n'.join([fmt]*df2array.shape[0])
                 data = fmt % tuple(df2array.ravel())   
                 f_rz.write(data)
                 f_rz.write(" \n")
+                f_rz.close
             else:
+                #=========write header
+                fout_WTH = path.join(Wdir_path, sce_name.upper() + repr(plt_year+ii)[2:4]+'01.WTH') 
+                f_rz = open(fout_WTH,"w") #opens file
+                f_rz.write("*WEATHER DATA : "+sce_name + "\n")
+                f_rz.write(" \n")
+                f_rz.write("@ INSI      LAT     LONG  ELEV   TAV   AMP REFHT WNDHT \n")
+                f_rz.write('{0:s} {1:4s} {2:8.3f} {3:8.3f} {4:5.1f} {5:5.1f} {6:5.1f} {7:5.1f} {8:5.1f}'.format(' ', sce_name,   
+                            LAT, LONG, ELEV, TAV, AMP, REFHT, WNDHT))         
+                f_rz.write(" \n")  
+                f_rz.write("@DATE  SRAD  TMAX  TMIN  RAIN  DEWP  WIND   PAR  EVAP  RHUM  \n")
+                #=========write header
                 df2array = df.values
                 df2array = np.vstack([df2array, df2array[-1,:]])  #copy data from 365 and make a data for DOY=366 in case of a leap year
                 df2array[-1,0]= df2array[-1,0][:2] + '366'   #replace 365 with 366
@@ -285,24 +403,112 @@ def write_WTH_obs_ensemble(IC_date, frst_date1, WTD_df, df_gen, Wdir_path, LAT, 
                 data = fmt % tuple(df2array.ravel())   
                 f_rz.write(data)  #check
                 f_rz.write(" \n")
+                f_rz.close
         else:
             if calendar.isleap(plt_year):
+                #=========write header
+                fout_WTH = path.join(Wdir_path, sce_name.upper() + repr(plt_year+ii)[2:4]+'01.WTH') #Linux looks for all capital for WTH name
+                f_rz = open(fout_WTH,"w") #opens file
+                f_rz.write("*WEATHER DATA : "+sce_name + "\n")
+                f_rz.write(" \n")
+                f_rz.write("@ INSI      LAT     LONG  ELEV   TAV   AMP REFHT WNDHT \n")
+                f_rz.write('{0:s} {1:4s} {2:8.3f} {3:8.3f} {4:5.1f} {5:5.1f} {6:5.1f} {7:5.1f} {8:5.1f}'.format(' ', sce_name,   
+                            LAT, LONG, ELEV, TAV, AMP, REFHT, WNDHT))         
+                f_rz.write(" \n")  
+                f_rz.write("@DATE  SRAD  TMAX  TMIN  RAIN  DEWP  WIND   PAR  EVAP  RHUM  \n")
+                #=========write header
                 df2array = df.values[:-1,:] #check => remove DOY=366
                 fmt = '%5s %5.1f %5.1f %5.1f %5.1f'
                 fmt = '\n'.join([fmt]*df2array.shape[0])
                 data = fmt % tuple(df2array.ravel())   
                 f_rz.write(data)  #check
                 f_rz.write(" \n")
+                f_rz.close
             else:
+                #=========write header
+                fout_WTH = path.join(Wdir_path, sce_name.upper() + repr(plt_year+ii)[2:4]+'01.WTH') 
+                f_rz = open(fout_WTH,"w") #opens file
+                f_rz.write("*WEATHER DATA : "+sce_name + "\n")
+                f_rz.write(" \n")
+                f_rz.write("@ INSI      LAT     LONG  ELEV   TAV   AMP REFHT WNDHT \n")
+                f_rz.write('{0:s} {1:4s} {2:8.3f} {3:8.3f} {4:5.1f} {5:5.1f} {6:5.1f} {7:5.1f} {8:5.1f}'.format(' ', sce_name,   
+                            LAT, LONG, ELEV, TAV, AMP, REFHT, WNDHT))         
+                f_rz.write(" \n")  
+                f_rz.write("@DATE  SRAD  TMAX  TMIN  RAIN  DEWP  WIND   PAR  EVAP  RHUM  \n")
+                #=========write header
                 df2array = df.values
                 fmt = '%5s %5.1f %5.1f %5.1f %5.1f'
                 fmt = '\n'.join([fmt]*df2array.shape[0])
                 data = fmt % tuple(df2array.ravel())   
                 f_rz.write(data)
                 f_rz.write(" \n")
-
+                f_rz.close
         start_date = start_date + ndays  #move to next realizations for writing another new year
-    f_rz.close
+    #==============================================
+    #EJ(8/4/2021)write one WTH file for 100 consecutive years => this file is ued for computing seasonal total rainfall "Rain_trimester_gen"
+    start_date = frst_date1%1000-1   #start_date [DOY inteer]=> start date to write ensemble weather realizations
+    for ii in range(0,nrealiz):
+        iyear = df_gen["YEAR2"].values[ndays*(ii)]  #one of the future generated years
+        #1) from DOY=1 to IC_date, write generate weather from climatology
+        df_temp = df_gen.iloc[ndays*ii:ndays*ii+IC_date%1000-1].copy()
+        df1 = pd.DataFrame({'YYDOY':df_temp.YEAR2[:].astype(str).str.slice(start=2)+df_temp.DOY[:],
+                    'SRAD':df_temp.SRAD.values,
+                    'TMAX':df_temp.TMAX.values,
+                    'TMIN':df_temp.TMIN.values,
+                    'RAIN':df_temp.RAIN.values})
+        #2) from IC_date to frst_date1, obs weather
+        df_obs = WTD_df3.copy()
+        if ii > 0: #update year for the hypothetical future years
+            temp = df_obs.YYDOY.values  #string in 'YYDOY'
+            if int(temp[0][:2]) < 50:  #maybe 1950 is the threshold year to distinghish 1900s vs 2000s
+                temp2 = temp.astype('int') + (2000 + ii)*1000 
+            else:
+                temp2 = temp.astype('int') + (1900 + ii)*1000
+            df_obs["YYDOY"] = [x.astype('str')[2:] for x in temp2]
+
+        #3) from frst_date1,  write generated weather from SCF
+        df_temp = df_gen.iloc[start_date:ndays*(ii+1)].copy()
+        df2 = pd.DataFrame({'YYDOY':df_temp.YEAR2[:].astype(str).str.slice(start=2)+df_temp.DOY[:],
+                    'SRAD':df_temp.SRAD.values,
+                    'TMAX':df_temp.TMAX.values,
+                    'TMIN':df_temp.TMIN.values,
+                    'RAIN':df_temp.RAIN.values})
+        #concatenate 3 df
+        df = df1.append(df_obs, ignore_index=True)
+        df = df.append(df2, ignore_index=True)
+        # print(df)
+
+        if calendar.isleap(iyear):  
+            if calendar.isleap(plt_year):
+                df2array = df.values  #convert datafrme to numpy array
+                fmt = '%5s %5.1f %5.1f %5.1f %5.1f'
+                fmt = '\n'.join([fmt]*df2array.shape[0])
+                data = fmt % tuple(df2array.ravel())   
+                f1_rz.write(data)
+            else:
+                df2array = df.values
+                df2array = np.vstack([df2array, df2array[-1,:]])  #copy data from 365 and make a data for DOY=366 in case of a leap year
+                df2array[-1,0]= df2array[-1,0][:2] + '366'   #replace 365 with 366
+                fmt = '%5s %5.1f %5.1f %5.1f %5.1f'
+                fmt = '\n'.join([fmt]*df2array.shape[0])
+                data = fmt % tuple(df2array.ravel())   
+                f1_rz.write(data)  #check
+        else:
+            if calendar.isleap(plt_year):
+                df2array = df.values[:-1,:] #check => remove DOY=366
+                fmt = '%5s %5.1f %5.1f %5.1f %5.1f'
+                fmt = '\n'.join([fmt]*df2array.shape[0])
+                data = fmt % tuple(df2array.ravel())   
+                f1_rz.write(data)  #check
+            else:
+                df2array = df.values
+                fmt = '%5s %5.1f %5.1f %5.1f %5.1f'
+                fmt = '\n'.join([fmt]*df2array.shape[0])
+                data = fmt % tuple(df2array.ravel())   
+                f1_rz.write(data)
+        #=============================================
+        start_date = start_date + ndays  #move to next realizations for writing another new year
+    f1_rz.close
     return
 
 #===================================================================
