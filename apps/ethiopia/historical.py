@@ -1090,7 +1090,7 @@ def make_sce_table(
                     "NAmount": [fa1, fa2, fa3, fa4, ],
                 })
 
-                crop_price = float(csv_df.CropPrice[i]) # float
+                crop_price = float(csv_df.CropPrice[i]) if csv_df.CropPrice[i] != -99 else "-99" # float
                 seed_cost = float(csv_df.NFertCost[i]) # float
                 fert_cost = float(csv_df.SeedCost[i]) # float
                 fixed_costs = float(csv_df.OtherVariableCosts[i]) # float
@@ -1148,14 +1148,14 @@ def make_sce_table(
 
                 EB_valid = True
                 if (
-                        crop_price < 0
+                        float(crop_price) < 0
                     or  seed_cost < 0
                     or  fert_cost < 0
                     or  fixed_costs < 0
                     or  variable_costs < 0
                 ):
                     if not (
-                            crop_price == -99
+                            float(crop_price) == -99
                         and seed_cost == -99
                         and fert_cost == -99
                         and fixed_costs == -99
@@ -1164,11 +1164,11 @@ def make_sce_table(
                         EB_valid = False
                 else:
                     if not (
-                            (crop_price*10.0).is_integer()
-                        and  (seed_cost*10.0).is_integer()
-                        and  (fert_cost*10.0).is_integer()
-                        and  (fixed_costs*10.0).is_integer()
-                        and  (variable_costs*10.0).is_integer()
+                            (float(crop_price)*10.0).is_integer()
+                        and (seed_cost*10.0).is_integer()
+                        and (fert_cost*10.0).is_integer()
+                        and (fixed_costs*10.0).is_integer()
+                        and (variable_costs*10.0).is_integer()
                     ):
                         EB_valid = False          
 
