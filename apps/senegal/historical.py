@@ -1317,7 +1317,7 @@ def show_hide_EBtable(EB_radio, scenarios):
     if existing_sces.empty:
         return {"display": "none"}
     else:
-        if existing_sces.sce_name.values[0] == "N/A" or set(existing_sces.CropPrice.values) == {"-99"}:
+        if existing_sces.sce_name.values[0] == "N/A" or set(existing_sces.CropPrice.values) == {-99}:
             return {"display": "none"}
         else:
             return {}
@@ -1697,19 +1697,19 @@ def make_sce_table(
             "sce_name": [scenario], "Crop": [crop], "Cultivar": [cultivar[7:]], "stn_name": [station], "PltDate": [planting_date[5:]], 
             "FirstYear": [start_year], "LastYear": [end_year], "soil": [soil_type], "iH2O": [initial_soil_moisture], 
             "iNO3": [initial_soil_no3], "plt_density": [planting_density], "TargetYr": [target_year], 
-            "Fert_1_DOY": ["-99"], "N_1_Kg": ["-99"], "P_1_Kg": ["-99"], "K_1_Kg": ["-99"], 
-            "Fert_2_DOY": ["-99"], "N_2_Kg": ["-99"], "P_2_Kg": ["-99"], "K_2_Kg": ["-99"], 
-            "Fert_3_DOY": ["-99"], "N_3_Kg": ["-99"], "P_3_Kg": ["-99"], "K_3_Kg": ["-99"], 
-            "Fert_4_DOY": ["-99"], "N_4_Kg": ["-99"], "P_4_Kg": ["-99"], "K_4_Kg": ["-99"], 
-            "P_level": ["-99"],   #P simulation    EJ(7/72021)
-            "IR_method": ["-99"], #Irrigation on reported date
-            "IR_1_DOY": ["-99"], "IR_1_amt": ["-99"],
-            "IR_2_DOY": ["-99"], "IR_2_amt": ["-99"],
-            "IR_3_DOY": ["-99"], "IR_3_amt": ["-99"],
-            "IR_4_DOY": ["-99"], "IR_4_amt": ["-99"],
-            "IR_5_DOY": ["-99"], "IR_5_amt": ["-99"],
-            "AutoIR_depth":  ["-99"], "AutoIR_thres": ["-99"], "AutoIR_eff": ["-99"], #Irrigation automatic
-            "CropPrice": ["-99"], "NFertCost": ["-99"], "SeedCost": ["-99"], "OtherVariableCosts": ["-99"], "FixedCosts": ["-99"],  
+            "Fert_1_DOY": [-99], "N_1_Kg": [-99], "P_1_Kg": [-99], "K_1_Kg": [-99], 
+            "Fert_2_DOY": [-99], "N_2_Kg": [-99], "P_2_Kg": [-99], "K_2_Kg": [-99], 
+            "Fert_3_DOY": [-99], "N_3_Kg": [-99], "P_3_Kg": [-99], "K_3_Kg": [-99], 
+            "Fert_4_DOY": [-99], "N_4_Kg": [-99], "P_4_Kg": [-99], "K_4_Kg": [-99], 
+            "P_level": [-99],   #P simulation    EJ(7/72021)
+            "IR_method": [-99], #Irrigation on reported date
+            "IR_1_DOY": [-99], "IR_1_amt": [-99],
+            "IR_2_DOY": [-99], "IR_2_amt": [-99],
+            "IR_3_DOY": [-99], "IR_3_amt": [-99],
+            "IR_4_DOY": [-99], "IR_4_amt": [-99],
+            "IR_5_DOY": [-99], "IR_5_amt": [-99],
+            "AutoIR_depth":  [-99], "AutoIR_thres": [-99], "AutoIR_eff": [-99], #Irrigation automatic
+            "CropPrice": [-99], "NFertCost": [-99], "SeedCost": [-99], "OtherVariableCosts": [-99], "FixedCosts": [-99],  
         })
 
         #=====================================================================
@@ -2147,7 +2147,7 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
     else: 
         # 1) Read saved scenario summaries and get a list of scenarios to run
         current_sces = pd.DataFrame(sce_in_table)
-        EB_sces = current_sces[current_sces["CropPrice"] != "-99"]
+        EB_sces = current_sces[current_sces["CropPrice"] != -99]
         sce_numbers = len(EB_sces.sce_name.values)
 
         if multiplier == None:
