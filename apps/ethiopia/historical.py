@@ -954,7 +954,7 @@ def show_hide_EBtable(EB_radio, scenarios):
     if existing_sces.empty:
         return {"display": "none"}
     else:
-        if existing_sces.sce_name.values[0] == "N/A" or set(existing_sces.CropPrice.values) == {"-99"}:
+        if existing_sces.sce_name.values[0] == "N/A" or set(existing_sces.CropPrice.values) == {-99}:
             return {"display": "none"}
         else:
             return {}
@@ -1090,7 +1090,7 @@ def make_sce_table(
                     "NAmount": [fa1, fa2, fa3, fa4, ],
                 })
 
-                crop_price = float(csv_df.CropPrice[i]) if csv_df.CropPrice[i] != -99 else "-99" # float
+                crop_price = float(csv_df.CropPrice[i]) if csv_df.CropPrice[i] != -99 else "-99" # float; str if none entered
                 seed_cost = float(csv_df.NFertCost[i]) # float
                 fert_cost = float(csv_df.SeedCost[i]) # float
                 fixed_costs = float(csv_df.OtherVariableCosts[i]) # float
@@ -1279,9 +1279,9 @@ def make_sce_table(
             "sce_name": [scenario], "Crop": [crop], "Cultivar": [cultivar], "stn_name": [station], "PltDate": [planting_date[5:]], 
             "FirstYear": [start_year], "LastYear": [end_year], "soil": [soil_type], "iH2O": [initial_soil_moisture], 
             "iNO3": [initial_soil_no3_content], "plt_density": [planting_density], "TargetYr": [target_year],
-            "Fert_1_DOY": ["-99"], "Fert_1_Kg": ["-99"], "Fert_2_DOY": ["-99"], "Fert_2_Kg": ["-99"], 
-            "Fert_3_DOY": ["-99"], "Fert_3_Kg": ["-99"], "Fert_4_DOY": ["-99"], "Fert_4_Kg": ["-99"], 
-            "CropPrice": ["-99"], "NFertCost": ["-99"], "SeedCost": ["-99"], "OtherVariableCosts": ["-99"], "FixedCosts": ["-99"],  
+            "Fert_1_DOY": [-99], "Fert_1_Kg": [-99], "Fert_2_DOY": [-99], "Fert_2_Kg": [-99], 
+            "Fert_3_DOY": [-99], "Fert_3_Kg": [-99], "Fert_4_DOY": [-99], "Fert_4_Kg": [-99], 
+            "CropPrice": [-99], "NFertCost": [-99], "SeedCost": [-99], "OtherVariableCosts": [-99], "FixedCosts": [-99],  
         })
 
         #=====================================================================
@@ -1671,7 +1671,7 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
     else:
         # 1) Read saved scenario summaries and get a list of scenarios to run
         current_sces = pd.DataFrame(sce_in_table)
-        EB_sces = current_sces[current_sces["CropPrice"] != "-99"]
+        EB_sces = current_sces[current_sces["CropPrice"] != -99]
         sce_numbers = len(EB_sces.sce_name.values)
 
         if multiplier == None:
