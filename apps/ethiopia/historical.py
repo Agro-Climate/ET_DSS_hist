@@ -1090,7 +1090,7 @@ def make_sce_table(
                     "NAmount": [fa1, fa2, fa3, fa4, ],
                 })
 
-                crop_price = float(csv_df.CropPrice[i]) if csv_df.CropPrice[i] != -99 else "-99" # float; str if none entered
+                crop_price = float(csv_df.CropPrice[i]) # float
                 seed_cost = float(csv_df.NFertCost[i]) # float
                 fert_cost = float(csv_df.SeedCost[i]) # float
                 fixed_costs = float(csv_df.OtherVariableCosts[i]) # float
