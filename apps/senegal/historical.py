@@ -29,11 +29,11 @@ import bisect   # an element into sorted list
 
 import graph
 
-sce_col_names=[ "sce_name", "Crop", "Cultivar","stn_name", "PltDate", "FirstYear", "LastYear", "soil","iH2O","iNO3","TargetYr",
-                "Fert_1_DOY","N_1_Kg","P_1_Kg","K_1_Kg", "Fert_2_DOY","N_2_Kg","P_2_Kg","K_2_Kg","Fert_3_DOY","N_3_Kg","P_3_Kg","K_3_Kg",
-                "Fert_4_DOY","N_4_Kg","P_4_Kg","K_4_Kg","P_level","IR_1_DOY", "IR_1_amt","IR_2_DOY", "IR_2_amt","IR_3_DOY","IR_3_amt", 
-                "IR_4_DOY","IR_4_amt","IR_5_DOY","IR_5_amt","AutoIR_depth","AutoIR_thres", "AutoIR_eff", 
-                "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"
+sce_col_names=[ "sce_name", "Crop", "Cultivar", "stn_name", "PltDate", "FirstYear", "LastYear", "soil", "iH2O", "iNO3", "plt_density", "TargetYr",
+                "Fert_1_DOY", "N_1_Kg", "P_1_Kg", "K_1_Kg", "Fert_2_DOY", "N_2_Kg", "P_2_Kg", "K_2_Kg", "Fert_3_DOY", "N_3_Kg", "P_3_Kg", "K_3_Kg",
+                "Fert_4_DOY", "N_4_Kg", "P_4_Kg", "K_4_Kg", "P_level", "IR_method", "IR_1_DOY", "IR_1_amt", "IR_2_DOY", "IR_2_amt", "IR_3_DOY", "IR_3_amt", 
+                "IR_4_DOY", "IR_4_amt", "IR_5_DOY", "IR_5_amt", "AutoIR_depth", "AutoIR_thres", "AutoIR_eff", 
+                "CropPrice", "NFertCost", "SeedCost", "OtherVariableCosts", "FixedCosts"
 ]
 
 
@@ -509,7 +509,7 @@ layout = html.Div([
                             ], 
                             value="IR004",
                             clearable=False,
-                          ),      
+                          ),
                           html.Div([
                             dbc.Row([
                               dbc.Col(
@@ -783,6 +783,7 @@ layout = html.Div([
                     {"id": "soil", "name": "Soil Type"},
                     {"id": "iH2O", "name": "Initial H2O"}, #"Initial Soil Water Content"},
                     {"id": "iNO3", "name": "Initial NO3"}, #"Initial Soil Nitrate Content"},
+                    {"id": "plt_density", "name": "Planting Density"},
                     {"id": "TargetYr", "name": "Target Yr"},
                     {"id": "Fert_1_DOY", "name": "FDOY(1)"},
                     {"id": "N_1_Kg", "name": "N(Kg/ha)(1)"},
@@ -801,6 +802,7 @@ layout = html.Div([
                     {"id": "P_4_Kg", "name": "P(Kg/ha)(4)"},
                     {"id": "K_4_Kg", "name": "K(Kg/ha)(4)"},
                     {"id": "P_level", "name": "Extractable P"},
+                    {"id": "IR_method", "name": "Irrigation Method"},
                     {"id": "IR_1_DOY", "name": "IDOY(1)"},
                     {"id": "IR_1_amt", "name": "IR(mm)(1)"},
                     {"id": "IR_2_DOY", "name": "IDOY(2)"},
@@ -1476,18 +1478,58 @@ def make_sce_table(
                 planting_density = str(csv_df.plt_density[i]) # str (original: float)
                 target_year = str(csv_df.TargetYr[i]) # str (original: int)
 
+                # fertiilizer simulation
                 fd1 = int(csv_df.Fert_1_DOY[i]) # int
-                fa1 = float(csv_df.Fert_1_Kg[i]) # float
+                fN1 = float(csv_df.N_1_Kg[i]) # float
+                fP1 = float(csv_df.P_1_Kg[i]) # float
+                fK1 = float(csv_df.K_1_Kg[i]) # float
                 fd2 = int(csv_df.Fert_2_DOY[i]) # int
-                fa2 = float(csv_df.Fert_2_Kg[i]) # float
+                fN2 = float(csv_df.N_2_Kg[i]) # float
+                fP2 = float(csv_df.P_2_Kg[i]) # float
+                fK2 = float(csv_df.K_2_Kg[i]) # float
                 fd3 = int(csv_df.Fert_3_DOY[i]) # int
-                fa3 = float(csv_df.Fert_3_Kg[i]) # float
+                fN3 = float(csv_df.N_3_Kg[i]) # float
+                fP3 = float(csv_df.P_3_Kg[i]) # float
+                fK3 = float(csv_df.K_3_Kg[i]) # float
                 fd4 = int(csv_df.Fert_4_DOY[i]) # int
-                fa4 = float(csv_df.Fert_4_Kg[i]) # float
+                fN4 = float(csv_df.N_4_Kg[i]) # float
+                fP4 = float(csv_df.P_4_Kg[i]) # float
+                fK4 = float(csv_df.K_4_Kg[i]) # float
+
                 current_fert = pd.DataFrame({
                     "DAP": [fd1, fd2, fd3, fd4, ],
-                    "NAmount": [fa1, fa2, fa3, fa4, ],
+                    "NAmount": [fN1, fN2, fN3, fN4, ],
+                    "PAmount": [fP1, fP2, fP3, fP4, ],
+                    "KAmount": [fK1, fK2, fK3, fK4, ],
                 })
+
+                # Phosphorous simualtion
+                p_level = csv_df.P_level[i] # str
+
+                # irrigation option
+                irrig_method = csv_df.IR_method[i] # str
+                
+                #on reported date
+                ird1 = int(csv_df.IR_1_DOY[i]) # int
+                iramt1 = float(csv_df.IR_1_amt[i]) # float
+                ird2 = int(csv_df.IR_2_DOY[i]) # int
+                iramt2 = float(csv_df.IR_2_amt[i]) # float
+                ird3 = int(csv_df.IR_3_DOY[i]) # int
+                iramt3 = float(csv_df.IR_3_amt[i]) # float
+                ird4 = int(csv_df.IR_4_DOY[i]) # int
+                iramt4 = float(csv_df.IR_4_amt[i]) # float
+                ird5 = int(csv_df.IR_5_DOY[i]) # int
+                iramt5 = float(csv_df.IR_5_amt[i]) # float
+            
+                current_irrig = pd.DataFrame({
+                    "DAP": [ird1, ird2, ird3, ird4, ird5,],
+                    "WAmount": [iramt1, iramt2, iramt3, iramt4,iramt5,],
+                })
+
+                #automatic when required
+                ir_depth = float(csv_df.AutoIR_depth[i]) # float
+                ir_threshold = float(csv_df.AutoIR_thres[i]) # float
+                ir_eff = float(csv_df.AutoIR_eff[i]) # float
 
                 crop_price = float(csv_df.CropPrice[i]) # float
                 seed_cost = float(csv_df.NFertCost[i]) # float
@@ -1505,17 +1547,42 @@ def make_sce_table(
                     or  planting_date == None
                     or  planting_density == None
                     or (
-                            fd1 == None or fa1 == None
-                        or  fd2 == None or fa2 == None
-                        or  fd3 == None or fa3 == None
-                        or  fd4 == None or fa4 == None
+                            fert_app == "Fert"
+                        and (
+                                fd1 == None or fN1 == None  or fP1 == None  or fK1== None 
+                            or  fd2 == None or fN2 == None  or fP2 == None  or fK2== None 
+                            or  fd3 == None or fN3 == None  or fP3 == None  or fK3== None 
+                            or  fd4 == None or fN4 == None  or fP4 == None  or fK4== None 
+                        ) 
                     )
                     or (
-                            crop_price == None
-                        or  seed_cost == None
-                        or  fert_cost == None
-                        or  fixed_costs == None
-                        or  variable_costs == None
+                            irrig_app == "repr_irrig" 
+                        and (
+                                irrig_method == None 
+                            or  ird1 == None  or iramt1 == None
+                            or  ird2 == None  or iramt2 == None
+                            or  ird3 == None  or iramt3 == None
+                            or  ird4 == None  or iramt4 == None
+                            or  ird5 == None  or iramt5 == None
+                        ) 
+                    )
+                    or (
+                            irrig_app == "auto_irrig" 
+                        and (
+                                ir_depth == None 
+                            or  ir_threshold == None
+                            or  ir_eff == None
+                        ) 
+                    )
+                    or (
+                            EB_radio == "EB_Yes"
+                        and (
+                                crop_price == None
+                            or  seed_cost == None
+                            or  fert_cost == None
+                            or  fixed_costs == None
+                            or  variable_costs == None
+                        )
                     )        
                 ):
                     return [sce_in_table, {"color": "red"}, f"Scenario '{scenario}' is missing data."]
@@ -1524,26 +1591,71 @@ def make_sce_table(
 
                 fert_valid = True
                 if (
-                        (fd1 < 0 or 365 < fd1) or fa1 < 0
-                    or  (fd2 < 0 or 365 < fd2) or fa2 < 0
-                    or  (fd3 < 0 or 365 < fd3) or fa3 < 0
-                    or  (fd4 < 0 or 365 < fd4) or fa4 < 0
+                        (fd1 < 0 or 365 < fd1) or fN1 < 0 or fP1 < 0 or fK1 < 0
+                    or  (fd2 < 0 or 365 < fd2) or fN2 < 0 or fP2 < 0 or fK2 < 0
+                    or  (fd3 < 0 or 365 < fd3) or fN3 < 0 or fP3 < 0 or fK3 < 0
+                    or  (fd4 < 0 or 365 < fd4) or fN4 < 0 or fP4 < 0 or fK4 < 0
                 ):
                     if not (
-                            fd1 == -99 and fa1 == -99
-                        and fd2 == -99 and fa2 == -99
-                        and fd3 == -99 and fa3 == -99
-                        and fd4 == -99 and fa4 == -99
+                            fd1 == -99 and fN1 == -99 and fP1 == -99 and fK1 == -99
+                        and fd2 == -99 and fN2 == -99 and fP2 == -99 and fK2 == -99
+                        and fd3 == -99 and fN3 == -99 and fP3 == -99 and fK3 == -99
+                        and fd4 == -99 and fN4 == -99 and fP4 == -99 and fK4 == -99
                     ):
                         fert_valid = False
                 else:
                     if not (
-                            float(fd1).is_integer() and (fa1*10.0).is_integer()
-                        and float(fd2).is_integer() and (fa2*10.0).is_integer()
-                        and float(fd3).is_integer() and (fa3*10.0).is_integer()
-                        and float(fd4).is_integer() and (fa4*10.0).is_integer()
+                            float(fd1).is_integer() and (fN1*10.0).is_integer() and (fP1*10.0).is_integer() and (fK1*10.0).is_integer()
+                        and float(fd2).is_integer() and (fN2*10.0).is_integer() and (fP2*10.0).is_integer() and (fK2*10.0).is_integer()
+                        and float(fd3).is_integer() and (fN3*10.0).is_integer() and (fP3*10.0).is_integer() and (fK3*10.0).is_integer()
+                        and float(fd4).is_integer() and (fN4*10.0).is_integer() and (fP4*10.0).is_integer() and (fK4*10.0).is_integer()
                     ):
                         fert_valid = False
+
+                IR_reported_valid = True
+                if (
+                        (ird1 < 0 or 365 < ird1) or iramt1 < 0
+                    or  (ird2 < 0 or 365 < ird2) or iramt2 < 0
+                    or  (ird3 < 0 or 365 < ird3) or iramt3 < 0
+                    or  (ird4 < 0 or 365 < ird4) or iramt4 < 0
+                    or  (ird5 < 0 or 365 < ird5) or iramt5 < 0
+                ):
+                    if not (
+                            ird1 == -99 and iramt1 == -99
+                        and ird2 == -99 and iramt2 == -99
+                        and ird3 == -99 and iramt3 == -99
+                        and ird4 == -99 and iramt4 == -99
+                        and ird5 == -99 and iramt5 == -99
+                    ):
+                        IR_reported_valid = False
+                    else: # this happens if all the above are -99. ie. if automatic irrigation is selected
+                        if (
+                                (ir_depth < 1 or 100 < ir_depth)
+                            or  (ir_threshold < 1 or 100 < ir_threshold)
+                            or  (ir_eff < 0.1 or 1 < ir_eff)
+                        ):
+                            if not (
+                                    ir_depth == -99
+                                and ir_threshold == -99
+                                and ir_eff == -99
+                            ):
+                                IR_reported_valid = False
+                        else:
+                            if not (
+                                    (ir_depth*10.0).is_integer()
+                                and (ir_threshold*10.0).is_integer()
+                                and (ir_eff*10.0).is_integer()
+                            ):
+                                IR_reported_valid = False
+                else:
+                    if not (
+                            float(ird1).is_integer() and (iramt1*10.0).is_integer()
+                        and float(ird2).is_integer() and (iramt2*10.0).is_integer()
+                        and float(ird3).is_integer() and (iramt3*10.0).is_integer()
+                        and float(ird4).is_integer() and (iramt4*10.0).is_integer()
+                        and float(ird5).is_integer() and (iramt5*10.0).is_integer()
+                    ):
+                        IR_reported_valid = False
 
                 EB_valid = True
                 if (
@@ -1607,8 +1719,10 @@ def make_sce_table(
                         "sce_name": [scenario], "Crop": [crop], "Cultivar": [cultivar], "stn_name": [station], "PltDate": [planting_date], 
                         "FirstYear": [start_year], "LastYear": [end_year], "soil": [soil_type], "iH2O": [initial_soil_moisture], 
                         "iNO3": [initial_soil_no3_content], "plt_density": [planting_density], "TargetYr": [target_year],
-                        "Fert_1_DOY": [fd1], "Fert_1_Kg": [fa1], "Fert_2_DOY": [fd2], "Fert_2_Kg": [fa2], 
-                        "Fert_3_DOY": [fd3], "Fert_3_Kg": [fa3], "Fert_4_DOY": [fd4], "Fert_4_Kg": [fa4], 
+                        "Fert_1_DOY": [fd1], "N_1_Kg": [fN1],"P_1_Kg": [fP1],"K_1_Kg": [fK1],
+                        "Fert_2_DOY": [fd2], "N_2_Kg": [fN2],"P_2_Kg": [fP2],"K_2_Kg": [fK2],
+                        "Fert_3_DOY": [fd3], "N_3_Kg": [fN3],"P_3_Kg": [fP3],"K_3_Kg": [fK3],
+                        "Fert_4_DOY": [fd4], "N_4_Kg": [fN4],"P_4_Kg": [fP4],"K_4_Kg": [fK4],
                         "CropPrice": [crop_price], "NFertCost": [fert_cost], "SeedCost": [seed_cost], "OtherVariableCosts": [variable_costs], "FixedCosts": [fixed_costs],  
                     })
                     val_csv = val_csv.append(df, ignore_index=True)
@@ -1617,8 +1731,8 @@ def make_sce_table(
 
                 #=====================================================================
                 # Write SNX file
-                writeSNX_main_hist(Wdir_path,station,start_year,end_year,f"2021-{planting_date}",crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
-                                    planting_density,scenario,fert_app, current_fert)
+                writeSNX_main_hist(Wdir_path,station,start_year,end_year,f"2021-{planting_date}",crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3,
+                                    planting_density,scenario,fert_app, current_fert, p_sim, p_level, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)
 
             updated_sces = existing_sces
             if existing_sces.empty: # overwrite if empty
@@ -1634,7 +1748,6 @@ def make_sce_table(
                     updated_sces = val_csv.append(existing_sces, ignore_index=True) # otherwise append new entry
                     return [updated_sces.to_dict("rows"), {"display": "none"}, ""]
         else:
-            print("File contents were None")
             return [sce_in_table, {"color": "red"}, "Empty file provided"]
 
     if triggered_by == "write-button-state":
@@ -1694,7 +1807,7 @@ def make_sce_table(
 
         # Make a new dataframe to return to scenario-summary table
         current_sce = pd.DataFrame({
-            "sce_name": [scenario], "Crop": [crop], "Cultivar": [cultivar[7:]], "stn_name": [station], "PltDate": [planting_date[5:]], 
+            "sce_name": [scenario], "Crop": [crop], "Cultivar": [cultivar], "stn_name": [station], "PltDate": [planting_date[5:]], 
             "FirstYear": [start_year], "LastYear": [end_year], "soil": [soil_type], "iH2O": [initial_soil_moisture], 
             "iNO3": [initial_soil_no3], "plt_density": [planting_density], "TargetYr": [target_year], 
             "Fert_1_DOY": [-99], "N_1_Kg": [-99], "P_1_Kg": [-99], "K_1_Kg": [-99], 
@@ -1732,23 +1845,22 @@ def make_sce_table(
             })
             current_sce.update(fert_frame)
 
-            # TODO: validation fert
-            # if (
-            #         (fd1 < 0 or 365 < fd1) or fa1 < 0
-            #     or  (fd2 < 0 or 365 < fd2) or fa2 < 0
-            #     or  (fd3 < 0 or 365 < fd3) or fa3 < 0
-            #     or  (fd4 < 0 or 365 < fd4) or fa4 < 0
-            # ):
-            #     fert_valid = False
-            # else:
-            #     if not (
-            #             float(fd1).is_integer() and (fa1*10.0).is_integer()
-            #         and float(fd2).is_integer() and (fa2*10.0).is_integer()
-            #         and float(fd3).is_integer() and (fa3*10.0).is_integer()
-            #         and float(fd4).is_integer() and (fa4*10.0).is_integer()
-            #     ):
-            #         fert_valid = False
-
+            # validation fert
+            if (
+                    (fd1 < 0 or 365 < fd1) or fN1 < 0 or fP1 < 0 or fK1 < 0
+                or  (fd2 < 0 or 365 < fd2) or fN2 < 0 or fP2 < 0 or fK2 < 0
+                or  (fd3 < 0 or 365 < fd3) or fN3 < 0 or fP3 < 0 or fK3 < 0
+                or  (fd4 < 0 or 365 < fd4) or fN4 < 0 or fP4 < 0 or fK4 < 0
+            ):
+                fert_valid = False
+            else:
+                if not (
+                        float(fd1).is_integer() and (fN1*10.0).is_integer() and (fP1*10.0).is_integer() and (fK1*10.0).is_integer()
+                    and float(fd2).is_integer() and (fN2*10.0).is_integer() and (fP2*10.0).is_integer() and (fK2*10.0).is_integer()
+                    and float(fd3).is_integer() and (fN3*10.0).is_integer() and (fP3*10.0).is_integer() and (fK3*10.0).is_integer()
+                    and float(fd4).is_integer() and (fN4*10.0).is_integer() and (fP4*10.0).is_integer() and (fK4*10.0).is_integer()
+                ):
+                    fert_valid = False
 
         #=====================================================================
         # #Update dataframe for irrigation (on reported date) inputs
