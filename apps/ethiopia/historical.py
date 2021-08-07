@@ -1148,14 +1148,14 @@ def make_sce_table(
 
                 EB_valid = True
                 if (
-                        float(crop_price) < 0
+                        crop_price < 0
                     or  seed_cost < 0
                     or  fert_cost < 0
                     or  fixed_costs < 0
                     or  variable_costs < 0
                 ):
                     if not (
-                            float(crop_price) == -99
+                            crop_price == -99
                         and seed_cost == -99
                         and fert_cost == -99
                         and fixed_costs == -99
@@ -1164,7 +1164,7 @@ def make_sce_table(
                         EB_valid = False
                 else:
                     if not (
-                            (float(crop_price)*10.0).is_integer()
+                            (crop_price*10.0).is_integer()
                         and (seed_cost*10.0).is_integer()
                         and (fert_cost*10.0).is_integer()
                         and (fixed_costs*10.0).is_integer()

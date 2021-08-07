@@ -530,13 +530,11 @@ layout = html.Div([
                               ),
                               dbc.Col(
                                 dbc.FormGroup([
-                                  # dbc.Label("1st", html_for="irrig-day1", ),
                                   dbc.Input(type="number", id="irrig-day1", value=0, min="0", max="365", required="required", ),
                                 ],),
                               ),
                               dbc.Col(
                                 dbc.FormGroup([
-                                  # dbc.Label("1st", html_for="irrig-mt1", ),
                                   dbc.Input(type="number", id="irrig-amt1", value=0, min="0", step="0.1", required="required", ),
                                 ],),
                               ),
@@ -547,13 +545,11 @@ layout = html.Div([
                               ),
                               dbc.Col(
                                 dbc.FormGroup([
-                                  # dbc.Label("2nd", html_for="irrig-day2", ),
                                   dbc.Input(type="number", id="irrig-day2", value=0, min="0", max="365", required="required", ),
                                 ],),
                               ),
                               dbc.Col(
                                 dbc.FormGroup([
-                                  # dbc.Label("2nd", html_for="irrig-amt2", ),
                                   dbc.Input(type="number", id="irrig-amt2", value=0, min="0", step="0.1", required="required", ),
                                 ],),
                               ),
@@ -564,13 +560,11 @@ layout = html.Div([
                               ),
                               dbc.Col(
                                 dbc.FormGroup([
-                                  # dbc.Label("3rd", html_for="irrig-day3", ),
                                   dbc.Input(type="number", id="irrig-day3", value=0, min="0", max="365", required="required", ),
                                 ],),
                               ),
                               dbc.Col(
                                 dbc.FormGroup([
-                                  # dbc.Label("3rd", html_for="irrig-amt3", ),
                                   dbc.Input(type="number", id="irrig-amt3", value=0, min="0", step="0.1", required="required", ),
                                 ],),
                               ),
@@ -581,13 +575,11 @@ layout = html.Div([
                               ),
                               dbc.Col(
                                 dbc.FormGroup([
-                                  # dbc.Label("4th", html_for="irrig-day4", ),
                                   dbc.Input(type="number", id="irrig-day4", value=0, min="0", max="365", required="required", ),
                                 ],),
                               ),
                               dbc.Col(
                                 dbc.FormGroup([
-                                  # dbc.Label("4th", html_for="irrig-amt4", ),
                                   dbc.Input(type="number", id="irrig-amt4", value=0, min="0", step="0.1", required="required", ),
                                 ],),
                               ),
@@ -598,13 +590,11 @@ layout = html.Div([
                               ),
                               dbc.Col(
                                 dbc.FormGroup([
-                                  # dbc.Label("5th", html_for="irrig-day5", ),
                                   dbc.Input(type="number", id="irrig-day5", value=0, min="0", max="365", required="required", ),
                                 ],),
                               ),
                               dbc.Col(
                                 dbc.FormGroup([
-                                  # dbc.Label("5th", html_for="irrig-amt5", ),
                                   dbc.Input(type="number", id="irrig-amt5", value=0, min="0", step="0.1", required="required", ),
                                 ],),
                               ),
@@ -1547,42 +1537,30 @@ def make_sce_table(
                     or  planting_date == None
                     or  planting_density == None
                     or (
-                            fert_app == "Fert"
-                        and (
-                                fd1 == None or fN1 == None  or fP1 == None  or fK1== None 
-                            or  fd2 == None or fN2 == None  or fP2 == None  or fK2== None 
-                            or  fd3 == None or fN3 == None  or fP3 == None  or fK3== None 
-                            or  fd4 == None or fN4 == None  or fP4 == None  or fK4== None 
-                        ) 
+                            fd1 == None or fN1 == None  or fP1 == None  or fK1== None 
+                        or  fd2 == None or fN2 == None  or fP2 == None  or fK2== None 
+                        or  fd3 == None or fN3 == None  or fP3 == None  or fK3== None 
+                        or  fd4 == None or fN4 == None  or fP4 == None  or fK4== None 
                     )
                     or (
-                            irrig_app == "repr_irrig" 
-                        and (
-                                irrig_method == None 
-                            or  ird1 == None  or iramt1 == None
-                            or  ird2 == None  or iramt2 == None
-                            or  ird3 == None  or iramt3 == None
-                            or  ird4 == None  or iramt4 == None
-                            or  ird5 == None  or iramt5 == None
-                        ) 
+                            irrig_method == None 
+                        or  ird1 == None  or iramt1 == None
+                        or  ird2 == None  or iramt2 == None
+                        or  ird3 == None  or iramt3 == None
+                        or  ird4 == None  or iramt4 == None
+                        or  ird5 == None  or iramt5 == None
                     )
                     or (
-                            irrig_app == "auto_irrig" 
-                        and (
-                                ir_depth == None 
-                            or  ir_threshold == None
-                            or  ir_eff == None
-                        ) 
+                            ir_depth == None 
+                        or  ir_threshold == None
+                        or  ir_eff == None
                     )
                     or (
-                            EB_radio == "EB_Yes"
-                        and (
-                                crop_price == None
-                            or  seed_cost == None
-                            or  fert_cost == None
-                            or  fixed_costs == None
-                            or  variable_costs == None
-                        )
+                            crop_price == None
+                        or  seed_cost == None
+                        or  fert_cost == None
+                        or  fixed_costs == None
+                        or  variable_costs == None
                     )        
                 ):
                     return [sce_in_table, {"color": "red"}, f"Scenario '{scenario}' is missing data."]
@@ -1711,7 +1689,7 @@ def make_sce_table(
                     and int(end_year) >= 1981 and int(end_year) <= 2018
                     and int(target_year) >= 1981 and int(target_year) <= 2018
                     and float(planting_density) >= 1 and float(planting_density) <= 300
-                    and planting_date_valid and fert_valid and EB_valid
+                    and planting_date_valid and fert_valid and IR_reported_valid and EB_valid
                 )
 
                 if csv_sce_valid:
@@ -1723,6 +1701,14 @@ def make_sce_table(
                         "Fert_2_DOY": [fd2], "N_2_Kg": [fN2],"P_2_Kg": [fP2],"K_2_Kg": [fK2],
                         "Fert_3_DOY": [fd3], "N_3_Kg": [fN3],"P_3_Kg": [fP3],"K_3_Kg": [fK3],
                         "Fert_4_DOY": [fd4], "N_4_Kg": [fN4],"P_4_Kg": [fP4],"K_4_Kg": [fK4],
+                        "P_level": [p_level],
+                        "IR_method": [irrig_method],
+                        "IR_1_DOY": [ird1], "IR_1_amt": [iramt1],
+                        "IR_2_DOY": [ird2], "IR_2_amt": [iramt2],
+                        "IR_3_DOY": [ird3], "IR_3_amt": [iramt3],
+                        "IR_4_DOY": [ird4], "IR_4_amt": [iramt4],
+                        "IR_5_DOY": [ird5], "IR_5_amt": [iramt5],
+                        "AutoIR_depth":  [ir_depth], "AutoIR_thres": [ir_threshold], "AutoIR_eff": [ir_eff], #Irrigation automatic
                         "CropPrice": [crop_price], "NFertCost": [fert_cost], "SeedCost": [seed_cost], "OtherVariableCosts": [variable_costs], "FixedCosts": [fixed_costs],  
                     })
                     val_csv = val_csv.append(df, ignore_index=True)
