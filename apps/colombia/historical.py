@@ -156,7 +156,7 @@ layout = html.Div([
                   dbc.FormGroup([ # Year to Highlight
                     dbc.Label("7) Year to Highlight", html_for="target-year", sm=3, align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="target-year", placeholder="YYYY", value="2015",min=1980, max=2018,   required="required", ),
+                      dbc.Input(type="number", id="target-year", placeholder="YYYY", value="2015",min=1980, max=2015,   required="required", ),
                       dbc.FormText("Type a specific year you remember (e.g., drought year) and want to compare with a full climatology distribution"),
                     ],
                     className="py-2",
@@ -1549,9 +1549,9 @@ def make_sce_table(
 
                 csv_sce_valid = (
                         re.match("....", scenario)
-                    and int(start_year) >= 1981 and int(start_year) <= 2018
-                    and int(end_year) >= 1981 and int(end_year) <= 2018
-                    and int(target_year) >= 1981 and int(target_year) <= 2018
+                    and int(start_year) >= 1980 and int(start_year) <= 2015
+                    and int(end_year) >= 1980 and int(end_year) <= 2015
+                    and int(target_year) >= 1980 and int(target_year) <= 2015
                     and float(planting_density) >= 1 and float(planting_density) <= 300
                     and planting_date_valid and fert_valid and IR_reported_valid and EB_valid
                 )
@@ -1821,9 +1821,9 @@ def make_sce_table(
         # required="required" triggers tooltips. This validation actually prevents improper forms being submitted. BOTH are necessary
         form_valid = (
                 re.match("....", current_sce.sce_name.values[0])
-            and int(current_sce.FirstYear.values[0]) >= 1980 and int(current_sce.FirstYear.values[0]) <= 2018
-            and int(current_sce.LastYear.values[0]) >= 1980 and int(current_sce.LastYear.values[0]) <= 2018
-            and int(current_sce.TargetYr.values[0]) >= 1980 and int(current_sce.TargetYr.values[0]) <= 2018
+            and int(current_sce.FirstYear.values[0]) >= 1980 and int(current_sce.FirstYear.values[0]) <= 2015
+            and int(current_sce.LastYear.values[0]) >= 1980 and int(current_sce.LastYear.values[0]) <= 2015
+            and int(current_sce.TargetYr.values[0]) >= 1980 and int(current_sce.TargetYr.values[0]) <= 2015
             and float(current_sce.plt_density.values[0]) >= 1 and float(current_sce.plt_density.values[0]) <= 300
             and planting_date_valid and fert_valid and IR_reported_valid and EB_valid
         )
