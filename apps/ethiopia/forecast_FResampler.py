@@ -34,8 +34,8 @@ from apps.ethiopia.run_FResampler import run_FResampler  # Downscaling method 1)
 from apps.ethiopia.write_WTH_FR import write_WTH_FR   #save WTH from the output fo FREsampler
 
 sce_col_names=[ "sce_name", "Trimester1", "AN1","BN1", "AN2","BN2",
-                "Crop", "Cultivar","stn_name", "Plt_date", #"FirstYear", "LastYear", 
-                "soil","iH2O","iNO3",#"TargetYr",
+                "Crop", "Cultivar","stn_name", "PltDate", #"FirstYear", "LastYear", 
+                "soil","iH2O","iNO3","plt_density", #"TargetYr",
                 "Fert_1_DOY","Fert_1_Kg","Fert_2_DOY","Fert_2_Kg","Fert_3_DOY","Fert_3_Kg","Fert_4_DOY","Fert_4_Kg",
                 "IR_1_DOY", "IR_1_amt","IR_2_DOY", "IR_2_amt","IR_3_DOY","IR_3_amt",
                 "IR_4_DOY","IR_4_amt","IR_5_DOY","IR_5_amt","AutoIR_depth","AutoIR_thres", "AutoIR_eff",
@@ -53,7 +53,7 @@ layout = html.Div([
           html.Div([
             html.Header(
               html.B(
-                "Simulation Input",
+                "Simulation Input (Forecast)",
               ),
             className=" card-header",
             ),
@@ -477,7 +477,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Irrigation
-                    dbc.Label("15) Irrigation", html_for="irrig_input", sm=3, align="start", ),
+                    dbc.Label("15) Irrigation", html_for="irrig_input_frst", sm=3, align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                         id="irrig_input_frst",
@@ -492,7 +492,7 @@ layout = html.Div([
                       html.Div([
                         html.Div([ # "on reported dates"
                           #irrigation method
-                          dbc.Label("Irrigation method", html_for="extr_P", align="start", ),
+                          dbc.Label("Irrigation method", html_for="ir_method_frst", align="start", ),
                           dcc.Dropdown(
                             id="ir_method_frst",
                             options=[
@@ -786,12 +786,13 @@ layout = html.Div([
                     {"id": "Crop", "name": "Crop"},
                     {"id": "Cultivar", "name": "Cultivar"},
                     {"id": "stn_name", "name": "Station"},
-                    {"id": "Plt_date", "name": "Planting Date"},
+                    {"id": "PltDate", "name": "Planting Date"},
                     # {"id": "FirstYear", "name": "First Year"},
                     # {"id": "LastYear", "name": "Last Year"},
                     {"id": "soil", "name": "Soil Type"},
                     {"id": "iH2O", "name": "Initial Soil Water Content"},
                     {"id": "iNO3", "name": "Initial Soil Nitrate Content"},
+                    {"id": "plt_density", "name": "Planting Density"},
                     # {"id": "TargetYr", "name": "Target Year"},
                     {"id": "Fert_1_DOY", "name": "DOY 1st Fertilizer Applied"},
                     {"id": "Fert_1_Kg", "name": "1st Amount Applied (Kg/ha)"},
@@ -876,7 +877,7 @@ layout = html.Div([
           html.Div( # SIMULATIONS
             html.Div([
               html.Header(
-                html.B("Simulation Graphs"),
+                html.B("Simulation Graphs (Forecast)"),
               className=" card-header"
               ),
               html.Div(
@@ -941,7 +942,7 @@ layout = html.Div([
                     html.Div([ # ORIGINAL CSV
                       dbc.Row([
                         dbc.Col(
-                          dbc.Button(id="btn_csv_yield", 
+                          dbc.Button(id="btn_csv_yield_frst", 
                           children="Simulated Yield", 
                           className="d-block mx-auto",
                           color="secondary",
@@ -1028,7 +1029,7 @@ layout = html.Div([
                     html.Div([
                       html.Div(id="EBbox-container_frst"), 
                       html.Div(id="EBcdf-container_frst"),  #exceedance curve
-                      html.Div(id="EBtimeseries-container_frst"), #exceedance curve
+                      # html.Div(id="EBtimeseries-container_frst"), #exceedance curve
 
                     ], 
                     className="plot-container plotly"),
@@ -1173,7 +1174,7 @@ def set_cultivar_value(available_options):
 #1) for yield - call back to save df into a csv file
 @app.callback(
     Output("download-dataframe-csv-yield_frst", "data"),
-    Input("btn_csv_yield", "n_clicks"),
+    Input("btn_csv_yield_frst", "n_clicks"),
     State("memory-yield-table_frst","data"), 
     # State("yield-table", "data"),
     prevent_initial_call=True,
@@ -1513,7 +1514,7 @@ def make_sce_table(
     # Make a new dataframe to return to scenario-summary table
     current_sce = pd.DataFrame({
         "sce_name": [scenario], "Trimester1": [trimester], "AN1": [AN1],"BN1": [BN1],"AN2": [AN2],"BN2": [BN2],
-        "Crop": [crop], "Cultivar": [cultivar[7:]], "stn_name": [station], "Plt_date":[planting_date], # [planting_date[5:]], 
+        "Crop": [crop], "Cultivar": [cultivar[7:]], "stn_name": [station], "PltDate":[planting_date], # [planting_date[5:]], 
         "soil": [soil_type], "iH2O": [initial_soil_moisture], 
         "iNO3": [initial_soil_no3_content], "plt_density": [planting_density], #"TargetYr": [target_year], 
         "Fert_1_DOY": ["-99"], "Fert_1_Kg": ["-99"], "Fert_2_DOY": ["-99"], "Fert_2_Kg": ["-99"], 
@@ -1741,8 +1742,6 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
               # df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)  #pass subset of summary table => NOTE: the scenario names are in reverse order and thus last scenario is selected first
               # write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)   #by taking into account planting and approximate harvesting dates
               #2)FResampler\
-              print("before calling run_FResampler")
-              print(Wdir_path)
               df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
               write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)  
             else:
@@ -1830,7 +1829,7 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
             #============================================================
             # ===compute seasonal rainfall total from climatolgoy for trimester 1 & 2
             # WTD_fname = path.join(Wdir_path, scenarios.stn_name[i]+".WTD")
-            WTH_fname = path.join(Wdir_path, scenarios.sce_name[i] + '_all.WTH') #+repr(scenarios.Plt_date[i])[3:5] +"99.WTH")  # e.g., aaaa2199.WTH
+            WTH_fname = path.join(Wdir_path, scenarios.sce_name[i] + '_all.WTH') #+repr(scenarios.PltDate[i])[3:5] +"99.WTH")  # e.g., aaaa2199.WTH
             if i ==0:
               df_FC = Rain_trimester_gen(WTH_fname, tri_doylist)
               df_CL = Rain_trimester_obs(WTD_fname, tri_doylist)
@@ -1857,7 +1856,7 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
             #In case of hindcast forecasting (i.e., if the planting year is among the observed years
             year1= temp_df.YEAR[temp_df["RUN"] == "Climatology"].values[0]  #first year of the climatolgy run
             year2= temp_df.YEAR[temp_df["RUN"] == "Climatology"].values[-1]  #lats year of the climatolgy run
-            target_year = repr(scenarios.Plt_date[i])[1:5]
+            target_year = repr(scenarios.PltDate[i])[1:5]
             if int(target_year) <= year2 and int(target_year) >= year1:
               doy = repr(PDAT[0])[4:]
               target = target_year + doy
@@ -1871,10 +1870,7 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
                 df = temp_df.copy()
             else:
                 df = temp_df.append(df, ignore_index=True)
-            print("read DSSAT output and make a df")
-            print(df)
 
-        print("after for (sce_number) loop ")
         # df = df.round({"RAIN": 0})  #Round a DataFrame to a variable number of decimal places.
         # yield_min = np.min(df.HWAM.values)  #to make a consistent yield scale for exceedance curve =>Fig 4,5,6
         # yield_max = np.max(df.HWAM.values)
@@ -1986,7 +1982,7 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
             #In case of hindcast forecasting (i.e., if the planting year is among the observed years
             year1= temp_df.YEAR[temp_df["RUN"] == "Climatology"].values[0]  #first year of the climatolgy run
             year2= temp_df.YEAR[temp_df["RUN"] == "Climatology"].values[-1]  #lats year of the climatolgy run
-            target_year = repr(EB_sces.Plt_date[i])[1:5]
+            target_year = repr(EB_sces.PltDate[i])[1:5]
             if int(target_year) <= year2 and int(target_year) >= year1:
               doy = repr(PDAT[0])[4:]
               target = target_year + doy

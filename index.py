@@ -26,9 +26,13 @@ if country == "ethiopia":
 elif country == "senegal":
     from apps.senegal import about
     from apps.senegal import historical
+    from apps.senegal import forecast_FResampler as forecast
+    # from apps.senegal import forecast_WGEN as forecast
 elif country == "colombia":
     from apps.colombia import about
     from apps.colombia import historical
+    # from apps.colombia import forecast_FResampler as forecast
+    # from apps.colombia import forecast_WGEN as forecast
 else:
     pass
 
@@ -40,7 +44,7 @@ apps = {
         "paths": {
             "/about": about.layout,
             "/historical": historical.layout, 
-            # "/forecast": forecast.layout,
+            "/forecast": forecast.layout,
         },
     },
     "senegal":  { 
@@ -50,6 +54,7 @@ apps = {
         "paths": {
             "/about": about.layout,
             "/historical": historical.layout, 
+            "/forecast": forecast.layout,
         },
     },
     "colombia": { 

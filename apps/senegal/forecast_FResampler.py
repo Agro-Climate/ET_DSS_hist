@@ -4,7 +4,10 @@ import plotly.express as px
 import plotly.graph_objects as go
 import pathlib
 import re
+import base64
+import io
 
+import dash
 import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
@@ -22,26 +25,31 @@ import subprocess  #to run executable
 from datetime import date
 import datetime    #to convert date to doy or vice versa
 import calendar
-import time
+import bisect   # an element into sorted list 
 
 import graph
 
-from apps.ethiopia.write_SNX import writeSNX_clim, writeSNX_frst 
-#from write_SNX import writeSNX_main_hist, writeSNX_main_frst  #EJ(7/26/2021) This is not working!!!
-from apps.ethiopia.run_WGEN import run_WGEN  # Downscaling method 1) WGEN (weather generator) to make 100 synthetic daily weather data
-from apps.ethiopia.write_WTH import write_WTH   #save WTH from the output fo WGEN
-# from apps.ethiopia.run_FResampler import run_FResampler  # Downscaling method 1) FResampler 
-# from apps.ethiopia.write_WTH_FR import write_WTH_FR   #save WTH from the output fo FREsampler
+from apps.senegal.write_SNX import writeSNX_clim, writeSNX_frst_FR 
+# from apps.senegal.run_WGEN import run_WGEN  # Downscaling method 1) WGEN (weather generator) to make 100 synthetic daily weather data
+from apps.senegal.write_WTH import write_WTH   #save WTH from the output fo WGEN
+from apps.senegal.run_FResampler import run_FResampler  # Downscaling method 1) FResampler 
+from apps.senegal.write_WTH_FR import write_WTH_FR   #save WTH from the output fo FREsampler
 
+
+# sce_col_names=[ "sce_name", "Crop", "Cultivar", "stn_name", "PltDate", "FirstYear", "LastYear", "soil", "iH2O", "iNO3", "plt_density", "TargetYr",
+#                 "Fert_1_DOY", "N_1_Kg", "P_1_Kg", "K_1_Kg", "Fert_2_DOY", "N_2_Kg", "P_2_Kg", "K_2_Kg", "Fert_3_DOY", "N_3_Kg", "P_3_Kg", "K_3_Kg",
+#                 "Fert_4_DOY", "N_4_Kg", "P_4_Kg", "K_4_Kg", "P_level", "IR_method", "IR_1_DOY", "IR_1_amt", "IR_2_DOY", "IR_2_amt", "IR_3_DOY", "IR_3_amt", 
+#                 "IR_4_DOY", "IR_4_amt", "IR_5_DOY", "IR_5_amt", "AutoIR_depth", "AutoIR_thres", "AutoIR_eff", 
+#                 "CropPrice", "NFertCost", "SeedCost", "OtherVariableCosts", "FixedCosts"
+# ]
 sce_col_names=[ "sce_name", "Trimester1", "AN1","BN1", "AN2","BN2",
                 "Crop", "Cultivar","stn_name", "PltDate", #"FirstYear", "LastYear", 
                 "soil","iH2O","iNO3","plt_density", #"TargetYr",
-                "Fert_1_DOY","Fert_1_Kg","Fert_2_DOY","Fert_2_Kg","Fert_3_DOY","Fert_3_Kg","Fert_4_DOY","Fert_4_Kg",
-                "IR_1_DOY", "IR_1_amt","IR_2_DOY", "IR_2_amt","IR_3_DOY","IR_3_amt",
-                "IR_4_DOY","IR_4_amt","IR_5_DOY","IR_5_amt","AutoIR_depth","AutoIR_thres", "AutoIR_eff",
-                "CropPrice", "NFertCost", "SeedCost","IrrigCost", "OtherVariableCosts","FixedCosts"
+                "Fert_1_DOY", "N_1_Kg", "P_1_Kg", "K_1_Kg", "Fert_2_DOY", "N_2_Kg", "P_2_Kg", "K_2_Kg", "Fert_3_DOY", "N_3_Kg", "P_3_Kg", "K_3_Kg",
+                "Fert_4_DOY", "N_4_Kg", "P_4_Kg", "K_4_Kg", "P_level", "IR_method", "IR_1_DOY", "IR_1_amt", "IR_2_DOY", "IR_2_amt", "IR_3_DOY", "IR_3_amt", 
+                "IR_4_DOY", "IR_4_amt", "IR_5_DOY", "IR_5_amt", "AutoIR_depth", "AutoIR_thres", "AutoIR_eff", 
+                "CropPrice", "NFertCost", "SeedCost", "OtherVariableCosts", "FixedCosts"
 ]
-
 
 layout = html.Div([
     dcc.Store(id="memory-yield-table_frst"),  #to save fertilizer application table
@@ -62,9 +70,9 @@ layout = html.Div([
               html.Div( # SCROLLABLE FORM
                 html.Div([ # FORM START
                   dbc.FormGroup([ # Scenario
-                    dbc.Label("1) Scenario Name", html_for="sce-name_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("1) Scenario Name", html_for="sce-name_frst", sm=3, align="start", ),
                     dbc.Col([
-                      dbc.Input(type="text", id="sce-name_frst", value="", minLength=4, maxLength=4,required="required", ),
+                      dbc.Input(type="text", id="sce-name_frst", value="", minLength=4, maxLength=4, required="required", ),
                     ],
                     className="py-2",
                     xl=9,
@@ -73,20 +81,16 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Station
-                    dbc.Label("2) Station", html_for="ETstation_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("2) Station", html_for="SNstation_frst", sm=3, align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
-                      id="ETstation_frst",
+                      id="SNstation_frst",
                       options=[
-                        {"label": "Melkasa", "value": "MELK"},
-                        {"label": "Mieso", "value": "MEIS"},
-                        {"label": "Awassa", "value": "AWAS"},
-                        {"label": "Asella", "value": "ASEL"},
-                        {"label": "Bako", "value": "BAKO"},
-                        {"label": "Mahoni", "value": "MAHO"},
-                        {"label": "Kobo", "value": "KOBO"}
+                        {"label": "Bambey", "value": "CNRA"},
+                        {"label": "Nioro", "value": "NRIP"},
+                        {"label": "Sinthiou Malem", "value": "SNTH"}
                       ],
-                      value="MELK",
+                      value="CNRA",
                       clearable=False,
                       ),
                     ],
@@ -97,7 +101,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Observed data => Not for user's input
-                    dbc.Label("Observed Weather", html_for="ETstation_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("Observed Weather", html_for="SNstation_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                         dbc.Row([
                           dbc.Col(
@@ -235,18 +239,18 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Crop
-                    dbc.Label("3) Crop", html_for="crop-radio_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("3) Crop", html_for="crop-radio_frst", sm=3, align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                       id="crop-radio_frst",
                       # options=[{"label": k, "value": k} for k in cultivar_options.keys()],
                       options = [
-                        {"label": "Maize", "value": "MZ"}, 
-                        {"label": "Wheat", "value": "WH"}, 
+                        {"label": "Peanut", "value": "PN"}, 
+                        {"label": "Millet", "value": "ML"}, 
                         {"label": "Sorghum", "value": "SG"},
                       ],
-                      labelStyle = {"display": "inline-block","margin-right": 10},
-                      value="MZ",
+                      labelStyle = {"display": "inline-block","marginRight": 10},
+                      value="SG",
                       ),
                     ],
                     className="py-2",
@@ -256,17 +260,17 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Cultivar
-                    dbc.Label("4) Cultivar", html_for="cultivar-dropdown_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("4) Cultivar", html_for="cultivar-dropdown_frst", sm=3, align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
                         id="cultivar-dropdown_frst", 
                         options=[
-                          {"label": "CIMT01 BH540", "value": "CIMT01 BH540-Kassie"},
-                          {"label": "CIMT02 MELKASA-1", "value": "CIMT02 MELKASA-Kassi"},
-                          {"label": "CIMT17 BH660-FAW-40%", "value": "CIMT17 BH660-FAW-40%"},
-                          {"label": "CIMT19 MELKASA2-FAW-40%", "value": "CIMT19 MELKASA2-FAW-40%"},
-                          {"label": "CIMT21 MELKASA-LowY", "value": "CIMT21 MELKASA-LowY"},], 
-                        value="CIMT19 MELKASA2-FAW-40%",
+                          {"label": "Fadda-D", "value": "IB0066 Fadda-D"},
+                          {"label": "IS15401-D", "value": "IB0069 IS15401-D"},
+                          {"label": "Soumba-D", "value": "IB0070 Soumba-D"},
+                          {"label": "Faourou-D", "value": "IB0071 Faourou-D"},
+                          {"label": "MELKASA-LowY", "value": "CIMT21 MELKASA-LowY"},],
+                        value="IB0066 Fadda-D",
                         clearable=False,
                       ),
                     ],
@@ -277,27 +281,24 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Soil Type
-                    dbc.Label("8) Soil Type", html_for="ETsoil_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("8) Soil Type", html_for="SNsoil_frst", sm=3, align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
-                        id="ETsoil_frst", 
+                        id="SNsoil_frst", 
                         options=[
-                          {"label": "ETET000010(AWAS,L)", "value": "ETET000010"},
-                          {"label": "ETET000_10(AWAS,L, shallow)", "value": "ETET000_10"},
-                          {"label": "ETET000011(BAKO,C)", "value": "ETET000011"},
-                          {"label": "ETET001_11(BAKO,C,shallow)", "value": "ETET001_11"},
-                          {"label": "ETET000018(MELK,L)", "value": "ETET000018"},
-                          {"label": "ETET001_18(MELK,L,shallow)", "value": "ETET001_18"},
-                          {"label": "ETET000015(KULU,C)", "value": "ETET000015"},
-                          {"label": "ETET001_15(KULU,C,shallow)", "value": "ETET001_15"},
-                          {"label": "ET00990066(MAHO,C)", "value": "ET00990066"},
-                          {"label": "ET00990_66(MAHO,C,shallow)", "value": "ET00990_66"},
-                          {"label": "ET00920067(KOBO,CL)", "value": "ET00920067"},
-                          {"label": "ET00920_67(KOBO,CL,shallow)", "value": "ET00920_67"},
-                          {"label": "ETET000022(MIES, C)", "value": "ETET000022"},
-                          {"label": "ETET001_22(MIES, C, shallow", "value": "ETET001_22"},
+                          {"label": "SN-N15Rain(S)", "value": "SN-N15Rain"},
+                          {"label": "SN-N15Irrg(S)", "value": "SN-N15Irrg"},
+                          {"label": "SN-N16Rain(S)", "value": "SN-N16Rain"},
+                          {"label": "SN-N16Irrg(S)", "value": "SN-N16Irrg"},
+                          {"label": "SN-S15Rain(LS)", "value": "SN-S15Rain"},
+                          {"label": "SN-S16Rain(LS)", "value": "SN-S16Rain"},
+                          {"label": "SN00840067(SL)", "value": "SN00840067"},
+                          {"label": "SN00840080(SL)", "value": "SN00840080"},
+                          {"label": "SN00840042(SL)", "value": "SN00840042"},
+                          {"label": "SN00840056(SL)", "value": "ET00990_66"},
+                          {"label": "ET00920067(KOBO,CL)", "value": "SN00840056"},
                         ],
-                        value="ETET001_18",
+                        value="SN-N15Rain",
                         clearable=False,
                       ),
                     ],
@@ -308,14 +309,20 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Initial Soil Water Condition
-                    dbc.Label("9) Initial Soil Water Condition", html_for="ini-H2O_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("9) Initial Soil Water Condition", html_for="ini-H2O_frst", sm=3, align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
                         id="ini-H2O_frst", 
                         options=[
+                          {"label": "10% of AWC", "value": "0.1"},
+                          {"label": "20% of AWC", "value": "0.2"},
                           {"label": "30% of AWC", "value": "0.3"},
+                          {"label": "40% of AWC", "value": "0.4"},
                           {"label": "50% of AWC", "value": "0.5"},
+                          {"label": "60% of AWC", "value": "0.6"},
                           {"label": "70% of AWC", "value": "0.7"},
+                          {"label": "80% of AWC", "value": "0.8"},
+                          {"label": "90% of AWC", "value": "0.9"},
                           {"label": "100% of AWC", "value": "1.0"},
                         ], 
                         value="0.5",
@@ -329,17 +336,10 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Initial NO3 Condition
-                    dbc.Label("10) Initial Soil NO3 Condition", html_for="ini-NO3_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label(["10) Initial Soil NO3 Condition", html.Span("  ([N kg/ha] in top 30cm soil)"), ],html_for="ini-NO3_frst", sm=3, align="start", ),
                     dbc.Col([
-                      dcc.Dropdown(
-                        id="ini-NO3_frst", 
-                        options=[
-                          {"label": "High(65 N kg/ha)", "value": "H"},
-                          {"label": "Low(23 N kg/ha)", "value": "L"},
-                        ], 
-                        value="L",
-                        clearable=False,
-                      ),                
+                      dbc.Input(type="number", id="ini-NO3_frst", value="20.1",min=1, max=150, step=0.1, required="required", ),
+                      dbc.FormText("[Reference] Low Nitrate: 20 N kg/ha (~ 4.8 ppm), High Nitrate: 85 N kg/ha (~20 ppm)"),
                     ],
                     className="py-2",
                     xl=9,
@@ -348,17 +348,17 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Planting Date
-                    dbc.Label("11) Planting Date", html_for="plt-date-picker_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("11) Planting Date", html_for="PltDate-picker_frst", sm=3, align="start", ),
                     dbc.Col([
                       dcc.DatePickerSingle(
-                      id="plt-date-picker_frst",
+                      id="PltDate-picker_frst",
                       # min_date_allowed=date(2021, 1, 1),
                       # max_date_allowed=date(2021, 12, 31),
                       initial_visible_month=date(2021, 6, 5),
                       display_format="DD/MM/YYYY",
                       date=date(2021, 6, 15),
                       ),
-                      # dbc.FormText("Only Month and Date are counted"), #for forecast mode, year does matter.
+                      # dbc.FormText("Only Month and Date are counted"),
                     ],
                     className="py-2",
                     xl=9,
@@ -367,7 +367,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Planting Density
-                    dbc.Label(["12) Planting Density", html.Span(" (plants/m"), html.Sup("2"), html.Span(")"), ], html_for="plt-density_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label(["12) Planting Density", html.Span(" (plants/m"), html.Sup("2"), html.Span(")"), ], html_for="plt-density_frst", sm=3, align="start", ),
                     dbc.Col([
                       dbc.Input(type="number", id="plt-density_frst", value=5, min=1, max=300, step=0.1, required="required", ),
                     ],
@@ -378,7 +378,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Fertilizer Application
-                    dbc.Label("13) Fertilizer Application", html_for="fert_input_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("13) N Fertilizer Application", html_for="fert_input_frst", sm=3, align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                         id="fert_input_frst",
@@ -386,11 +386,10 @@ layout = html.Div([
                           {"label": "Fertilizer", "value": "Fert"},
                           {"label": "No Fertilizer", "value": "No_fert"},
                         ],
-                        labelStyle = {"display": "inline-block","margin-right": 10},
+                        labelStyle = {"display": "inline-block","marginRight": 10},
                         value="No_fert",
                       ),
-
-                      html.Div([ # FERTILIZER FORM
+                      html.Div([ # FERTILIZER INPUT TABLE
                         dbc.Row([
                           dbc.Col(
                             dbc.Label("No.", className="text-center", ),
@@ -398,24 +397,51 @@ layout = html.Div([
                           dbc.Col(
                             dbc.Label("Days After Planting", className="text-center", ),
                           ),
+                          # dbc.Col(
+                          #   dbc.Label("Depth(cm)", className="text-center", ),
+                          # ),
                           dbc.Col(
-                            dbc.Label("Amount of N [kg/ha]", className="text-center", ),
+                            dbc.Label("N (kg/ha)", className="text-center", ),
                           ),
-                        ],
-                        className="py-3",
-                        ),
+                          dbc.Col(
+                            dbc.Label("P (kg/ha)", className="text-center", ),
+                          ),
+                          dbc.Col(
+                            dbc.Label("K (kg/ha)", className="text-center", ),
+                          ),
+                        ],),
                         dbc.Row([
                           dbc.Col(
                             dbc.Label("1st", className="text-center", ),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
+                              # dbc.Label("1st", html_for="fert-day1", ),
                               dbc.Input(type="number", id="fert-day1_frst", value=0, min="0", max="365", required="required", ),
+                            ],),
+                          ),
+                          # dbc.Col(
+                          #   dbc.FormGroup([
+                          #     # dbc.Label("1st", html_for="depth1", ),
+                          #     dbc.Input(type="number", id="depth1", value=0, min="0", step="0.1", required="required", ),
+                          #   ],),
+                          # ),
+                          dbc.Col(
+                            dbc.FormGroup([
+                              # dbc.Label("1st", html_for="N-amt1", ),
+                              dbc.Input(type="number", id="N-amt1_frst", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="fert-amt1_frst", value=0, min="0", step="0.1", required="required", ),
+                              # dbc.Label("1st", html_for="P-amt1", ),
+                              dbc.Input(type="number", id="P-amt1_frst", value=0, min="0", step="0.1", required="required", ),
+                            ],),
+                          ),
+                          dbc.Col(
+                            dbc.FormGroup([
+                              # dbc.Label("1st", html_for="K-amt1", ),
+                              dbc.Input(type="number", id="K-amt1_frst", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                         ],),
@@ -425,12 +451,32 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
+                              # dbc.Label("2nd", html_for="fert-day2", ),
                               dbc.Input(type="number", id="fert-day2_frst", value=0, min="0", max="365", required="required", ),
+                            ],),
+                          ),
+                          # dbc.Col(
+                          #   dbc.FormGroup([
+                          #     # dbc.Label("2nd", html_for="depth2", ),
+                          #     dbc.Input(type="number", id="depth2", value=0, min="0", step="0.1", required="required", ),
+                          #   ],),
+                          # ),
+                          dbc.Col(
+                            dbc.FormGroup([
+                              # dbc.Label("2nd", html_for="N-amt2", ),
+                              dbc.Input(type="number", id="N-amt2_frst", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="fert-amt2_frst", value=0, min="0", step="0.1", required="required", ),
+                              # dbc.Label("2nd", html_for="P-amt2", ),
+                              dbc.Input(type="number", id="P-amt2_frst", value=0, min="0", step="0.1", required="required", ),
+                            ],),
+                          ),
+                          dbc.Col(
+                            dbc.FormGroup([
+                              # dbc.Label("2nd", html_for="K-amt2", ),
+                              dbc.Input(type="number", id="K-amt2_frst", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                         ],),
@@ -440,12 +486,32 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
+                              # dbc.Label("3rd", html_for="fert-day3", ),
                               dbc.Input(type="number", id="fert-day3_frst", value=0, min="0", max="365", required="required", ),
+                            ],),
+                          ),
+                          # dbc.Col(
+                          #   dbc.FormGroup([
+                          #     # dbc.Label("3rd", html_for="depth3", ),
+                          #     dbc.Input(type="number", id="depth3", value=0, min="0", step="0.1", required="required", ),
+                          #   ],),
+                          # ),
+                          dbc.Col(
+                            dbc.FormGroup([
+                              # dbc.Label("3rd", html_for="N-amt3", ),
+                              dbc.Input(type="number", id="N-amt3_frst", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="fert-amt3_frst", value=0, min="0", step="0.1", required="required", ),
+                              # dbc.Label("3rd", html_for="P-amt3", ),
+                              dbc.Input(type="number", id="P-amt3_frst", value=0, min="0", step="0.1", required="required", ),
+                            ],),
+                          ),
+                          dbc.Col(
+                            dbc.FormGroup([
+                              # dbc.Label("3rd", html_for="K-amt3", ),
+                              dbc.Input(type="number", id="K-amt3_frst", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                         ],),
@@ -455,17 +521,74 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
+                              # dbc.Label("4th", html_for="fert-day4", ),
                               dbc.Input(type="number", id="fert-day4_frst", value=0, min="0", max="365", required="required", ),
+                            ],),
+                          ),
+                          # dbc.Col(
+                          #   dbc.FormGroup([
+                          #     # dbc.Label("4th", html_for="depth4", ),
+                          #     dbc.Input(type="number", id="depth4", value=0, min="0", step="0.1", required="required", ),
+                          #   ],),
+                          # ),
+                          dbc.Col(
+                            dbc.FormGroup([
+                              # dbc.Label("4th", html_for="N-amt4", ),
+                              dbc.Input(type="number", id="N-amt4_frst", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="fert-amt4_frst", value=0, min="0", step="0.1", required="required", ),
+                              # dbc.Label("4th", html_for="P-amt4", ),
+                              dbc.Input(type="number", id="P-amt4_frst", value=0, min="0", step="0.1", required="required", ),
+                            ],),
+                          ),
+                          dbc.Col(
+                            dbc.FormGroup([
+                              # dbc.Label("4th", html_for="K-amt4", ),
+                              dbc.Input(type="number", id="K-amt4_frst", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                         ],),
                       ],
                       id="fert-table-Comp_frst", 
+                      className="w-100",
+                      style={"display": "none"},
+                      ),
+                    ],
+                    className="py-2",
+                    xl=9,
+                    ),
+                  ],
+                  row=True
+                  ),
+                  dbc.FormGroup([ # Phosphorous simualtion
+                    dbc.Label("14) Phosphorous simualtion?", html_for="P_input_frst", sm=3, align="start", ),
+                    dbc.Col([
+                      dcc.RadioItems(
+                        id="P_input_frst",
+                        options=[
+                          {"label": "Yes", "value": "P_yes"},
+                          {"label": "No", "value": "P_no"},
+                        ],
+                        labelStyle = {"display": "inline-block","marginRight": 10},
+                        value="P_no",
+                      ),
+                      html.Div([
+                        dbc.Label("Level of extractrable phosphorous in soil", html_for="extr_P_frst", align="start", ),
+                        dcc.Dropdown(
+                          id="extr_P_frst", 
+                          options=[
+                            {"label": "Very Low(2 ppm)", "value": "VL"},
+                            {"label": "Low (7 ppm)", "value": "L"},
+                            {"label": "Medium (12 ppm)", "value": "M"},
+                            {"label": "High (18 ppm)", "value": "H"},
+                          ], 
+                          value="L",
+                          clearable=False,
+                        ),
+                      ],
+                      id="P-sim-Comp_frst", 
                       className="w-100",
                       style={"display": "none"},
                       ),
@@ -494,12 +617,12 @@ layout = html.Div([
                           #irrigation method
                           dbc.Label("Irrigation method", html_for="ir_method_frst", align="start", ),
                           dcc.Dropdown(
-                            id="ir_method_frst",
+                            id="ir_method_frst", 
                             options=[
                               {"label": "Sprinkler", "value": "IR004"},
                               {"label": "Furrow", "value": "IR001"},
                               {"label": "Flood", "value": "IR001"},
-                            ],
+                            ], 
                             value="IR004",
                             clearable=False,
                           ),
@@ -523,13 +646,11 @@ layout = html.Div([
                               ),
                               dbc.Col(
                                 dbc.FormGroup([
-                                  # dbc.Label("1st", html_for="irrig-day1", ),
                                   dbc.Input(type="number", id="irrig-day1_frst", value=0, min="0", max="365", required="required", ),
                                 ],),
                               ),
                               dbc.Col(
                                 dbc.FormGroup([
-                                  # dbc.Label("1st", html_for="irrig-mt1", ),
                                   dbc.Input(type="number", id="irrig-amt1_frst", value=0, min="0", step="0.1", required="required", ),
                                 ],),
                               ),
@@ -540,13 +661,11 @@ layout = html.Div([
                               ),
                               dbc.Col(
                                 dbc.FormGroup([
-                                  # dbc.Label("2nd", html_for="irrig-day2", ),
                                   dbc.Input(type="number", id="irrig-day2_frst", value=0, min="0", max="365", required="required", ),
                                 ],),
                               ),
                               dbc.Col(
                                 dbc.FormGroup([
-                                  # dbc.Label("2nd", html_for="irrig-amt2", ),
                                   dbc.Input(type="number", id="irrig-amt2_frst", value=0, min="0", step="0.1", required="required", ),
                                 ],),
                               ),
@@ -557,13 +676,11 @@ layout = html.Div([
                               ),
                               dbc.Col(
                                 dbc.FormGroup([
-                                  # dbc.Label("3rd", html_for="irrig-day3", ),
                                   dbc.Input(type="number", id="irrig-day3_frst", value=0, min="0", max="365", required="required", ),
                                 ],),
                               ),
                               dbc.Col(
                                 dbc.FormGroup([
-                                  # dbc.Label("3rd", html_for="irrig-amt3", ),
                                   dbc.Input(type="number", id="irrig-amt3_frst", value=0, min="0", step="0.1", required="required", ),
                                 ],),
                               ),
@@ -574,13 +691,11 @@ layout = html.Div([
                               ),
                               dbc.Col(
                                 dbc.FormGroup([
-                                  # dbc.Label("4th", html_for="irrig-day4", ),
                                   dbc.Input(type="number", id="irrig-day4_frst", value=0, min="0", max="365", required="required", ),
                                 ],),
                               ),
                               dbc.Col(
                                 dbc.FormGroup([
-                                  # dbc.Label("4th", html_for="irrig-amt4", ),
                                   dbc.Input(type="number", id="irrig-amt4_frst", value=0, min="0", step="0.1", required="required", ),
                                 ],),
                               ),
@@ -591,27 +706,25 @@ layout = html.Div([
                               ),
                               dbc.Col(
                                 dbc.FormGroup([
-                                  # dbc.Label("5th", html_for="irrig-day5", ),
                                   dbc.Input(type="number", id="irrig-day5_frst", value=0, min="0", max="365", required="required", ),
                                 ],),
                               ),
                               dbc.Col(
                                 dbc.FormGroup([
-                                  # dbc.Label("5th", html_for="irrig-amt5", ),
                                   dbc.Input(type="number", id="irrig-amt5_frst", value=0, min="0", step="0.1", required="required", ),
                                 ],),
                               ),
                             ],),
                           ],),
                         ],
-                        id="irrig-table-Comp_frst",
+                        id="irrig-table-Comp_frst", 
                         className="w-100",
                         style={"display": "none"},
                         ),
                         html.Div([ # "Automatic when required"
                           dbc.Row([  #irrigation depth
                             dbc.Col(
-                              dbc.Label("Management soil depth", html_for="ir_depth", ),
+                              dbc.Label("Management soil depth", html_for="ir_depth_frst", ),
                             ),
                             dbc.Col([
                               dbc.Input(type="number", id="ir_depth_frst", value=30, min=1, max=100, step=0.1, required="required", ),
@@ -622,28 +735,28 @@ layout = html.Div([
                           ),
                           dbc.Row([  #irrigation threshold
                             dbc.Col(
-                              dbc.Label("Threshold", html_for="ir_threshold", ),
+                              dbc.Label("Threshold", html_for="ir_threshold_frst", ),
                             ),
                             dbc.Col([
                               dbc.Input(type="number", id="ir_threshold_frst", value=50, min=1, max=100, step=0.1, required="required", ),
-                              dbc.FormText("(% of max available water holding capacity)"),
+                              dbc.FormText("(% of max available water trigging irrigation)"),
                             ],),
                           ],
                           className="py-2",
                           ),
                           dbc.Row([  #efficiency fraction
                             dbc.Col(
-                              dbc.Label("Irrigation efficiency fraction", html_for="ir_eff", ),
+                              dbc.Label("Irrigation efficiency fraction", html_for="ir_eff_frst", ),
                             ),
                             dbc.Col([
                               dbc.Input(type="number", id="ir_eff_frst", value=0.9, min=0.1, max=1, step=0.1, required="required", ),
                               dbc.FormText("[0 ~ 1]"),
-                            ],),
+                            ],), 
                           ],
                           className="py-2",
                           ),
                         ],
-                        id="autoirrig-table-Comp_frst",
+                        id="autoirrig-table-Comp_frst", 
                         className="w-100",
                         style={"display": "none"},
                         ),
@@ -656,7 +769,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Enterprise Budgeting?
-                    dbc.Label("14) Enterprise Budgeting?", html_for="EB_radio_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("16) Enterprise Budgeting?", html_for="EB_radio_frst", sm=3, align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                         id="EB_radio_frst",
@@ -664,10 +777,9 @@ layout = html.Div([
                           {"label": "Yes", "value": "EB_Yes"},
                           {"label": "No", "value": "EB_No"},
                         ],
-                        labelStyle = {"display": "inline-block","margin-right": 10},
+                        labelStyle = {"display": "inline-block","marginRight": 10},
                         value="EB_No",
                       ),
-
                       html.Div([ # ENTERPRISE BUDGETING FORM
                         dbc.Row([
                           dbc.Col(
@@ -675,7 +787,7 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="crop-price_frst", value=0, min=0, step=0.1, required="required", ),
+                              dbc.Input(type="number", id="crop-price_frst", value="0", min="0", step="0.1", required="required", ),
                               dbc.FormText("[ETB/kg]"),
                             ],),
                           ),
@@ -686,7 +798,7 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="fert-cost_frst", value=0, min=0, step=0.1, required="required", ),
+                              dbc.Input(type="number", id="fert-cost_frst", value="0", min="0", step="0.1", required="required", ),
                               dbc.FormText("[ETB/N kg]"),
                             ],),
                           ),
@@ -697,19 +809,8 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="seed-cost_frst", value=0, min=0, step=0.1, required="required", ),
+                              dbc.Input(type="number", id="seed-cost_frst", value="0", min="0", step="0.1", required="required", ),
                               dbc.FormText("[ETB/ha]"),
-                            ],),
-                          ),
-                        ],),
-                        dbc.Row([
-                          dbc.Col(
-                            dbc.Label("Irrigation Cost", html_for="irrigation-cost", className="text-center", ),
-                          ),
-                          dbc.Col(
-                            dbc.FormGroup([
-                              dbc.Input(type="number", id="irrigation-cost_frst", value=0, min=0, step=0.1, required="required", ),
-                              dbc.FormText("[ETB/mm]"),
                             ],),
                           ),
                         ],),
@@ -719,7 +820,7 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="variable-costs_frst", value=0, min=0, step=0.1, required="required", ),
+                              dbc.Input(type="number", id="variable-costs_frst", value="0", min="0", step="0.1", required="required", ),
                               dbc.FormText("[ETB/ha]"),
                             ],),
                           ),
@@ -730,7 +831,7 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="fixed-costs_frst", value=0, min=0, step=0.1, required="required", ),
+                              dbc.Input(type="number", id="fixed-costs_frst", value="0", min="0", step="0.1", required="required", ),
                               dbc.FormText("[ETB/ha]"),
                             ],),
                           ),
@@ -739,7 +840,7 @@ layout = html.Div([
                         dbc.FormText(
                           html.Span([
                             "See the ",
-                            html.A("Tutorial", target="_blank", href="https://sites.google.com/iri.columbia.edu/simagri-ethiopia/simagri-tutorial"),
+                            html.A("Tutorial", target="_blank", href="https://sites.google.com/iri.columbia.edu/simagri-senegal/simagri-tutorial"),
                             " for more details of calculation"
                           ])
                         ),
@@ -755,25 +856,26 @@ layout = html.Div([
                   ],
                   row=True
                   ),
-
-                  # INPUT FORM END
                 ], 
                 className="p-3"
                 ),
               className="overflow-auto",
               style={"height": "63vh"},
               ),
+              html.Header(html.B("Scenarios"), className="card-header",),
+              dbc.FormGroup([ # SUBMIT - ADD SCENARIO
+                dbc.Button(id="write-button-state_frst", 
+                n_clicks=0, 
+                children="Create or Add a new Scenario", 
+                className="w-75 d-block mx-auto my-3",
+                color="primary"
+                ),
+              ]),
+            ]),
+            # FORM END
 
+            html.Div([
               html.Div([ # SCENARIO TABLE
-                html.Header(html.B("Scenarios"), className="card-header",),
-                dbc.FormGroup([ # SUBMIT - ADD SCENARIO
-                  dbc.Button(id="write-button-state_frst", 
-                  n_clicks=0, 
-                  children="Create or Add a new Scenario", 
-                  className="w-75 d-block mx-auto my-3",
-                  color="primary"
-                  ),
-                ]),
                 dash_table.DataTable(
                 id="scenario-table_frst",
                 columns=([
@@ -782,7 +884,7 @@ layout = html.Div([
                     {"id": "AN1", "name": "AN1"},  #AN of the first trimeter
                     {"id": "BN1", "name": "BN1"},  #BN of the first trimester
                     {"id": "AN2", "name": "AN2"},  #AN of the second (following) trimester
-                    {"id": "BN2", "name": "BN2"},  #BN of the second (following) trimester
+                    {"id": "BN2", "name": "BN2"},  #BN of the second (following)
                     {"id": "Crop", "name": "Crop"},
                     {"id": "Cultivar", "name": "Cultivar"},
                     {"id": "stn_name", "name": "Station"},
@@ -790,18 +892,28 @@ layout = html.Div([
                     # {"id": "FirstYear", "name": "First Year"},
                     # {"id": "LastYear", "name": "Last Year"},
                     {"id": "soil", "name": "Soil Type"},
-                    {"id": "iH2O", "name": "Initial Soil Water Content"},
-                    {"id": "iNO3", "name": "Initial Soil Nitrate Content"},
+                    {"id": "iH2O", "name": "Initial H2O"}, #"Initial Soil Water Content"},
+                    {"id": "iNO3", "name": "Initial NO3"}, #"Initial Soil Nitrate Content"},
                     {"id": "plt_density", "name": "Planting Density"},
-                    # {"id": "TargetYr", "name": "Target Year"},
-                    {"id": "Fert_1_DOY", "name": "DOY 1st Fertilizer Applied"},
-                    {"id": "Fert_1_Kg", "name": "1st Amount Applied (Kg/ha)"},
-                    {"id": "Fert_2_DOY", "name": "DOY 2nd Fertilizer Applied"},
-                    {"id": "Fert_2_Kg", "name": "2nd Amount Applied(Kg/ha)"},
-                    {"id": "Fert_3_DOY", "name": "DOY 3rd Fertilizer Applied"},
-                    {"id": "Fert_3_Kg", "name": "3rd Amount Applied(Kg/ha)"},
-                    {"id": "Fert_4_DOY", "name": "DOY 4th Fertilizer Applied"},
-                    {"id": "Fert_4_Kg", "name": "4th Amount Applied(Kg/ha)"},
+                    # {"id": "TargetYr", "name": "Target Yr"},
+                    {"id": "Fert_1_DOY", "name": "FDOY(1)"},
+                    {"id": "N_1_Kg", "name": "N(Kg/ha)(1)"},
+                    {"id": "P_1_Kg", "name": "P(Kg/ha)(1)"},
+                    {"id": "K_1_Kg", "name": "K(Kg/ha)(1)"},
+                    {"id": "Fert_2_DOY", "name": "FDOY(2)"},
+                    {"id": "N_2_Kg", "name": "N(Kg/ha)(2)"},
+                    {"id": "P_2_Kg", "name": "P(Kg/ha)(2)"},
+                    {"id": "K_2_Kg", "name": "K(Kg/ha)(2)"},
+                    {"id": "Fert_3_DOY", "name": "FDOY(3)"},
+                    {"id": "N_3_Kg", "name": "N(Kg/ha)(3)"},
+                    {"id": "P_3_Kg", "name": "P(Kg/ha)(3)"},
+                    {"id": "K_3_Kg", "name": "K(Kg/ha)(3)"},
+                    {"id": "Fert_4_DOY", "name": "FDOY(4)"},
+                    {"id": "N_4_Kg", "name": "N(Kg/ha)(4)"},
+                    {"id": "P_4_Kg", "name": "P(Kg/ha)(4)"},
+                    {"id": "K_4_Kg", "name": "K(Kg/ha)(4)"},
+                    {"id": "P_level", "name": "Extractable P"},
+                    {"id": "IR_method", "name": "Irrigation Method"},
                     {"id": "IR_1_DOY", "name": "IDOY(1)"},
                     {"id": "IR_1_amt", "name": "IR(mm)(1)"},
                     {"id": "IR_2_DOY", "name": "IDOY(2)"},
@@ -809,7 +921,7 @@ layout = html.Div([
                     {"id": "IR_3_DOY", "name": "IDOY(3)"},
                     {"id": "IR_3_amt", "name": "IR(mm)(3)"},
                     {"id": "IR_4_DOY", "name": "IDOY(4)"},
-                    {"id": "IR_4_amt", "name": "IR(mm)(4)"},
+                    {"id": "IR_4_amt", "name": "IR(mm)(4)"},                    
                     {"id": "IR_5_DOY", "name": "IDOY(5)"},
                     {"id": "IR_5_amt", "name": "IR(mm)(5)"},
                     {"id": "AutoIR_depth", "name": "AutoIR_depth"},
@@ -818,7 +930,6 @@ layout = html.Div([
                     {"id": "CropPrice", "name": "Crop Price"},
                     {"id": "NFertCost", "name": "Fertilizer Cost"},
                     {"id": "SeedCost", "name": "Seed Cost"},
-                    {"id": "IrrigCost", "name": "Irrigation Cost"},
                     {"id": "OtherVariableCosts", "name": "Other Variable Costs"},
                     {"id": "FixedCosts", "name": "Fixed Costs"},
                 ]),
@@ -838,11 +949,69 @@ layout = html.Div([
                 row_deletable=True
                 ),
               ]),
+              html.Div([
+                dbc.Row([ # IMPORT/DOWNLOAD SCENARIOS
+                  dbc.Col(
+                    dcc.Upload([
+                      html.Div([
+                        html.Div(html.B("Import Scenarios:")),
+                        "Drag and Drop or ",
+                        dcc.Link("Select a File", href="", )
+                      ],
+                      className="d-block mx-auto text-center p-2"
+                      )
+                    ],
+                    id="import-sce_frst", 
+                    className="w-75 d-block mx-auto m-3",
+                    style={
+                        "borderWidth": "1px",
+                        "borderStyle": "dashed",
+                        "borderRadius": "5px",
+                        "background-color": "lightgray"
+                    },
+                    ),
+                  ),
+                  dbc.Col([
+                    dbc.Button(
+                      "Download Scenarios",
+                    id="download-btn-sce_frst", 
+                    n_clicks=0, 
+                    className="w-75 h-50 d-block mx-auto m-4",
+                    color="secondary"
+                    ),
+                    dcc.Download(id="download-sce_frst")
+                  ],),
+                ],
+                className="mx-3", 
+                no_gutters=True
+                ),
+                html.Div( # IMPORT/DOWNLOAD ERROR MESSAGES
+                  dbc.Row([
+                    dbc.Col(
+                      html.Div("",
+                      id="import-sce-error_frst",
+                      style={"display": "none"},
+                      ),
+                    ),
+                    dbc.Col([
+                      html.Div(
+                        html.Div("Nothing to Download",
+                        className="d-block mx-auto m-2", 
+                        style={"color": "red"},
+                        ),
+                      id="download-sce-error_frst",
+                      style={"display": "none"}, 
+                      ),
+                    ]),
+                  ]),
+                className="text-center mx-3",
+                ),
+              ]),
             ]),
 
             html.Div([ # AFTER SCENARIO TABLE
               # dbc.FormGroup([ # Approximate Growing Season
-              #   dbc.Label("15) Critical growing period to relate rainfall amount with crop yield", html_for="season-slider"),
+              #   dbc.Label("17) Critical growing period to relate rainfall amount with crop yield", html_for="season-slider"),
               #   dbc.FormText("Selected period is used to sort drier/wetter years based on the seasonal total rainfall"),
               #   dcc.RangeSlider(
               #     id="season-slider",
@@ -939,7 +1108,7 @@ layout = html.Div([
               html.Div(
                 html.Div([
                   html.Div([
-                    html.Div([ # ORIGINAL CSV
+                    html.Div([ # ORIGINAL CSV STUFF
                       dbc.Row([
                         dbc.Col(
                           dbc.Button(id="btn_csv_yield_frst", 
@@ -969,7 +1138,7 @@ layout = html.Div([
                         # className="p-2"
                         # ),
                       ],
-                      className="m-1",
+                      className="m-3",
                       ),
                       # dcc.Download(id="download-dataframe-csv"),
                       Download(id="download-dataframe-csv-yield_frst"),
@@ -1029,7 +1198,7 @@ layout = html.Div([
                     html.Div([
                       html.Div(id="EBbox-container_frst"), 
                       html.Div(id="EBcdf-container_frst"),  #exceedance curve
-                      # html.Div(id="EBtimeseries-container_frst"), #exceedance curve
+                      # html.Div(id="EBtimeseries-container"), #exceedance curve
 
                     ], 
                     className="plot-container plotly"),
@@ -1060,7 +1229,7 @@ layout = html.Div([
                   style={"height": "20vh"},
                   ),   #yield simulated output
                 ]),
-              ],),
+              ]),
             ],
             id="EB-figures_frst",
             style={"display": "none"},
@@ -1078,11 +1247,9 @@ layout = html.Div([
     ),
 ])
 
-# # is this needed?
+# is this needed?
 DATA_PATH = pathlib.Path(__file__).parent.joinpath("data").resolve()
-
 DSSAT_FILES_DIR_SHORT = "/DSSAT/dssat-base-files"  #for linux systemn
-
 DSSAT_FILES_DIR = os.getcwd() + DSSAT_FILES_DIR_SHORT   #for linux systemn
 
 #https://community.plotly.com/t/loading-when-opening-localhost/7284
@@ -1092,21 +1259,30 @@ app.scripts.config.serve_locally = True
 app.css.config.serve_locally = True
 
 cultivar_options = {
-    # "MZ": ["CIMT01 BH540-Kassie","CIMT02 MELKASA-Kassi","CIMT17 BH660-FAW-40%", "CIMT19 MELKASA2-FAW-40%", "CIMT21 MELKASA-LowY"],
-    "MZ": ["CIMT01 BH540","CIMT02 MELKASA-1","CIMT17 BH660-FAW-40%", "CIMT19 MELKASA2-FAW-40%", "CIMT21 MELKASA-LowY"],
-    "WH": ["CI2021 KT-KUB", "CI2022 RMSI", "CI2023 Meda wolabu", "CI2024 Sofumer", "CI2025 Hollandi", "CI2018 ET-MED", "CI2019 ET-LNG"],
-    "SG": ["IB0020 ESH-1","IB0020 ESH-2","IB0027 Dekeba","IB0027 Melkam","IB0027 Teshale"]
+    "PN": ["IB0090 VAR_FLEUR_11","IB0091 VAR_73-33"],
+    "ML": ["IB0044 CIVT"],
+    # "MZ": ["CIMT01 BH540","CIMT02 MELKASA-1","CIMT17 BH660-FAW-40%", "CIMT19 MELKASA2-FAW-40%", "CIMT21 MELKASA-LowY"],
+    # "WH": ["CI2021 KT-KUB", "CI2022 RMSI", "CI2023 Meda wolabu", "CI2024 Sofumer", "CI2025 Hollandi", "CI2018 ET-MED", "CI2019 ET-LNG"],
+    "SG": ["IB0066 Fadda-D","IB0069 IS15401-D","IB0070 Soumba-D","IB0071 Faourou-D"]
+}
+soil_options = {
+    "PN": ["CNCNioro14(S)","CNCNNior15(SL)", "CNBambey14(LS)", #from Adama
+          "CNNior14_S(S)", "CNNior15_S(SL)", "CNBamb14_S(LS)", #from Adama-SRGF adjusted],
+          "SN00840067(SL)", "SN00840080(SL)", "SN00840042(SL)", "SN00840056(SL)"],
+    "ML": ["CNCNioro14(S)","CNCNNior15(SL)", "CNBambey14(LS)", #from Adama
+          "CNNior14_S(S)", "CNNior15_S(SL)", "CNBamb14_S(LS)", #from Adama-SRGF adjusted],
+          "SN00840067(SL)", "SN00840080(SL)", "SN00840042(SL)", "SN00840056(SL)"],
+    "SG": ["SN-N15Rain(S)", "SN-N15Irrg(S)", "SN-N16Rain(S)", "SN-N16Irrg(S)", "SN-S15Rain(LS)","SN-S16Rain(LS)",#from Ganyo(2019) sorghum
+          "SN00840067(SL)", "SN00840080(SL)", "SN00840042(SL)", "SN00840056(SL)"]
 }
 
-
-# Wdir_path = "C:\\IRI\\Dash_ET_forecast\\ET_forecast_windows\\TEST_ET\\"
 Wdir_path = DSSAT_FILES_DIR    #for linux systemn
 
 #==============================================================
 #call back to update the first & last weather observed dates
 @app.callback(Output("obs_1st", component_property="value"),
               Output("obs_last", component_property="value"),
-              Input("ETstation_frst", component_property="value"))
+              Input("SNstation_frst", component_property="value"))
 def func(station_id):
     WTD_fname = path.join(Wdir_path, station_id +".WTD")
     data1 = np.loadtxt(WTD_fname,skiprows=1)
@@ -1163,11 +1339,24 @@ def func(AN, BN):
     Output("cultivar-dropdown_frst", "options"),
     Input("crop-radio_frst", "value"))
 def set_cultivar_options(selected_crop):
-    return [{"label": i, "value": i} for i in cultivar_options[selected_crop]]
+    return [{"label": i[7:], "value": i} for i in cultivar_options[selected_crop]]
 
 @app.callback(
     Output("cultivar-dropdown_frst", "value"),
     Input("cultivar-dropdown_frst", "options"))
+def set_cultivar_value(available_options):
+    return available_options[0]["value"]
+#=============================================================
+#Dynamic call back for different soils for a selected target crop
+@app.callback(
+    Output("SNsoil_frst", "options"),
+    Input("crop-radio_frst", "value"))
+def set_soil_options(selected_crop):
+    return [{"label": i, "value": i} for i in soil_options[selected_crop]]
+
+@app.callback(
+    Output("SNsoil_frst", "value"),
+    Input("SNsoil_frst", "options"))
 def set_cultivar_value(available_options):
     return available_options[0]["value"]
 #==============================================================
@@ -1176,7 +1365,7 @@ def set_cultivar_value(available_options):
     Output("download-dataframe-csv-yield_frst", "data"),
     Input("btn_csv_yield_frst", "n_clicks"),
     State("memory-yield-table_frst","data"), 
-    # State("yield-table", "data"),
+    # State("yield-table_frst", "data"),
     prevent_initial_call=True,
 )
 def func(n_clicks, yield_data):
@@ -1295,7 +1484,7 @@ def individual_exceedance(scenario_name, yield_table):
 #         df_out.iloc[:,k]=temp.values
 #         k=k+1 #column index for a new df
 #     return dcc.send_data_frame(df_out.to_csv, "seasonal_rainfall.csv")
-#=================================================    
+# #=================================================    
 # #3) for prob of exceedance - call back to save df into a csv file
 # @app.callback(
 #     Output("download-dataframe-csv-Pexe", "data"),
@@ -1336,8 +1525,17 @@ def func(n_clicks, EB_data):
               Input("fert_input_frst", component_property="value"))
 def show_hide_table(visibility_state):
     if visibility_state == "Fert":
-        return {}   
+        return {}
     if visibility_state == "No_fert":
+        return {"display": "none"}
+#==============================================================
+#call back to "show/hide" Phosphorus Simulation option
+@app.callback(Output("P-sim-Comp_frst", component_property="style"),
+              Input("P_input_frst", component_property="value"))
+def show_hide_table(visibility_state):
+    if visibility_state == "P_yes":
+        return {}
+    if visibility_state == "P_no":
         return {"display": "none"}
 #==============================================================
 #call back to "show/hide" irrigation options
@@ -1370,73 +1568,108 @@ def show_hide_EBtable(EB_radio_frst, scenarios):
     existing_sces = pd.DataFrame(scenarios)
     if EB_radio_frst == "EB_Yes":
         return {}
+    if existing_sces.empty:
+        return {"display": "none"}
     else:
-        if existing_sces.empty:
+        if existing_sces.sce_name.values[0] == "N/A" or set(existing_sces.CropPrice.values) == {-99}:
             return {"display": "none"}
         else:
-            return {"display": "none"} if existing_sces.sce_name.values[0] == "N/A" or set(existing_sces.CropPrice.values) == {"-99"} else {}
-
+            return {}
 #==============================================================
+# callback for downloading scenarios
+@app.callback(Output("download-sce_frst", "data"),
+              Output("download-sce-error_frst", component_property="style"),
+              Input("download-btn-sce_frst", "n_clicks"),
+              State("scenario-table_frst","data"),
+)
+def download_scenarios(n_clicks, scenario_table):
+    scenarios = pd.DataFrame(scenario_table)
+    # first validate that there is relevant data in the scenario table. TODO: finish validation
+    if scenarios.empty:
+        return [None, {}]
+    else:
+        if scenarios.sce_name.values[0] == "N/A":
+            return [None, {}]
+
+    # take timestamp and download as csv
+    timestamp = datetime.datetime.now().strftime("%d-%m-%Y_%H:%M:%S")
+    return [dcc.send_data_frame(scenarios.to_csv, f"simagri_SN_scenarios_{timestamp}.csv"), {"display": "none"}]
+#==============================================================
+# submit to scenario table or import CSV
 @app.callback(Output("scenario-table_frst", "data"),
-                Input("write-button-state_frst", "n_clicks"),
-                State("ETstation_frst", "value"),
-                State("trimester1", "value"),
-                State("AN1", "value"),
-                State("BN1", "value"),
-                State("AN2", "value"),
-                State("BN2", "value"),
-                # State("year1", "value"),
-                # State("year2", "value"),
-                State("plt-date-picker_frst", "date"),
-                State("crop-radio_frst", "value"),
-                State("cultivar-dropdown_frst", "value"),
-                State("ETsoil_frst", "value"),
-                State("ini-H2O_frst", "value"),
-                State("ini-NO3_frst", "value"),
-                State("plt-density_frst", "value"),
-                State("sce-name_frst", "value"),
-                # State("target-year", "value"),
-                State("fert_input_frst", "value"),
-                State("fert-day1_frst","value"),
-                State("fert-amt1_frst","value"),
-                State("fert-day2_frst","value"),
-                State("fert-amt2_frst","value"),
-                State("fert-day3_frst","value"),
-                State("fert-amt3_frst","value"),
-                State("fert-day4_frst","value"),
-                State("fert-amt4_frst","value"),
-                State("irrig_input_frst", "value"),     ## irrigation option
-                State("ir_method_frst", "value"),     ##irrigation method in case "on reported date"
-                State("irrig-day1_frst", "value"),
-                State("irrig-amt1_frst", "value"),
-                State("irrig-day2_frst", "value"),
-                State("irrig-amt2_frst", "value"),
-                State("irrig-day3_frst", "value"),
-                State("irrig-amt3_frst", "value"),
-                State("irrig-day4_frst", "value"),
-                State("irrig-amt4_frst", "value"),
-                State("irrig-day5_frst", "value"),
-                State("irrig-amt5_frst", "value"),
-                State("ir_depth_frst", "value"), #autmomatic irrigaiton
-                State("ir_threshold_frst", "value"),
-                State("ir_eff_frst", "value"),
-                State("EB_radio_frst", "value"),
-                State("crop-price_frst","value"),
-                State("seed-cost_frst","value"),
-                State("fert-cost_frst","value"),
-                State("irrigation-cost_frst","value"),
-                State("fixed-costs_frst","value"),
-                State("variable-costs_frst","value"),
-                State("scenario-table_frst","data")
-            )
+              Output("import-sce-error_frst","style"),
+              Output("import-sce-error_frst","children"),
+              Input("write-button-state_frst", "n_clicks"),
+              Input("import-sce_frst", "contents"),
+              State("import-sce_frst", "filename"),
+              State("SNstation_frst", "value"),
+              State("trimester1", "value"),
+              State("AN1", "value"),
+              State("BN1", "value"),
+              State("AN2", "value"),
+              State("BN2", "value"),
+              # State("year1", "value"),
+              # State("year2", "value"),
+              State("PltDate-picker_frst", "date"),
+              State("crop-radio_frst", "value"),
+              State("cultivar-dropdown_frst", "value"),
+              State("SNsoil_frst", "value"),
+              State("ini-H2O_frst", "value"),
+              State("ini-NO3_frst", "value"),
+              State("plt-density_frst", "value"),
+              State("sce-name_frst", "value"),
+              # State("target-year", "value"),
+              State("fert_input_frst", "value"),
+              State("fert-day1_frst","value"),
+              State("N-amt1_frst","value"),
+              State("P-amt1_frst","value"),
+              State("K-amt1_frst","value"),
+              State("fert-day2_frst","value"),
+              State("N-amt2_frst","value"),
+              State("P-amt2_frst","value"),
+              State("K-amt2_frst","value"),
+              State("fert-day3_frst","value"),
+              State("N-amt3_frst","value"),
+              State("P-amt3_frst","value"),
+              State("K-amt3_frst","value"),
+              State("fert-day4_frst","value"),
+              State("N-amt4_frst","value"),
+              State("P-amt4_frst","value"),
+              State("K-amt4_frst","value"),
+              State("P_input_frst", "value"),
+              State("extr_P_frst", "value"),
+              State("irrig_input_frst", "value"),
+              State("ir_method_frst", "value"),
+              State("irrig-day1_frst", "value"),
+              State("irrig-amt1_frst", "value"),
+              State("irrig-day2_frst", "value"),
+              State("irrig-amt2_frst", "value"),
+              State("irrig-day3_frst", "value"),
+              State("irrig-amt3_frst", "value"),
+              State("irrig-day4_frst", "value"),
+              State("irrig-amt4_frst", "value"),
+              State("irrig-day5_frst", "value"),
+              State("irrig-amt5_frst", "value"),
+              State("ir_depth_frst", "value"),
+              State("ir_threshold_frst", "value"),
+              State("ir_eff_frst", "value"),
+              State("EB_radio_frst", "value"),
+              State("crop-price_frst","value"),
+              State("seed-cost_frst","value"),
+              State("fert-cost_frst","value"),
+              State("fixed-costs_frst","value"),
+              State("variable-costs_frst","value"),
+              State("scenario-table_frst","data")
+)
 def make_sce_table(
-    n_clicks, station, trimester, AN1, BN1, AN2, BN2, planting_date, crop, cultivar, soil_type, 
+    n_clicks, file_contents, filename, station, trimester, AN1, BN1, AN2, BN2, planting_date, crop, cultivar, soil_type, 
     initial_soil_moisture, initial_soil_no3_content, planting_density, scenario, #target_year, 
     fert_app, 
-    fd1, fa1,
-    fd2, fa2,
-    fd3, fa3,
-    fd4, fa4,
+    fd1, fN1,fP1,fK1, #EJ(7/7/2021) added P and K as well as N
+    fd2, fN2,fP2,fK2,
+    fd3, fN3,fP3,fK3,
+    fd4, fN4,fP4,fK4,
+    p_sim, p_level,  #EJ(7/7/2021) Phosphorous simualtion
     irrig_app,  #EJ(7/7/2021) irrigation option
     irrig_method,  #on reported date
     ird1, iramt1,
@@ -1449,239 +1682,601 @@ def make_sce_table(
     crop_price,
     seed_cost,
     fert_cost,
-    irrig_cost, ##EJ(7/30/2021) irrigation option
     fixed_costs,
     variable_costs,
     sce_in_table
 ):
+
     existing_sces = pd.DataFrame(sce_in_table)
-
-    if ( # first check that all required inputs have been given
-            scenario == None
-        # or  start_year == None
-        # or  end_year == None
-        # or  target_year == None
-        or  planting_date == None
-        or  planting_density == None
-        or (
-                fert_app == "Fert"
-            and (
-                    fd1 == None or fa1 == None
-                or  fd2 == None or fa2 == None
-                or  fd3 == None or fa3 == None
-                or  fd4 == None or fa4 == None
-            ) 
-        )
-        or (
-                irrig_app == "repr_irrig"
-            and (
-                    irrig_method == None
-                or  ird1 == None  or iramt1 == None
-                or  ird2 == None  or iramt2 == None
-                or  ird3 == None  or iramt3 == None
-                or  ird4 == None  or iramt4 == None
-                or  ird5 == None  or iramt5 == None
-            )
-        )
-        or (
-                irrig_app == "auto_irrig"
-            and (
-                    ir_depth == None
-                or  ir_threshold == None
-                or  ir_eff == None
-            )
-        )
-        or (
-                EB_radio == "EB_Yes"
-            and (
-                    crop_price == None
-                or  seed_cost == None
-                or  fert_cost == None
-                or  irrig_cost == None
-                or  fixed_costs == None
-                or  variable_costs == None
-            )
-        )        
-    ):
-        return existing_sces
-
-    # convert integer inputs to string
-    # start_year = str(start_year)
-    # end_year = str(end_year)
-    # target_year = str(target_year)
-    planting_density = str(planting_density)
-
-    # Make a new dataframe to return to scenario-summary table
-    current_sce = pd.DataFrame({
-        "sce_name": [scenario], "Trimester1": [trimester], "AN1": [AN1],"BN1": [BN1],"AN2": [AN2],"BN2": [BN2],
-        "Crop": [crop], "Cultivar": [cultivar[7:]], "stn_name": [station], "PltDate":[planting_date], # [planting_date[5:]], 
-        "soil": [soil_type], "iH2O": [initial_soil_moisture], 
-        "iNO3": [initial_soil_no3_content], "plt_density": [planting_density], #"TargetYr": [target_year], 
-        "Fert_1_DOY": ["-99"], "Fert_1_Kg": ["-99"], "Fert_2_DOY": ["-99"], "Fert_2_Kg": ["-99"], 
-        "Fert_3_DOY": ["-99"], "Fert_3_Kg": ["-99"], "Fert_4_DOY": ["-99"], "Fert_4_Kg": ["-99"], 
-        "IR_method": ["-99"], #Irrigation on reported date
-        "IR_1_DOY": ["-99"], "IR_1_amt": ["-99"],
-        "IR_2_DOY": ["-99"], "IR_2_amt": ["-99"],
-        "IR_3_DOY": ["-99"], "IR_3_amt": ["-99"],
-        "IR_4_DOY": ["-99"], "IR_4_amt": ["-99"],
-        "IR_5_DOY": ["-99"], "IR_5_amt": ["-99"],
-        "AutoIR_depth":  ["-99"], "AutoIR_thres": ["-99"], "AutoIR_eff": ["-99"], #Irrigation automatic
-        "CropPrice": ["-99"], "NFertCost": ["-99"], "SeedCost": ["-99"],"IrrigCost": ["-99"], "OtherVariableCosts": ["-99"], "FixedCosts": ["-99"]
-    })
-
-    #=====================================================================
-    # #Update dataframe for fertilizer inputs
-    current_fert = pd.DataFrame(columns=["DAP", "NAmount"])
-    fert_valid = True
-    if fert_app == "Fert":
-        current_fert = pd.DataFrame({
-            "DAP": [fd1, fd2, fd3, fd4, ],
-            "NAmount": [fa1, fa2, fa3, fa4, ],
-        })
-
-        fert_frame =  pd.DataFrame({
-            "Fert_1_DOY": [fd1], "Fert_1_Kg": [fa1],
-            "Fert_2_DOY": [fd2], "Fert_2_Kg": [fa2],
-            "Fert_3_DOY": [fd3], "Fert_3_Kg": [fa3],
-            "Fert_4_DOY": [fd4], "Fert_4_Kg": [fa4],
-        })
-        current_sce.update(fert_frame)
-
-        if (
-                (fd1 < 0 or 365 < fd1) or fa1 < 0
-            or  (fd2 < 0 or 365 < fd2) or fa2 < 0
-            or  (fd3 < 0 or 365 < fd3) or fa3 < 0
-            or  (fd4 < 0 or 365 < fd4) or fa4 < 0
-        ):
-            fert_valid = False
-    #=====================================================================
-    # #Update dataframe for irrigation (on reported date) inputs
-    IR_reported_valid = True
-    current_irrig = pd.DataFrame(columns=["DAP", "WAmount"])
-    if irrig_app == "repr_irrig":
-        current_irrig = pd.DataFrame({
-            "DAP": [ird1, ird2, ird3, ird4, ird5,],
-            "WAmount": [iramt1, iramt2, iramt3, iramt4,iramt5,],
-        })
-
-        irrig_frame =  pd.DataFrame({
-            "IR_1_DOY": [ird1], "IR_1_amt": [iramt1],
-            "IR_2_DOY": [ird2], "IR_2_amt": [iramt2],
-            "IR_3_DOY": [ird3], "IR_3_amt": [iramt3],
-            "IR_4_DOY": [ird4], "IR_4_amt": [iramt4],
-            "IR_5_DOY": [ird5], "IR_5_amt": [iramt5],
-        })
-        current_sce.update(irrig_frame)
-
-        if (
-                (ird1 < 0 or 365 < ird1) or iramt1 < 0
-            or  (ird2 < 0 or 365 < ird2) or iramt2 < 0
-            or  (ird3 < 0 or 365 < ird3) or iramt3 < 0
-            or  (ird4 < 0 or 365 < ird4) or iramt4 < 0
-            or  (ird5 < 0 or 365 < ird5) or iramt5 < 0
-        ):
-            IR_reported_valid = False
-    if irrig_app == "auto_irrig":
-      current_sce.loc[0,"AutoIR_depth"] = ir_depth   #check index 0
-      current_sce.loc[0,"AutoIR_thres"] = ir_threshold
-      current_sce.loc[0,"AutoIR_eff"] = ir_eff
-
-      if (
-              (ir_depth < 1 or 100 < ir_depth)
-          or  (ir_threshold < 1 or 100 < ir_threshold)
-          or  (ir_eff < 0.1 or 1 < ir_eff)
-      ):
-          IR_reported_valid = False
-    #=====================================================================
-    # Write SNX file
-    # writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
-    #                     planting_density,scenario,fert_app, current_fert)
-    writeSNX_clim(Wdir_path,station,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
-                        planting_density,scenario,fert_app, current_fert, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)  #This is differnt from writeSNX_main_hist in the historical analysis
-    writeSNX_frst(Wdir_path,station,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
-                        planting_density,scenario,fert_app, current_fert, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)
-    #=====================================================================
-    # #Update dataframe for Enterprise Budgeting inputs
-    EB_valid = True
-    if EB_radio == "EB_Yes":
-        EB_frame =  pd.DataFrame({
-            "CropPrice": [crop_price],
-            "NFertCost": [seed_cost],
-            "SeedCost": [fert_cost],
-            "IrrigCost": [irrig_cost],
-            "OtherVariableCosts": [fixed_costs],
-            "FixedCosts": [variable_costs],
-        })
-        current_sce.update(EB_frame)
-
-        if (
-                crop_price < 0
-            or  seed_cost < 0
-            or  fert_cost < 0
-            or  irrig_cost < 0
-            or  fixed_costs < 0
-            or  variable_costs < 0
-        ):
-            EB_valid = False          
-
-    # validate planting date
-    planting_date_valid = True
-    pl_date_split = planting_date.split("-")
-    if not len(pl_date_split) == 3:
-        planting_date_valid = False
+    ctx = dash.callback_context
+    if not ctx.triggered:
+        triggered_by = "Not triggered"
     else:
-        yyyy = pl_date_split[0]
-        mm = pl_date_split[1]
-        dd = pl_date_split[2]
+        triggered_by = ctx.triggered[0]["prop_id"].split(".")[0]
 
-        long_months = [1,3,5,7,8,10,12]
-        short_months = [2,4,6,9,11]
+    if triggered_by == "import-sce":
+        if file_contents is not None:
+            content_type, content_string = file_contents.split(",")
+            decoded = base64.b64decode(content_string)
 
-        if not (re.match("\d\d", dd) and re.match("\d\d", mm)):# and re.match("2021", yyyy)): EJ(7/27/2021) to allow hindcast simulation (e.g., 2001)
+            csv_df = None
+            try:
+                if filename.split(".")[-1] == "csv":
+                    # Assume that the user uploaded a CSV file
+                    csv_df = pd.read_csv(io.StringIO(decoded.decode("utf-8")))
+                    # Remove 'Unnamed: 0' index column
+                    csv_df = csv_df.drop(columns=["Unnamed: 0"])
+            except Exception as e:
+                print(e)
+                return [sce_in_table, {"color": "red"}, "There was an error processing this file."]
+
+            # if user deleted all rows from scenario table reassign column names
+            if not list(existing_sces):
+                existing_sces = pd.DataFrame(columns=sce_col_names)
+
+            if list(csv_df) != list(existing_sces):
+                return [sce_in_table, {"color": "red"}, "The columns in the CSV are invalid."]
+
+            # IF all columns match up
+            shared_scenarios = list(set(csv_df.sce_name.values) & set(existing_sces.sce_name.values))
+            val_csv = pd.DataFrame()
+            for i in range(len(csv_df)):
+                scenario = csv_df.sce_name[i] # str
+                station = csv_df.stn_name[i] # str                
+                # start_year = str(csv_df.FirstYear[i]) # str (original: int)
+                # end_year = str(csv_df.LastYear[i]) # str (original: int)
+                planting_date = csv_df.PltDate[i] # str
+                crop = csv_df.Crop[i] # str
+                cultivar = csv_df.Cultivar[i] # str
+                soil_type = csv_df.soil[i] # str
+                initial_soil_moisture = csv_df.iH2O[i] # str
+                initial_soil_no3_content = csv_df.iNO3[i] # str
+                planting_density = str(csv_df.plt_density[i]) # str (original: float)
+                target_year = str(csv_df.TargetYr[i]) # str (original: int)
+
+                # fertiilizer simulation
+                fd1 = int(csv_df.Fert_1_DOY[i]) # int
+                fN1 = float(csv_df.N_1_Kg[i]) # float
+                fP1 = float(csv_df.P_1_Kg[i]) # float
+                fK1 = float(csv_df.K_1_Kg[i]) # float
+                fd2 = int(csv_df.Fert_2_DOY[i]) # int
+                fN2 = float(csv_df.N_2_Kg[i]) # float
+                fP2 = float(csv_df.P_2_Kg[i]) # float
+                fK2 = float(csv_df.K_2_Kg[i]) # float
+                fd3 = int(csv_df.Fert_3_DOY[i]) # int
+                fN3 = float(csv_df.N_3_Kg[i]) # float
+                fP3 = float(csv_df.P_3_Kg[i]) # float
+                fK3 = float(csv_df.K_3_Kg[i]) # float
+                fd4 = int(csv_df.Fert_4_DOY[i]) # int
+                fN4 = float(csv_df.N_4_Kg[i]) # float
+                fP4 = float(csv_df.P_4_Kg[i]) # float
+                fK4 = float(csv_df.K_4_Kg[i]) # float
+
+                current_fert = pd.DataFrame({
+                    "DAP": [fd1, fd2, fd3, fd4, ],
+                    "NAmount": [fN1, fN2, fN3, fN4, ],
+                    "PAmount": [fP1, fP2, fP3, fP4, ],
+                    "KAmount": [fK1, fK2, fK3, fK4, ],
+                })
+
+                # Phosphorous simualtion
+                p_level = csv_df.P_level[i] # str
+
+                # irrigation option
+                irrig_method = csv_df.IR_method[i] # str
+                
+                #on reported date
+                ird1 = int(csv_df.IR_1_DOY[i]) # int
+                iramt1 = float(csv_df.IR_1_amt[i]) # float
+                ird2 = int(csv_df.IR_2_DOY[i]) # int
+                iramt2 = float(csv_df.IR_2_amt[i]) # float
+                ird3 = int(csv_df.IR_3_DOY[i]) # int
+                iramt3 = float(csv_df.IR_3_amt[i]) # float
+                ird4 = int(csv_df.IR_4_DOY[i]) # int
+                iramt4 = float(csv_df.IR_4_amt[i]) # float
+                ird5 = int(csv_df.IR_5_DOY[i]) # int
+                iramt5 = float(csv_df.IR_5_amt[i]) # float
+            
+                current_irrig = pd.DataFrame({
+                    "DAP": [ird1, ird2, ird3, ird4, ird5,],
+                    "WAmount": [iramt1, iramt2, iramt3, iramt4,iramt5,],
+                })
+
+                #automatic when required
+                ir_depth = float(csv_df.AutoIR_depth[i]) # float
+                ir_threshold = float(csv_df.AutoIR_thres[i]) # float
+                ir_eff = float(csv_df.AutoIR_eff[i]) # float
+
+                crop_price = float(csv_df.CropPrice[i]) # float
+                seed_cost = float(csv_df.NFertCost[i]) # float
+                fert_cost = float(csv_df.SeedCost[i]) # float
+                fixed_costs = float(csv_df.OtherVariableCosts[i]) # float
+                variable_costs = float(csv_df.FixedCosts[i]) # float
+                #################################################
+                # Validate data
+                
+                if ( # first check that all required inputs have been given
+                        scenario == None
+                    # or  start_year == None
+                    # or  end_year == None
+                    # or  target_year == None
+                    or  planting_date == None
+                    or  planting_density == None
+                    or (
+                            fd1 == None or fN1 == None  or fP1 == None  or fK1== None 
+                        or  fd2 == None or fN2 == None  or fP2 == None  or fK2== None 
+                        or  fd3 == None or fN3 == None  or fP3 == None  or fK3== None 
+                        or  fd4 == None or fN4 == None  or fP4 == None  or fK4== None 
+                    )
+                    or (
+                            irrig_method == None 
+                        or  ird1 == None  or iramt1 == None
+                        or  ird2 == None  or iramt2 == None
+                        or  ird3 == None  or iramt3 == None
+                        or  ird4 == None  or iramt4 == None
+                        or  ird5 == None  or iramt5 == None
+                    )
+                    or (
+                            ir_depth == None 
+                        or  ir_threshold == None
+                        or  ir_eff == None
+                    )
+                    or (
+                            crop_price == None
+                        or  seed_cost == None
+                        or  fert_cost == None
+                        or  fixed_costs == None
+                        or  variable_costs == None
+                    )        
+                ):
+                    return [sce_in_table, {"color": "red"}, f"Scenario '{scenario}' is missing data."]
+
+                csv_sce_valid = True
+
+                fert_valid = True
+                if (
+                        (fd1 < 0 or 365 < fd1) or fN1 < 0 or fP1 < 0 or fK1 < 0
+                    or  (fd2 < 0 or 365 < fd2) or fN2 < 0 or fP2 < 0 or fK2 < 0
+                    or  (fd3 < 0 or 365 < fd3) or fN3 < 0 or fP3 < 0 or fK3 < 0
+                    or  (fd4 < 0 or 365 < fd4) or fN4 < 0 or fP4 < 0 or fK4 < 0
+                ):
+                    if not (
+                            fd1 == -99 and fN1 == -99 and fP1 == -99 and fK1 == -99
+                        and fd2 == -99 and fN2 == -99 and fP2 == -99 and fK2 == -99
+                        and fd3 == -99 and fN3 == -99 and fP3 == -99 and fK3 == -99
+                        and fd4 == -99 and fN4 == -99 and fP4 == -99 and fK4 == -99
+                    ):
+                        fert_valid = False
+                else:
+                    if not (
+                            float(fd1).is_integer() and (fN1*10.0).is_integer() and (fP1*10.0).is_integer() and (fK1*10.0).is_integer()
+                        and float(fd2).is_integer() and (fN2*10.0).is_integer() and (fP2*10.0).is_integer() and (fK2*10.0).is_integer()
+                        and float(fd3).is_integer() and (fN3*10.0).is_integer() and (fP3*10.0).is_integer() and (fK3*10.0).is_integer()
+                        and float(fd4).is_integer() and (fN4*10.0).is_integer() and (fP4*10.0).is_integer() and (fK4*10.0).is_integer()
+                    ):
+                        fert_valid = False
+
+                IR_reported_valid = True
+                if (
+                        (ird1 < 0 or 365 < ird1) or iramt1 < 0
+                    or  (ird2 < 0 or 365 < ird2) or iramt2 < 0
+                    or  (ird3 < 0 or 365 < ird3) or iramt3 < 0
+                    or  (ird4 < 0 or 365 < ird4) or iramt4 < 0
+                    or  (ird5 < 0 or 365 < ird5) or iramt5 < 0
+                ):
+                    if not (
+                            ird1 == -99 and iramt1 == -99
+                        and ird2 == -99 and iramt2 == -99
+                        and ird3 == -99 and iramt3 == -99
+                        and ird4 == -99 and iramt4 == -99
+                        and ird5 == -99 and iramt5 == -99
+                    ):
+                        IR_reported_valid = False
+                    else: # this happens if all the above are -99. ie. if automatic irrigation is selected
+                        if (
+                                (ir_depth < 1 or 100 < ir_depth)
+                            or  (ir_threshold < 1 or 100 < ir_threshold)
+                            or  (ir_eff < 0.1 or 1 < ir_eff)
+                        ):
+                            if not (
+                                    ir_depth == -99
+                                and ir_threshold == -99
+                                and ir_eff == -99
+                            ):
+                                IR_reported_valid = False
+                        else:
+                            if not (
+                                    (ir_depth*10.0).is_integer()
+                                and (ir_threshold*10.0).is_integer()
+                                and (ir_eff*10.0).is_integer()
+                            ):
+                                IR_reported_valid = False
+                else:
+                    if not (
+                            float(ird1).is_integer() and (iramt1*10.0).is_integer()
+                        and float(ird2).is_integer() and (iramt2*10.0).is_integer()
+                        and float(ird3).is_integer() and (iramt3*10.0).is_integer()
+                        and float(ird4).is_integer() and (iramt4*10.0).is_integer()
+                        and float(ird5).is_integer() and (iramt5*10.0).is_integer()
+                    ):
+                        IR_reported_valid = False
+
+                EB_valid = True
+                if (
+                        crop_price < 0
+                    or  seed_cost < 0
+                    or  fert_cost < 0
+                    or  fixed_costs < 0
+                    or  variable_costs < 0
+                ):
+                    if not (
+                            crop_price == -99
+                        and seed_cost == -99
+                        and fert_cost == -99
+                        and fixed_costs == -99
+                        and variable_costs == -99
+                    ):
+                        EB_valid = False
+                else:
+                    if not (
+                            (crop_price*10.0).is_integer()
+                        and  (seed_cost*10.0).is_integer()
+                        and  (fert_cost*10.0).is_integer()
+                        and  (fixed_costs*10.0).is_integer()
+                        and  (variable_costs*10.0).is_integer()
+                    ):
+                        EB_valid = False          
+
+                # validate planting date
+                planting_date_valid = True
+                pl_date_split = planting_date.split("-")
+                if not len(pl_date_split) == 2:
+                    planting_date_valid = False
+                else:
+                    mm = pl_date_split[0]
+                    dd = pl_date_split[1]
+
+                    long_months = [1,3,5,7,8,10,12]
+                    short_months = [2,4,6,9,11]
+
+                    if int(mm) in long_months:
+                        if int(dd) < 1 or 31 < int(dd):
+                            planting_date_valid = False
+                    if int(mm) in short_months:
+                        if int(dd) < 1 or 30 < int(dd):
+                            planting_date_valid = False 
+                    if int(mm) == 2:
+                        if int(dd) < 1 or 28 < int(dd):
+                            planting_date_valid = False
+
+                csv_sce_valid = (
+                        re.match("....", scenario)
+                    # and int(start_year) >= 1981 and int(start_year) <= 2018
+                    # and int(end_year) >= 1981 and int(end_year) <= 2018
+                    # and int(target_year) >= 1981 and int(target_year) <= 2018
+                    and float(planting_density) >= 1 and float(planting_density) <= 300
+                    and planting_date_valid and fert_valid and IR_reported_valid and EB_valid
+                )
+
+                if csv_sce_valid:
+                    df = pd.DataFrame({
+                        "sce_name": [scenario], "Trimester1": [trimester], "AN1": [AN1],"BN1": [BN1],"AN2": [AN2],"BN2": [BN2],
+                        "Crop": [crop], "Cultivar": [cultivar[7:]], "stn_name": [station], "PltDate":[planting_date], # [planting_date[5:]], 
+                        "soil": [soil_type], "iH2O": [initial_soil_moisture], 
+                        "iNO3": [initial_soil_no3_content], "plt_density": [planting_density], #"TargetYr": [target_year], 
+                        "Fert_1_DOY": [-99], "N_1_Kg": [-99], "P_1_Kg": [-99], "K_1_Kg": [-99], 
+                        "Fert_2_DOY": [-99], "N_2_Kg": [-99], "P_2_Kg": [-99], "K_2_Kg": [-99], 
+                        "Fert_3_DOY": [-99], "N_3_Kg": [-99], "P_3_Kg": [-99], "K_3_Kg": [-99], 
+                        "Fert_4_DOY": [-99], "N_4_Kg": [-99], "P_4_Kg": [-99], "K_4_Kg": [-99], 
+                        "P_level": [-99],   #P simulation    EJ(7/72021)
+                        "IR_method": [irrig_method],
+                        "IR_1_DOY": [ird1], "IR_1_amt": [iramt1],
+                        "IR_2_DOY": [ird2], "IR_2_amt": [iramt2],
+                        "IR_3_DOY": [ird3], "IR_3_amt": [iramt3],
+                        "IR_4_DOY": [ird4], "IR_4_amt": [iramt4],
+                        "IR_5_DOY": [ird5], "IR_5_amt": [iramt5],
+                        "AutoIR_depth":  [ir_depth], "AutoIR_thres": [ir_threshold], "AutoIR_eff": [ir_eff], #Irrigation automatic
+                        "CropPrice": [crop_price], "NFertCost": [fert_cost], "SeedCost": [seed_cost], "OtherVariableCosts": [variable_costs], "FixedCosts": [fixed_costs],  
+                    })
+                    val_csv = val_csv.append(df, ignore_index=True)
+                else:
+                    return [sce_in_table, {"color": "red"}, f"Scenario '{scenario}' contains invalid data."]
+
+                #=====================================================================
+                # # Write SNX file
+                # writeSNX_main_hist(Wdir_path,station,start_year,end_year,f"2021-{planting_date}",crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3,
+                #                     planting_density,scenario,fert_app, current_fert, p_sim, p_level, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)
+                #=====================================================================
+                # Write SNX file for climatology runs
+                writeSNX_clim(Wdir_path,station,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
+                                    planting_density,scenario,fert_app, current_fert, p_sim, p_level, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)  #This is differnt from writeSNX_main_hist in the historical analysis
+ 
+                # Write SNX for forecast runs 
+                # #1)for WGEN
+                # writeSNX_frst_(Wdir_path,station,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
+                #                     planting_density,scenario,fert_app, current_fert, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)
+                #2) for FResampler
+                writeSNX_frst_FR(Wdir_path,station,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
+                                    planting_density,scenario,fert_app, current_fert, p_sim, p_level, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)
+                #=====================================================================
+            updated_sces = existing_sces
+            if existing_sces.empty: # overwrite if empty
+                return [val_csv.to_dict("rows"), {"display": "none"}, ""]
+            else:
+                if existing_sces.sce_name.values[0] == "N/A": # overwrite if "N/A"
+                    return [val_csv.to_dict("rows"), {"display": "none"}, ""]                    
+                if bool(shared_scenarios): # duplicate scenario names exist
+                    updated_sces = val_csv.append(existing_sces, ignore_index=True)
+                    duplicates = ", ".join(f"'{s}'" for s in shared_scenarios)
+                    return [updated_sces.to_dict("rows"), {"color": "red"}, f"Could not import scenarios: {duplicates} because they already exist in the table"]
+                else: # no duplicate scenario names exist
+                    updated_sces = val_csv.append(existing_sces, ignore_index=True) # otherwise append new entry
+                    return [updated_sces.to_dict("rows"), {"display": "none"}, ""]
+        else:
+            return [sce_in_table, {"color": "red"}, "Empty file provided"]
+
+    if triggered_by == "write-button-state_frst":
+        if ( # first check that all required inputs have been given
+                scenario == None
+            # or  start_year == None
+            # or  end_year == None
+            # or  target_year == None
+            or  planting_date == None
+            or  planting_density == None
+            or (
+                    fert_app == "Fert"
+                and (
+                        fd1 == None or fN1 == None  or fP1 == None  or fK1== None 
+                    or  fd2 == None or fN2 == None  or fP2 == None  or fK2== None 
+                    or  fd3 == None or fN3 == None  or fP3 == None  or fK3== None 
+                    or  fd4 == None or fN4 == None  or fP4 == None  or fK4== None 
+                ) 
+            )
+            or (
+                    irrig_app == "repr_irrig" 
+                and (
+                        irrig_method == None 
+                    or  ird1 == None  or iramt1 == None
+                    or  ird2 == None  or iramt2 == None
+                    or  ird3 == None  or iramt3 == None
+                    or  ird4 == None  or iramt4 == None
+                    or  ird5 == None  or iramt5 == None
+                ) 
+            )
+            or (
+                    irrig_app == "auto_irrig" 
+                and (
+                        ir_depth == None 
+                    or  ir_threshold == None
+                    or  ir_eff == None
+                ) 
+            )
+            or (
+                    EB_radio == "EB_Yes"
+                and (
+                        crop_price == None
+                    or  seed_cost == None
+                    or  fert_cost == None
+                    or  fixed_costs == None
+                    or  variable_costs == None
+                )
+            )        
+        ):
+            return [sce_in_table, {"display": "none"}, ""]
+
+        # convert integer inputs to string
+        # start_year = str(start_year)
+        # end_year = str(end_year)
+        # target_year = str(target_year)
+        planting_density = str(planting_density)
+
+        # Make a new dataframe to return to scenario-summary table
+        current_sce = pd.DataFrame({
+            "sce_name": [scenario], "Trimester1": [trimester], "AN1": [AN1],"BN1": [BN1],"AN2": [AN2],"BN2": [BN2],
+            "Crop": [crop], "Cultivar": [cultivar[7:]], "stn_name": [station], "PltDate":[planting_date], # [planting_date[5:]], 
+            "soil": [soil_type], "iH2O": [initial_soil_moisture], 
+            "iNO3": [initial_soil_no3_content], "plt_density": [planting_density], #"TargetYr": [target_year], 
+            "Fert_1_DOY": [-99], "N_1_Kg": [-99], "P_1_Kg": [-99], "K_1_Kg": [-99], 
+            "Fert_2_DOY": [-99], "N_2_Kg": [-99], "P_2_Kg": [-99], "K_2_Kg": [-99], 
+            "Fert_3_DOY": [-99], "N_3_Kg": [-99], "P_3_Kg": [-99], "K_3_Kg": [-99], 
+            "Fert_4_DOY": [-99], "N_4_Kg": [-99], "P_4_Kg": [-99], "K_4_Kg": [-99], 
+            "P_level": [-99],   #P simulation    EJ(7/72021)
+            "IR_method": [-99], #Irrigation on reported date
+            "IR_1_DOY": [-99], "IR_1_amt": [-99],
+            "IR_2_DOY": [-99], "IR_2_amt": [-99],
+            "IR_3_DOY": [-99], "IR_3_amt": [-99],
+            "IR_4_DOY": [-99], "IR_4_amt": [-99],
+            "IR_5_DOY": [-99], "IR_5_amt": [-99],
+            "AutoIR_depth":  [-99], "AutoIR_thres": [-99], "AutoIR_eff": [-99], #Irrigation automatic
+            "CropPrice": [-99], "NFertCost": [-99], "SeedCost": [-99], "OtherVariableCosts": [-99], "FixedCosts": [-99],  
+        })
+
+        #=====================================================================
+        # #Update dataframe for fertilizer inputs
+        fert_valid = True
+        current_fert = pd.DataFrame(columns=["DAP", "FDEP", "NAmount", "PAmount", "KAmount"])
+        if fert_app == "Fert":
+            current_fert = pd.DataFrame({
+                "DAP": [fd1, fd2, fd3, fd4, ],
+                "NAmount": [fN1, fN2, fN3, fN4, ],
+                "PAmount": [fP1, fP2, fP3, fP4, ],
+                "KAmount": [fK1, fK2, fK3, fK4, ],
+            })
+
+            fert_frame =  pd.DataFrame({
+                "Fert_1_DOY": [fd1], "N_1_Kg": [fN1],"P_1_Kg": [fP1],"K_1_Kg": [fK1],
+                "Fert_2_DOY": [fd2], "N_2_Kg": [fN2],"P_2_Kg": [fP2],"K_2_Kg": [fK2],
+                "Fert_3_DOY": [fd3], "N_3_Kg": [fN3],"P_3_Kg": [fP3],"K_3_Kg": [fK3],
+                "Fert_4_DOY": [fd4], "N_4_Kg": [fN4],"P_4_Kg": [fP4],"K_4_Kg": [fK4],
+            })
+            current_sce.update(fert_frame)
+
+            # validation fert
+            if (
+                    (fd1 < 0 or 365 < fd1) or fN1 < 0 or fP1 < 0 or fK1 < 0
+                or  (fd2 < 0 or 365 < fd2) or fN2 < 0 or fP2 < 0 or fK2 < 0
+                or  (fd3 < 0 or 365 < fd3) or fN3 < 0 or fP3 < 0 or fK3 < 0
+                or  (fd4 < 0 or 365 < fd4) or fN4 < 0 or fP4 < 0 or fK4 < 0
+            ):
+                fert_valid = False
+            else:
+                if not (
+                        float(fd1).is_integer() and (fN1*10.0).is_integer() and (fP1*10.0).is_integer() and (fK1*10.0).is_integer()
+                    and float(fd2).is_integer() and (fN2*10.0).is_integer() and (fP2*10.0).is_integer() and (fK2*10.0).is_integer()
+                    and float(fd3).is_integer() and (fN3*10.0).is_integer() and (fP3*10.0).is_integer() and (fK3*10.0).is_integer()
+                    and float(fd4).is_integer() and (fN4*10.0).is_integer() and (fP4*10.0).is_integer() and (fK4*10.0).is_integer()
+                ):
+                    fert_valid = False
+
+        #=====================================================================
+        # #Update dataframe for irrigation (on reported date) inputs
+        IR_reported_valid = True
+        current_irrig = pd.DataFrame(columns=["DAP", "WAmount"])
+        if irrig_app == "repr_irrig":
+            current_irrig = pd.DataFrame({
+                "DAP": [ird1, ird2, ird3, ird4, ird5,],
+                "WAmount": [iramt1, iramt2, iramt3, iramt4,iramt5,],
+            })
+
+            irrig_frame =  pd.DataFrame({
+                "IR_1_DOY": [ird1], "IR_1_amt": [iramt1],
+                "IR_2_DOY": [ird2], "IR_2_amt": [iramt2],
+                "IR_3_DOY": [ird3], "IR_3_amt": [iramt3],
+                "IR_4_DOY": [ird4], "IR_4_amt": [iramt4],
+                "IR_5_DOY": [ird5], "IR_5_amt": [iramt5],
+            })
+            current_sce.update(irrig_frame)
+
+            if (
+                    (ird1 < 0 or 365 < ird1) or iramt1 < 0
+                or  (ird2 < 0 or 365 < ird2) or iramt2 < 0
+                or  (ird3 < 0 or 365 < ird3) or iramt3 < 0
+                or  (ird4 < 0 or 365 < ird4) or iramt4 < 0
+                or  (ird5 < 0 or 365 < ird5) or iramt5 < 0
+            ):
+                IR_reported_valid = False
+            else:
+                if not (
+                        float(ird1).is_integer() and (iramt1*10.0).is_integer()
+                    and float(ird2).is_integer() and (iramt2*10.0).is_integer()
+                    and float(ird3).is_integer() and (iramt3*10.0).is_integer()
+                    and float(ird4).is_integer() and (iramt4*10.0).is_integer()
+                    and float(ird5).is_integer() and (iramt5*10.0).is_integer()
+                ):
+                    IR_reported_valid = False
+
+        if irrig_app == "auto_irrig":       
+          current_sce.loc[0,"AutoIR_depth"] = ir_depth   #check index 0
+          current_sce.loc[0,"AutoIR_thres"] = ir_threshold
+          current_sce.loc[0,"AutoIR_eff"] = ir_eff
+
+          if (
+                  (ir_depth < 1 or 100 < ir_depth)
+              or  (ir_threshold < 1 or 100 < ir_threshold)
+              or  (ir_eff < 0.1 or 1 < ir_eff)
+          ):
+              IR_reported_valid = False
+
+        #=====================================================================
+        # Write SNX file
+        # writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3,
+        #                     planting_density,scenario,fert_app, current_fert, p_sim, p_level, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)
+        writeSNX_clim(Wdir_path,station,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
+                            planting_density,scenario,fert_app, current_fert, p_sim, p_level, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)  #This is differnt from writeSNX_main_hist in the historical analysis
+        # #1)for WGEN
+        # writeSNX_frst_(Wdir_path,station,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
+        #                     planting_density,scenario,fert_app, current_fert, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)
+        #2) for FResampler
+        writeSNX_frst_FR(Wdir_path,station,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
+                            planting_density,scenario,fert_app, current_fert, p_sim, p_level, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)
+        #=====================================================================
+    # #Update dataframe for Enterprise Budgeting inputs
+        EB_valid = True
+        if EB_radio == "EB_Yes":
+            EB_frame =  pd.DataFrame({
+                "CropPrice": [crop_price],
+                "NFertCost": [seed_cost],
+                "SeedCost": [fert_cost],
+                "OtherVariableCosts": [fixed_costs],
+                "FixedCosts": [variable_costs],
+            })
+            current_sce.update(EB_frame)
+
+            if (
+                    crop_price < 0
+                or  seed_cost < 0
+                or  fert_cost < 0
+                or  fixed_costs < 0
+                or  variable_costs < 0
+            ):
+                EB_valid = False          
+            else:
+                if not (
+                        (crop_price*10.0).is_integer()
+                    and  (seed_cost*10.0).is_integer()
+                    and  (fert_cost*10.0).is_integer()
+                    and  (fixed_costs*10.0).is_integer()
+                    and  (variable_costs*10.0).is_integer()
+                ):
+                    EB_valid = False          
+
+        # validate planting date
+        planting_date_valid = True
+        pl_date_split = planting_date.split("-")
+        if not len(pl_date_split) == 3:
             planting_date_valid = False
         else:
-            if int(mm) in long_months:
-                if int(dd) < 1 or 31 < int(dd):
-                    planting_date_valid = False
-            if int(mm) in short_months:
-                if int(dd) < 1 or 30 < int(dd):
-                    planting_date_valid = False 
-            if int(mm) == 2:
-                if int(dd) < 1 or 28 < int(dd):
-                    planting_date_valid = False
+            yyyy = pl_date_split[0]
+            mm = pl_date_split[1]
+            dd = pl_date_split[2]
 
-    # required="required" triggers tooltips. This validation actually prevents improper forms being submitted. BOTH are necessary
-    form_valid = (
-            re.match("....", current_sce.sce_name.values[0])
-        # and int(current_sce.FirstYear.values[0]) >= 1981 and int(current_sce.FirstYear.values[0]) <= 2018
-        # and int(current_sce.LastYear.values[0]) >= 1981 and int(current_sce.LastYear.values[0]) <= 2018
-        # and int(current_sce.TargetYr.values[0]) >= 1981 and int(current_sce.TargetYr.values[0]) <= 2018
-        and float(current_sce.plt_density.values[0]) >= 1 and float(current_sce.plt_density.values[0]) <= 300
-        and planting_date_valid and fert_valid and EB_valid
-    )
+            long_months = [1,3,5,7,8,10,12]
+            short_months = [2,4,6,9,11]
 
-    if form_valid:
-        if existing_sces.empty: # overwrite if empty
-            data = current_sce.to_dict("rows")
-        else:
-            if existing_sces.sce_name.values[0] == "N/A": # overwrite if "N/A"
-                data = current_sce.to_dict("rows")
-            elif scenario in existing_sces.sce_name.values: # no duplicate scenario names
-                data = existing_sces.to_dict("rows")
+            if not (re.match("\d\d", dd) and re.match("\d\d", mm)): #  and re.match("2021", yyyy)):  #EJ(8/10/2021)
+                planting_date_valid = False
             else:
-                all_sces = current_sce.append(existing_sces, ignore_index=True) # otherwise append new entry
-                data = all_sces.to_dict("rows")
-        return data
-    else:
-        return existing_sces.to_dict("rows")
+                if int(mm) in long_months:
+                    if int(dd) < 1 or 31 < int(dd):
+                        planting_date_valid = False
+                if int(mm) in short_months:
+                    if int(dd) < 1 or 30 < int(dd):
+                        planting_date_valid = False 
+                if int(mm) == 2:
+                    if int(dd) < 1 or 28 < int(dd):
+                        planting_date_valid = False
 
+        # required="required" triggers tooltips. This validation actually prevents improper forms being submitted. BOTH are necessary
+        form_valid = (
+                re.match("....", current_sce.sce_name.values[0])
+            # and int(current_sce.FirstYear.values[0]) >= 1981 and int(current_sce.FirstYear.values[0]) <= 2018
+            # and int(current_sce.LastYear.values[0]) >= 1981 and int(current_sce.LastYear.values[0]) <= 2018
+            # and int(current_sce.TargetYr.values[0]) >= 1981 and int(current_sce.TargetYr.values[0]) <= 2018
+            and float(current_sce.plt_density.values[0]) >= 1 and float(current_sce.plt_density.values[0]) <= 300
+            and planting_date_valid and fert_valid and IR_reported_valid and EB_valid
+        )
+
+        if form_valid:
+            if existing_sces.empty: # overwrite if empty
+                data = current_sce.to_dict("rows")
+            else:
+                if existing_sces.sce_name.values[0] == "N/A": # overwrite if "N/A"
+                    data = current_sce.to_dict("rows")
+                elif scenario in existing_sces.sce_name.values: # no duplicate scenario names
+                    data = existing_sces.to_dict("rows")
+                else:
+                    all_sces = current_sce.append(existing_sces, ignore_index=True) # otherwise append new entry
+                    data = all_sces.to_dict("rows")
+            return [data, {"display": "none"}, ""]
+        else:
+            return [sce_in_table, {"display": "none"}, ""]
 
 #===============================
 #2nd callback to run ALL scenarios
 @app.callback(Output(component_id="yieldbox-container_frst", component_property="children"),
                 Output(component_id="yieldcdf-container_frst", component_property="children"),
-                # Output(component_id="yieldtimeseries-container_frst", component_property="children"),
-                # Output(component_id="yield-BN-container_frst", component_property="children"),
+                # Output(component_id="yieldtimeseries-container", component_property="children"),
+                # Output(component_id="yield-BN-container", component_property="children"),
                 # Output(component_id="yield-NN-container", component_property="children"),
                 # Output(component_id="yield-AN-container", component_property="children"),
                 # Output(component_id="yieldtables-container", component_property="children"),
@@ -1689,20 +2284,20 @@ def make_sce_table(
                 Output("memory-yield-table_frst", "data"),
                 Input("simulate-button-state_frst", "n_clicks"),
                 State("scenario-table_frst","data"), ### scenario summary table
-                # State("season-slider", "value"), #EJ (5/13/2021) for seasonal total rainfall
+                # State("season-slider_frst", "value"), #EJ (5/13/2021) for seasonal total rainfall
                 prevent_initial_call=True,
               )
 
-def run_create_figure(n_clicks, sce_in_table): #, slider_range):
+def run_create_figure(n_clicks, sce_in_table):
     if n_clicks is None:
         raise PreventUpdate
-        return 
     else: 
+
         # 1) Read saved scenario summaries and get a list of scenarios to run
         # dff = pd.read_json(intermediate, orient="split")
         scenarios = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
         sce_numbers = len(scenarios.sce_name.values)
-        # Wdir_path = "C:\\IRI\\Dash_ET_forecast\\ET_forecast_windows\\TEST_ET\\"  #for windows
+        # num_sces = len(scenarios.sce_name.values)
         Wdir_path = DSSAT_FILES_DIR   #for linux system
         TG_yield = []
 
@@ -1734,31 +2329,31 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
             # # EJ(7/27/2021) RUN WEATHER GENERATOR TO MAKE SYNTHETIC WEATHER REALIZATION
             # i) check if station name and target trimester is repeated or not
             if i ==0:
-              #1)WGEN
-              df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)  #pass subset of summary table => NOTE: the scenario names are in reverse order and thus last scenario is selected first
-              write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)   #by taking into account planting and approximate harvesting dates
-            #   #2)FResampler
-            #   df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
-            #   write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)  
+              # #1)WGEN
+              # df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)  #pass subset of summary table => NOTE: the scenario names are in reverse order and thus last scenario is selected first
+              # write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)   #by taking into account planting and approximate harvesting dates
+              #2)FResampler\
+              df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
+              write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)  
             else:
               if station == scenarios.stn_name.values[i-1] and trimester == scenarios.Trimester1.values[i-1]:
                 if AN1 == scenarios.AN1.values[i-1] and BN1 == scenarios.BN1.values[i-1] and AN2 == scenarios.AN2.values[i-1] and BN2 == scenarios.BN2.values[i-1]:
                   #No need to run WGEN again => use df_wgen from previous scenario
                   write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path) 
                 else:
-                  #1)WGEN
-                  df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)
-                  write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)
-                #   #2)FResampler
-                #   df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
-                #   write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)  
+                  # #1)WGEN
+                  # df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)
+                  # write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)
+                  #2)FResampler
+                  df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
+                  write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)  
               else:
-                #1)WGEN
-                df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)
-                write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)
-                # #2)FResampler
-                # df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
-                # write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path) 
+                # #1)WGEN
+                # df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)
+                # write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)
+                #2)FResampler
+                df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
+                write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path) 
             # # EJ(7/27/2021) end of RUN WEATHER GENERATOR TO MAKE SYNTHETIC WEATHER REALIZATION
             #=====================================================================
             # 1) Write V47 file for climatolgoy
@@ -1787,27 +2382,24 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
             fr.close()
             fw.close()
             #=====================================================================
-            #1-1) Run DSSAT executable for BOTh climatolgoy & forecast => Simulation resutls from both runs are in one Summary.out file
-            os.chdir(Wdir_path)  #change directory
-            if scenarios.Crop[i] == "WH":
-                args = "./dscsm047 CSCER047 B DSSBatch.V47"  #===========>for linux system
-                # args = "DSCSM047.EXE CSCER047 B DSSBatch.v47"  #===========>for windows
-                # fout_name = path.join(Wdir_path, "ETWH"+scenario+".OSU")   #===========>for windows
-            elif scenarios.Crop[i] == "MZ":
-                args = "./dscsm047 MZCER047 B DSSBatch.V47" #===========>for linux system
-                # args = "DSCSM047.EXE MZCER047 B DSSBatch.v47" #===========>for windows
-                # # fout_name = path.join(Wdir_path, "ETMZ"+scenario+".OSU") #===========>for windows
+            #3) Run DSSAT executable
+            os.chdir(Wdir_path)  #change directory  #check if needed or not
+            if scenarios.Crop[i] == "PN":
+                args = "./dscsm047 CRGRO047 B DSSBatch.V47"
+                # args = "./dscsm047 B DSSBatch.V47"
+            elif scenarios.Crop[i] == "ML":
+                args = "./dscsm047 MLCER047 B DSSBatch.V47"
             else:  # SG
-                args = "./dscsm047 SGCER047 B DSSBatch.V47" #===========>for linux system
-                # args = "DSCSM047.EXE SGCER047 B DSSBatch.v47"  #===========>for windows
-                # fout_name = path.join(Wdir_path, "ETSG"+scenario+".OSU")  #===========>for windows
+                args = "./dscsm047 SGCER047 B DSSBatch.V47"
 
-            fout_name = f"CL{scenarios.Crop[i]}{scenario}.OSU"  #simulation start for climatolgoy first
-            arg_mv = f"mv Summary.OUT {fout_name}"   #Q: Do we need this? => Yes, DSSAT-Linux does not allow FNAME=Y, and generate only summary.out
-
-            os.system(args) 
+            fout_name = f"SN{scenarios.Crop[i]}{scenario}.OSU"
+            arg_mv = f"mv Summary.OUT {fout_name}"
+            fout_name2 = f"SN{scenarios.Crop[i]}{scenario}.OVERVIEW"  #EJ(8/10 for debugging purpose)
+            arg_mv2 = f"mv OVERVIEW.OUT {fout_name2}"     #EJ(8/10 for debugging purpose)         
+            os.system(args)
             os.system(arg_mv) 
-            #=====================================================================
+            os.system(arg_mv2)   #EJ(8/10 for debugging purpose)
+            # #===========>end of for linux system
             #=====================================================================
 
             #4) read DSSAT output => Read Summary.out from all scenario output
@@ -1824,7 +2416,7 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
             #============================================================
             # ===compute seasonal rainfall total from climatolgoy for trimester 1 & 2
             # WTD_fname = path.join(Wdir_path, scenarios.stn_name[i]+".WTD")
-            WTH_fname = path.join(Wdir_path, scenarios.sce_name[i]+ '_all.WTH') #+repr(scenarios.PltDate[i])[3:5] +"99.WTH")  # e.g., aaaa2199.WTH
+            WTH_fname = path.join(Wdir_path, scenarios.sce_name[i] + '_all.WTH') #+repr(scenarios.PltDate[i])[3:5] +"99.WTH")  # e.g., aaaa2199.WTH
             if i ==0:
               df_FC = Rain_trimester_gen(WTH_fname, tri_doylist)
               df_CL = Rain_trimester_obs(WTD_fname, tri_doylist)
@@ -1913,6 +2505,8 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
 #Last callback to create figures for Enterprise budgeting
 @app.callback(Output(component_id="EBbox-container_frst", component_property="children"),
                 Output(component_id="EBcdf-container_frst", component_property="children"),
+                # Output(component_id="EBtimeseries-container", component_property="children"),
+                Output(component_id="EBtables-container_frst", component_property="children"),
                 Output("memory-EB-table_frst", "data"),
                 Input("EB-button-state_frst", "n_clicks"),
                 State('yield-multiplier_frst', 'value'), #EJ(6/5/2021)
@@ -1923,10 +2517,10 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
     if n_clicks is None:
         raise PreventUpdate
         return 
-    else:
+    else: 
         # 1) Read saved scenario summaries and get a list of scenarios to run
         current_sces = pd.DataFrame(sce_in_table)
-        EB_sces = current_sces[current_sces["CropPrice"] != "-99"]
+        EB_sces = current_sces[current_sces["CropPrice"] != -99]
         sce_numbers = len(EB_sces.sce_name.values)
 
         if multiplier == None:
@@ -1935,15 +2529,14 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
             if multiplier < 0 or 2 < multiplier or sce_numbers == 0:
                 return [html.Div(""),html.Div(""),html.Div(""),html.Div(""),]
 
-        # Wdir_path = DSSAT_FILES_DIR  #for linux system
-        # os.chdir(Wdir_path)  #change directory  #check if needed or not
+        Wdir_path = DSSAT_FILES_DIR  #for linux system
+        os.chdir(Wdir_path)  #change directory  #check if needed or not
         TG_GMargin = []
 
         #EJ(5/3/2021) Read DSSAT output for each scenarios
         for i in range(sce_numbers):
             sname = EB_sces.sce_name.values[i]
-            # fout_name = path.join(Wdir_path, f"ET{EB_sces.Crop[i]}{sname}.OSU")
-            fout_name = path.join(Wdir_path, f"CL{EB_sces.Crop[i]}{sname}.OSU")
+            fout_name = path.join(Wdir_path, f"SN{EB_sces.Crop[i]}"+sname+".OSU")
 
             #4) read DSSAT output => Read Summary.out from all scenario output
             df_OUT=pd.read_csv(fout_name,delim_whitespace=True ,skiprows=3)
@@ -1955,78 +2548,82 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
             MDAT = df_OUT.iloc[:,16].values  #read 14th column only    
             YEAR = df_OUT.iloc[:,13].values//1000
             NICM = df_OUT.iloc[:,39].values  #read 40th column only,  #NICM   Tot N app kg/ha Inorganic N applied (kg [N]/ha)
-            IRCM = df_OUT.iloc[:,30].values    #IRCM   Irrig mm        Season irrigation (mm)   EJ(7/30/2021)
             HWAM[HWAM < 0]=0 #==> if HWAM == -99, consider it as "0" yield (i.e., crop failure)
-            run_type = ["Forecast" if x[:2] == 'FC' else "Climatology" for x in EXPERIMENT]  #to distinguish "FC(Forecast)" and "CL (climatology)"  check
-            sname = [x[4:] for x in EXPERIMENT]  #scenario name (4 char)
             #Compute gross margin
-            # GMargin=HWAM*float(EB_sces.CropPrice[i])- float(EB_sces.NFertCost[i])*NICM - float(EB_sces.SeedCost[i]) - float(EB_sces.OtherVariableCosts[i]) - float(EB_sces.FixedCosts[i])
-            GMargin=HWAM*float(EB_sces.CropPrice[i])- float(EB_sces.NFertCost[i])*NICM - float(EB_sces.IrrigCost[i])*IRCM - float(EB_sces.SeedCost[i]) - float(EB_sces.OtherVariableCosts[i]) - float(EB_sces.FixedCosts[i])
-
-            # TG_GMargin_temp = np.nan
-            # if int(EB_sces.TargetYr[i]) <= int(EB_sces.LastYear[i]):
-            #     doy = repr(PDAT[0])[4:]
-            #     target = EB_sces.TargetYr[i] + doy
-            #     yr_index = np.argwhere(PDAT == int(target))
-            #     TG_GMargin_temp = GMargin[yr_index[0][0]]
-
-            data = {"EXPERIMENT":EXPERIMENT, "YEAR":YEAR, "PDAT": PDAT, "ADAT":ADAT,"MDAT":MDAT,  "HWAM":HWAM,"NICM":NICM,"IRCM":IRCM, 
-                    "GMargin":GMargin, "RUN": run_type, "SNAME": sname,}  #EJ(6/5/2021) fixed
-            temp_df = pd.DataFrame (data) #, columns = ["EXPERIMENT","YEAR", "PDAT","ADAT","HWAM","NICM","GMargin"])  #EJ(6/5/2021) fixed
+            GMargin=HWAM*float(EB_sces.CropPrice[i])- float(EB_sces.NFertCost[i])*NICM - float(EB_sces.SeedCost[i]) - float(EB_sces.OtherVariableCosts[i]) - float(EB_sces.FixedCosts[i])
             
-            #In case of hindcast forecasting (i.e., if the planting year is among the observed years
-            year1= temp_df.YEAR[temp_df["RUN"] == "Climatology"].values[0]  #first year of the climatolgy run
-            year2= temp_df.YEAR[temp_df["RUN"] == "Climatology"].values[-1]  #lats year of the climatolgy run
-            target_year = repr(EB_sces.PltDate[i])[1:5]
-            if int(target_year) <= year2 and int(target_year) >= year1:
-              doy = repr(PDAT[0])[4:]
-              target = target_year + doy
-              yr_index = np.argwhere(PDAT == int(target))
-              TG_GMargin_temp = GMargin[yr_index[0][0]]   
-            else:
-              TG_GMargin_temp = np.nan #-99  #or np.nan ?
-            TG_GMargin = [TG_GMargin_temp]+TG_GMargin   #check
+            TG_GMargin_temp = np.nan
+            if int(EB_sces.TargetYr[i]) <= int(EB_sces.LastYear[i]):
+                doy = repr(PDAT[0])[4:]
+                target = EB_sces.TargetYr[i] + doy
+                yr_index = np.argwhere(PDAT == int(target))
+                TG_GMargin_temp = GMargin[yr_index[0][0]]
+            
+            data = {"EXPERIMENT":EXPERIMENT, "YEAR":YEAR, "PDAT": PDAT, "ADAT":ADAT, "HWAM":HWAM,"NICM":NICM, "GMargin":GMargin}  #EJ(6/5/2021) fixed
+            temp_df = pd.DataFrame (data, columns = ["EXPERIMENT","YEAR", "PDAT","ADAT","HWAM","NICM","GMargin"])  #EJ(6/5/2021) fixed
 
             if i==0:
                 df = temp_df.copy()
             else:
                 df = temp_df.append(df, ignore_index=True)
 
-            # TG_GMargin = [TG_GMargin_temp]+TG_GMargin
+            TG_GMargin = [TG_GMargin_temp]+TG_GMargin
 
         # adding column name to the respective columns
-        df.columns =["EXPERIMENT", "YEAR","PDAT", "ADAT","HWAM","NICM","IRCM","GMargin", "RUN", "SNAME"]
+        df.columns =["EXPERIMENT", "YEAR","PDAT", "ADAT","HWAM","NICM","GMargin"]
         x_val = np.unique(df.EXPERIMENT.values)
-        #1) Make a boxplot
-        x_val2 = EB_sces.sce_name.values
-        gmargin_box = px.box(df, x="SNAME", y="GMargin", color="RUN", title="Gross Margin Boxplot")
-        gmargin_box.add_scatter(x=x_val2, y=TG_GMargin, mode="markers", 
-            marker=dict(color='LightSkyBlue', size=10, line=dict(color='MediumPurple', width=2))) #, mode="lines+markers") #"lines")
-        gmargin_box.update_xaxes(title= "Scenario Name [*Note:LightBlue dot(s) represents gross margin using the simulated yield(s) with observed weather in the planting year]")
-        gmargin_box.update_yaxes(title= "Gross Margin[Birr/ha]")
+        fig = px.box(df, x="EXPERIMENT", y="GMargin", title="Gross Margin Boxplot")
+        fig.add_scatter(x=x_val,y=TG_GMargin, mode="markers") #, mode="lines+markers") #"lines")
+        fig.update_xaxes(title= "Scenario Name")
+        fig.update_yaxes(title= "Gross Margin[Birr/ha]")
 
-        gmargin_exc = go.Figure()
+        fig2 = go.Figure()
         for i in x_val:
             x_data = df.GMargin[df["EXPERIMENT"]==i].values
             x_data = np.sort(x_data)
             fx_scf = [1.0/len(x_data)] * len(x_data) #pdf
             Fx_scf= 1.0-np.cumsum(fx_scf)  #for exceedance curve
 
-            gmargin_exc.add_trace(go.Scatter(x=x_data, y=Fx_scf,
+            fig2.add_trace(go.Scatter(x=x_data, y=Fx_scf,
                         mode="lines+markers",
                         name=i))
         # Edit the layout
-        gmargin_exc.update_layout(title="Gross Margin Exceedance Curve",
+        fig2.update_layout(title="Gross Margin Exceedance Curve",
                         xaxis_title="Gross Margin[Birr/ha]",
                         yaxis_title="Probability of Exceedance [-]")
 
+        #make a new dataframe to save into CSV
+        yr_val = np.unique(df.YEAR.values)
+        df_out = pd.DataFrame({"YEAR":yr_val})
+
+        # fig3 = go.Figure()
+        # for i in x_val:
+        #     x_data = df.YEAR[df["EXPERIMENT"]==i].values
+        #     y_data = df.GMargin[df["EXPERIMENT"]==i].values
+        #     y_data = y_data.astype(int) #EJ(6/5/2021)
+
+        #     ##make a new dataframe to save into CSV
+        #     df_temp = pd.DataFrame({i:y_data})
+        #     df_out = pd.concat([df_out, df_temp], axis=1)
+
+        #     fig3.add_trace(go.Scatter(x=x_data, y=y_data,
+        #                 mode="lines+markers",
+        #                 name=i))
+        # # Edit the layout
+        # fig3.update_layout(title="Gross Margin Time-Series",
+        #                 xaxis_title="Year",
+        #                 yaxis_title="Gross Margin[Birr/ha]")
         #save simulated yield outputs into a csv file <<<<<<=======================
         fname = path.join(Wdir_path, "simulated_Gmargin_frst.csv")
         df.to_csv(fname, index=False)  #EJ(7/27/2021) check 
         return [
-            dcc.Graph(id="EB-boxplot", figure = gmargin_box, config = graph.config, ),
-            dcc.Graph(id="EB-exceedance", figure = gmargin_exc, config = graph.config, ),
-            df.to_dict("records")
+            dcc.Graph(id="EB-boxplot", figure = fig, config = graph.config, ),
+            dcc.Graph(id="EB-exceedance", figure = fig2, config = graph.config, ),
+            # dcc.Graph(id="EB-ts", figure = fig3, config = graph.config, ),
+            dash_table.DataTable(columns=[{"name": i, "id": i} for i in df_out.columns],
+                data=df_out.to_dict("records"),
+                style_cell={"whiteSpace": "normal","height": "auto",},),
+            df_out.to_dict("records")
             ]
 
 #====================================================================
@@ -2111,7 +2708,7 @@ def Rain_trimester_obs(fname,tri_doylist):  #sname=> scenario name to make a col
 
     data = {"RainT1": np.array(sum_T1), "RainT2": np.array(sum_T2),}
     df_out = pd.DataFrame(data)
-    # # #write dataframe into CSV file for debugging
+    # #write dataframe into CSV file for debugging
     # df_out.to_csv("C:\\IRI\\Dash_ET_forecast\\ET_forecast_windows\\TEST_ET\\trimester_rain_clim.csv", index=False)
     return df_out
 #====================================================================

@@ -6,11 +6,12 @@ import subprocess  #to run executable
 from datetime import date
 import datetime    #to convert date to doy or vice versa
 import calendar
+import bisect   # an element into sorted list 
 
 
 def writeSNX_clim(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
                        planting_density,scenario,fert_app, df_fert,
-                       irrig_app, irrig_method, df_irrig, ir_depth,ir_threshold, ir_eff):   
+                       p_sim, p_level, irrig_app, irrig_method, df_irrig, ir_depth,ir_threshold, ir_eff):    
     WSTA = station
     # ============
     # find the first year in *.WTD & compute how many years are available
@@ -83,8 +84,8 @@ def writeSNX_clim(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initi
         FERTI = 'N'
 
     #1) make SNX
-    temp_snx = path.join(DSSAT_PATH, f"TEMP_ET{crop}.SNX")
-    # snx_name = f"ET{crop}"+scenario[:4]+".SNX"
+    temp_snx = path.join(DSSAT_PATH, f"SN{crop}TEMP.SNX")
+    # snx_name = f"SN{crop}"+scenario[:4]+".SNX"
     snx_name = f"CL{crop}"+scenario[:4]+".SNX"  #EJ(7/27/2021) climatology run in comparison with forecast run
 
     SNX_fname = path.join(DSSAT_PATH, snx_name)
@@ -103,7 +104,11 @@ def writeSNX_clim(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initi
         MF = "1"
     else:
         MF = "0"
-    # MF = "1"
+    if p_sim == "P_yes":  #EJ(7/8/2021) Addd Soil Analysis section if P is simulated
+      SA = "1"
+    else: 
+      SA = "0"
+    # SA = "0"
     SA = "0"
     IC = "1"
     MP = "1"
@@ -116,7 +121,7 @@ def writeSNX_clim(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initi
     temp_str = fr.readline()
     FL = "1"
     fw.write("{0:3s}{1:31s}{2:3s}{3:3s}{4:3s}{5:3s}{6:3s}{7:3s}{8:3s}{9:3s}{10:3s}{11:3s}{12:3s}{13:3s}".format(
-        FL.rjust(3), "1 0 0 ET-SIMAGRI                 1",
+        FL.rjust(3), "1 0 0 SN-SIMAGRI                 1",
         FL.rjust(3), SA.rjust(3), IC.rjust(3), MP.rjust(3), MI.rjust(3), MF.rjust(3), MR.rjust(3), MC.rjust(3),
         MT.rjust(3), ME.rjust(3), MH.rjust(3), SM.rjust(3)))
     fw.write(" \n")
@@ -138,7 +143,7 @@ def writeSNX_clim(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initi
         fw.write(temp_str)
     # ================write *FIELDS
     # Get soil info from *.SOL
-    SOL_file = path.join(DSSAT_PATH, "ET.SOL")
+    SOL_file = path.join(DSSAT_PATH, "SN.SOL")
     # soil_depth, wp, fc, nlayer = get_soil_IC(SOL_file, ID_SOIL)
     soil_depth, wp, fc, nlayer, SLTX = get_soil_IC(SOL_file, ID_SOIL)
     SLDP = repr(soil_depth[-1])
@@ -162,6 +167,25 @@ def writeSNX_clim(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initi
     fw.write(" \n")
     fw.write(" \n")
 
+    #EJ(7/8/2021) Addd Soil Analysis section if P is simulated
+    if p_sim == "P_yes":
+      fw.write('*SOIL ANALYSIS'+ "\n")
+      fw.write('@A SADAT  SMHB  SMPX  SMKE  SANAME'+ "\n")
+      fw.write(' 1 '+ ICDAT + ' SA011 SA002 SA014  -99'+ "\n")
+      fw.write('@A  SABL  SADM  SAOC  SANI SAPHW SAPHB  SAPX  SAKE  SASC'+ "\n")
+      soil_depth, SADM, SAOC, SANI, SAPHW = get_soil_SA(SOL_file, ID_SOIL)
+      if p_level == 'V':  #very low
+        SAPX = '   2.0'
+      elif p_level == 'L':  #Low
+        SAPX = '   7.0'
+      elif p_level == 'M':  #Medium
+        SAPX = '  12.0'
+      else:   #high
+        SAPX = '  18.0'
+      for i in range(0, len(soil_depth)):
+        new_str = ' 1'+ repr(soil_depth[i]).rjust(6) + repr(SADM[i]).rjust(6) + repr(SAOC[i]).rjust(6) + repr(SANI[i]).rjust(6) + repr(SAPHW[i]).rjust(6)+ '   -99' + SAPX + '   -99   -99'+"\n"
+        fw.write(new_str)
+
     # read lines from temp file
     for line in range(0, 3):
         temp_str = fr.readline()
@@ -173,27 +197,44 @@ def writeSNX_clim(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initi
     fw.write(new_str)
     temp_str = fr.readline()  # @C  ICBL  SH2O  SNH4  SNO3
     fw.write(temp_str)
+
     temp_str = fr.readline()
-    for nline in range(0, nlayer):
-        if nline == 0:  # first layer
+
+    # check if 30cm soil layer exists - Searching for the position 
+    soil_set = set(soil_depth) 
+    if not 30 in soil_set:   #insert one more layer for 30 cm depth
+        bisect.insort(soil_depth, 30)  #soil_depth is updated by adding 30cm layer
+        index_30=soil_depth.index(30)
+        fc = fc[:index_30] + [fc[index_30]] + fc[index_30:]
+        wp = wp[:index_30] + [wp[index_30]] + wp[index_30:]
+        for nline in range(0, nlayer+1):
             temp_SH2O = IC_w_ratio * (fc[nline] - wp[nline]) + wp[nline]  # EJ(6/25/2015): initial AWC=70% of maximum AWC
-            if i_NO3 == "H":
-                SNO3 = "15"  # **EJ(4/29/2020) used one constant number regardless of soil types
-            else:  # i_NO3 == "L":
-                SNO3 = "5"  # **EJ(5/27/2015)
-        elif nline == 1:  # second layer
+            if soil_depth[nline] <= 30: 
+                #Estimate NO3[ppm] from the user input [N kg/ha] by assuming Buld density = 1.4 g/cm3
+                print('i_NO3', i_NO3)
+                temp_SNO3 = i_NO3 * 10.0 / (1.4 * 30) # **EJ(2/18/2021)
+                SNO3 = repr(temp_SNO3)[0:4]  # convert float to string
+            else:
+                # temp_SH2O = fc[nline]  # float
+                SNO3 = '0.5'  
+            SH2O = repr(temp_SH2O)[0:5]  # convert float to string
+            new_str = temp_str[0:5] + repr(soil_depth[nline]).rjust(3) + ' ' + SH2O.rjust(5) + temp_str[14:22] + SNO3.rjust(4) + "\n"
+            fw.write(new_str)
+    else: #if original soil profile has a 30cm depth
+        for nline in range(0, nlayer):
             temp_SH2O = IC_w_ratio * (fc[nline] - wp[nline]) + wp[nline]  # EJ(6/25/2015): initial AWC=70% of maximum AWC
-            if i_NO3 == "H":
-                SNO3 = "2"  # **EJ(4/29/2020) used one constant number regardless of soil types
-            else:  # elif i_NO3 == "L":
-                SNO3 = ".5"  # **EJ(4/29/2020) used one constant number regardless of soil types
-        else:
-            temp_SH2O = fc[nline]  # float
-            SNO3 = "0"  # **EJ(5/27/2015)
-        SH2O = repr(temp_SH2O)[0:5]  # convert float to string
-        new_str = temp_str[0:5] + repr(soil_depth[nline]).rjust(3) + " " + SH2O.rjust(5) + temp_str[14:22] + SNO3.rjust(4) + "\n"
-        fw.write(new_str)
+            if soil_depth[nline] <= 30: 
+                #Estimate NO3[ppm] from the user input [N kg/ha] by assuming Buld density = 1.4 g/cm3
+                temp_SNO3 = float(i_NO3) * 10.0 / (1.4 * 30) # **EJ(2/18/2021)
+                SNO3 = repr(temp_SNO3)[0:4]  # convert float to string
+            else:
+                # temp_SH2O = fc[nline]  # float
+                SNO3 = '0.5'  # **EJ(5/27/2015)
+            SH2O = repr(temp_SH2O)[0:5]  # convert float to string
+            new_str = temp_str[0:5] + repr(soil_depth[nline]).rjust(3) + ' ' + SH2O.rjust(5) + temp_str[14:22] + SNO3.rjust(4) + "\n"
+            fw.write(new_str)
     fw.write("  \n")
+
     for nline in range(0, 10):
         temp_str = fr.readline()
         if temp_str[0:9] == "*PLANTING":
@@ -240,7 +281,7 @@ def writeSNX_clim(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initi
     temp_str = fr.readline()  # @F FDATE  FMCD  FACD 
     fw.write(temp_str)
     temp_str = fr.readline()  #1     0 FE005 AP001     5    30   -99   -99   -99   -99   -99   -99
-#-0------------        # write *FERTILIZERS (INORGANIC)
+    #-0------------        # write *FERTILIZERS (INORGANIC)
     if fert_app == "Fert":
         df_fert = df_fert.astype(float)
         df_filtered = df_fert[(df_fert["DAP"] >= 0) & (df_fert["NAmount"] >= 0)]
@@ -250,15 +291,15 @@ def writeSNX_clim(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initi
         FACD = "AP001"  #Broadcast, not incorporated    
         FDEP = "5"   #5cm depth
         FAMN = df_filtered.NAmount.values
-        FAMP = "-99"
-        FAMK = "-99"
+        FAMP = df_filtered.PAmount.values
+        FAMK = df_filtered.KAmount.values
 
         if fert_count > 0:   # fertilizer applied
             for i in range(fert_count):
-                new_str = temp_str[0:5] + repr(int(FDATE[i])).rjust(3) + " " + FMCD.rjust(5) + " " + FACD.rjust(5) + " " + FDEP.rjust(5) + " " + repr(FAMN[i]).rjust(5) + " " + FAMP.rjust(5) + " " + FAMK.rjust(5) + temp_str[44:]
+                new_str = temp_str[0:5] + repr(int(FDATE[i])).rjust(3) + " " + FMCD.rjust(5) + " " + FACD.rjust(5) + " " + FDEP.rjust(5) + " " + repr(FAMN[i]).rjust(5) + " " + repr(FAMP[i]).rjust(5) + " " + repr(FAMK[i]).rjust(5) + temp_str[44:]
                 fw.write(new_str)
             fw.write(" \n")
-#-------------------------------------------
+    #-------------------------------------------
     # else: #if no fertilzier applied
     #     temp_str = fr.readline()  #  1     0 FE005 AP002 
     #     fw.write(temp_str)
@@ -280,7 +321,10 @@ def writeSNX_clim(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initi
     temp_str = fr.readline()  # @N OPTIONS
     fw.write(temp_str)
     temp_str = fr.readline()  # 1 OP
-    fw.write(" 1 OP              Y     Y     Y     N     N     N     N     N     D"+ "\n")
+    if p_sim == "P_yes":  #if phosphorous simulation is "on"
+        fw.write(' 1 OP              Y     Y     Y     Y     N     N     N     N     D'+ "\n")
+    else:
+        fw.write(' 1 OP              Y     Y     Y     N     N     N     N     N     D'+ "\n")
     temp_str = fr.readline()  # @N METHODS
     fw.write(temp_str)
     temp_str = fr.readline()  # 1 ME
@@ -324,7 +368,7 @@ def writeSNX_clim(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initi
 # ======================================================================================
 def writeSNX_frst(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
                        planting_density,scenario,fert_app, df_fert,
-                       irrig_app, irrig_method, df_irrig, ir_depth,ir_threshold, ir_eff):    
+                       p_sim, p_level, irrig_app, irrig_method, df_irrig, ir_depth,ir_threshold, ir_eff):    
 
     plt_year = planting_date[:4] #self._Setting.DSSATSetup1.plt_year.getvalue()
     if planting_date is not None:
@@ -365,8 +409,8 @@ def writeSNX_frst(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initi
         FERTI = 'N'
 
     #1) make SNX
-    temp_snx = path.join(DSSAT_PATH, f"TEMP_ET{crop}.SNX")
-    # snx_name = f"ET{crop}"+scenario[:4]+".SNX"
+    temp_snx = path.join(DSSAT_PATH, f"SN{crop}TEMP.SNX")
+    # snx_name = f"SN{crop}"+scenario[:4]+".SNX"
     snx_name = f"FC{crop}"+scenario[:4]+".SNX"  #EJ(7/27/2021) Forecast mode
 
     SNX_fname = path.join(DSSAT_PATH, snx_name)
@@ -385,8 +429,11 @@ def writeSNX_frst(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initi
         MF = "1"
     else: 
         MF = "0"
-    # MF = "1"
-    SA = "0"
+    if p_sim == "P_yes":  #EJ(7/8/2021) Addd Soil Analysis section if P is simulated
+      SA = "1"
+    else: 
+      SA = "0"
+    # SA = "0"
     IC = "1"
     MP = "1"
     MR = "0"
@@ -398,7 +445,7 @@ def writeSNX_frst(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initi
     temp_str = fr.readline()
     FL = "1"
     fw.write("{0:3s}{1:31s}{2:3s}{3:3s}{4:3s}{5:3s}{6:3s}{7:3s}{8:3s}{9:3s}{10:3s}{11:3s}{12:3s}{13:3s}".format(
-        FL.rjust(3), "1 0 0 ET-SIMAGRI                 1",
+        FL.rjust(3), "1 0 0 SN-SIMAGRI                 1",
         FL.rjust(3), SA.rjust(3), IC.rjust(3), MP.rjust(3), MI.rjust(3), MF.rjust(3), MR.rjust(3), MC.rjust(3),
         MT.rjust(3), ME.rjust(3), MH.rjust(3), SM.rjust(3)))
     fw.write(" \n")
@@ -420,18 +467,11 @@ def writeSNX_frst(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initi
         fw.write(temp_str)
     # ================write *FIELDS
     # Get soil info from *.SOL
-    SOL_file = path.join(DSSAT_PATH, "ET.SOL")
+    SOL_file = path.join(DSSAT_PATH, "SN.SOL")
     # soil_depth, wp, fc, nlayer = get_soil_IC(SOL_file, ID_SOIL)
     soil_depth, wp, fc, nlayer, SLTX = get_soil_IC(SOL_file, ID_SOIL)
     SLDP = repr(soil_depth[-1])
     ID_FIELD = scenario[:4] + "0001"
-    # WSTA_ID =  scenario[:4]+ plt_year[2:] +"99"  #EJ(7/27/2021) generated weather are stored in ONE long WTH file for the next 100 yr simulations
-    # # This line must not be changed for Linux version - DSSAt seems to be sensitive to spacing
-    # fw.write(
-    #     "{0:2s} {1:8s} {2:8s}{3:36s} {4:4s}  {5:4s}  {6:10s}{7:4s}".format(FL.rjust(2), ID_FIELD, WSTA_ID,
-    #                                                                     "   -99   -99   -99   -99   -99   -99",
-    #                                                                     SLTX.rjust(4), SLDP.rjust(4), ID_SOIL,
-    #                                                                     " -99"))
     WSTA_ID = scenario[:4].upper()
     # This line must not be changed for Linux version - DSSAt seems to be sensitive to spacing
     fw.write(
@@ -451,6 +491,25 @@ def writeSNX_frst(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initi
     fw.write(" \n")
     fw.write(" \n")
 
+    #EJ(7/8/2021) Addd Soil Analysis section if P is simulated
+    if p_sim == "P_yes":
+      fw.write('*SOIL ANALYSIS'+ "\n")
+      fw.write('@A SADAT  SMHB  SMPX  SMKE  SANAME'+ "\n")
+      fw.write(' 1 '+ ICDAT + ' SA011 SA002 SA014  -99'+ "\n")
+      fw.write('@A  SABL  SADM  SAOC  SANI SAPHW SAPHB  SAPX  SAKE  SASC'+ "\n")
+      soil_depth, SADM, SAOC, SANI, SAPHW = get_soil_SA(SOL_file, ID_SOIL)
+      if p_level == 'V':  #very low
+        SAPX = '   2.0'
+      elif p_level == 'L':  #Low
+        SAPX = '   7.0'
+      elif p_level == 'M':  #Medium
+        SAPX = '  12.0'
+      else:   #high
+        SAPX = '  18.0'
+      for i in range(0, len(soil_depth)):
+        new_str = ' 1'+ repr(soil_depth[i]).rjust(6) + repr(SADM[i]).rjust(6) + repr(SAOC[i]).rjust(6) + repr(SANI[i]).rjust(6) + repr(SAPHW[i]).rjust(6)+ '   -99' + SAPX + '   -99   -99'+"\n"
+        fw.write(new_str)
+
     # read lines from temp file
     for line in range(0, 3):
         temp_str = fr.readline()
@@ -462,27 +521,43 @@ def writeSNX_frst(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initi
     fw.write(new_str)
     temp_str = fr.readline()  # @C  ICBL  SH2O  SNH4  SNO3
     fw.write(temp_str)
+
     temp_str = fr.readline()
-    for nline in range(0, nlayer):
-        if nline == 0:  # first layer
+
+    # check if 30cm soil layer exists - Searching for the position 
+    soil_set = set(soil_depth) 
+    if not 30 in soil_set:   #insert one more layer for 30 cm depth
+        bisect.insort(soil_depth, 30)  #soil_depth is updated by adding 30cm layer
+        index_30=soil_depth.index(30)
+        fc = fc[:index_30] + [fc[index_30]] + fc[index_30:]
+        wp = wp[:index_30] + [wp[index_30]] + wp[index_30:]
+        for nline in range(0, nlayer+1):
             temp_SH2O = IC_w_ratio * (fc[nline] - wp[nline]) + wp[nline]  # EJ(6/25/2015): initial AWC=70% of maximum AWC
-            if i_NO3 == "H":
-                SNO3 = "15"  # **EJ(4/29/2020) used one constant number regardless of soil types
-            else:  # i_NO3 == "L":
-                SNO3 = "5"  # **EJ(5/27/2015)
-        elif nline == 1:  # second layer
+            if soil_depth[nline] <= 30: 
+                #Estimate NO3[ppm] from the user input [N kg/ha] by assuming Buld density = 1.4 g/cm3
+                temp_SNO3 = i_NO3 * 10.0 / (1.4 * 30) # **EJ(2/18/2021)
+                SNO3 = repr(temp_SNO3)[0:4]  # convert float to string
+            else:
+                # temp_SH2O = fc[nline]  # float
+                SNO3 = '0.5'  
+            SH2O = repr(temp_SH2O)[0:5]  # convert float to string
+            new_str = temp_str[0:5] + repr(soil_depth[nline]).rjust(3) + ' ' + SH2O.rjust(5) + temp_str[14:22] + SNO3.rjust(4) + "\n"
+            fw.write(new_str)
+    else: #if original soil profile has a 30cm depth
+        for nline in range(0, nlayer):
             temp_SH2O = IC_w_ratio * (fc[nline] - wp[nline]) + wp[nline]  # EJ(6/25/2015): initial AWC=70% of maximum AWC
-            if i_NO3 == "H":
-                SNO3 = "2"  # **EJ(4/29/2020) used one constant number regardless of soil types
-            else:  # elif i_NO3 == "L":
-                SNO3 = ".5"  # **EJ(4/29/2020) used one constant number regardless of soil types
-        else:
-            temp_SH2O = fc[nline]  # float
-            SNO3 = "0"  # **EJ(5/27/2015)
-        SH2O = repr(temp_SH2O)[0:5]  # convert float to string
-        new_str = temp_str[0:5] + repr(soil_depth[nline]).rjust(3) + " " + SH2O.rjust(5) + temp_str[14:22] + SNO3.rjust(4) + "\n"
-        fw.write(new_str)
+            if soil_depth[nline] <= 30: 
+                #Estimate NO3[ppm] from the user input [N kg/ha] by assuming Buld density = 1.4 g/cm3
+                temp_SNO3 = float(i_NO3) * 10.0 / (1.4 * 30) # **EJ(2/18/2021)
+                SNO3 = repr(temp_SNO3)[0:4]  # convert float to string
+            else:
+                # temp_SH2O = fc[nline]  # float
+                SNO3 = '0.5'  # **EJ(5/27/2015)
+            SH2O = repr(temp_SH2O)[0:5]  # convert float to string
+            new_str = temp_str[0:5] + repr(soil_depth[nline]).rjust(3) + ' ' + SH2O.rjust(5) + temp_str[14:22] + SNO3.rjust(4) + "\n"
+            fw.write(new_str)
     fw.write("  \n")
+
     for nline in range(0, 10):
         temp_str = fr.readline()
         if temp_str[0:9] == "*PLANTING":
@@ -539,12 +614,12 @@ def writeSNX_frst(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initi
         FACD = "AP001"  #Broadcast, not incorporated    
         FDEP = "5"   #5cm depth
         FAMN = df_filtered.NAmount.values
-        FAMP = "-99"
-        FAMK = "-99"
+        FAMP = df_filtered.PAmount.values
+        FAMK = df_filtered.KAmount.values
 
         if fert_count > 0:   # fertilizer applied
             for i in range(fert_count):
-                new_str = temp_str[0:5] + repr(int(FDATE[i])).rjust(3) + " " + FMCD.rjust(5) + " " + FACD.rjust(5) + " " + FDEP.rjust(5) + " " + repr(FAMN[i]).rjust(5) + " " + FAMP.rjust(5) + " " + FAMK.rjust(5) + temp_str[44:]
+                new_str = temp_str[0:5] + repr(int(FDATE[i])).rjust(3) + " " + FMCD.rjust(5) + " " + FACD.rjust(5) + " " + FDEP.rjust(5) + " " + repr(FAMN[i]).rjust(5) + " " + repr(FAMP[i]).rjust(5) + " " + repr(FAMK[i]).rjust(5) + temp_str[44:]
                 fw.write(new_str)
             fw.write(" \n")
 #-------------------------------------------
@@ -569,7 +644,10 @@ def writeSNX_frst(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initi
     temp_str = fr.readline()  # @N OPTIONS
     fw.write(temp_str)
     temp_str = fr.readline()  # 1 OP
-    fw.write(" 1 OP              Y     Y     Y     N     N     N     N     N     D"+ "\n")
+    if p_sim == "P_yes":  #if phosphorous simulation is "on"
+        fw.write(' 1 OP              Y     Y     Y     Y     N     N     N     N     D'+ "\n")
+    else:
+        fw.write(' 1 OP              Y     Y     Y     N     N     N     N     N     D'+ "\n")
     temp_str = fr.readline()  # @N METHODS
     fw.write(temp_str)
     temp_str = fr.readline()  # 1 ME
@@ -615,7 +693,7 @@ def writeSNX_frst(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initi
 # ======================================================================================
 def writeSNX_frst_FR(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
                        planting_density,scenario,fert_app, df_fert,
-                       irrig_app, irrig_method, df_irrig, ir_depth,ir_threshold, ir_eff):    
+                       p_sim, p_level, irrig_app, irrig_method, df_irrig, ir_depth,ir_threshold, ir_eff):    
 
     plt_year = planting_date[:4] #self._Setting.DSSATSetup1.plt_year.getvalue()
     if planting_date is not None:
@@ -632,7 +710,7 @@ def writeSNX_frst_FR(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,in
         ICDAT = plt_year + repr(plt_doy-1).zfill(3)  #IC date is one day before planting
         ICDAT = ICDAT[2:]
 
-    NYERS = 200  #EJ(8/2/2021) temporary => hard-coded by fixing 300 simulation for FResampler
+    NYERS = 200  #EJ(7/27/2021) temporary => hard-coded by fixing 100 simulations 
     SDATE = ICDAT
     INGENO = cultivar[0:6]  
     CNAME = cultivar[7:]  
@@ -656,8 +734,8 @@ def writeSNX_frst_FR(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,in
         FERTI = 'N'
 
     #1) make SNX
-    temp_snx = path.join(DSSAT_PATH, f"TEMP_ET{crop}.SNX")
-    # snx_name = f"ET{crop}"+scenario[:4]+".SNX"
+    temp_snx = path.join(DSSAT_PATH, f"SN{crop}TEMP.SNX")
+    # snx_name = f"SN{crop}"+scenario[:4]+".SNX"
     snx_name = f"FC{crop}"+scenario[:4]+".SNX"  #EJ(7/27/2021) Forecast mode
 
     SNX_fname = path.join(DSSAT_PATH, snx_name)
@@ -676,8 +754,11 @@ def writeSNX_frst_FR(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,in
         MF = "1"
     else: 
         MF = "0"
-    # MF = "1"
-    SA = "0"
+    if p_sim == "P_yes":  #EJ(7/8/2021) Addd Soil Analysis section if P is simulated
+      SA = "1"
+    else: 
+      SA = "0"
+    # SA = "0"
     IC = "1"
     MP = "1"
     MR = "0"
@@ -689,7 +770,7 @@ def writeSNX_frst_FR(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,in
     temp_str = fr.readline()
     FL = "1"
     fw.write("{0:3s}{1:31s}{2:3s}{3:3s}{4:3s}{5:3s}{6:3s}{7:3s}{8:3s}{9:3s}{10:3s}{11:3s}{12:3s}{13:3s}".format(
-        FL.rjust(3), "1 0 0 ET-SIMAGRI                 1",
+        FL.rjust(3), "1 0 0 SN-SIMAGRI                 1",
         FL.rjust(3), SA.rjust(3), IC.rjust(3), MP.rjust(3), MI.rjust(3), MF.rjust(3), MR.rjust(3), MC.rjust(3),
         MT.rjust(3), ME.rjust(3), MH.rjust(3), SM.rjust(3)))
     fw.write(" \n")
@@ -711,18 +792,13 @@ def writeSNX_frst_FR(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,in
         fw.write(temp_str)
     # ================write *FIELDS
     # Get soil info from *.SOL
-    SOL_file = path.join(DSSAT_PATH, "ET.SOL")
+    SOL_file = path.join(DSSAT_PATH, "SN.SOL")
     # soil_depth, wp, fc, nlayer = get_soil_IC(SOL_file, ID_SOIL)
+    print('ID_SOIL =', ID_SOIL)
     soil_depth, wp, fc, nlayer, SLTX = get_soil_IC(SOL_file, ID_SOIL)
+    print('SLTX  =', SLTX )
     SLDP = repr(soil_depth[-1])
     ID_FIELD = scenario[:4] + "0001"
-    # WSTA_ID =  scenario[:4]+ plt_year[2:] +"99"  #EJ(7/27/2021) generated weather are stored in ONE long WTH file for the next 100 yr simulations
-    # # This line must not be changed for Linux version - DSSAt seems to be sensitive to spacing
-    # fw.write(
-    #     "{0:2s} {1:8s} {2:8s}{3:36s} {4:4s}  {5:4s}  {6:10s}{7:4s}".format(FL.rjust(2), ID_FIELD, WSTA_ID,
-    #                                                                     "   -99   -99   -99   -99   -99   -99",
-    #                                                                     SLTX.rjust(4), SLDP.rjust(4), ID_SOIL,
-    #                                                                     " -99"))
     WSTA_ID = scenario[:4].upper()
     # This line must not be changed for Linux version - DSSAt seems to be sensitive to spacing
     fw.write(
@@ -742,6 +818,25 @@ def writeSNX_frst_FR(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,in
     fw.write(" \n")
     fw.write(" \n")
 
+    #EJ(7/8/2021) Addd Soil Analysis section if P is simulated
+    if p_sim == "P_yes":
+      fw.write('*SOIL ANALYSIS'+ "\n")
+      fw.write('@A SADAT  SMHB  SMPX  SMKE  SANAME'+ "\n")
+      fw.write(' 1 '+ ICDAT + ' SA011 SA002 SA014  -99'+ "\n")
+      fw.write('@A  SABL  SADM  SAOC  SANI SAPHW SAPHB  SAPX  SAKE  SASC'+ "\n")
+      soil_depth, SADM, SAOC, SANI, SAPHW = get_soil_SA(SOL_file, ID_SOIL)
+      if p_level == 'V':  #very low
+        SAPX = '   2.0'
+      elif p_level == 'L':  #Low
+        SAPX = '   7.0'
+      elif p_level == 'M':  #Medium
+        SAPX = '  12.0'
+      else:   #high
+        SAPX = '  18.0'
+      for i in range(0, len(soil_depth)):
+        new_str = ' 1'+ repr(soil_depth[i]).rjust(6) + repr(SADM[i]).rjust(6) + repr(SAOC[i]).rjust(6) + repr(SANI[i]).rjust(6) + repr(SAPHW[i]).rjust(6)+ '   -99' + SAPX + '   -99   -99'+"\n"
+        fw.write(new_str)
+
     # read lines from temp file
     for line in range(0, 3):
         temp_str = fr.readline()
@@ -753,27 +848,43 @@ def writeSNX_frst_FR(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,in
     fw.write(new_str)
     temp_str = fr.readline()  # @C  ICBL  SH2O  SNH4  SNO3
     fw.write(temp_str)
+
     temp_str = fr.readline()
-    for nline in range(0, nlayer):
-        if nline == 0:  # first layer
+
+    # check if 30cm soil layer exists - Searching for the position 
+    soil_set = set(soil_depth) 
+    if not 30 in soil_set:   #insert one more layer for 30 cm depth
+        bisect.insort(soil_depth, 30)  #soil_depth is updated by adding 30cm layer
+        index_30=soil_depth.index(30)
+        fc = fc[:index_30] + [fc[index_30]] + fc[index_30:]
+        wp = wp[:index_30] + [wp[index_30]] + wp[index_30:]
+        for nline in range(0, nlayer+1):
             temp_SH2O = IC_w_ratio * (fc[nline] - wp[nline]) + wp[nline]  # EJ(6/25/2015): initial AWC=70% of maximum AWC
-            if i_NO3 == "H":
-                SNO3 = "15"  # **EJ(4/29/2020) used one constant number regardless of soil types
-            else:  # i_NO3 == "L":
-                SNO3 = "5"  # **EJ(5/27/2015)
-        elif nline == 1:  # second layer
+            if soil_depth[nline] <= 30: 
+                #Estimate NO3[ppm] from the user input [N kg/ha] by assuming Buld density = 1.4 g/cm3
+                temp_SNO3 = i_NO3 * 10.0 / (1.4 * 30) # **EJ(2/18/2021)
+                SNO3 = repr(temp_SNO3)[0:4]  # convert float to string
+            else:
+                # temp_SH2O = fc[nline]  # float
+                SNO3 = '0.5'  
+            SH2O = repr(temp_SH2O)[0:5]  # convert float to string
+            new_str = temp_str[0:5] + repr(soil_depth[nline]).rjust(3) + ' ' + SH2O.rjust(5) + temp_str[14:22] + SNO3.rjust(4) + "\n"
+            fw.write(new_str)
+    else: #if original soil profile has a 30cm depth
+        for nline in range(0, nlayer):
             temp_SH2O = IC_w_ratio * (fc[nline] - wp[nline]) + wp[nline]  # EJ(6/25/2015): initial AWC=70% of maximum AWC
-            if i_NO3 == "H":
-                SNO3 = "2"  # **EJ(4/29/2020) used one constant number regardless of soil types
-            else:  # elif i_NO3 == "L":
-                SNO3 = ".5"  # **EJ(4/29/2020) used one constant number regardless of soil types
-        else:
-            temp_SH2O = fc[nline]  # float
-            SNO3 = "0"  # **EJ(5/27/2015)
-        SH2O = repr(temp_SH2O)[0:5]  # convert float to string
-        new_str = temp_str[0:5] + repr(soil_depth[nline]).rjust(3) + " " + SH2O.rjust(5) + temp_str[14:22] + SNO3.rjust(4) + "\n"
-        fw.write(new_str)
+            if soil_depth[nline] <= 30: 
+                #Estimate NO3[ppm] from the user input [N kg/ha] by assuming Buld density = 1.4 g/cm3
+                temp_SNO3 = float(i_NO3) * 10.0 / (1.4 * 30) # **EJ(2/18/2021)
+                SNO3 = repr(temp_SNO3)[0:4]  # convert float to string
+            else:
+                # temp_SH2O = fc[nline]  # float
+                SNO3 = '0.5'  # **EJ(5/27/2015)
+            SH2O = repr(temp_SH2O)[0:5]  # convert float to string
+            new_str = temp_str[0:5] + repr(soil_depth[nline]).rjust(3) + ' ' + SH2O.rjust(5) + temp_str[14:22] + SNO3.rjust(4) + "\n"
+            fw.write(new_str)
     fw.write("  \n")
+
     for nline in range(0, 10):
         temp_str = fr.readline()
         if temp_str[0:9] == "*PLANTING":
@@ -830,12 +941,12 @@ def writeSNX_frst_FR(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,in
         FACD = "AP001"  #Broadcast, not incorporated    
         FDEP = "5"   #5cm depth
         FAMN = df_filtered.NAmount.values
-        FAMP = "-99"
-        FAMK = "-99"
+        FAMP = df_filtered.PAmount.values
+        FAMK = df_filtered.KAmount.values
 
         if fert_count > 0:   # fertilizer applied
             for i in range(fert_count):
-                new_str = temp_str[0:5] + repr(int(FDATE[i])).rjust(3) + " " + FMCD.rjust(5) + " " + FACD.rjust(5) + " " + FDEP.rjust(5) + " " + repr(FAMN[i]).rjust(5) + " " + FAMP.rjust(5) + " " + FAMK.rjust(5) + temp_str[44:]
+                new_str = temp_str[0:5] + repr(int(FDATE[i])).rjust(3) + " " + FMCD.rjust(5) + " " + FACD.rjust(5) + " " + FDEP.rjust(5) + " " + repr(FAMN[i]).rjust(5) + " " + repr(FAMP[i]).rjust(5) + " " + repr(FAMK[i]).rjust(5) + temp_str[44:]
                 fw.write(new_str)
             fw.write(" \n")
 #-------------------------------------------
@@ -860,7 +971,10 @@ def writeSNX_frst_FR(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,in
     temp_str = fr.readline()  # @N OPTIONS
     fw.write(temp_str)
     temp_str = fr.readline()  # 1 OP
-    fw.write(" 1 OP              Y     Y     Y     N     N     N     N     N     D"+ "\n")
+    if p_sim == "P_yes":  #if phosphorous simulation is "on"
+        fw.write(' 1 OP              Y     Y     Y     Y     N     N     N     N     D'+ "\n")
+    else:
+        fw.write(' 1 OP              Y     Y     Y     N     N     N     N     N     D'+ "\n")
     temp_str = fr.readline()  # @N METHODS
     fw.write(temp_str)
     temp_str = fr.readline()  # 1 ME
@@ -899,10 +1013,11 @@ def writeSNX_frst_FR(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,in
     fr.close()
     fw.close()
     return
-
 # ====End of WRITE *.SNX
+#===============================================================
+#===============================================================
 def get_soil_IC(SOL_file, ID_SOIL):
-    # SOL_file=DSSAT_PATH.replace("/","\\") + "\\SN.SOL"
+    # SOL_file=Wdir_path.replace("/","\\") + "\\SN.SOL"
     # initialize
     depth_layer = []
     ll_layer = []
@@ -928,3 +1043,31 @@ def get_soil_IC(SOL_file, ID_SOIL):
                     break
     return depth_layer, ll_layer, ul_layer, n_layer, s_class
 #===============================================================
+# =============================================
+def get_soil_SA(SOL_file, ID_SOIL):
+    # SOL_file=Wdir_path.replace("/","\\") + "\\SN.SOL"
+    # initialize
+    depth_layer = []
+    SADM = [] #bulk density
+    SAOC = [] #organic carbon %
+    SANI = [] #total nitrogen %
+    SAPHW = [] #pH in water
+    soil_flag = 0
+    count = 0
+    fname = open(SOL_file, "r")  # opens *.SOL
+    for line in fname:
+        if ID_SOIL in line:
+            soil_depth = line[33:37]
+            soil_flag = 1
+        if soil_flag == 1:
+            count = count + 1
+            if count >= 7:
+                depth_layer.append(int(line[0:6]))
+                SADM.append(float(line[43:49]))
+                SAOC.append(float(line[49:55]))
+                SANI.append(float(line[73:79]))
+                SAPHW.append(float(line[79:85]))
+                if line[3:6].strip() == soil_depth.strip():
+                    fname.close()
+                    break
+    return depth_layer, SADM, SAOC, SANI, SAPHW

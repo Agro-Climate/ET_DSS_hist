@@ -876,7 +876,7 @@ layout = html.Div([
           html.Div( # SIMULATIONS
             html.Div([
               html.Header(
-                html.B("Simulation Graphs"),
+                html.B("Simulation Graphs (Forecast)"),
               className=" card-header"
               ),
               html.Div(
@@ -1871,10 +1871,7 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
                 df = temp_df.copy()
             else:
                 df = temp_df.append(df, ignore_index=True)
-            print("read DSSAT output and make a df")
-            print(df)
 
-        print("after for (sce_number) loop ")
         # df = df.round({"RAIN": 0})  #Round a DataFrame to a variable number of decimal places.
         # yield_min = np.min(df.HWAM.values)  #to make a consistent yield scale for exceedance curve =>Fig 4,5,6
         # yield_max = np.max(df.HWAM.values)

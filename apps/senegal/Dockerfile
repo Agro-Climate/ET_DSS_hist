@@ -20,3 +20,4 @@ COPY ./TEST_SN/* DSSAT/dssat-base-files/
 
 WORKDIR /home/SIMAGRI/
 CMD ["python3", "index.py", "senegal"]
+# CMD ["python3", "debug.py", "senegal"]

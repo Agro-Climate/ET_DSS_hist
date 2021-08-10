@@ -47,7 +47,7 @@ layout = html.Div([
           html.Div([
             html.Header(
               html.B(
-                "Simulation Input",
+                "Simulation Input (Historical)",
               ),
             className=" card-header",
             ),
@@ -925,7 +925,7 @@ layout = html.Div([
           html.Div( # SIMULATIONS
             html.Div([
               html.Header(
-                html.B("Simulation Graphs"),
+                html.B("Simulation Graphs (Historical)"),
               className=" card-header"
               ),
               html.Div(
@@ -2765,8 +2765,8 @@ def season_rain_rank(WTD_df, sdoy, edoy):
     # rain_rank = rain_rank +1  #to start from 1, not 0
     data = {"YEAR":year_array[0:nyears], "season_rain": season_rain_sum, "Rank":rain_rank}
     df_season_rain = pd.DataFrame (data, columns = ["YEAR","season_rain", "Rank"])
-    #write dataframe into CSV file for debugging
-    df_season_rain.to_csv("C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\df_season_rain.csv", index=False)
+    # #write dataframe into CSV file for debugging
+    # df_season_rain.to_csv("C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\df_season_rain.csv", index=False)
     return df_season_rain
 #===============================================================
 #====================================================================

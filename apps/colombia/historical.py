@@ -47,7 +47,7 @@ layout = html.Div([
           html.Div([
             html.Header(
               html.B(
-                "Simulation Input",
+                "Simulation Input (Historical)",
               ),
             className=" card-header",
             ),
@@ -819,7 +819,7 @@ layout = html.Div([
           html.Div( # SIMULATIONS
             html.Div([
               html.Header(
-                html.B("Simulation Graphs"),
+                html.B("Simulation Graphs (Historical)"),
               className=" card-header"
               ),
               html.Div(
