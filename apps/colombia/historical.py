@@ -33,7 +33,7 @@ sce_col_names=[ "sce_name", "Crop", "Cultivar","stn_name", "PltDate", "FirstYear
                 "Fert_1_DOY","N_1_Kg", "Fert_2_DOY","N_2_Kg","Fert_3_DOY","N_3_Kg",
                 "Fert_4_DOY","N_4_Kg", "IR_method", "IR_1_DOY", "IR_1_amt","IR_2_DOY", "IR_2_amt","IR_3_DOY","IR_3_amt",
                 "IR_4_DOY","IR_4_amt","IR_5_DOY","IR_5_amt","AutoIR_depth","AutoIR_thres", "AutoIR_eff",
-                "CropPrice", "NFertCost", "SeedCost","OtherVariableCosts","FixedCosts"
+                "CropPrice", "NFertCost", "SeedCost", "IrrigCost", "OtherVariableCosts","FixedCosts"
 ]
 
 
@@ -387,7 +387,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Irrigation
-                    dbc.Label("15) Irrigation", html_for="irrig_input", sm=3, align="start", ),
+                    dbc.Label("14) Irrigation", html_for="irrig_input", sm=3, align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                         id="irrig_input",
@@ -402,7 +402,7 @@ layout = html.Div([
                       html.Div([
                         html.Div([ # "on reported dates"
                           #irrigation method
-                          dbc.Label("Irrigation method", html_for="extr_P", align="start", ),
+                          dbc.Label("Irrigation method", html_for="ir_method", align="start", ),
                           dcc.Dropdown(
                             id="ir_method",
                             options=[
@@ -556,7 +556,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Enterprise Budgeting?
-                    dbc.Label("16) Enterprise Budgeting?", html_for="EB_radio", sm=3, align="start", ),
+                    dbc.Label("15) Enterprise Budgeting?", html_for="EB_radio", sm=3, align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                         id="EB_radio",
@@ -575,7 +575,7 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Input(type="number", id="crop-price", value="0", min="0", step="0.1", required="required", ),
-                              dbc.FormText("[ETB/kg]"),
+                              dbc.FormText("[USD/kg]"),
                             ],),
                           ),
                         ],),
@@ -586,7 +586,7 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Input(type="number", id="fert-cost", value="0", min="0", step="0.1", required="required", ),
-                              dbc.FormText("[ETB/N kg]"),
+                              dbc.FormText("[USD/N kg]"),
                             ],),
                           ),
                         ],),
@@ -597,7 +597,18 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Input(type="number", id="seed-cost", value="0", min="0", step="0.1", required="required", ),
-                              dbc.FormText("[ETB/ha]"),
+                              dbc.FormText("[USD/ha]"),
+                            ],),
+                          ),
+                        ],),
+                        dbc.Row([
+                          dbc.Col(
+                            dbc.Label("Irrigation Cost", html_for="irrigation-cost", className="text-center", ),
+                          ),
+                          dbc.Col(
+                            dbc.FormGroup([
+                              dbc.Input(type="number", id="irrigation-cost", value=0, min=0, step=0.1, ),#required="required", ),
+                              dbc.FormText("[USD/mm]"),
                             ],),
                           ),
                         ],),
@@ -608,7 +619,7 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Input(type="number", id="variable-costs", value="0", min="0", step="0.1", required="required", ),
-                              dbc.FormText("[ETB/ha]"),
+                              dbc.FormText("[USD/ha]"),
                             ],),
                           ),
                         ],),
@@ -619,7 +630,7 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Input(type="number", id="fixed-costs", value="0", min="0", step="0.1", required="required", ),
-                              dbc.FormText("[ETB/ha]"),
+                              dbc.FormText("[USD/ha]"),
                             ],),
                           ),
                         ],),
@@ -703,6 +714,7 @@ layout = html.Div([
                     {"id": "CropPrice", "name": "Crop Price"},
                     {"id": "NFertCost", "name": "Fertilizer Cost"},
                     {"id": "SeedCost", "name": "Seed Cost"},
+                    {"id": "IrrigCost", "name": "Irrigation Cost"},
                     {"id": "OtherVariableCosts", "name": "Other Variable Costs"},
                     {"id": "FixedCosts", "name": "Fixed Costs"},
                 ]),
@@ -1156,15 +1168,6 @@ def show_hide_table(visibility_state):
     if visibility_state == "No_fert":
         return {"display": "none"}
 #==============================================================
-#call back to "show/hide" Phosphorus Simulation option
-@app.callback(Output("P-sim-Comp", component_property="style"),
-              Input("P_input", component_property="value"))
-def show_hide_table(visibility_state):
-    if visibility_state == "P_yes":
-        return {}
-    if visibility_state == "P_no":
-        return {"display": "none"}
-#==============================================================
 #call back to "show/hide" irrigation options
 @app.callback([Output("irrig-table-Comp", component_property="style"),
               Output("autoirrig-table-Comp", component_property="style")],
@@ -1269,6 +1272,7 @@ def download_scenarios(n_clicks, scenario_table):
               State("crop-price","value"),
               State("seed-cost","value"),
               State("fert-cost","value"),
+              State("irrigation-cost","value"),
               State("fixed-costs","value"),
               State("variable-costs","value"),
               State("scenario-table","data")
@@ -1297,6 +1301,7 @@ def make_sce_table(
     seed_cost,
     fert_cost,
     fixed_costs,
+    irrig_cost, ##EJ(7/30/2021) irrigation option
     variable_costs,
     sce_in_table
 ):
@@ -1388,6 +1393,7 @@ def make_sce_table(
                 crop_price = float(csv_df.CropPrice[i]) # float
                 seed_cost = float(csv_df.NFertCost[i]) # float
                 fert_cost = float(csv_df.SeedCost[i]) # float
+                irrig_cost = float(csv_df.IrrigCost[i]) # float
                 fixed_costs = float(csv_df.OtherVariableCosts[i]) # float
                 variable_costs = float(csv_df.FixedCosts[i]) # float
                 #################################################
@@ -1423,6 +1429,7 @@ def make_sce_table(
                             crop_price == None
                         or  seed_cost == None
                         or  fert_cost == None
+                        or  irrig_cost == None
                         or  fixed_costs == None
                         or  variable_costs == None
                     )        
@@ -1504,6 +1511,7 @@ def make_sce_table(
                         crop_price < 0
                     or  seed_cost < 0
                     or  fert_cost < 0
+                    or  irrig_cost < 0
                     or  fixed_costs < 0
                     or  variable_costs < 0
                 ):
@@ -1511,6 +1519,7 @@ def make_sce_table(
                             crop_price == -99
                         and seed_cost == -99
                         and fert_cost == -99
+                        and irrig_cost == -99
                         and fixed_costs == -99
                         and variable_costs == -99
                     ):
@@ -1520,6 +1529,7 @@ def make_sce_table(
                             (crop_price*10.0).is_integer()
                         and (seed_cost*10.0).is_integer()
                         and (fert_cost*10.0).is_integer()
+                        and (irrig_cost*10.0).is_integer()
                         and (fixed_costs*10.0).is_integer()
                         and (variable_costs*10.0).is_integer()
                     ):
@@ -1561,8 +1571,8 @@ def make_sce_table(
                         "sce_name": [scenario], "Crop": [crop], "Cultivar": [cultivar], "stn_name": [station], "PltDate": [planting_date], 
                         "FirstYear": [start_year], "LastYear": [end_year], "soil": [soil_type], "iH2O": [initial_soil_moisture], 
                         "iNO3": [initial_soil_no3_content], "plt_density": [planting_density], "TargetYr": [target_year],
-                        "Fert_1_DOY": [fd1], "Fert_1_Kg": [fN1], "Fert_2_DOY": [fd2], "Fert_2_Kg": [fN2], 
-                        "Fert_3_DOY": [fd3], "Fert_3_Kg": [fN3], "Fert_4_DOY": [fd4], "Fert_4_Kg": [fN4], 
+                        "Fert_1_DOY": [fd1], "N_1_Kg": [fN1], "Fert_2_DOY": [fd2], "N_2_Kg": [fN2], 
+                        "Fert_3_DOY": [fd3], "N_3_Kg": [fN3], "Fert_4_DOY": [fd4], "N_4_Kg": [fN4], 
                         "IR_method": [irrig_method],
                         "IR_1_DOY": [ird1], "IR_1_amt": [iramt1],
                         "IR_2_DOY": [ird2], "IR_2_amt": [iramt2],
@@ -1570,7 +1580,7 @@ def make_sce_table(
                         "IR_4_DOY": [ird4], "IR_4_amt": [iramt4],
                         "IR_5_DOY": [ird5], "IR_5_amt": [iramt5],
                         "AutoIR_depth":  [ir_depth], "AutoIR_thres": [ir_threshold], "AutoIR_eff": [ir_eff], #Irrigation automatic
-                        "CropPrice": [crop_price], "NFertCost": [fert_cost], "SeedCost": [seed_cost], "OtherVariableCosts": [variable_costs], "FixedCosts": [fixed_costs],  
+                        "CropPrice": [crop_price], "NFertCost": [fert_cost], "SeedCost": [seed_cost], "IrrigCost": [irrig_cost], "OtherVariableCosts": [variable_costs], "FixedCosts": [fixed_costs],  
                     })
                     val_csv = val_csv.append(df, ignore_index=True)
                 else:
@@ -1640,6 +1650,7 @@ def make_sce_table(
                         crop_price == None
                     or  seed_cost == None
                     or  fert_cost == None
+                    or  irrig_cost == None
                     or  fixed_costs == None
                     or  variable_costs == None
                 )
@@ -1671,7 +1682,7 @@ def make_sce_table(
             "IR_5_DOY": [-99], "IR_5_amt": [-99],
             #Irrigation automatic
             "AutoIR_depth":  [-99], "AutoIR_thres": [-99], "AutoIR_eff": [-99],
-            "CropPrice": [-99], "NFertCost": [-99], "SeedCost": [-99], "OtherVariableCosts": [-99], "FixedCosts": [-99],
+            "CropPrice": [-99], "NFertCost": [-99], "SeedCost": [-99], "IrrigCost": ["-99"],"OtherVariableCosts": [-99], "FixedCosts": [-99],
         })
 
         #=====================================================================
@@ -1769,6 +1780,7 @@ def make_sce_table(
                 "CropPrice": [crop_price],
                 "NFertCost": [seed_cost],
                 "SeedCost": [fert_cost],
+                "IrrigCost": [irrig_cost],
                 "OtherVariableCosts": [fixed_costs],
                 "FixedCosts": [variable_costs],
             })
@@ -1778,6 +1790,7 @@ def make_sce_table(
                     crop_price < 0
                 or  seed_cost < 0
                 or  fert_cost < 0
+                or  irrig_cost < 0
                 or  fixed_costs < 0
                 or  variable_costs < 0
             ):
@@ -1787,6 +1800,7 @@ def make_sce_table(
                         (crop_price*10.0).is_integer()
                     and  (seed_cost*10.0).is_integer()
                     and  (fert_cost*10.0).is_integer()
+                    and  (irrig_cost*10.0).is_integer()
                     and  (fixed_costs*10.0).is_integer()
                     and  (variable_costs*10.0).is_integer()
                 ):
@@ -2136,9 +2150,11 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
             MDAT = df_OUT.iloc[:,16].values  #read 14th column only
             YEAR = df_OUT.iloc[:,13].values//1000
             NICM = df_OUT.iloc[:,39].values  #read 40th column only,  #NICM   Tot N app kg/ha Inorganic N applied (kg [N]/ha)
+            IRCM = df_OUT.iloc[:,30].values    #IRCM   Irrig mm        Season irrigation (mm)   EJ(7/30/2021)
             HWAM[HWAM < 0]=0 #==> if HWAM == -99, consider it as "0" yield (i.e., crop failure)
             #Compute gross margin
-            GMargin=HWAM*float(EB_sces.CropPrice[i])- float(EB_sces.NFertCost[i])*NICM - float(EB_sces.SeedCost[i]) - float(EB_sces.OtherVariableCosts[i]) - float(EB_sces.FixedCosts[i])
+            # GMargin=HWAM*float(EB_sces.CropPrice[i])- float(EB_sces.NFertCost[i])*NICM - float(EB_sces.SeedCost[i]) - float(EB_sces.OtherVariableCosts[i]) - float(EB_sces.FixedCosts[i])
+            GMargin=HWAM*float(EB_sces.CropPrice[i])- float(EB_sces.NFertCost[i])*NICM - float(EB_sces.IrrigCost[i])*IRCM - float(EB_sces.SeedCost[i]) - float(EB_sces.OtherVariableCosts[i]) - float(EB_sces.FixedCosts[i])
 
             TG_GMargin_temp = np.nan
             if int(EB_sces.TargetYr[i]) <= int(EB_sces.LastYear[i]):
@@ -2147,8 +2163,8 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
                 yr_index = np.argwhere(PDAT == int(target))
                 TG_GMargin_temp = GMargin[yr_index[0][0]]
 
-            data = {"EXPERIMENT":EXPERIMENT, "YEAR":YEAR, "PDAT": PDAT, "ADAT":ADAT, "HWAM":HWAM,"NICM":NICM, "GMargin":GMargin}  #EJ(6/5/2021) fixed
-            temp_df = pd.DataFrame (data, columns = ["EXPERIMENT","YEAR", "PDAT","ADAT","HWAM","NICM","GMargin"])  #EJ(6/5/2021) fixed
+            data = {"EXPERIMENT":EXPERIMENT, "YEAR":YEAR, "PDAT": PDAT, "ADAT":ADAT, "HWAM":HWAM,"NICM":NICM, "IRCM":IRCM,"GMargin":GMargin}  #EJ(6/5/2021) fixed
+            temp_df = pd.DataFrame (data) #, columns = ["EXPERIMENT","YEAR", "PDAT","ADAT","HWAM","NICM","GMargin"])  #EJ(6/5/2021) fixed
 
             if i==0:
                 df = temp_df.copy()
@@ -2158,7 +2174,7 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
             TG_GMargin = [TG_GMargin_temp]+TG_GMargin
 
         # adding column name to the respective columns
-        df.columns =["EXPERIMENT", "YEAR","PDAT", "ADAT","HWAM","NICM","GMargin"]
+        df.columns =["EXPERIMENT", "YEAR","PDAT", "ADAT","HWAM","NICM","IRCM","GMargin"]
         x_val = np.unique(df.EXPERIMENT.values)
         fig = px.box(df, x="EXPERIMENT", y="GMargin", title="Gross Margin Boxplot")
         fig.add_scatter(x=x_val,y=TG_GMargin, mode="markers") #, mode="lines+markers") #"lines")
@@ -2566,35 +2582,6 @@ def get_soil_IC(SOL_file, ID_SOIL):
                     break
     return depth_layer, ll_layer, ul_layer, n_layer, s_class
 #===============================================================
-# =============================================
-# def get_soil_SA(SOL_file, ID_SOIL):
-#     # SOL_file=Wdir_path.replace("/","\\") + "\\SN.SOL"
-#     # initialize
-#     depth_layer = []
-#     SADM = [] #bulk density
-#     SAOC = [] #organic carbon %
-#     SANI = [] #total nitrogen %
-#     SAPHW = [] #pH in water
-#     soil_flag = 0
-#     count = 0
-#     fname = open(SOL_file, "r")  # opens *.SOL
-#     for line in fname:
-#         if ID_SOIL in line:
-#             soil_depth = line[33:37]
-#             soil_flag = 1
-#         if soil_flag == 1:
-#             count = count + 1
-#             if count >= 7:
-#                 depth_layer.append(int(line[0:6]))
-#                 SADM.append(float(line[43:49]))
-#                 SAOC.append(float(line[49:55]))
-#                 SANI.append(float(line[73:79]))
-#                 SAPHW.append(float(line[79:85]))
-#                 if line[3:6].strip() == soil_depth.strip():
-#                     fname.close()
-#                     break
-#     return depth_layer, SADM, SAOC, SANI, SAPHW
-
 #===============================================================
 def season_rain_rank(WTD_df, sdoy, edoy):
     #sdoy: starting doy of the target period
@@ -2630,8 +2617,8 @@ def season_rain_rank(WTD_df, sdoy, edoy):
     # rain_rank = rain_rank +1  #to start from 1, not 0
     data = {"YEAR":year_array[0:nyears], "season_rain": season_rain_sum, "Rank":rain_rank}
     df_season_rain = pd.DataFrame (data, columns = ["YEAR","season_rain", "Rank"])
-    #write dataframe into CSV file for debugging
-    df_season_rain.to_csv("C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\df_season_rain.csv", index=False)
+    # #write dataframe into CSV file for debugging
+    # df_season_rain.to_csv("C:\\IRI\\Python_Dash\\ET_DSS_hist\\TEST\\df_season_rain.csv", index=False)
     return df_season_rain
 #===============================================================
 #====================================================================

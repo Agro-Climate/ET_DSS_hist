@@ -48,7 +48,7 @@ sce_col_names=[ "sce_name", "Trimester1", "AN1","BN1", "AN2","BN2",
                 "Fert_1_DOY", "N_1_Kg", "P_1_Kg", "K_1_Kg", "Fert_2_DOY", "N_2_Kg", "P_2_Kg", "K_2_Kg", "Fert_3_DOY", "N_3_Kg", "P_3_Kg", "K_3_Kg",
                 "Fert_4_DOY", "N_4_Kg", "P_4_Kg", "K_4_Kg", "P_level", "IR_method", "IR_1_DOY", "IR_1_amt", "IR_2_DOY", "IR_2_amt", "IR_3_DOY", "IR_3_amt", 
                 "IR_4_DOY", "IR_4_amt", "IR_5_DOY", "IR_5_amt", "AutoIR_depth", "AutoIR_thres", "AutoIR_eff", 
-                "CropPrice", "NFertCost", "SeedCost", "OtherVariableCosts", "FixedCosts"
+                "CropPrice", "NFertCost", "SeedCost","IrrigCost", "OtherVariableCosts", "FixedCosts"
 ]
 
 layout = html.Div([
@@ -816,6 +816,17 @@ layout = html.Div([
                         ],),
                         dbc.Row([
                           dbc.Col(
+                            dbc.Label("Irrigation Cost", html_for="irrigation-cost", className="text-center", ),
+                          ),
+                          dbc.Col(
+                            dbc.FormGroup([
+                              dbc.Input(type="number", id="irrigation-cost", value=0, min=0, step=0.1, ),#required="required", ),
+                              dbc.FormText("[ETB/mm]"),
+                            ],),
+                          ),
+                        ],),
+                        dbc.Row([
+                          dbc.Col(
                             dbc.Label("Other Variable Costs", html_for="variable-costs_frst", className="text-center", ),
                           ),
                           dbc.Col(
@@ -929,6 +940,7 @@ layout = html.Div([
                     {"id": "AutoIR_eff", "name": "AutoIR_eff"},
                     {"id": "CropPrice", "name": "Crop Price"},
                     {"id": "NFertCost", "name": "Fertilizer Cost"},
+                    {"id": "SeedCost", "name": "Seed Cost"},
                     {"id": "SeedCost", "name": "Seed Cost"},
                     {"id": "OtherVariableCosts", "name": "Other Variable Costs"},
                     {"id": "FixedCosts", "name": "Fixed Costs"},
@@ -1656,6 +1668,7 @@ def download_scenarios(n_clicks, scenario_table):
               State("crop-price_frst","value"),
               State("seed-cost_frst","value"),
               State("fert-cost_frst","value"),
+              State("irrigation-cost","value"),
               State("fixed-costs_frst","value"),
               State("variable-costs_frst","value"),
               State("scenario-table_frst","data")
@@ -1681,6 +1694,7 @@ def make_sce_table(
     crop_price,
     seed_cost,
     fert_cost,
+    irrig_cost, ##EJ(7/30/2021) irrigation option
     fixed_costs,
     variable_costs,
     sce_in_table
@@ -1789,6 +1803,7 @@ def make_sce_table(
                 crop_price = float(csv_df.CropPrice[i]) # float
                 seed_cost = float(csv_df.NFertCost[i]) # float
                 fert_cost = float(csv_df.SeedCost[i]) # float
+                irrig_cost = float(csv_df.IrrigCost[i]) # float
                 fixed_costs = float(csv_df.OtherVariableCosts[i]) # float
                 variable_costs = float(csv_df.FixedCosts[i]) # float
                 #################################################
@@ -1824,6 +1839,7 @@ def make_sce_table(
                             crop_price == None
                         or  seed_cost == None
                         or  fert_cost == None
+                        or  irrig_cost == None
                         or  fixed_costs == None
                         or  variable_costs == None
                     )        
@@ -1905,6 +1921,7 @@ def make_sce_table(
                         crop_price < 0
                     or  seed_cost < 0
                     or  fert_cost < 0
+                    or  irrig_cost < 0
                     or  fixed_costs < 0
                     or  variable_costs < 0
                 ):
@@ -1912,6 +1929,7 @@ def make_sce_table(
                             crop_price == -99
                         and seed_cost == -99
                         and fert_cost == -99
+                        and irrig_cost == -99
                         and fixed_costs == -99
                         and variable_costs == -99
                     ):
@@ -1921,6 +1939,7 @@ def make_sce_table(
                             (crop_price*10.0).is_integer()
                         and  (seed_cost*10.0).is_integer()
                         and  (fert_cost*10.0).is_integer()
+                        and  (irrig_cost*10.0).is_integer()
                         and  (fixed_costs*10.0).is_integer()
                         and  (variable_costs*10.0).is_integer()
                     ):
@@ -1975,7 +1994,7 @@ def make_sce_table(
                         "IR_4_DOY": [ird4], "IR_4_amt": [iramt4],
                         "IR_5_DOY": [ird5], "IR_5_amt": [iramt5],
                         "AutoIR_depth":  [ir_depth], "AutoIR_thres": [ir_threshold], "AutoIR_eff": [ir_eff], #Irrigation automatic
-                        "CropPrice": [crop_price], "NFertCost": [fert_cost], "SeedCost": [seed_cost], "OtherVariableCosts": [variable_costs], "FixedCosts": [fixed_costs],  
+                        "CropPrice": [crop_price], "NFertCost": [fert_cost], "SeedCost": [seed_cost],"IrrigCost": [irrig_cost], "OtherVariableCosts": [variable_costs], "FixedCosts": [fixed_costs],  
                     })
                     val_csv = val_csv.append(df, ignore_index=True)
                 else:
@@ -2055,6 +2074,7 @@ def make_sce_table(
                         crop_price == None
                     or  seed_cost == None
                     or  fert_cost == None
+                    or  irrig_cost == None
                     or  fixed_costs == None
                     or  variable_costs == None
                 )
@@ -2086,7 +2106,7 @@ def make_sce_table(
             "IR_4_DOY": [-99], "IR_4_amt": [-99],
             "IR_5_DOY": [-99], "IR_5_amt": [-99],
             "AutoIR_depth":  [-99], "AutoIR_thres": [-99], "AutoIR_eff": [-99], #Irrigation automatic
-            "CropPrice": [-99], "NFertCost": [-99], "SeedCost": [-99], "OtherVariableCosts": [-99], "FixedCosts": [-99],  
+            "CropPrice": [-99], "NFertCost": [-99], "SeedCost": [-99], "IrrigCost": ["-99"], "OtherVariableCosts": [-99], "FixedCosts": [-99],  
         })
 
         #=====================================================================
@@ -2195,6 +2215,7 @@ def make_sce_table(
                 "CropPrice": [crop_price],
                 "NFertCost": [seed_cost],
                 "SeedCost": [fert_cost],
+                "IrrigCost": [irrig_cost],
                 "OtherVariableCosts": [fixed_costs],
                 "FixedCosts": [variable_costs],
             })
@@ -2204,6 +2225,7 @@ def make_sce_table(
                     crop_price < 0
                 or  seed_cost < 0
                 or  fert_cost < 0
+                or  irrig_cost < 0
                 or  fixed_costs < 0
                 or  variable_costs < 0
             ):
@@ -2213,6 +2235,7 @@ def make_sce_table(
                         (crop_price*10.0).is_integer()
                     and  (seed_cost*10.0).is_integer()
                     and  (fert_cost*10.0).is_integer()
+                    and  (irrig_cost*10.0).is_integer()
                     and  (fixed_costs*10.0).is_integer()
                     and  (variable_costs*10.0).is_integer()
                 ):
@@ -2547,10 +2570,12 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
             MDAT = df_OUT.iloc[:,16].values  #read 14th column only    
             YEAR = df_OUT.iloc[:,13].values//1000
             NICM = df_OUT.iloc[:,39].values  #read 40th column only,  #NICM   Tot N app kg/ha Inorganic N applied (kg [N]/ha)
+            IRCM = df_OUT.iloc[:,30].values    #IRCM   Irrig mm        Season irrigation (mm)   EJ(7/30/2021)
             HWAM[HWAM < 0]=0 #==> if HWAM == -99, consider it as "0" yield (i.e., crop failure)
             #Compute gross margin
-            GMargin=HWAM*float(EB_sces.CropPrice[i])- float(EB_sces.NFertCost[i])*NICM - float(EB_sces.SeedCost[i]) - float(EB_sces.OtherVariableCosts[i]) - float(EB_sces.FixedCosts[i])
-            
+            # GMargin=HWAM*float(EB_sces.CropPrice[i])- float(EB_sces.NFertCost[i])*NICM - float(EB_sces.SeedCost[i]) - float(EB_sces.OtherVariableCosts[i]) - float(EB_sces.FixedCosts[i])
+            GMargin=HWAM*float(EB_sces.CropPrice[i])- float(EB_sces.NFertCost[i])*NICM - float(EB_sces.IrrigCost[i])*IRCM - float(EB_sces.SeedCost[i]) - float(EB_sces.OtherVariableCosts[i]) - float(EB_sces.FixedCosts[i])
+  
             TG_GMargin_temp = np.nan
             if int(EB_sces.TargetYr[i]) <= int(EB_sces.LastYear[i]):
                 doy = repr(PDAT[0])[4:]
@@ -2558,8 +2583,8 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
                 yr_index = np.argwhere(PDAT == int(target))
                 TG_GMargin_temp = GMargin[yr_index[0][0]]
             
-            data = {"EXPERIMENT":EXPERIMENT, "YEAR":YEAR, "PDAT": PDAT, "ADAT":ADAT, "HWAM":HWAM,"NICM":NICM, "GMargin":GMargin}  #EJ(6/5/2021) fixed
-            temp_df = pd.DataFrame (data, columns = ["EXPERIMENT","YEAR", "PDAT","ADAT","HWAM","NICM","GMargin"])  #EJ(6/5/2021) fixed
+            data = {"EXPERIMENT":EXPERIMENT, "YEAR":YEAR, "PDAT": PDAT, "ADAT":ADAT, "HWAM":HWAM,"NICM":NICM, "IRCM":IRCM, "GMargin":GMargin}  #EJ(6/5/2021) fixed
+            temp_df = pd.DataFrame (data) #, columns = ["EXPERIMENT","YEAR", "PDAT","ADAT","HWAM","NICM","GMargin"])  #EJ(6/5/2021) fixed
 
             if i==0:
                 df = temp_df.copy()
@@ -2569,7 +2594,7 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
             TG_GMargin = [TG_GMargin_temp]+TG_GMargin
 
         # adding column name to the respective columns
-        df.columns =["EXPERIMENT", "YEAR","PDAT", "ADAT","HWAM","NICM","GMargin"]
+        df.columns =["EXPERIMENT", "YEAR","PDAT", "ADAT","HWAM","NICM","IRCM","GMargin"]
         x_val = np.unique(df.EXPERIMENT.values)
         fig = px.box(df, x="EXPERIMENT", y="GMargin", title="Gross Margin Boxplot")
         fig.add_scatter(x=x_val,y=TG_GMargin, mode="markers") #, mode="lines+markers") #"lines")
