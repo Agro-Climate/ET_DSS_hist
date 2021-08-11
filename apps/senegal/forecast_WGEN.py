@@ -787,7 +787,7 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="crop-price_frst", value="0", min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="crop-price_frst", value=0, min=0, step=0.1, required="required", ),
                               dbc.FormText("[ETB/kg]"),
                             ],),
                           ),
@@ -798,7 +798,7 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="fert-cost_frst", value="0", min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="fert-cost_frst", value=0, min=0, step=0.1, required="required", ),
                               dbc.FormText("[ETB/N kg]"),
                             ],),
                           ),
@@ -809,7 +809,7 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="seed-cost_frst", value="0", min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="seed-cost_frst", value=0, min=0, step=0.1, required="required", ),
                               dbc.FormText("[ETB/ha]"),
                             ],),
                           ),
@@ -820,7 +820,7 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="irrigation-cost", value=0, min=0, step=0.1, ),#required="required", ),
+                              dbc.Input(type="number", id="irrigation-cost", value=0, min=0, step=0.1, required="required", ),
                               dbc.FormText("[ETB/mm]"),
                             ],),
                           ),
@@ -831,7 +831,7 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="variable-costs_frst", value="0", min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="variable-costs_frst", value=0, min=0, step=0.1, required="required", ),
                               dbc.FormText("[ETB/ha]"),
                             ],),
                           ),
@@ -842,7 +842,7 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="fixed-costs_frst", value="0", min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="fixed-costs_frst", value=0, min=0, step=0.1, required="required", ),
                               dbc.FormText("[ETB/ha]"),
                             ],),
                           ),
@@ -2009,11 +2009,11 @@ def make_sce_table(
                 #=====================================================================
                 # Write SNX file for climatology runs
                 writeSNX_clim(Wdir_path,station,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
-                                    planting_density,scenario,fert_app, current_fert, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)  #This is differnt from writeSNX_main_hist in the historical analysis
+                                    planting_density,scenario,fert_app, current_fert, p_sim, p_level, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)  #This is differnt from writeSNX_main_hist in the historical analysis
                 # Write SNX for forecast runs 
                 #1)for WGEN
                 writeSNX_frst(Wdir_path,station,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
-                                    planting_density,scenario,fert_app, current_fert, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)
+                                    planting_density,scenario,fert_app, current_fert, p_sim, p_level, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)
                 # #2) for FResampler
                 # writeSNX_frst_FR(Wdir_path,station,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
                 #                     planting_density,scenario,fert_app, current_fert, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)
@@ -2108,7 +2108,7 @@ def make_sce_table(
             "IR_4_DOY": [-99], "IR_4_amt": [-99],
             "IR_5_DOY": [-99], "IR_5_amt": [-99],
             "AutoIR_depth":  [-99], "AutoIR_thres": [-99], "AutoIR_eff": [-99], #Irrigation automatic
-            "CropPrice": [-99], "NFertCost": [-99], "SeedCost": [-99], "IrrigCost": ["-99"], "OtherVariableCosts": [-99], "FixedCosts": [-99],  
+            "CropPrice": [-99], "NFertCost": [-99], "SeedCost": [-99], "IrrigCost": [-99], "OtherVariableCosts": [-99], "FixedCosts": [-99],  
         })
 
         #=====================================================================
@@ -2202,10 +2202,10 @@ def make_sce_table(
         # writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3,
         #                     planting_density,scenario,fert_app, current_fert, p_sim, p_level, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)
         writeSNX_clim(Wdir_path,station,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
-                            planting_density,scenario,fert_app, current_fert, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)  #This is differnt from writeSNX_main_hist in the historical analysis
+                            planting_density,scenario,fert_app, current_fert, p_sim, p_level, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)  #This is differnt from writeSNX_main_hist in the historical analysis
         #1)for WGEN
         writeSNX_frst(Wdir_path,station,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
-                            planting_density,scenario,fert_app, current_fert, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)
+                            planting_density,scenario,fert_app, current_fert, p_sim, p_level, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)
         # #2) for FResampler
         # writeSNX_frst_FR(Wdir_path,station,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
         #                     planting_density,scenario,fert_app, current_fert, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)

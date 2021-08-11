@@ -12,6 +12,8 @@
 
 FROM irikesha/simagridssat:latest
 
+RUN pip3 install exp-mixture-model
+
 COPY ./*.py /home/SIMAGRI/
 COPY ./apps/ /home/SIMAGRI/apps/
 COPY ./assets/ /home/SIMAGRI/assets/
@@ -19,5 +21,5 @@ COPY ./data/ /home/SIMAGRI/data/
 COPY ./TEST_ET/* DSSAT/dssat-base-files/
 
 WORKDIR /home/SIMAGRI/
-# CMD ["python3", "index.py", "ethiopia"]
-CMD ["python3", "debug.py", "ethiopia"]
+CMD ["python3", "index.py", "ethiopia"]
+# CMD ["python3", "debug.py", "ethiopia"]

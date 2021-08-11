@@ -89,31 +89,22 @@ layout = html.Div([
                       value="MELK",
                       clearable=False,
                       ),
-                    ],
-                    className="py-2",
-                    xl=9,
-                    ),
-                  ],
-                  row=True
-                  ),
-                  dbc.FormGroup([ # Observed data => Not for user's input
-                    dbc.Label("Observed Weather", html_for="ETstation_frst", sm=3, className="p-2", align="start", ),
-                    dbc.Col([
-                        dbc.Row([
-                          dbc.Col(
-                            dbc.FormGroup([
-                              dbc.Input(type="text", id="obs_1st", disabled="disabled" ), 
-                            ],),
-                          ),
-                          dbc.Col(
-                            dbc.Label("to", html_for="trimester1", sm=3, className="p-0",),
-                          ),
-                          dbc.Col(
-                            dbc.FormGroup([
-                              dbc.Input(type="text", id="obs_last", disabled="disabled" ), 
-                            ],),
-                          ),
-                        ],),
+                      html.Div("Observed Weather:", className="py-2"),
+                      dbc.Row([
+                        dbc.Col(
+                          dbc.FormGroup([
+                            dbc.Input(type="text", id="obs_1st", disabled="disabled" ), 
+                          ],),
+                        ),
+                        dbc.Col(
+                          dbc.Label("to", html_for="trimester1", sm=3, className="p-0",),
+                        ),
+                        dbc.Col(
+                          dbc.FormGroup([
+                            dbc.Input(type="text", id="obs_last", disabled="disabled" ), 
+                          ],),
+                        ),
+                      ],),
                     ],
                     className="py-2",
                     xl=9,
@@ -122,7 +113,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Seasonal climate forecast EJ(7/25/2021)
-                    dbc.Label("3) Seasonal Climate Forecast", html_for="SCF", sm=3, className="p-0", align="start", ),
+                    dbc.Label("3) Seasonal Climate Forecast", html_for="SCF", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       html.Div([ # SEASONAL CLIMATE FORECAST
                         html.Div([ # 1st trimester
@@ -235,7 +226,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Crop
-                    dbc.Label("3) Crop", html_for="crop-radio_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("4) Crop", html_for="crop-radio_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                       id="crop-radio_frst",
@@ -256,7 +247,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Cultivar
-                    dbc.Label("4) Cultivar", html_for="cultivar-dropdown_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("5) Cultivar", html_for="cultivar-dropdown_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
                         id="cultivar-dropdown_frst", 
@@ -277,7 +268,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Soil Type
-                    dbc.Label("8) Soil Type", html_for="ETsoil_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("6) Soil Type", html_for="ETsoil_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
                         id="ETsoil_frst", 
@@ -308,7 +299,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Initial Soil Water Condition
-                    dbc.Label("9) Initial Soil Water Condition", html_for="ini-H2O_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("7) Initial Soil Water Condition", html_for="ini-H2O_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
                         id="ini-H2O_frst", 
@@ -329,7 +320,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Initial NO3 Condition
-                    dbc.Label("10) Initial Soil NO3 Condition", html_for="ini-NO3_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("8) Initial Soil NO3 Condition", html_for="ini-NO3_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
                         id="ini-NO3_frst", 
@@ -348,7 +339,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Planting Date
-                    dbc.Label("11) Planting Date", html_for="plt-date-picker_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("9) Planting Date", html_for="plt-date-picker_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.DatePickerSingle(
                       id="plt-date-picker_frst",
@@ -378,7 +369,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Fertilizer Application
-                    dbc.Label("13) Fertilizer Application", html_for="fert_input_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("10) Fertilizer Application", html_for="fert_input_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                         id="fert_input_frst",
@@ -477,7 +468,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Irrigation
-                    dbc.Label("15) Irrigation", html_for="irrig_input_frst", sm=3, align="start", ),
+                    dbc.Label("11) Irrigation", html_for="irrig_input_frst", sm=3, align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                         id="irrig_input_frst",
@@ -656,7 +647,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Enterprise Budgeting?
-                    dbc.Label("14) Enterprise Budgeting?", html_for="EB_radio_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("12) Enterprise Budgeting?", html_for="EB_radio_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                         id="EB_radio_frst",

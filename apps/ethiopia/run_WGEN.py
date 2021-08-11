@@ -23,7 +23,7 @@ def run_WGEN(df_tab, tri_doylist, Wdir_path):
     WSTA =df_tab.stn_name.values[0] 
     WTD_fname = path.join(Wdir_path, WSTA+".WTD")
     trimester1 = df_tab.Trimester1.values[0]  #"JJA followed by SON"
-    planting_date = df_tab.Plt_date.values[0]
+    planting_date = df_tab.PltDate.values[0]
     plt_year = planting_date[:4] 
     #================== MAIN PROGRAM ======================================
     target_year = int(plt_year)  #2016

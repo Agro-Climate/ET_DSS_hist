@@ -31,7 +31,6 @@ from optparse import OptionParser
 import sys
 import os
 from os import path # path
-from apps.ethiopia.exp_mixture_model import EMM, EMMs  
 from exp_mixture_model import EMM, EMMs  
 from exp_mixture_model import generate_emm 
 

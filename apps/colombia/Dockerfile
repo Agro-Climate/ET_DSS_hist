@@ -12,6 +12,8 @@
 
 FROM irikesha/simagridssat:latest
 
+RUN pip3 install exp-mixture-model
+
 COPY . /home/SIMAGRI/
 COPY ./TEST_CO/* /home/SIMAGRI/DSSAT/dssat-base-files/
 
