@@ -53,7 +53,7 @@ layout = html.Div([
           html.Div([
             html.Header(
               html.B(
-                "Simulation Input (Forecast)",
+                "Simulation Input",
               ),
             className=" card-header",
             ),
@@ -64,7 +64,7 @@ layout = html.Div([
                   dbc.FormGroup([ # Scenario
                     dbc.Label("1) Scenario Name", html_for="sce-name_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
-                      dbc.Input(type="text", id="sce-name_frst", value="", minLength=4, maxLength=4,required="required", ),
+                      dbc.Input(type="text", id="sce-name_frst", value="", minLength=4, maxLength=4, required="required", ),
                     ],
                     className="py-2",
                     xl=9,
@@ -89,31 +89,22 @@ layout = html.Div([
                       value="MELK",
                       clearable=False,
                       ),
-                    ],
-                    className="py-2",
-                    xl=9,
-                    ),
-                  ],
-                  row=True
-                  ),
-                  dbc.FormGroup([ # Observed data => Not for user's input
-                    dbc.Label("Observed Weather", html_for="ETstation_frst", sm=3, className="p-2", align="start", ),
-                    dbc.Col([
-                        dbc.Row([
-                          dbc.Col(
-                            dbc.FormGroup([
-                              dbc.Input(type="text", id="obs_1st", disabled="disabled" ), 
-                            ],),
-                          ),
-                          dbc.Col(
-                            dbc.Label("to", html_for="trimester1", sm=3, className="p-0",),
-                          ),
-                          dbc.Col(
-                            dbc.FormGroup([
-                              dbc.Input(type="text", id="obs_last", disabled="disabled" ), 
-                            ],),
-                          ),
-                        ],),
+                      dbc.Label("Observed Weather:", html_for="ETstation_frst", className="p-2", align="start", ),
+                      dbc.Row([
+                        dbc.Col(
+                          dbc.FormGroup([
+                            dbc.Input(type="text", id="obs_1st", disabled="disabled" ), 
+                          ],),
+                        ),
+                        dbc.Col(
+                          dbc.Label("to", html_for="trimester1", sm=3, className="p-0",),
+                        ),
+                        dbc.Col(
+                          dbc.FormGroup([
+                            dbc.Input(type="text", id="obs_last", disabled="disabled" ), 
+                          ],),
+                        ),
+                      ],),
                     ],
                     className="py-2",
                     xl=9,
@@ -122,7 +113,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Seasonal climate forecast EJ(7/25/2021)
-                    dbc.Label("3) Seasonal Climate Forecast", html_for="SCF", sm=3, className="p-0", align="start", ),
+                    dbc.Label("3) Seasonal Climate Forecast", html_for="SCF", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       html.Div([ # SEASONAL CLIMATE FORECAST
                         html.Div([ # 1st trimester
@@ -167,12 +158,12 @@ layout = html.Div([
                             dbc.Row([
                               dbc.Col(
                                 dbc.FormGroup([
-                                  dbc.Input(type="number", id="AN1", value=40, min="0", max="100", required="required", ),
+                                  dbc.Input(type="number", id="AN1", value=40, min="0", max="100", step="0.1", required="required", ),
                                 ],),
                               ),
                               dbc.Col(
                                 dbc.FormGroup([
-                                  dbc.Input(type="number", id="BN1", value=20, min="0", max="100", required="required", ),
+                                  dbc.Input(type="number", id="BN1", value=20, min="0", max="100", step="0.1", required="required", ),
                                 ],),
                               ),
                               dbc.Col(
@@ -181,6 +172,14 @@ layout = html.Div([
                                 ],),
                               ),
                             ],),
+                            dbc.Row([
+                              dbc.FormText([
+                                ""
+                              ],
+                              id="trimester1-error-msg",
+                              style= {"display": "none"}
+                              ),
+                            ]),
                           ]),
                         ]),
                         html.Div([ # 2nd trimester
@@ -221,6 +220,14 @@ layout = html.Div([
                                 ],),
                               ),
                             ],),
+                            dbc.Row([
+                              dbc.FormText([
+                                ""
+                              ],
+                              id="trimester2-error-msg",
+                              style= {"display": "none"}
+                              ),
+                            ]),
                           ]),
                         ]),
                       ],
@@ -235,7 +242,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Crop
-                    dbc.Label("3) Crop", html_for="crop-radio_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("4) Crop", html_for="crop-radio_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                       id="crop-radio_frst",
@@ -256,7 +263,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Cultivar
-                    dbc.Label("4) Cultivar", html_for="cultivar-dropdown_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("5) Cultivar", html_for="cultivar-dropdown_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
                         id="cultivar-dropdown_frst", 
@@ -277,7 +284,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Soil Type
-                    dbc.Label("8) Soil Type", html_for="ETsoil_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("6) Soil Type", html_for="ETsoil_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
                         id="ETsoil_frst", 
@@ -308,7 +315,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Initial Soil Water Condition
-                    dbc.Label("9) Initial Soil Water Condition", html_for="ini-H2O_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("7) Initial Soil Water Condition", html_for="ini-H2O_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
                         id="ini-H2O_frst", 
@@ -329,7 +336,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Initial NO3 Condition
-                    dbc.Label("10) Initial Soil NO3 Condition", html_for="ini-NO3_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("8) Initial Soil NO3 Condition", html_for="ini-NO3_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
                         id="ini-NO3_frst", 
@@ -348,7 +355,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Planting Date
-                    dbc.Label("11) Planting Date", html_for="plt-date-picker_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("9) Planting Date", html_for="plt-date-picker_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.DatePickerSingle(
                       id="plt-date-picker_frst",
@@ -367,7 +374,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Planting Density
-                    dbc.Label(["12) Planting Density", html.Span(" (plants/m"), html.Sup("2"), html.Span(")"), ], html_for="plt-density_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label(["10) Planting Density", html.Span(" (plants/m"), html.Sup("2"), html.Span(")"), ], html_for="plt-density_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dbc.Input(type="number", id="plt-density_frst", value=5, min=1, max=300, step=0.1, required="required", ),
                     ],
@@ -378,7 +385,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Fertilizer Application
-                    dbc.Label("13) Fertilizer Application", html_for="fert_input_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("11) Fertilizer Application", html_for="fert_input_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                         id="fert_input_frst",
@@ -477,7 +484,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Irrigation
-                    dbc.Label("15) Irrigation", html_for="irrig_input_frst", sm=3, align="start", ),
+                    dbc.Label("12) Irrigation", html_for="irrig_input", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                         id="irrig_input_frst",
@@ -492,7 +499,7 @@ layout = html.Div([
                       html.Div([
                         html.Div([ # "on reported dates"
                           #irrigation method
-                          dbc.Label("Irrigation method", html_for="ir_method_frst", align="start", ),
+                          dbc.Label("Irrigation method", html_for="extr_P", align="start", ),
                           dcc.Dropdown(
                             id="ir_method_frst",
                             options=[
@@ -656,7 +663,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Enterprise Budgeting?
-                    dbc.Label("14) Enterprise Budgeting?", html_for="EB_radio_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("13) Enterprise Budgeting?", html_for="EB_radio_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                         id="EB_radio_frst",
@@ -786,13 +793,12 @@ layout = html.Div([
                     {"id": "Crop", "name": "Crop"},
                     {"id": "Cultivar", "name": "Cultivar"},
                     {"id": "stn_name", "name": "Station"},
-                    {"id": "PltDate", "name": "Planting Date"},
+                    {"id": "Plt_date", "name": "Planting Date"},
                     # {"id": "FirstYear", "name": "First Year"},
                     # {"id": "LastYear", "name": "Last Year"},
                     {"id": "soil", "name": "Soil Type"},
                     {"id": "iH2O", "name": "Initial Soil Water Content"},
                     {"id": "iNO3", "name": "Initial Soil Nitrate Content"},
-                    {"id": "plt_density", "name": "Planting Density"},
                     # {"id": "TargetYr", "name": "Target Year"},
                     {"id": "Fert_1_DOY", "name": "DOY 1st Fertilizer Applied"},
                     {"id": "Fert_1_Kg", "name": "1st Amount Applied (Kg/ha)"},
@@ -877,7 +883,7 @@ layout = html.Div([
           html.Div( # SIMULATIONS
             html.Div([
               html.Header(
-                html.B("Simulation Graphs (Forecast)"),
+                html.B("Simulation Graphs"),
               className=" card-header"
               ),
               html.Div(
@@ -889,7 +895,7 @@ layout = html.Div([
                         html.Div(id="yieldcdf-container_frst"),  #exceedance curve
                         html.Div( #interactive graph for CDF curve like flexible forecast
                           dbc.FormGroup([ # individual cdf graph comparison (climatology vs. forecast)
-                            dbc.Label("      Scenario Name", html_for="sname_cdf", sm=3, className="p-2", ), #align="start", ),
+                            dbc.Label("Scenario Name", html_for="sname_cdf", sm=3, align="start", ),
                             dbc.Col([
                               dcc.Dropdown(
                               id="sname_cdf",
@@ -900,17 +906,18 @@ layout = html.Div([
                             xl=9,
                             ),
                           ],
-                          row=True
+                          row=True,
+                          className="m-2",
                           ),                        
                         ),  
                         html.Div(id="yieldcdf-container_indiv"),  #interactive individual cdf graph
                         dbc.Row([
                           dbc.Col(
                             html.Div(id="rain_trimester1"),
-                          md=4),
+                          md=6),
                           dbc.Col(
                             html.Div(id="rain_trimester2"),
-                          md=4),
+                          md=6),
                         ],
                         no_gutters=True,
                         ),
@@ -942,7 +949,7 @@ layout = html.Div([
                     html.Div([ # ORIGINAL CSV
                       dbc.Row([
                         dbc.Col(
-                          dbc.Button(id="btn_csv_yield_frst", 
+                          dbc.Button(id="btn_csv_yield", 
                           children="Simulated Yield", 
                           className="d-block mx-auto",
                           color="secondary",
@@ -975,14 +982,14 @@ layout = html.Div([
                       Download(id="download-dataframe-csv-yield_frst"),
                       # Download(id="download-dataframe-csv-rain"),
                       # Download(id="download-dataframe-csv-Pexe"),
-                      # html.Div(
-                      #   dash_table.DataTable(
-                      #     columns = [{"id": "YEAR", "name": "YEAR"}],
-                      #     id="yield-table",
-                      #     style_table = {"height": "10vh"},
-                      #   ),
-                      # id="yieldtables-container", 
-                      # ),  #yield simulated output
+                      html.Div(
+                        dash_table.DataTable(
+                          columns = [{"id": "YEAR", "name": "YEAR"}],
+                          id="yield-table",
+                          style_table = {"height": "10vh"},
+                        ),
+                      id="fcst-yieldtables-container", 
+                      ),  #yield simulated output
                     ], ),
                   ],
                   ),
@@ -1029,7 +1036,7 @@ layout = html.Div([
                     html.Div([
                       html.Div(id="EBbox-container_frst"), 
                       html.Div(id="EBcdf-container_frst"),  #exceedance curve
-                      # html.Div(id="EBtimeseries-container_frst"), #exceedance curve
+                      html.Div(id="EBtimeseries-container_frst"), #exceedance curve
 
                     ], 
                     className="plot-container plotly"),
