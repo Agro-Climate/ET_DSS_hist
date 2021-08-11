@@ -1236,10 +1236,10 @@ layout = html.Div([
                   ),
                   # dcc.Download(id="download-dataframe-csv"),
                   Download(id="download-dataframe-csv_EB_frst"),
-                  html.Div(id="EBtables-container_frst", 
-                  className="overflow-auto",
-                  style={"height": "20vh"},
-                  ),   #yield simulated output
+                  # html.Div(id="EBtables-container_frst", 
+                  # className="overflow-auto",
+                  # style={"height": "20vh"},
+                  # ),   #yield simulated output
                 ]),
               ]),
             ],
@@ -1708,7 +1708,7 @@ def make_sce_table(
     else:
         triggered_by = ctx.triggered[0]["prop_id"].split(".")[0]
 
-    if triggered_by == "import-sce":
+    if triggered_by == "import-sce_frst":
         if file_contents is not None:
             content_type, content_string = file_contents.split(",")
             decoded = base64.b64decode(content_string)
@@ -1746,7 +1746,7 @@ def make_sce_table(
                 initial_soil_moisture = csv_df.iH2O[i] # str
                 initial_soil_no3_content = csv_df.iNO3[i] # str
                 planting_density = str(csv_df.plt_density[i]) # str (original: float)
-                target_year = str(csv_df.TargetYr[i]) # str (original: int)
+                # target_year = str(csv_df.TargetYr[i]) # str (original: int)
 
                 # fertiilizer simulation
                 fd1 = int(csv_df.Fert_1_DOY[i]) # int
@@ -1949,11 +1949,13 @@ def make_sce_table(
                 # validate planting date
                 planting_date_valid = True
                 pl_date_split = planting_date.split("-")
-                if not len(pl_date_split) == 2:
+                if not len(pl_date_split) == 3:
                     planting_date_valid = False
                 else:
-                    mm = pl_date_split[0]
-                    dd = pl_date_split[1]
+                    # mm = pl_date_split[0]
+                    # dd = pl_date_split[1]
+                    mm = pl_date_split[1]  #EJ(8/11/2011)
+                    dd = pl_date_split[2]
 
                     long_months = [1,3,5,7,8,10,12]
                     short_months = [2,4,6,9,11]
@@ -2457,7 +2459,7 @@ def run_create_figure(n_clicks, sce_in_table):
                 df_CL = Rain_trimester_obs(WTD_fname, tri_doylist)
                 df_rain = df_CL.append(df_FC, ignore_index=True)
 
-            #=========================================================end of seasonal rainfall total estimation            
+            #=========================================================end of seasonal rainfall total estimation              
             # Make a new dataframe for plotting
             data = {"EXPERIMENT":EXPERIMENT, "YEAR":YEAR, "PDAT": PDAT, "ADAT":ADAT,"MDAT":MDAT, "HWAM":HWAM, 
                     "RUN": run_type, "SNAME": sname, "RAIN_T1":df_rain.iloc[:,0], "RAIN_T2":df_rain.iloc[:,1]} #,"RAIN":df_season_rain.season_rain.values,"RANK":df_season_rain.Rank.values}
@@ -2529,7 +2531,7 @@ def run_create_figure(n_clicks, sce_in_table):
 @app.callback(Output(component_id="EBbox-container_frst", component_property="children"),
                 Output(component_id="EBcdf-container_frst", component_property="children"),
                 # Output(component_id="EBtimeseries-container", component_property="children"),
-                Output(component_id="EBtables-container_frst", component_property="children"),
+                # Output(component_id="EBtables-container_frst", component_property="children"),
                 Output("memory-EB-table_frst", "data"),
                 Input("EB-button-state_frst", "n_clicks"),
                 State('yield-multiplier_frst', 'value'), #EJ(6/5/2021)
@@ -2573,82 +2575,75 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
             NICM = df_OUT.iloc[:,39].values  #read 40th column only,  #NICM   Tot N app kg/ha Inorganic N applied (kg [N]/ha)
             IRCM = df_OUT.iloc[:,30].values    #IRCM   Irrig mm        Season irrigation (mm)   EJ(7/30/2021)
             HWAM[HWAM < 0]=0 #==> if HWAM == -99, consider it as "0" yield (i.e., crop failure)
+            run_type = ["Forecast" if x[:2] == 'FC' else "Climatology" for x in EXPERIMENT]  #to distinguish "FC(Forecast)" and "CL (climatology)"  check
+            sname = [x[4:] for x in EXPERIMENT]  #scenario name (4 char)
             #Compute gross margin
             # GMargin=HWAM*float(EB_sces.CropPrice[i])- float(EB_sces.NFertCost[i])*NICM - float(EB_sces.SeedCost[i]) - float(EB_sces.OtherVariableCosts[i]) - float(EB_sces.FixedCosts[i])
             GMargin=HWAM*float(EB_sces.CropPrice[i])- float(EB_sces.NFertCost[i])*NICM - float(EB_sces.IrrigCost[i])*IRCM - float(EB_sces.SeedCost[i]) - float(EB_sces.OtherVariableCosts[i]) - float(EB_sces.FixedCosts[i])
+  
+            # TG_GMargin_temp = np.nan
+            # if int(EB_sces.TargetYr[i]) <= int(EB_sces.LastYear[i]):
+            #     doy = repr(PDAT[0])[4:]
+            #     target = EB_sces.TargetYr[i] + doy
+            #     yr_index = np.argwhere(PDAT == int(target))
+            #     TG_GMargin_temp = GMargin[yr_index[0][0]]
 
-            TG_GMargin_temp = np.nan
-            if int(EB_sces.TargetYr[i]) <= int(EB_sces.LastYear[i]):
-                doy = repr(PDAT[0])[4:]
-                target = EB_sces.TargetYr[i] + doy
-                yr_index = np.argwhere(PDAT == int(target))
-                TG_GMargin_temp = GMargin[yr_index[0][0]]
-            
-            data = {"EXPERIMENT":EXPERIMENT, "YEAR":YEAR, "PDAT": PDAT, "ADAT":ADAT, "HWAM":HWAM,"NICM":NICM, "IRCM":IRCM, "GMargin":GMargin}  #EJ(6/5/2021) fixed
+            data = {"EXPERIMENT":EXPERIMENT, "YEAR":YEAR, "PDAT": PDAT, "ADAT":ADAT,"MDAT":MDAT,  "HWAM":HWAM,"NICM":NICM,"IRCM":IRCM, 
+                    "GMargin":GMargin, "RUN": run_type, "SNAME": sname,}  #EJ(6/5/2021) fixed
             temp_df = pd.DataFrame (data) #, columns = ["EXPERIMENT","YEAR", "PDAT","ADAT","HWAM","NICM","GMargin"])  #EJ(6/5/2021) fixed
+            
+            #In case of hindcast forecasting (i.e., if the planting year is among the observed years
+            year1= temp_df.YEAR[temp_df["RUN"] == "Climatology"].values[0]  #first year of the climatolgy run
+            year2= temp_df.YEAR[temp_df["RUN"] == "Climatology"].values[-1]  #lats year of the climatolgy run
+            target_year = repr(EB_sces.PltDate[i])[1:5]
+            if int(target_year) <= year2 and int(target_year) >= year1:
+              doy = repr(PDAT[0])[4:]
+              target = target_year + doy
+              yr_index = np.argwhere(PDAT == int(target))
+              TG_GMargin_temp = GMargin[yr_index[0][0]]   
+            else:
+              TG_GMargin_temp = np.nan #-99  #or np.nan ?
+            TG_GMargin = [TG_GMargin_temp]+TG_GMargin   #check
 
             if i==0:
                 df = temp_df.copy()
             else:
                 df = temp_df.append(df, ignore_index=True)
 
-            TG_GMargin = [TG_GMargin_temp]+TG_GMargin
-
+            # TG_GMargin = [TG_GMargin_temp]+TG_GMargin
         # adding column name to the respective columns
-        df.columns =["EXPERIMENT", "YEAR","PDAT", "ADAT","HWAM","NICM","IRCM","GMargin"]
+        df.columns =["EXPERIMENT", "YEAR","PDAT", "ADAT","MDAT", "HWAM","NICM","IRCM","GMargin", "RUN", "SNAME"]
         x_val = np.unique(df.EXPERIMENT.values)
-        fig = px.box(df, x="EXPERIMENT", y="GMargin", title="Gross Margin Boxplot")
-        fig.add_scatter(x=x_val,y=TG_GMargin, mode="markers") #, mode="lines+markers") #"lines")
-        fig.update_xaxes(title= "Scenario Name")
-        fig.update_yaxes(title= "Gross Margin[Birr/ha]")
+        #1) Make a boxplot
+        x_val2 = EB_sces.sce_name.values
+        gmargin_box = px.box(df, x="SNAME", y="GMargin", color="RUN", title="Gross Margin Boxplot")
+        gmargin_box.add_scatter(x=x_val2, y=TG_GMargin, mode="markers", 
+            marker=dict(color='LightSkyBlue', size=10, line=dict(color='MediumPurple', width=2))) #, mode="lines+markers") #"lines")
+        gmargin_box.update_xaxes(title= "Scenario Name [*Note:LightBlue dot(s) represents gross margin using the simulated yield(s) with observed weather in the planting year]")
+        gmargin_box.update_yaxes(title= "Gross Margin[Birr/ha]")
 
-        fig2 = go.Figure()
+        gmargin_exc = go.Figure()
         for i in x_val:
             x_data = df.GMargin[df["EXPERIMENT"]==i].values
             x_data = np.sort(x_data)
             fx_scf = [1.0/len(x_data)] * len(x_data) #pdf
             Fx_scf= 1.0-np.cumsum(fx_scf)  #for exceedance curve
 
-            fig2.add_trace(go.Scatter(x=x_data, y=Fx_scf,
+            gmargin_exc.add_trace(go.Scatter(x=x_data, y=Fx_scf,
                         mode="lines+markers",
                         name=i))
         # Edit the layout
-        fig2.update_layout(title="Gross Margin Exceedance Curve",
+        gmargin_exc.update_layout(title="Gross Margin Exceedance Curve",
                         xaxis_title="Gross Margin[Birr/ha]",
                         yaxis_title="Probability of Exceedance [-]")
 
-        #make a new dataframe to save into CSV
-        yr_val = np.unique(df.YEAR.values)
-        df_out = pd.DataFrame({"YEAR":yr_val})
-
-        # fig3 = go.Figure()
-        # for i in x_val:
-        #     x_data = df.YEAR[df["EXPERIMENT"]==i].values
-        #     y_data = df.GMargin[df["EXPERIMENT"]==i].values
-        #     y_data = y_data.astype(int) #EJ(6/5/2021)
-
-        #     ##make a new dataframe to save into CSV
-        #     df_temp = pd.DataFrame({i:y_data})
-        #     df_out = pd.concat([df_out, df_temp], axis=1)
-
-        #     fig3.add_trace(go.Scatter(x=x_data, y=y_data,
-        #                 mode="lines+markers",
-        #                 name=i))
-        # # Edit the layout
-        # fig3.update_layout(title="Gross Margin Time-Series",
-        #                 xaxis_title="Year",
-        #                 yaxis_title="Gross Margin[Birr/ha]")
         #save simulated yield outputs into a csv file <<<<<<=======================
         fname = path.join(Wdir_path, "simulated_Gmargin_frst.csv")
         df.to_csv(fname, index=False)  #EJ(7/27/2021) check 
         return [
-            dcc.Graph(id="EB-boxplot", figure = fig, config = graph.config, ),
-            dcc.Graph(id="EB-exceedance", figure = fig2, config = graph.config, ),
-            # dcc.Graph(id="EB-ts", figure = fig3, config = graph.config, ),
-            dash_table.DataTable(columns=[{"name": i, "id": i} for i in df_out.columns],
-                data=df_out.to_dict("records"),
-                style_cell={"whiteSpace": "normal","height": "auto",},),
-            df_out.to_dict("records")
+            dcc.Graph(id="EB-boxplot", figure = gmargin_box, config = graph.config, ),
+            dcc.Graph(id="EB-exceedance", figure = gmargin_exc, config = graph.config, ),
+            df.to_dict("records")
             ]
 
 #====================================================================

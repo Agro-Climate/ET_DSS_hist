@@ -1055,10 +1055,10 @@ layout = html.Div([
                   ),
                   # dcc.Download(id="download-dataframe-csv"),
                   Download(id="download-dataframe-csv_EB_frst"),
-                  html.Div(id="EBtables-container_frst", 
-                  className="overflow-auto",
-                  style={"height": "20vh"},
-                  ),   #yield simulated output
+                  # html.Div(id="EBtables-container_frst", 
+                  # className="overflow-auto",
+                  # style={"height": "20vh"},
+                  # ),   #yield simulated output
                 ]),
               ],),
             ],
@@ -2000,7 +2000,7 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
             # TG_GMargin = [TG_GMargin_temp]+TG_GMargin
 
         # adding column name to the respective columns
-        df.columns =["EXPERIMENT", "YEAR","PDAT", "ADAT","HWAM","NICM","IRCM","GMargin", "RUN", "SNAME"]
+        df.columns =["EXPERIMENT", "YEAR","PDAT", "ADAT","MDAT", "HWAM","NICM","IRCM","GMargin", "RUN", "SNAME"]
         x_val = np.unique(df.EXPERIMENT.values)
         #1) Make a boxplot
         x_val2 = EB_sces.sce_name.values

@@ -794,9 +794,8 @@ def writeSNX_frst_FR(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,in
     # Get soil info from *.SOL
     SOL_file = path.join(DSSAT_PATH, "SN.SOL")
     # soil_depth, wp, fc, nlayer = get_soil_IC(SOL_file, ID_SOIL)
-    print('ID_SOIL =', ID_SOIL)
     soil_depth, wp, fc, nlayer, SLTX = get_soil_IC(SOL_file, ID_SOIL)
-    print('SLTX  =', SLTX )
+    # print('SLTX  =', SLTX )
     SLDP = repr(soil_depth[-1])
     ID_FIELD = scenario[:4] + "0001"
     WSTA_ID = scenario[:4].upper()
