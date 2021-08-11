@@ -11,7 +11,7 @@ import time #just for checking processign time => delete later
 # from WGEN_PAR_biweekly import WGEN_PAR_biweekly  
 # from low_freq_correction import low_freq_correction  
 # from season_bias_corr import season_bias_corr 
-from apps.senegal.WGEN_generator import WGEN_generator   #EJ(7/27/2021)
+from apps.ethiopia.WGEN_generator import WGEN_generator   #EJ(7/27/2021)
 from apps.senegal.WGEN_PAR_biweekly import WGEN_PAR_biweekly  
 from apps.senegal.low_freq_correction import low_freq_correction  
 from apps.senegal.season_bias_corr import season_bias_corr  #EJ(7/12/2021) bias correction for seasonal total rainfall
