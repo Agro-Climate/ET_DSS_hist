@@ -91,19 +91,9 @@ layout = html.Div([
                       ),
                       dbc.Label("Observed Weather:", html_for="ETstation_frst", className="p-2", align="start", ),
                       dbc.Row([
-                        dbc.Col(
-                          dbc.FormGroup([
-                            dbc.Input(type="text", id="obs_1st", disabled="disabled" ), 
-                          ],),
-                        ),
-                        dbc.Col(
-                          dbc.Label("to", html_for="trimester1", sm=3, className="p-0",),
-                        ),
-                        dbc.Col(
-                          dbc.FormGroup([
-                            dbc.Input(type="text", id="obs_last", disabled="disabled" ), 
-                          ],),
-                        ),
+                        dbc.Col(dbc.Input(type="text", id="obs_1st", disabled="disabled" ), width=5, ),
+                        dbc.Col(html.Div("to", className="text-center",), width=2, ),
+                        dbc.Col(dbc.Input(type="text", id="obs_last", disabled="disabled" ), width=5, ),
                       ],),
                     ],
                     className="py-2",
