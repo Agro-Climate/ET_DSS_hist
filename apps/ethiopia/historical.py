@@ -2209,9 +2209,11 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
             dcc.Graph(id="EB-boxplot", figure = fig, config = graph.config, ),
             dcc.Graph(id="EB-exceedance", figure = fig2, config = graph.config, ),
             dcc.Graph(id="EB-ts", figure = fig3, config = graph.config, ),
-            dash_table.DataTable(columns=[{"name": i, "id": i} for i in df_out.columns],
+            dash_table.DataTable(
+                columns=[{"name": i, "id": i} for i in df_out.columns],
                 data=df_out.to_dict("records"),
-                style_cell={"whiteSpace": "normal","height": "auto",},),
+                style_cell={"whiteSpace": "normal","height": "auto",},
+            ),
             df_out.to_dict("records")
             ]
 

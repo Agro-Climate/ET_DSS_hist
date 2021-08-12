@@ -948,33 +948,17 @@ layout = html.Div([
                   html.Div([
                     html.Div([ # ORIGINAL CSV
                       dbc.Row([
+                        dbc.Col("", xs=4, className="p-2"),
                         dbc.Col(
                           dbc.Button(id="btn_csv_yield", 
                           children="Simulated Yield", 
-                          className="d-block mx-auto",
+                          className="d-block mx-auto w-100",
                           color="secondary",
                           ),
                         xs=4,
                         className="p-2"
                         ),
-                        # dbc.Col(
-                        #   dbc.Button(id="btn_csv_Pexe", 
-                        #   children="Prob. of Exceedance", 
-                        #   className="d-block mx-auto",
-                        #   color="secondary",
-                        #   ),
-                        # xs=4,
-                        # className="p-2"
-                        # ),
-                        # dbc.Col(
-                        #   dbc.Button(id="btn_csv_rain", 
-                        #   children="Seasonal Rainfall", 
-                        #   className="d-block mx-auto",
-                        #   color="secondary",
-                        #   ),
-                        # xs=4,
-                        # className="p-2"
-                        # ),
+                        dbc.Col("", xs=4, className="p-2"),
                       ],
                       className="m-1",
                       ),
@@ -1054,11 +1038,20 @@ layout = html.Div([
                 className=" card-header"
                 ),
                 html.Div([
-                  html.Br(),
-                  dbc.Button(id="btn_csv_EB_frst", 
-                  children="Download", 
-                  className="w-50 d-block mx-auto m-1",
-                  color="secondary"
+                  dbc.Row([
+                    dbc.Col("", xs=4, className="p-2"),
+                    dbc.Col(
+                      dbc.Button(id="btn_csv_EB_frst", 
+                      children="Download", 
+                      className="d-block mx-auto w-100",
+                      color="secondary"
+                      ), 
+                    xs=4, 
+                    className="p-2"
+                    ),
+                    dbc.Col("", xs=4, className="p-2"),                    
+                  ],
+                  className="m-1",
                   ),
                   # dcc.Download(id="download-dataframe-csv"),
                   Download(id="download-dataframe-csv_EB_frst"),
@@ -1933,6 +1926,7 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
 #Last callback to create figures for Enterprise budgeting
 @app.callback(Output(component_id="EBbox-container_frst", component_property="children"),
                 Output(component_id="EBcdf-container_frst", component_property="children"),
+                Output(component_id="EBtables-container_frst", component_property="children"),
                 Output("memory-EB-table_frst", "data"),
                 Input("EB-button-state_frst", "n_clicks"),
                 State('yield-multiplier_frst', 'value'), #EJ(6/5/2021)
@@ -2046,8 +2040,13 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
         return [
             dcc.Graph(id="EB-boxplot", figure = gmargin_box, config = graph.config, ),
             dcc.Graph(id="EB-exceedance", figure = gmargin_exc, config = graph.config, ),
+            dash_table.DataTable(
+                columns=[{"name": i, "id": i} for i in df.columns],
+                data=df.to_dict("records"),
+                style_cell={"whiteSpace": "normal","height": "auto",},
+            ),
             df.to_dict("records")
-            ]
+        ]
 
 #====================================================================
 #Read observed rainfall for two consecutive trimesters in a row 
