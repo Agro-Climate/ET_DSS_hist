@@ -14,8 +14,16 @@ FROM irikesha/simagridssat:latest
 
 RUN pip3 install exp-mixture-model
 
-COPY . /home/SIMAGRI/
-COPY ./TEST_CO/* /home/SIMAGRI/DSSAT/dssat-base-files/
+# COPY . /home/SIMAGRI/
+# COPY ./TEST_CO/* /home/SIMAGRI/DSSAT/dssat-base-files/
+
+COPY ./*.py /home/SIMAGRI/
+COPY ./apps/ /home/SIMAGRI/apps/
+COPY ./assets/ /home/SIMAGRI/assets/
+COPY ./data/ /home/SIMAGRI/data/
+COPY ./TEST_CO/* DSSAT/dssat-base-files/
+
 
 WORKDIR /home/SIMAGRI/
-CMD ["python3", "index.py", "colombia"]
+# CMD ["python3", "index.py", "colombia"]
+CMD ["python3", "debug.py", "colombia"]

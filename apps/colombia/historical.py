@@ -67,10 +67,10 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Station
-                    dbc.Label("2) Station", html_for="SNstation", sm=3, align="start", ),
+                    dbc.Label("2) Station", html_for="COstation", sm=3, align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
-                      id="SNstation",
+                      id="COstation",
                       options=[
                         {"label": "Cerete", "value": "CTUR"},
                         {"label": "Espinal", "value": "CNAT"},
@@ -1232,7 +1232,7 @@ def download_scenarios(n_clicks, scenario_table):
               Input("write-button-state", "n_clicks"),
               Input("import-sce", "contents"),
               State("import-sce", "filename"),
-              State("SNstation", "value"),
+              State("COstation", "value"),
               State("year1", "value"),
               State("year2", "value"),
               State("PltDate-picker", "date"),

@@ -26,15 +26,14 @@ import time
 
 import graph
 
-from apps.ethiopia.write_SNX import writeSNX_clim, writeSNX_frst_FR 
-#from write_SNX import writeSNX_main_hist, writeSNX_main_frst  #EJ(7/26/2021) This is not working!!!
+from apps.colombia.write_SNX import writeSNX_clim, writeSNX_frst_FR
 # from apps.ethiopia.run_WGEN import run_WGEN  # Downscaling method 1) WGEN (weather generator) to make 100 synthetic daily weather data
-from apps.ethiopia.write_WTH import write_WTH   #save WTH from the output fo WGEN
-from apps.ethiopia.run_FResampler import run_FResampler  # Downscaling method 1) FResampler 
-from apps.ethiopia.write_WTH_FR import write_WTH_FR   #save WTH from the output fo FREsampler
+# from apps.colombia.write_WTH import write_WTH   #save WTH from the output fo WGEN
+from apps.ethiopia.run_FResampler import run_FResampler  # Downscaling method 1) FResampler
+from apps.colombia.write_WTH_FR import write_WTH_FR   #save WTH from the output fo FREsampler
 
 sce_col_names=[ "sce_name", "Trimester1", "AN1","BN1", "AN2","BN2",
-                "Crop", "Cultivar","stn_name", "PltDate", #"FirstYear", "LastYear", 
+                "Crop", "Cultivar","stn_name", "PltDate", #"FirstYear", "LastYear",
                 "soil","iH2O","iNO3","plt_density", #"TargetYr",
                 "Fert_1_DOY","Fert_1_Kg","Fert_2_DOY","Fert_2_Kg","Fert_3_DOY","Fert_3_Kg","Fert_4_DOY","Fert_4_Kg",
                 "IR_1_DOY", "IR_1_amt","IR_2_DOY", "IR_2_amt","IR_3_DOY","IR_3_amt",
@@ -73,27 +72,26 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Station
-                    dbc.Label("2) Station", html_for="ETstation_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("2) Station", html_for="COstation_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
-                      id="ETstation_frst",
+                      id="COstation_frst",
                       options=[
-                        {"label": "Melkasa", "value": "MELK"},
-                        {"label": "Mieso", "value": "MEIS"},
-                        {"label": "Awassa", "value": "AWAS"},
-                        {"label": "Asella", "value": "ASEL"},
-                        {"label": "Bako", "value": "BAKO"},
-                        {"label": "Mahoni", "value": "MAHO"},
-                        {"label": "Kobo", "value": "KOBO"}
+                        {"label": "Cerete", "value": "CTUR"},
+                        {"label": "Espinal", "value": "CNAT"},
+                        {"label": "La Union", "value": "CUNI"},
+                        {"label": "Cucharo El", "value": "CUCH"},
+                        {"label": "Esc Agr Mogotes", "value": "EAMO"},
+                        {"label": "Zapatoca", "value": "ZAPA"},
                       ],
-                      value="MELK",
+                      value="CTUR",
                       clearable=False,
                       ),
-                      dbc.Label("Observed Weather:", html_for="ETstation_frst", className="p-2", align="start", ),
+                      dbc.Label("Observed Weather:", html_for="COstation_frst", className="p-2", align="start", ),
                       dbc.Row([
                         dbc.Col(
                           dbc.FormGroup([
-                            dbc.Input(type="text", id="obs_1st", disabled="disabled" ), 
+                            dbc.Input(type="text", id="obs_1st", disabled="disabled" ),
                           ],),
                         ),
                         dbc.Col(
@@ -101,7 +99,7 @@ layout = html.Div([
                         ),
                         dbc.Col(
                           dbc.FormGroup([
-                            dbc.Input(type="text", id="obs_last", disabled="disabled" ), 
+                            dbc.Input(type="text", id="obs_last", disabled="disabled" ),
                           ],),
                         ),
                       ],),
@@ -231,7 +229,7 @@ layout = html.Div([
                           ]),
                         ]),
                       ],
-                      id="scf-table-Comp", 
+                      id="scf-table-Comp",
                       className="w-100",
                       #style={"display": "none"},
                       ),
@@ -248,9 +246,8 @@ layout = html.Div([
                       id="crop-radio_frst",
                       # options=[{"label": k, "value": k} for k in cultivar_options.keys()],
                       options = [
-                        {"label": "Maize", "value": "MZ"}, 
-                        {"label": "Wheat", "value": "WH"}, 
-                        {"label": "Sorghum", "value": "SG"},
+                        {"label": "Drybean", "value": "BN"},
+                        {"label": "Maize", "value": "MZ"},
                       ],
                       labelStyle = {"display": "inline-block","margin-right": 10},
                       value="MZ",
@@ -266,14 +263,13 @@ layout = html.Div([
                     dbc.Label("5) Cultivar", html_for="cultivar-dropdown_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
-                        id="cultivar-dropdown_frst", 
+                        id="cultivar-dropdown_frst",
                         options=[
-                          {"label": "CIMT01 BH540", "value": "CIMT01 BH540-Kassie"},
-                          {"label": "CIMT02 MELKASA-1", "value": "CIMT02 MELKASA-Kassi"},
-                          {"label": "CIMT17 BH660-FAW-40%", "value": "CIMT17 BH660-FAW-40%"},
-                          {"label": "CIMT19 MELKASA2-FAW-40%", "value": "CIMT19 MELKASA2-FAW-40%"},
-                          {"label": "CIMT21 MELKASA-LowY", "value": "CIMT21 MELKASA-LowY"},], 
-                        value="CIMT19 MELKASA2-FAW-40%",
+                          {"label": "DK234", "value": "CI0002 DK234"},
+                          {"label": "FNC3056", "value": "CI0003 FNC3056"},
+                          {"label": "DK7088", "value": "CI0004 DK7088"},
+                          {"label": "P30F35", "value": "CI0001 P30F35"},],
+                        value="CI0002 DK234",
                         clearable=False,
                       ),
                     ],
@@ -284,27 +280,25 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Soil Type
-                    dbc.Label("6) Soil Type", html_for="ETsoil_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("6) Soil Type", html_for="COsoil_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
-                        id="ETsoil_frst", 
+                        id="COsoil_frst",
                         options=[
-                          {"label": "ETET000010(AWAS,L)", "value": "ETET000010"},
-                          {"label": "ETET000_10(AWAS,L, shallow)", "value": "ETET000_10"},
-                          {"label": "ETET000011(BAKO,C)", "value": "ETET000011"},
-                          {"label": "ETET001_11(BAKO,C,shallow)", "value": "ETET001_11"},
-                          {"label": "ETET000018(MELK,L)", "value": "ETET000018"},
-                          {"label": "ETET001_18(MELK,L,shallow)", "value": "ETET001_18"},
-                          {"label": "ETET000015(KULU,C)", "value": "ETET000015"},
-                          {"label": "ETET001_15(KULU,C,shallow)", "value": "ETET001_15"},
-                          {"label": "ET00990066(MAHO,C)", "value": "ET00990066"},
-                          {"label": "ET00990_66(MAHO,C,shallow)", "value": "ET00990_66"},
-                          {"label": "ET00920067(KOBO,CL)", "value": "ET00920067"},
-                          {"label": "ET00920_67(KOBO,CL,shallow)", "value": "ET00920_67"},
-                          {"label": "ETET000022(MIES, C)", "value": "ETET000022"},
-                          {"label": "ETET001_22(MIES, C, shallow", "value": "ETET001_22"},
+                          {"label": "CCCereteC1(SICL)", "value": "CCCereteC1"},
+                          {"label": "CCCienaga0(SIC)", "value": "CCCienaga0"},
+                          {"label": "CCCienaga1(SIC)", "value": "CCCienaga1"},
+                          {"label": "CCCienaga2(SIC)", "value": "CCCienaga2"},
+                          {"label": "CCTolima01(SL)", "value": "CCTolima01"},
+                          {"label": "CCBuga0001(SL)", "value": "CCBuga0001"},
+                          {"label": "CCBuga2013(CL)", "value": "CCBuga2013"},
+                          {"label": "CCBuga2014(CL)", "value": "CCBuga2014"},
+                          {"label": "CCEspi2013(SL)", "value": "CCEspi2013"},
+                          {"label": "CCEspi2014(SL)", "value": "CCEspi2014"},
+                          {"label": "CCCere2013(SICL)", "value": "CCCere2013"},
+                          {"label": "CCCere2014(SICL)", "value": "CCCere2014"},
                         ],
-                        value="ETET001_18",
+                        value="CCCereteC1",
                         clearable=False,
                       ),
                     ],
@@ -318,13 +312,13 @@ layout = html.Div([
                     dbc.Label("7) Initial Soil Water Condition", html_for="ini-H2O_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
-                        id="ini-H2O_frst", 
+                        id="ini-H2O_frst",
                         options=[
                           {"label": "30% of AWC", "value": "0.3"},
                           {"label": "50% of AWC", "value": "0.5"},
                           {"label": "70% of AWC", "value": "0.7"},
                           {"label": "100% of AWC", "value": "1.0"},
-                        ], 
+                        ],
                         value="0.5",
                         clearable=False,
                       ),
@@ -339,14 +333,14 @@ layout = html.Div([
                     dbc.Label("8) Initial Soil NO3 Condition", html_for="ini-NO3_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
-                        id="ini-NO3_frst", 
+                        id="ini-NO3_frst",
                         options=[
                           {"label": "High(65 N kg/ha)", "value": "H"},
                           {"label": "Low(23 N kg/ha)", "value": "L"},
-                        ], 
+                        ],
                         value="L",
                         clearable=False,
-                      ),                
+                      ),
                     ],
                     className="py-2",
                     xl=9,
@@ -472,7 +466,7 @@ layout = html.Div([
                           ),
                         ],),
                       ],
-                      id="fert-table-Comp_frst", 
+                      id="fert-table-Comp_frst",
                       className="w-100",
                       style={"display": "none"},
                       ),
@@ -683,7 +677,7 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Input(type="number", id="crop-price_frst", value=0, min=0, step=0.1, required="required", ),
-                              dbc.FormText("[ETB/kg]"),
+                              dbc.FormText("[USD/kg]"),
                             ],),
                           ),
                         ],),
@@ -694,7 +688,7 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Input(type="number", id="fert-cost_frst", value=0, min=0, step=0.1, required="required", ),
-                              dbc.FormText("[ETB/N kg]"),
+                              dbc.FormText("[USD/N kg]"),
                             ],),
                           ),
                         ],),
@@ -705,7 +699,7 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Input(type="number", id="seed-cost_frst", value=0, min=0, step=0.1, required="required", ),
-                              dbc.FormText("[ETB/ha]"),
+                              dbc.FormText("[USD/ha]"),
                             ],),
                           ),
                         ],),
@@ -716,7 +710,7 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Input(type="number", id="irrigation-cost_frst", value=0, min=0, step=0.1, required="required", ),
-                              dbc.FormText("[ETB/mm]"),
+                              dbc.FormText("[USD/mm]"),
                             ],),
                           ),
                         ],),
@@ -727,7 +721,7 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Input(type="number", id="variable-costs_frst", value=0, min=0, step=0.1, required="required", ),
-                              dbc.FormText("[ETB/ha]"),
+                              dbc.FormText("[USD/ha]"),
                             ],),
                           ),
                         ],),
@@ -738,7 +732,7 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Input(type="number", id="fixed-costs_frst", value=0, min=0, step=0.1, required="required", ),
-                              dbc.FormText("[ETB/ha]"),
+                              dbc.FormText("[USD/ha]"),
                             ],),
                           ),
                         ],),
@@ -751,7 +745,7 @@ layout = html.Div([
                           ])
                         ),
                       ],
-                      id="EB-table-Comp_frst", 
+                      id="EB-table-Comp_frst",
                       className="w-100",
                       style={"display": "none"},
                       ),
@@ -764,7 +758,7 @@ layout = html.Div([
                   ),
 
                   # INPUT FORM END
-                ], 
+                ],
                 className="p-3"
                 ),
               className="overflow-auto",
@@ -774,9 +768,9 @@ layout = html.Div([
               html.Div([ # SCENARIO TABLE
                 html.Header(html.B("Scenarios"), className="card-header",),
                 dbc.FormGroup([ # SUBMIT - ADD SCENARIO
-                  dbc.Button(id="write-button-state_frst", 
-                  n_clicks=0, 
-                  children="Create or Add a new Scenario", 
+                  dbc.Button(id="write-button-state_frst",
+                  n_clicks=0,
+                  children="Create or Add a new Scenario",
                   className="w-75 d-block mx-auto my-3",
                   color="primary"
                   ),
@@ -839,7 +833,7 @@ layout = html.Div([
                 style_cell = {   # all three widths are needed
                     "minWidth": "120px", "width": "120px", "maxWidth": "150px",
                     "overflow": "hidden",
-                    "textOverflow": "ellipsis", 
+                    "textOverflow": "ellipsis",
                 },
                 row_deletable=True
                 ),
@@ -860,7 +854,7 @@ layout = html.Div([
               # ),
               html.Br(),
               html.Div( ## RUN DSSAT BUTTON
-                dbc.Button(id="simulate-button-state_frst", 
+                dbc.Button(id="simulate-button-state_frst",
                 children="Simulate all scenarios (Run DSSAT)",
                 className="w-75 d-block mx-auto",
                 color="success",
@@ -870,11 +864,11 @@ layout = html.Div([
             className="p-3",
             ),
 
-          ], 
+          ],
           ),
         className="block card",
         ),
-      ], 
+      ],
       md=5,
       className="p-1",
       ),
@@ -883,7 +877,7 @@ layout = html.Div([
           html.Div( # SIMULATIONS
             html.Div([
               html.Header(
-                html.B("Simulation Graphs"),
+                html.B("Simulation Graphs (Forecast)"),
               className=" card-header"
               ),
               html.Div(
@@ -908,8 +902,8 @@ layout = html.Div([
                           ],
                           row=True,
                           className="m-2",
-                          ),                        
-                        ),  
+                          ),
+                        ),
                         html.Div(id="yieldcdf-container_indiv"),  #interactive individual cdf graph
                         dbc.Row([
                           dbc.Col(
@@ -922,20 +916,20 @@ layout = html.Div([
                         no_gutters=True,
                         ),
                       ],),
-                    ], 
-                    size="lg", color="primary", type="border", 
+                    ],
+                    size="lg", color="primary", type="border",
                     ),
                   )
-                ], 
-                id="simulation-graphs", 
+                ],
+                id="simulation-graphs",
                 className="overflow-auto",
                 style={"height": "94vh"},
                 ),
               ),
-            ], 
+            ],
             ),
           ),
-          
+
           # CSV FOR SIMULATED YIELD
           html.Div( # ORIGINAL CSV
             html.Div([
@@ -950,8 +944,8 @@ layout = html.Div([
                       dbc.Row([
                         dbc.Col("", xs=4, className="p-2"),
                         dbc.Col(
-                          dbc.Button(id="btn_csv_yield_frst", 
-                          children="Simulated Yield", 
+                          dbc.Button(id="btn_csv_yield_frst",
+                          children="Simulated Yield",
                           className="d-block mx-auto w-100",
                           color="secondary",
                           ),
@@ -966,23 +960,23 @@ layout = html.Div([
                       Download(id="download-dataframe-csv-yield_frst"),
                       # Download(id="download-dataframe-csv-rain"),
                       # Download(id="download-dataframe-csv-Pexe"),
-                      html.Div(
-                        dash_table.DataTable(
-                          columns = [{"id": "YEAR", "name": "YEAR"}],
-                          id="yield-table",
-                          style_table = {"height": "10vh"},
-                        ),
-                      id="fcst-yieldtables-container", 
-                      ),  #yield simulated output
+                      # html.Div(
+                      #   dash_table.DataTable(
+                      #     columns = [{"id": "YEAR", "name": "YEAR"}],
+                      #     id="yield-table",
+                      #     style_table = {"height": "10vh"},
+                      #   ),
+                      # id="fcst-yieldtables-container",
+                      # ),  #yield simulated output
                     ], ),
                   ],
                   ),
-                ], 
-                id="original-yield-csv-table", 
+                ],
+                id="original-yield-csv-table",
                 className="dash-table-container"
                 ),
               ),
-            ], 
+            ],
             ),
           ),
 
@@ -1006,8 +1000,8 @@ layout = html.Div([
                   ],
                   row=True
                   ),
-                  dbc.Button(id="EB-button-state_frst", 
-                  children="Display figures for Enterprise Budgets", 
+                  dbc.Button(id="EB-button-state_frst",
+                  children="Display figures for Enterprise Budgets",
                   className="w-75 d-block mx-auto my-3",
                   color="danger"
                   ),
@@ -1018,16 +1012,16 @@ layout = html.Div([
                 html.Div([
                   html.Div(
                     html.Div([
-                      html.Div(id="EBbox-container_frst"), 
+                      html.Div(id="EBbox-container_frst"),
                       html.Div(id="EBcdf-container_frst"),  #exceedance curve
                       html.Div(id="EBtimeseries-container_frst"), #exceedance curve
 
-                    ], 
+                    ],
                     className="plot-container plotly"),
                   className="js-plotly-plot"
                   )
-                ], 
-                id="enterprise-budgeting", 
+                ],
+                id="enterprise-budgeting",
                 className="overflow-auto",
                 style={"height": "94vh"},
                 ),
@@ -1038,24 +1032,15 @@ layout = html.Div([
                 className=" card-header"
                 ),
                 html.Div([
-                  dbc.Row([
-                    dbc.Col("", xs=4, className="p-2"),
-                    dbc.Col(
-                      dbc.Button(id="btn_csv_EB_frst", 
-                      children="Download", 
-                      className="d-block mx-auto w-100",
-                      color="secondary"
-                      ), 
-                    xs=4, 
-                    className="p-2"
-                    ),
-                    dbc.Col("", xs=4, className="p-2"),                    
-                  ],
-                  className="m-1",
+                  html.Br(),
+                  dbc.Button(id="btn_csv_EB_frst",
+                  children="Download",
+                  className="w-50 d-block mx-auto m-1",
+                  color="secondary"
                   ),
                   # dcc.Download(id="download-dataframe-csv"),
                   Download(id="download-dataframe-csv_EB_frst"),
-                  html.Div(id="EBtables-container_frst", 
+                  html.Div(id="EBtables-container_frst",
                   className="overflow-auto",
                   style={"height": "20vh"},
                   ),   #yield simulated output
@@ -1066,7 +1051,7 @@ layout = html.Div([
             style={"display": "none"},
             ),
           ),
-        ], 
+        ],
         className="block card"
         ),
       ],
@@ -1106,12 +1091,12 @@ Wdir_path = DSSAT_FILES_DIR    #for linux systemn
 #call back to update the first & last weather observed dates
 @app.callback(Output("obs_1st", component_property="value"),
               Output("obs_last", component_property="value"),
-              Input("ETstation_frst", component_property="value"))
+              Input("COstation_frst", component_property="value"))
 def func(station_id):
     WTD_fname = path.join(Wdir_path, station_id +".WTD")
     data1 = np.loadtxt(WTD_fname,skiprows=1)
     #convert numpy array to dataframe
-    df = pd.DataFrame({"YEAR":data1[:,0].astype(int)//1000,   
+    df = pd.DataFrame({"YEAR":data1[:,0].astype(int)//1000,
                     "DOY":data1[:,0].astype(int)%1000,
                     "RAIN":data1[:,4]})
     doy, year = df.DOY.values[0], df.YEAR.values[0]
@@ -1122,7 +1107,7 @@ def func(station_id):
     last_obsdate = result.strftime('%b-%d-%Y')
     return [first_obsdate, last_obsdate]
 
-#============================================================== 
+#==============================================================
 #call back to fill second SCF trimester
 @app.callback(Output("trimester2", component_property="value"),
               Input("trimester1", component_property="value"))
@@ -1175,7 +1160,7 @@ def set_cultivar_value(available_options):
 @app.callback(
     Output("download-dataframe-csv-yield_frst", "data"),
     Input("btn_csv_yield_frst", "n_clicks"),
-    State("memory-yield-table_frst","data"), 
+    State("memory-yield-table_frst","data"),
     # State("yield-table", "data"),
     prevent_initial_call=True,
 )
@@ -1186,15 +1171,15 @@ def func(n_clicks, yield_data):
     df_out = pd.DataFrame(data, columns=[sce_name[0]])
 
     for i in sce_name[1:]:  #from second scenario
-      data = df.HWAM[df["EXPERIMENT"] == i].values  
+      data = df.HWAM[df["EXPERIMENT"] == i].values
       df_temp = pd.DataFrame(data, columns=[i])
       df_out = pd.concat([df_out, df_temp], axis=1) #concatenate columns with different size
 
     # col = df.columns  #EJ(6/7/2021)
     # col_names = [df.columns[0]]   #list for col names - first column for YEAR
-    # for i in range(1,len(col),3):  
+    # for i in range(1,len(col),3):
     #     col_names.append(df.columns[i])
-      
+
     # #make a new filtered dataframe to save into a csv
     # df_out = pd.DataFrame(columns = col_names)
     # # df_out.iloc[:,0]=df.iloc[:,[0]].values  #first column for YEAR
@@ -1213,15 +1198,15 @@ def func(n_clicks, yield_data):
     Output(component_id="rain_trimester1", component_property="children"),
     Output(component_id="rain_trimester2", component_property="children"),
     Input("sname_cdf", "value"),
-    State("memory-yield-table_frst","data"), 
+    State("memory-yield-table_frst","data"),
     prevent_initial_call=True,
     )
 def individual_exceedance(scenario_name, yield_table):
-    df_yield = pd.DataFrame(yield_table)  #read dash_table.DataTable into pd df 
-    exe_name = np.unique(df_yield.EXPERIMENT[df_yield["SNAME"]==scenario_name].values) 
+    df_yield = pd.DataFrame(yield_table)  #read dash_table.DataTable into pd df
+    exe_name = np.unique(df_yield.EXPERIMENT[df_yield["SNAME"]==scenario_name].values)
     #1)Yield CDF graphs for both climatology and forecast
     yld_exc = go.Figure()
-    for i in exe_name:  
+    for i in exe_name:
         x_data = df_yield.HWAM[df_yield["EXPERIMENT"]==i].values
         x_data = np.sort(x_data)
         fx_scf = [1.0/len(x_data)] * len(x_data) #pdf
@@ -1236,7 +1221,7 @@ def individual_exceedance(scenario_name, yield_table):
                         yaxis_title="Probability of Exceedance [-]")
     #2) Trimester 1 rainfall CDF graphs for both climatology and forecast
     rain1 = go.Figure()
-    for i in exe_name:  
+    for i in exe_name:
         x_data2 = df_yield.RAIN_T1[df_yield["EXPERIMENT"]==i].values
         x_data2 = np.sort(x_data2)
         fx_scf2 = [1.0/len(x_data2)] * len(x_data2) #pdf
@@ -1251,7 +1236,7 @@ def individual_exceedance(scenario_name, yield_table):
                         yaxis_title="Probability of Exceedance [-]")
     #3) Trimester 2 rainfall CDF graphs for both climatology and forecast
     rain2 = go.Figure()
-    for i in exe_name:  
+    for i in exe_name:
         x_data3 = df_yield.RAIN_T2[df_yield["EXPERIMENT"]==i].values
         x_data3 = np.sort(x_data3)
         fx_scf3 = [1.0/len(x_data3)] * len(x_data3) #pdf
@@ -1279,11 +1264,11 @@ def individual_exceedance(scenario_name, yield_table):
 # )
 # def func(n_clicks, yield_data):
 #     df =pd.DataFrame(yield_data)
-#     col = df.columns  #EJ(6/7/2021) 
+#     col = df.columns  #EJ(6/7/2021)
 #     col_names = [df.columns[0]]   #first column for YEAR
-#     for i in range(3,len(col),3):  
+#     for i in range(3,len(col),3):
 #         col_names.append(df.columns[i])
-      
+
 #     #make a new filtered dataframe to save into a csv
 #     df_out = pd.DataFrame(columns = col_names)
 #     df_out.iloc[:,0] = df.iloc[:,0].values  #first column for YEAR
@@ -1295,7 +1280,7 @@ def individual_exceedance(scenario_name, yield_table):
 #         df_out.iloc[:,k]=temp.values
 #         k=k+1 #column index for a new df
 #     return dcc.send_data_frame(df_out.to_csv, "seasonal_rainfall.csv")
-#=================================================    
+#=================================================
 # #3) for prob of exceedance - call back to save df into a csv file
 # @app.callback(
 #     Output("download-dataframe-csv-Pexe", "data"),
@@ -1305,11 +1290,11 @@ def individual_exceedance(scenario_name, yield_table):
 # )
 # def func(n_clicks, yield_data):
 #     df =pd.DataFrame(yield_data)
-#     col = df.columns  #EJ(6/7/2021) 
+#     col = df.columns  #EJ(6/7/2021)
 #     col_names = [df.columns[0]]   #first column for YEAR
-#     for i in range(2,len(col),3):  
+#     for i in range(2,len(col),3):
 #         col_names.append(df.columns[i])
-      
+
 #     #make a new filtered dataframe to save into a csv
 #     df_out = pd.DataFrame(columns = col_names)
 #     df_out.iloc[:,0] = df.iloc[:,0].values  #first column for YEAR
@@ -1330,13 +1315,13 @@ def individual_exceedance(scenario_name, yield_table):
 def func(n_clicks, EB_data):
     df =pd.DataFrame(EB_data)
     return dcc.send_data_frame(df.to_csv, "simulated_yield_EB.csv")
-#=================================================   
+#=================================================
 #call back to "show/hide" fertilizer input table
 @app.callback(Output("fert-table-Comp_frst", component_property="style"),
               Input("fert_input_frst", component_property="value"))
 def show_hide_table(visibility_state):
     if visibility_state == "Fert":
-        return {}   
+        return {}
     if visibility_state == "No_fert":
         return {"display": "none"}
 #==============================================================
@@ -1379,7 +1364,7 @@ def show_hide_EBtable(EB_radio_frst, scenarios):
 #==============================================================
 @app.callback(Output("scenario-table_frst", "data"),
                 Input("write-button-state_frst", "n_clicks"),
-                State("ETstation_frst", "value"),
+                State("COstation_frst", "value"),
                 State("trimester1", "value"),
                 State("AN1", "value"),
                 State("BN1", "value"),
@@ -1390,7 +1375,7 @@ def show_hide_EBtable(EB_radio_frst, scenarios):
                 State("plt-date-picker_frst", "date"),
                 State("crop-radio_frst", "value"),
                 State("cultivar-dropdown_frst", "value"),
-                State("ETsoil_frst", "value"),
+                State("COsoil_frst", "value"),
                 State("ini-H2O_frst", "value"),
                 State("ini-NO3_frst", "value"),
                 State("plt-density_frst", "value"),
@@ -1430,9 +1415,9 @@ def show_hide_EBtable(EB_radio_frst, scenarios):
                 State("scenario-table_frst","data")
             )
 def make_sce_table(
-    n_clicks, station, trimester, AN1, BN1, AN2, BN2, planting_date, crop, cultivar, soil_type, 
-    initial_soil_moisture, initial_soil_no3_content, planting_density, scenario, #target_year, 
-    fert_app, 
+    n_clicks, station, trimester, AN1, BN1, AN2, BN2, planting_date, crop, cultivar, soil_type,
+    initial_soil_moisture, initial_soil_no3_content, planting_density, scenario, #target_year,
+    fert_app,
     fd1, fa1,
     fd2, fa2,
     fd3, fa3,
@@ -1470,7 +1455,7 @@ def make_sce_table(
                 or  fd2 == None or fa2 == None
                 or  fd3 == None or fa3 == None
                 or  fd4 == None or fa4 == None
-            ) 
+            )
         )
         or (
                 irrig_app == "repr_irrig"
@@ -1501,7 +1486,7 @@ def make_sce_table(
                 or  fixed_costs == None
                 or  variable_costs == None
             )
-        )        
+        )
     ):
         return existing_sces
 
@@ -1514,11 +1499,11 @@ def make_sce_table(
     # Make a new dataframe to return to scenario-summary table
     current_sce = pd.DataFrame({
         "sce_name": [scenario], "Trimester1": [trimester], "AN1": [AN1],"BN1": [BN1],"AN2": [AN2],"BN2": [BN2],
-        "Crop": [crop], "Cultivar": [cultivar[7:]], "stn_name": [station], "PltDate":[planting_date], # [planting_date[5:]], 
-        "soil": [soil_type], "iH2O": [initial_soil_moisture], 
-        "iNO3": [initial_soil_no3_content], "plt_density": [planting_density], #"TargetYr": [target_year], 
-        "Fert_1_DOY": ["-99"], "Fert_1_Kg": ["-99"], "Fert_2_DOY": ["-99"], "Fert_2_Kg": ["-99"], 
-        "Fert_3_DOY": ["-99"], "Fert_3_Kg": ["-99"], "Fert_4_DOY": ["-99"], "Fert_4_Kg": ["-99"], 
+        "Crop": [crop], "Cultivar": [cultivar[7:]], "stn_name": [station], "PltDate":[planting_date], # [planting_date[5:]],
+        "soil": [soil_type], "iH2O": [initial_soil_moisture],
+        "iNO3": [initial_soil_no3_content], "plt_density": [planting_density], #"TargetYr": [target_year],
+        "Fert_1_DOY": ["-99"], "Fert_1_Kg": ["-99"], "Fert_2_DOY": ["-99"], "Fert_2_Kg": ["-99"],
+        "Fert_3_DOY": ["-99"], "Fert_3_Kg": ["-99"], "Fert_4_DOY": ["-99"], "Fert_4_Kg": ["-99"],
         "IR_method": ["-99"], #Irrigation on reported date
         "IR_1_DOY": ["-99"], "IR_1_amt": ["-99"],
         "IR_2_DOY": ["-99"], "IR_2_amt": ["-99"],
@@ -1626,7 +1611,7 @@ def make_sce_table(
             or  fixed_costs < 0
             or  variable_costs < 0
         ):
-            EB_valid = False          
+            EB_valid = False
 
     # validate planting date
     planting_date_valid = True
@@ -1649,7 +1634,7 @@ def make_sce_table(
                     planting_date_valid = False
             if int(mm) in short_months:
                 if int(dd) < 1 or 30 < int(dd):
-                    planting_date_valid = False 
+                    planting_date_valid = False
             if int(mm) == 2:
                 if int(dd) < 1 or 28 < int(dd):
                     planting_date_valid = False
@@ -1683,21 +1668,25 @@ def make_sce_table(
 #===============================
 #2nd callback to run ALL scenarios
 @app.callback(Output(component_id="yieldbox-container_frst", component_property="children"),
-              Output(component_id="yieldcdf-container_frst", component_property="children"),
-              Output("fcst-yieldtables-container", "children"),
-              Output("sname_cdf", "options"),
-              Output("memory-yield-table_frst", "data"),
-              Input("simulate-button-state_frst", "n_clicks"),
-              State("scenario-table_frst","data"), ### scenario summary table
-              # State("season-slider", "value"), #EJ (5/13/2021) for seasonal total rainfall
-              prevent_initial_call=True,
-)
+                Output(component_id="yieldcdf-container_frst", component_property="children"),
+                # Output(component_id="yieldtimeseries-container_frst", component_property="children"),
+                # Output(component_id="yield-BN-container_frst", component_property="children"),
+                # Output(component_id="yield-NN-container", component_property="children"),
+                # Output(component_id="yield-AN-container", component_property="children"),
+                # Output(component_id="yieldtables-container", component_property="children"),
+                Output("sname_cdf", "options"),
+                Output("memory-yield-table_frst", "data"),
+                Input("simulate-button-state_frst", "n_clicks"),
+                State("scenario-table_frst","data"), ### scenario summary table
+                # State("season-slider", "value"), #EJ (5/13/2021) for seasonal total rainfall
+                prevent_initial_call=True,
+              )
 
 def run_create_figure(n_clicks, sce_in_table): #, slider_range):
     if n_clicks is None:
         raise PreventUpdate
-        return 
-    else: 
+        return
+    else:
         # 1) Read saved scenario summaries and get a list of scenarios to run
         # dff = pd.read_json(intermediate, orient="split")
         scenarios = pd.DataFrame(sce_in_table)  #read dash_table.DataTable into pd df #J(5/3/2021)
@@ -1707,7 +1696,7 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
         TG_yield = []
 
         #compute seasonal rainfall total for each trimester EJ(7/27/2021)
-        trim_dates = { 
+        trim_dates = {
             "JFM": [1,90,91,181], #AMJ    1)first doy of 1st trimester, 2) last doy of 1st trimester, 3) first doy of 2nd trimester, 4)last doy of 2nd trimester
             "FMA": [31,120,121,212], #"MJJ",
             "MAM": [60,151,152,243], #"JJA",
@@ -1723,7 +1712,7 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
 
         for i in range(sce_numbers):
             scenario = scenarios.sce_name.values[i]
-            station = scenarios.stn_name.values[i] 
+            station = scenarios.stn_name.values[i]
             trimester  = scenarios.Trimester1.values[i]
             tri_doylist = trim_dates[trimester]
             WTD_fname = path.join(Wdir_path, scenarios.stn_name[i]+".WTD")
@@ -1738,27 +1727,27 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
               # df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)  #pass subset of summary table => NOTE: the scenario names are in reverse order and thus last scenario is selected first
               # write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)   #by taking into account planting and approximate harvesting dates
               #2)FResampler\
-              df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
-              write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)  
+              df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)
+              write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)
             else:
               if station == scenarios.stn_name.values[i-1] and trimester == scenarios.Trimester1.values[i-1]:
                 if AN1 == scenarios.AN1.values[i-1] and BN1 == scenarios.BN1.values[i-1] and AN2 == scenarios.AN2.values[i-1] and BN2 == scenarios.BN2.values[i-1]:
                   #No need to run WGEN again => use df_wgen from previous scenario
-                  write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path) 
+                  write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)
                 else:
                   # #1)WGEN
                   # df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)
                   # write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)
                   #2)FResampler
-                  df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
-                  write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)  
+                  df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)
+                  write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)
               else:
                 # #1)WGEN
                 # df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)
                 # write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)
                 #2)FResampler
-                df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
-                write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path) 
+                df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)
+                write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)
             # # EJ(7/27/2021) end of RUN WEATHER GENERATOR TO MAKE SYNTHETIC WEATHER REALIZATION
             #=====================================================================
             # 1) Write V47 file for climatolgoy
@@ -1789,25 +1778,21 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
             #=====================================================================
             #1-1) Run DSSAT executable for BOTh climatolgoy & forecast => Simulation resutls from both runs are in one Summary.out file
             os.chdir(Wdir_path)  #change directory
-            if scenarios.Crop[i] == "WH":
-                args = "./dscsm047 CSCER047 B DSSBatch.V47"  #===========>for linux system
+            if scenarios.Crop[i] == "BN":
+                args = "./dscsm047 CRGRO047 B DSSBatch.V47" #===========>for linux system
                 # args = "DSCSM047.EXE CSCER047 B DSSBatch.v47"  #===========>for windows
                 # fout_name = path.join(Wdir_path, "ETWH"+scenario+".OSU")   #===========>for windows
-            elif scenarios.Crop[i] == "MZ":
-                args = "./dscsm047 MZCER047 B DSSBatch.V47" #===========>for linux system
+            else: # scenarios.Crop[i] == "MZ":
+                args = "./dscsm047 MZCER047 B DSSBatch.V47"  #===========>for linux system
                 # args = "DSCSM047.EXE MZCER047 B DSSBatch.v47" #===========>for windows
-                # fout_name = path.join(Wdir_path, "ETMZ"+scenario+".OSU") #===========>for windows
-            else:  # SG
-                args = "./dscsm047 SGCER047 B DSSBatch.V47" #===========>for linux system
-                # args = "DSCSM047.EXE SGCER047 B DSSBatch.v47"  #===========>for windows
-                # fout_name = path.join(Wdir_path, "ETSG"+scenario+".OSU")  #===========>for windows
+                # # fout_name = path.join(Wdir_path, "COMZ"+scenario+".OSU") #===========>for windows
 
             #fout_name = f"ET{scenarios.Crop[i]}{scenario}.OSU"  #Q: Do we need this?
             fout_name = f"CL{scenarios.Crop[i]}{scenario}.OSU"  #simulation start for climatolgoy first
             arg_mv = f"mv Summary.OUT {fout_name}"   #Q: Do we need this? => Yes, DSSAT-Linux does not allow FNAME=Y, and generate only summary.out
 
-            os.system(args) 
-            os.system(arg_mv) 
+            os.system(args)
+            os.system(arg_mv)
             #=====================================================================
             #=====================================================================
 
@@ -1818,7 +1803,7 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
             EXPERIMENT = df_OUT.iloc[:,7].values  #read 4th column only
             PDAT = df_OUT.iloc[:,13].values  #read 14th column only
             ADAT = df_OUT.iloc[:,15].values  #read 14th column only
-            MDAT = df_OUT.iloc[:,16].values  #read 14th column only    
+            MDAT = df_OUT.iloc[:,16].values  #read 14th column only
             YEAR = df_OUT.iloc[:,13].values//1000
             run_type = ["Forecast" if x[:2] == 'FC' else "Climatology" for x in EXPERIMENT]  #to distinguish "FC(Forecast)" and "CL (climatology)"  check
             sname = [x[4:] for x in EXPERIMENT]  #scenario name (4 char)
@@ -1843,9 +1828,9 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
                 df_CL = Rain_trimester_obs(WTD_fname, tri_doylist)
                 df_rain = df_CL.append(df_FC, ignore_index=True)
 
-            #=========================================================end of seasonal rainfall total estimation            
+            #=========================================================end of seasonal rainfall total estimation
             # Make a new dataframe for plotting
-            data = {"EXPERIMENT":EXPERIMENT, "YEAR":YEAR, "PDAT": PDAT, "ADAT":ADAT,"MDAT":MDAT, "HWAM":HWAM, 
+            data = {"EXPERIMENT":EXPERIMENT, "YEAR":YEAR, "PDAT": PDAT, "ADAT":ADAT,"MDAT":MDAT, "HWAM":HWAM,
                     "RUN": run_type, "SNAME": sname, "RAIN_T1":df_rain.iloc[:,0], "RAIN_T2":df_rain.iloc[:,1]} #,"RAIN":df_season_rain.season_rain.values,"RANK":df_season_rain.Rank.values}
             temp_df = pd.DataFrame (data) #, columns = ["EXPERIMENT","YEAR", "PDAT","ADAT","HWAM", "RUN", "SNAME"]) #"RAIN", "RANK"])
 
@@ -1857,7 +1842,7 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
               doy = repr(PDAT[0])[4:]
               target = target_year + doy
               yr_index = np.argwhere(PDAT == int(target))
-              TG_yield_temp = HWAM[yr_index[0][0]]   
+              TG_yield_temp = HWAM[yr_index[0][0]]
             else:
               TG_yield_temp = np.nan #-99  #or np.nan ?
             TG_yield = [TG_yield_temp]+TG_yield   #check
@@ -1874,18 +1859,18 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
         # x_val2 = []
         # for j in scenarios.sce_name.values:
         #   x_val2.append(np.unique(df.EXPERIMENT[df["SNAME"]==j].values))  #CL##aaaa, FC##aaaa, CL##bbbb, FC##bbbb......
-        x_val3 = [v for i, v in enumerate(x_val) if "FC" in v] #=> forecast Experiment names only check 
+        x_val3 = [v for i, v in enumerate(x_val) if "FC" in v] #=> forecast Experiment names only check
         #4) Make a boxplot
         x_val2 = scenarios.sce_name.values
         yld_box = px.box(df, x="SNAME", y="HWAM", color="RUN", title="Yield Boxplot")
-        yld_box.add_scatter(x=x_val2, y=TG_yield, mode="markers", 
+        yld_box.add_scatter(x=x_val2, y=TG_yield, mode="markers",
             marker=dict(color='LightSkyBlue', size=10, line=dict(color='MediumPurple', width=2))) #, mode="lines+markers") #"lines")
-        yld_box.update_xaxes(title= "Scenario Name <br>[*Note:LightBlue dot(s) represents simulated yield(s) <br>using observed weather of the planting year]")
+        yld_box.update_xaxes(title= "Scenario Name [*Note:LightBlue dot(s) represents simulated yield(s) using observed weather of the planting year]")
         yld_box.update_yaxes(title= "Yield [kg/ha]")
 
         yld_exc = go.Figure()
         # for i in x_val:
-        for i in x_val3:  #forecast Experiment names only       check 
+        for i in x_val3:  #forecast Experiment names only       check
             x_data = df.HWAM[df["EXPERIMENT"]==i].values
             x_data = np.sort(x_data)
             fx_scf = [1.0/len(x_data)] * len(x_data) #pdf
@@ -1902,36 +1887,18 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
 
         #save simulated yield outputs into a csv file <<<<<<=======================
         fname = path.join(Wdir_path, "simulated_yield_first.csv")
-        df.to_csv(fname, index=False)  #EJ(7/27/2021) check 
+        df.to_csv(fname, index=False)  #EJ(7/27/2021) check
         #print({"label": i, "value": i} for i in list(df_out.columns))
         dic_sname = [{"label": i, "value": i} for i in np.unique(df.SNAME.values)]   #check
         return [
-            dcc.Graph(id="yield-boxplot", figure = yld_box, config = graph.config, ), 
+            dcc.Graph(id="yield-boxplot", figure = yld_box, config = graph.config, ),
             dcc.Graph(id="yield-exceedance", figure = yld_exc, config = graph.config, ),
-            dash_table.DataTable(columns = [{"name": i, "id": i} for i in df.columns],data=df.to_dict("records"),
-              id="yield-table",
-              sort_action = "native",
-              sort_mode = "single",
-              style_table = {
-                "maxHeight": "30vh",
-                "overflow": "auto",
-                "minWidth": "100%",
-              },
-              fixed_rows = { "headers": True, "data": 0 },
-              fixed_columns = { "headers": True, "data": 1 },
-              style_cell = {   # all three widths are needed
-                "minWidth": "120px", "width": "120px", "maxWidth": "150px",
-                "overflow": "hidden",
-                "textOverflow": "ellipsis", 
-              }
-            ),            
             dic_sname, #EJ(7/27/2021)
-            df.to_dict("records"),   #df_out.to_dict("records"),    #EJ(7/27/2021) check 
+            df.to_dict("records"),   #df_out.to_dict("records"),    #EJ(7/27/2021) check
         ]
 #Last callback to create figures for Enterprise budgeting
 @app.callback(Output(component_id="EBbox-container_frst", component_property="children"),
                 Output(component_id="EBcdf-container_frst", component_property="children"),
-                Output(component_id="EBtables-container_frst", component_property="children"),
                 Output("memory-EB-table_frst", "data"),
                 Input("EB-button-state_frst", "n_clicks"),
                 State('yield-multiplier_frst', 'value'), #EJ(6/5/2021)
@@ -1941,7 +1908,7 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
 def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplier
     if n_clicks is None:
         raise PreventUpdate
-        return 
+        return
     else:
         # 1) Read saved scenario summaries and get a list of scenarios to run
         current_sces = pd.DataFrame(sce_in_table)
@@ -1971,7 +1938,7 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
             EXPERIMENT = df_OUT.iloc[:,7].values  #read 4th column only
             PDAT = df_OUT.iloc[:,13].values  #read 14th column only
             ADAT = df_OUT.iloc[:,15].values  #read 14th column only
-            MDAT = df_OUT.iloc[:,16].values  #read 14th column only    
+            MDAT = df_OUT.iloc[:,16].values  #read 14th column only
             YEAR = df_OUT.iloc[:,13].values//1000
             NICM = df_OUT.iloc[:,39].values  #read 40th column only,  #NICM   Tot N app kg/ha Inorganic N applied (kg [N]/ha)
             IRCM = df_OUT.iloc[:,30].values    #IRCM   Irrig mm        Season irrigation (mm)   EJ(7/30/2021)
@@ -1989,10 +1956,10 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
             #     yr_index = np.argwhere(PDAT == int(target))
             #     TG_GMargin_temp = GMargin[yr_index[0][0]]
 
-            data = {"EXPERIMENT":EXPERIMENT, "YEAR":YEAR, "PDAT": PDAT, "ADAT":ADAT,"MDAT":MDAT,  "HWAM":HWAM,"NICM":NICM,"IRCM":IRCM, 
+            data = {"EXPERIMENT":EXPERIMENT, "YEAR":YEAR, "PDAT": PDAT, "ADAT":ADAT,"MDAT":MDAT,  "HWAM":HWAM,"NICM":NICM,"IRCM":IRCM,
                     "GMargin":GMargin, "RUN": run_type, "SNAME": sname,}  #EJ(6/5/2021) fixed
             temp_df = pd.DataFrame (data) #, columns = ["EXPERIMENT","YEAR", "PDAT","ADAT","HWAM","NICM","GMargin"])  #EJ(6/5/2021) fixed
-            
+
             #In case of hindcast forecasting (i.e., if the planting year is among the observed years
             year1= temp_df.YEAR[temp_df["RUN"] == "Climatology"].values[0]  #first year of the climatolgy run
             year2= temp_df.YEAR[temp_df["RUN"] == "Climatology"].values[-1]  #lats year of the climatolgy run
@@ -2001,7 +1968,7 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
               doy = repr(PDAT[0])[4:]
               target = target_year + doy
               yr_index = np.argwhere(PDAT == int(target))
-              TG_GMargin_temp = GMargin[yr_index[0][0]]   
+              TG_GMargin_temp = GMargin[yr_index[0][0]]
             else:
               TG_GMargin_temp = np.nan #-99  #or np.nan ?
             TG_GMargin = [TG_GMargin_temp]+TG_GMargin   #check
@@ -2019,9 +1986,9 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
         #1) Make a boxplot
         x_val2 = EB_sces.sce_name.values
         gmargin_box = px.box(df, x="SNAME", y="GMargin", color="RUN", title="Gross Margin Boxplot")
-        gmargin_box.add_scatter(x=x_val2, y=TG_GMargin, mode="markers", 
+        gmargin_box.add_scatter(x=x_val2, y=TG_GMargin, mode="markers",
             marker=dict(color='LightSkyBlue', size=10, line=dict(color='MediumPurple', width=2))) #, mode="lines+markers") #"lines")
-        gmargin_box.update_xaxes(title= "Scenario Name <br>[*Note:LightBlue dot(s) represents gross margin using the simulated yield(s) <br>with observed weather in the planting year]")
+        gmargin_box.update_xaxes(title= "Scenario Name [*Note:LightBlue dot(s) represents gross margin using the simulated yield(s) with observed weather in the planting year]")
         gmargin_box.update_yaxes(title= "Gross Margin[Birr/ha]")
 
         gmargin_exc = go.Figure()
@@ -2041,20 +2008,15 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
 
         #save simulated yield outputs into a csv file <<<<<<=======================
         fname = path.join(Wdir_path, "simulated_Gmargin_frst.csv")
-        df.to_csv(fname, index=False)  #EJ(7/27/2021) check 
+        df.to_csv(fname, index=False)  #EJ(7/27/2021) check
         return [
             dcc.Graph(id="EB-boxplot", figure = gmargin_box, config = graph.config, ),
             dcc.Graph(id="EB-exceedance", figure = gmargin_exc, config = graph.config, ),
-            dash_table.DataTable(
-                columns=[{"name": i, "id": i} for i in df.columns],
-                data=df.to_dict("records"),
-                style_cell={"whiteSpace": "normal","height": "auto",},
-            ),
             df.to_dict("records")
             ]
 
 #====================================================================
-#Read observed rainfall for two consecutive trimesters in a row 
+#Read observed rainfall for two consecutive trimesters in a row
 def Rain_trimester_obs(fname,tri_doylist):  #sname=> scenario name to make a colum of output df
     data1 = np.loadtxt(fname,skiprows=1)
     #convert numpy array to dataframe
@@ -2070,7 +2032,7 @@ def Rain_trimester_obs(fname,tri_doylist):  #sname=> scenario name to make a col
     temp_indx = [0 if (calendar.isleap(year_WTD[i])) & (doy_WTD[i] == 60) else 1 for i in range(len(year_WTD))] #[f(x) if condition else g(x) for x in sequence]
     df["leap_indx"]=temp_indx
     df2 = df[df['leap_indx'] > 0]  #drop rows having Feb 29th
-    #Make a new DOY column 
+    #Make a new DOY column
     doy_list = []
     yr_list = np.unique(year_WTD)
     for i in range(len(np.unique(year_WTD))):
@@ -2099,11 +2061,11 @@ def Rain_trimester_obs(fname,tri_doylist):  #sname=> scenario name to make a col
         if sdoy1_ind[-1] < edoy2_ind[-1]:  #the target season is within a year
             nyears = len(sdoy1_ind)
             # year_array = df2.YEAR.unique()
-        else:  #sdoy1_ind[-1] > edoy2_ind[-1]:  
+        else:  #sdoy1_ind[-1] > edoy2_ind[-1]:
             nyears = len(sdoy1_ind)-1
             # year_array = df2.YEAR.unique()[:-1]  #ignore last year because it does not have a full season
     elif sdoy1_ind[0] > edoy2_ind[0]:  #the target season goes beyond a year
-        if sdoy1_ind[-2] < edoy2_ind[-1]: 
+        if sdoy1_ind[-2] < edoy2_ind[-1]:
             nyears = len(sdoy1_ind)-1
             # year_array = df2.YEAR.unique()[:-1]
         else:
@@ -2121,7 +2083,7 @@ def Rain_trimester_obs(fname,tri_doylist):  #sname=> scenario name to make a col
         elif sdoy1_ind[i] > edoy1_ind[i]:  #last year does not have full season days
             sum_T1.append(np.sum(df.RAIN.iloc[sdoy1_ind[i]:edoy1_ind[i+1]+1].values))
 
-        #2nd trimester    
+        #2nd trimester
         if sdoy1_ind[i] < edoy2_ind[i]:  #last year does not have full season days
             if sdoy2_ind[i] < edoy2_ind[i]:  #last year does not have full season days
                 sum_T2.append(np.sum(df.RAIN.iloc[sdoy2_ind[i]:edoy2_ind[i]+1].values))
@@ -2130,8 +2092,8 @@ def Rain_trimester_obs(fname,tri_doylist):  #sname=> scenario name to make a col
         else:  #sdoy1_ind[i] > edoy2_ind[i] => 2nd trimester starts from the 2nd year although data is available (when the first year is incomplete)
             if sdoy2_ind[i] < edoy2_ind[i]:
                 sum_T2.append(np.sum(df.RAIN.iloc[sdoy2_ind[i+1]:edoy2_ind[i+1]+1].values))
-            elif sdoy2_ind[i] > edoy2_ind[i]:  
-                sum_T2.append(np.sum(df.RAIN.iloc[sdoy2_ind[i]:edoy2_ind[i+1]+1].values))        
+            elif sdoy2_ind[i] > edoy2_ind[i]:
+                sum_T2.append(np.sum(df.RAIN.iloc[sdoy2_ind[i]:edoy2_ind[i+1]+1].values))
 
     data = {"RainT1": np.array(sum_T1), "RainT2": np.array(sum_T2),}
     df_out = pd.DataFrame(data)
@@ -2159,14 +2121,14 @@ def Rain_trimester_gen(fname,tri_doylist):  #sname=> scenario name to make a col
     new_year = np.array(new_year) + 2000
     df["YEAR"] = new_year  #update YEAR column from 2 digit to 4 digit
     # rain_WTD = df.RAIN.values
-    year_WTD = df.YEAR.values 
+    year_WTD = df.YEAR.values
 
     doy_WTD = df.DOY.values
     #Exclude Feb. 29th in leapyears (60th DOY in a leap year)
     temp_indx = [0 if (calendar.isleap(year_WTD[i])) & (doy_WTD[i] == 60) else 1 for i in range(len(year_WTD))] #[f(x) if condition else g(x) for x in sequence]
     df["leap_indx"]=temp_indx
     df2 = df[df['leap_indx'] > 0]  #drop rows having Feb 29th
-    #Make a new DOY column 
+    #Make a new DOY column
     doy_list = []
     yr_list = np.unique(year_WTD)
     for i in range(len(np.unique(year_WTD))):
@@ -2195,11 +2157,11 @@ def Rain_trimester_gen(fname,tri_doylist):  #sname=> scenario name to make a col
         if sdoy1_ind[-1] < edoy2_ind[-1]:  #the target season is within a year
             nyears = len(sdoy1_ind)
             # year_array = df2.YEAR.unique()
-        else:  #sdoy1_ind[-1] > edoy2_ind[-1]:  
+        else:  #sdoy1_ind[-1] > edoy2_ind[-1]:
             nyears = len(sdoy1_ind)-1
             # year_array = df2.YEAR.unique()[:-1]  #ignore last year because it does not have a full season
     elif sdoy1_ind[0] > edoy2_ind[0]:  #the target season goes beyond a year
-        if sdoy1_ind[-2] < edoy2_ind[-1]: 
+        if sdoy1_ind[-2] < edoy2_ind[-1]:
             nyears = len(sdoy1_ind)-1
             # year_array = df2.YEAR.unique()[:-1]
         else:
@@ -2217,7 +2179,7 @@ def Rain_trimester_gen(fname,tri_doylist):  #sname=> scenario name to make a col
         elif sdoy1_ind[i] > edoy1_ind[i]:  #last year does not have full season days
             sum_T1.append(np.sum(df.RAIN.iloc[sdoy1_ind[i]:edoy1_ind[i+1]+1].values))
 
-        #2nd trimester    
+        #2nd trimester
         if sdoy1_ind[i] < edoy2_ind[i]:  #last year does not have full season days
             if sdoy2_ind[i] < edoy2_ind[i]:  #last year does not have full season days
                 sum_T2.append(np.sum(df.RAIN.iloc[sdoy2_ind[i]:edoy2_ind[i]+1].values))
@@ -2226,8 +2188,8 @@ def Rain_trimester_gen(fname,tri_doylist):  #sname=> scenario name to make a col
         else:  #sdoy1_ind[i] > edoy2_ind[i] => 2nd trimester starts from the 2nd year although data is available (when the first year is incomplete)
             if sdoy2_ind[i] < edoy2_ind[i]:
                 sum_T2.append(np.sum(df.RAIN.iloc[sdoy2_ind[i+1]:edoy2_ind[i+1]+1].values))
-            elif sdoy2_ind[i] > edoy2_ind[i]:  
-                sum_T2.append(np.sum(df.RAIN.iloc[sdoy2_ind[i]:edoy2_ind[i+1]+1].values))        
+            elif sdoy2_ind[i] > edoy2_ind[i]:
+                sum_T2.append(np.sum(df.RAIN.iloc[sdoy2_ind[i]:edoy2_ind[i+1]+1].values))
 
     data = {"RainT1": np.array(sum_T1), "RainT2": np.array(sum_T2),}
     df_out = pd.DataFrame(data)
@@ -2235,5 +2197,5 @@ def Rain_trimester_gen(fname,tri_doylist):  #sname=> scenario name to make a col
     # df_out.to_csv("C:\\IRI\\Dash_ET_forecast\\ET_forecast_windows\\TEST_ET\\trimester_rain_frst.csv", index=False)
     return df_out
 #====================================================================
-# End of reading observations (WTD file) into a matrix 
+# End of reading observations (WTD file) into a matrix
 #====================================================================
