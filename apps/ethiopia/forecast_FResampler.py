@@ -1690,19 +1690,15 @@ def make_sce_table(
 #===============================
 #2nd callback to run ALL scenarios
 @app.callback(Output(component_id="yieldbox-container_frst", component_property="children"),
-                Output(component_id="yieldcdf-container_frst", component_property="children"),
-                # Output(component_id="yieldtimeseries-container_frst", component_property="children"),
-                # Output(component_id="yield-BN-container_frst", component_property="children"),
-                # Output(component_id="yield-NN-container", component_property="children"),
-                # Output(component_id="yield-AN-container", component_property="children"),
-                # Output(component_id="yieldtables-container", component_property="children"),
-                Output("sname_cdf", "options"),
-                Output("memory-yield-table_frst", "data"),
-                Input("simulate-button-state_frst", "n_clicks"),
-                State("scenario-table_frst","data"), ### scenario summary table
-                # State("season-slider", "value"), #EJ (5/13/2021) for seasonal total rainfall
-                prevent_initial_call=True,
-              )
+              Output(component_id="yieldcdf-container_frst", component_property="children"),
+              Output("fcst-yieldtables-container", "children"),
+              Output("sname_cdf", "options"),
+              Output("memory-yield-table_frst", "data"),
+              Input("simulate-button-state_frst", "n_clicks"),
+              State("scenario-table_frst","data"), ### scenario summary table
+              # State("season-slider", "value"), #EJ (5/13/2021) for seasonal total rainfall
+              prevent_initial_call=True,
+)
 
 def run_create_figure(n_clicks, sce_in_table): #, slider_range):
     if n_clicks is None:
@@ -1891,7 +1887,7 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
         yld_box = px.box(df, x="SNAME", y="HWAM", color="RUN", title="Yield Boxplot")
         yld_box.add_scatter(x=x_val2, y=TG_yield, mode="markers", 
             marker=dict(color='LightSkyBlue', size=10, line=dict(color='MediumPurple', width=2))) #, mode="lines+markers") #"lines")
-        yld_box.update_xaxes(title= "Scenario Name [*Note:LightBlue dot(s) represents simulated yield(s) using observed weather of the planting year]")
+        yld_box.update_xaxes(title= "Scenario Name <br>[*Note:LightBlue dot(s) represents simulated yield(s) <br>using observed weather of the planting year]")
         yld_box.update_yaxes(title= "Yield [kg/ha]")
 
         yld_exc = go.Figure()
@@ -1919,6 +1915,23 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
         return [
             dcc.Graph(id="yield-boxplot", figure = yld_box, config = graph.config, ), 
             dcc.Graph(id="yield-exceedance", figure = yld_exc, config = graph.config, ),
+            dash_table.DataTable(columns = [{"name": i, "id": i} for i in df.columns],data=df.to_dict("records"),
+              id="yield-table",
+              sort_action = "native",
+              sort_mode = "single",
+              style_table = {
+                "maxHeight": "30vh",
+                "overflow": "auto",
+                "minWidth": "100%",
+              },
+              fixed_rows = { "headers": True, "data": 0 },
+              fixed_columns = { "headers": True, "data": 1 },
+              style_cell = {   # all three widths are needed
+                "minWidth": "120px", "width": "120px", "maxWidth": "150px",
+                "overflow": "hidden",
+                "textOverflow": "ellipsis", 
+              }
+            ),            
             dic_sname, #EJ(7/27/2021)
             df.to_dict("records"),   #df_out.to_dict("records"),    #EJ(7/27/2021) check 
         ]
@@ -2014,7 +2027,7 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
         gmargin_box = px.box(df, x="SNAME", y="GMargin", color="RUN", title="Gross Margin Boxplot")
         gmargin_box.add_scatter(x=x_val2, y=TG_GMargin, mode="markers", 
             marker=dict(color='LightSkyBlue', size=10, line=dict(color='MediumPurple', width=2))) #, mode="lines+markers") #"lines")
-        gmargin_box.update_xaxes(title= "Scenario Name [*Note:LightBlue dot(s) represents gross margin using the simulated yield(s) with observed weather in the planting year]")
+        gmargin_box.update_xaxes(title= "Scenario Name <br>[*Note:LightBlue dot(s) represents gross margin using the simulated yield(s) <br>with observed weather in the planting year]")
         gmargin_box.update_yaxes(title= "Gross Margin[Birr/ha]")
 
         gmargin_exc = go.Figure()
