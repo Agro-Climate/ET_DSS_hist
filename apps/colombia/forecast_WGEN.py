@@ -26,12 +26,11 @@ import time
 
 import graph
 
-from apps.ethiopia.write_SNX import writeSNX_clim, writeSNX_frst_FR 
-#from write_SNX import writeSNX_main_hist, writeSNX_main_frst  #EJ(7/26/2021) This is not working!!!
-# from apps.ethiopia.run_WGEN import run_WGEN  # Downscaling method 1) WGEN (weather generator) to make 100 synthetic daily weather data
-from apps.ethiopia.write_WTH import write_WTH   #save WTH from the output fo WGEN
-from apps.ethiopia.run_FResampler import run_FResampler  # Downscaling method 1) FResampler 
-from apps.ethiopia.write_WTH_FR import write_WTH_FR   #save WTH from the output fo FREsampler
+from apps.colombia.write_SNX import writeSNX_clim, writeSNX_frst 
+from apps.ethiopia.run_WGEN import run_WGEN  # Downscaling method 1) WGEN (weather generator) to make 100 synthetic daily weather data
+from apps.colombia.write_WTH import write_WTH   #save WTH from the output fo WGEN
+# from apps.ethiopia.run_FResampler import run_FResampler  # Downscaling method 1) FResampler 
+# from apps.ethiopia.write_WTH_FR import write_WTH_FR   #save WTH from the output fo FREsampler
 
 sce_col_names=[ "sce_name", "Trimester1", "AN1","BN1", "AN2","BN2",
                 "Crop", "Cultivar","stn_name", "PltDate", #"FirstYear", "LastYear", 
@@ -73,27 +72,36 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Station
-                    dbc.Label("2) Station", html_for="ETstation_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("2) Station", html_for="COstation_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
-                      id="ETstation_frst",
+                      id="COstation_frst",
                       options=[
-                        {"label": "Melkasa", "value": "MELK"},
-                        {"label": "Mieso", "value": "MEIS"},
-                        {"label": "Awassa", "value": "AWAS"},
-                        {"label": "Asella", "value": "ASEL"},
-                        {"label": "Bako", "value": "BAKO"},
-                        {"label": "Mahoni", "value": "MAHO"},
-                        {"label": "Kobo", "value": "KOBO"}
+                        {"label": "Cerete", "value": "CTUR"},
+                        {"label": "Espinal", "value": "CNAT"},
+                        {"label": "La Union", "value": "CUNI"},
+                        {"label": "Cucharo El", "value": "CUCH"},
+                        {"label": "Esc Agr Mogotes", "value": "EAMO"},
+                        {"label": "Zapatoca", "value": "ZAPA"},
                       ],
-                      value="MELK",
+                      value="CTUR",
                       clearable=False,
                       ),
-                      dbc.Label("Observed Weather:", html_for="ETstation_frst", className="p-2", align="start", ),
+                      dbc.Label("Observed Weather:", html_for="COstation_frst", className="p-2", align="start", ),
                       dbc.Row([
-                        dbc.Col(dbc.Input(type="text", id="obs_1st", disabled="disabled" ), width=5, ),
-                        dbc.Col(html.Div("to", className="text-center",), width=2, ),
-                        dbc.Col(dbc.Input(type="text", id="obs_last", disabled="disabled" ), width=5, ),
+                        dbc.Col(
+                          dbc.FormGroup([
+                            dbc.Input(type="text", id="obs_1st", disabled="disabled" ), 
+                          ],),
+                        ),
+                        dbc.Col(
+                          dbc.Label("to", html_for="trimester1", sm=3, className="p-0",),
+                        ),
+                        dbc.Col(
+                          dbc.FormGroup([
+                            dbc.Input(type="text", id="obs_last", disabled="disabled" ), 
+                          ],),
+                        ),
                       ],),
                     ],
                     className="py-2",
@@ -258,12 +266,11 @@ layout = html.Div([
                       dcc.Dropdown(
                         id="cultivar-dropdown_frst", 
                         options=[
-                          {"label": "CIMT01 BH540", "value": "CIMT01 BH540-Kassie"},
-                          {"label": "CIMT02 MELKASA-1", "value": "CIMT02 MELKASA-Kassi"},
-                          {"label": "CIMT17 BH660-FAW-40%", "value": "CIMT17 BH660-FAW-40%"},
-                          {"label": "CIMT19 MELKASA2-FAW-40%", "value": "CIMT19 MELKASA2-FAW-40%"},
-                          {"label": "CIMT21 MELKASA-LowY", "value": "CIMT21 MELKASA-LowY"},], 
-                        value="CIMT19 MELKASA2-FAW-40%",
+                          {"label": "DK234", "value": "CI0002 DK234"},
+                          {"label": "FNC3056", "value": "CI0003 FNC3056"},
+                          {"label": "DK7088", "value": "CI0004 DK7088"},
+                          {"label": "P30F35", "value": "CI0001 P30F35"},],
+                        value="CI0002 DK234",
                         clearable=False,
                       ),
                     ],
@@ -274,27 +281,25 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Soil Type
-                    dbc.Label("6) Soil Type", html_for="ETsoil_frst", sm=3, className="p-2", align="start", ),
+                    dbc.Label("6) Soil Type", html_for="COsoil_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
-                        id="ETsoil_frst", 
+                        id="COsoil_frst", 
                         options=[
-                          {"label": "ETET000010(AWAS,L)", "value": "ETET000010"},
-                          {"label": "ETET000_10(AWAS,L, shallow)", "value": "ETET000_10"},
-                          {"label": "ETET000011(BAKO,C)", "value": "ETET000011"},
-                          {"label": "ETET001_11(BAKO,C,shallow)", "value": "ETET001_11"},
-                          {"label": "ETET000018(MELK,L)", "value": "ETET000018"},
-                          {"label": "ETET001_18(MELK,L,shallow)", "value": "ETET001_18"},
-                          {"label": "ETET000015(KULU,C)", "value": "ETET000015"},
-                          {"label": "ETET001_15(KULU,C,shallow)", "value": "ETET001_15"},
-                          {"label": "ET00990066(MAHO,C)", "value": "ET00990066"},
-                          {"label": "ET00990_66(MAHO,C,shallow)", "value": "ET00990_66"},
-                          {"label": "ET00920067(KOBO,CL)", "value": "ET00920067"},
-                          {"label": "ET00920_67(KOBO,CL,shallow)", "value": "ET00920_67"},
-                          {"label": "ETET000022(MIES, C)", "value": "ETET000022"},
-                          {"label": "ETET001_22(MIES, C, shallow", "value": "ETET001_22"},
+                          {"label": "CCCereteC1(SICL)", "value": "CCCereteC1"},
+                          {"label": "CCCienaga0(SIC)", "value": "CCCienaga0"},
+                          {"label": "CCCienaga1(SIC)", "value": "CCCienaga1"},
+                          {"label": "CCCienaga2(SIC)", "value": "CCCienaga2"},
+                          {"label": "CCTolima01(SL)", "value": "CCTolima01"},
+                          {"label": "CCBuga0001(SL)", "value": "CCBuga0001"},
+                          {"label": "CCBuga2013(CL)", "value": "CCBuga2013"},
+                          {"label": "CCBuga2014(CL)", "value": "CCBuga2014"},
+                          {"label": "CCEspi2013(SL)", "value": "CCEspi2013"},
+                          {"label": "CCEspi2014(SL)", "value": "CCEspi2014"},
+                          {"label": "CCCere2013(SICL)", "value": "CCCere2013"},
+                          {"label": "CCCere2014(SICL)", "value": "CCCere2014"},
                         ],
-                        value="ETET001_18",
+                        value="CCCereteC1",
                         clearable=False,
                       ),
                     ],
@@ -673,7 +678,7 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Input(type="number", id="crop-price_frst", value=0, min=0, step=0.1, required="required", ),
-                              dbc.FormText("[ETB/kg]"),
+                              dbc.FormText("[USD/kg]"),
                             ],),
                           ),
                         ],),
@@ -684,7 +689,7 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Input(type="number", id="fert-cost_frst", value=0, min=0, step=0.1, required="required", ),
-                              dbc.FormText("[ETB/N kg]"),
+                              dbc.FormText("[USD/N kg]"),
                             ],),
                           ),
                         ],),
@@ -695,7 +700,7 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Input(type="number", id="seed-cost_frst", value=0, min=0, step=0.1, required="required", ),
-                              dbc.FormText("[ETB/ha]"),
+                              dbc.FormText("[USD/ha]"),
                             ],),
                           ),
                         ],),
@@ -706,7 +711,7 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Input(type="number", id="irrigation-cost_frst", value=0, min=0, step=0.1, required="required", ),
-                              dbc.FormText("[ETB/mm]"),
+                              dbc.FormText("[USD/mm]"),
                             ],),
                           ),
                         ],),
@@ -717,7 +722,7 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Input(type="number", id="variable-costs_frst", value=0, min=0, step=0.1, required="required", ),
-                              dbc.FormText("[ETB/ha]"),
+                              dbc.FormText("[USD/ha]"),
                             ],),
                           ),
                         ],),
@@ -728,7 +733,7 @@ layout = html.Div([
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Input(type="number", id="fixed-costs_frst", value=0, min=0, step=0.1, required="required", ),
-                              dbc.FormText("[ETB/ha]"),
+                              dbc.FormText("[USD/ha]"),
                             ],),
                           ),
                         ],),
@@ -873,7 +878,7 @@ layout = html.Div([
           html.Div( # SIMULATIONS
             html.Div([
               html.Header(
-                html.B("Simulation Graphs"),
+                html.B("Simulation Graphs (Forecast)"),
               className=" card-header"
               ),
               html.Div(
@@ -956,14 +961,14 @@ layout = html.Div([
                       Download(id="download-dataframe-csv-yield_frst"),
                       # Download(id="download-dataframe-csv-rain"),
                       # Download(id="download-dataframe-csv-Pexe"),
-                      html.Div(
-                        dash_table.DataTable(
-                          columns = [{"id": "YEAR", "name": "YEAR"}],
-                          id="yield-table",
-                          style_table = {"height": "10vh"},
-                        ),
-                      id="fcst-yieldtables-container", 
-                      ),  #yield simulated output
+                      # html.Div(
+                      #   dash_table.DataTable(
+                      #     columns = [{"id": "YEAR", "name": "YEAR"}],
+                      #     id="yield-table",
+                      #     style_table = {"height": "10vh"},
+                      #   ),
+                      # id="fcst-yieldtables-container", 
+                      # ),  #yield simulated output
                     ], ),
                   ],
                   ),
@@ -975,7 +980,6 @@ layout = html.Div([
             ], 
             ),
           ),
-
           html.Div( # ENTERPRISE BUDGETING
             html.Div([
               html.Header(
@@ -1028,20 +1032,11 @@ layout = html.Div([
                 className=" card-header"
                 ),
                 html.Div([
-                  dbc.Row([
-                    dbc.Col("", xs=4, className="p-2"),
-                    dbc.Col(
-                      dbc.Button(id="btn_csv_EB_frst", 
-                      children="Download", 
-                      className="d-block mx-auto w-100",
-                      color="secondary"
-                      ), 
-                    xs=4, 
-                    className="p-2"
-                    ),
-                    dbc.Col("", xs=4, className="p-2"),                    
-                  ],
-                  className="m-1",
+                  html.Br(),
+                  dbc.Button(id="btn_csv_EB_frst", 
+                  children="Download", 
+                  className="w-50 d-block mx-auto m-1",
+                  color="secondary"
                   ),
                   # dcc.Download(id="download-dataframe-csv"),
                   Download(id="download-dataframe-csv_EB_frst"),
@@ -1096,7 +1091,7 @@ Wdir_path = DSSAT_FILES_DIR    #for linux systemn
 #call back to update the first & last weather observed dates
 @app.callback(Output("obs_1st", component_property="value"),
               Output("obs_last", component_property="value"),
-              Input("ETstation_frst", component_property="value"))
+              Input("COstation_frst", component_property="value"))
 def func(station_id):
     WTD_fname = path.join(Wdir_path, station_id +".WTD")
     data1 = np.loadtxt(WTD_fname,skiprows=1)
@@ -1369,7 +1364,7 @@ def show_hide_EBtable(EB_radio_frst, scenarios):
 #==============================================================
 @app.callback(Output("scenario-table_frst", "data"),
                 Input("write-button-state_frst", "n_clicks"),
-                State("ETstation_frst", "value"),
+                State("COstation_frst", "value"),
                 State("trimester1", "value"),
                 State("AN1", "value"),
                 State("BN1", "value"),
@@ -1380,7 +1375,7 @@ def show_hide_EBtable(EB_radio_frst, scenarios):
                 State("plt-date-picker_frst", "date"),
                 State("crop-radio_frst", "value"),
                 State("cultivar-dropdown_frst", "value"),
-                State("ETsoil_frst", "value"),
+                State("COsoil_frst", "value"),
                 State("ini-H2O_frst", "value"),
                 State("ini-NO3_frst", "value"),
                 State("plt-density_frst", "value"),
@@ -1588,11 +1583,7 @@ def make_sce_table(
     #                     planting_density,scenario,fert_app, current_fert)
     writeSNX_clim(Wdir_path,station,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
                         planting_density,scenario,fert_app, current_fert, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)  #This is differnt from writeSNX_main_hist in the historical analysis
-    # #1)for WGEN
-    # writeSNX_frst_(Wdir_path,station,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
-    #                     planting_density,scenario,fert_app, current_fert, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)
-    #2) for FResampler
-    writeSNX_frst_FR(Wdir_path,station,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
+    writeSNX_frst(Wdir_path,station,planting_date,crop, cultivar,soil_type,initial_soil_moisture,initial_soil_no3_content,
                         planting_density,scenario,fert_app, current_fert, irrig_app, irrig_method, current_irrig, ir_depth,ir_threshold, ir_eff)
     #=====================================================================
     # #Update dataframe for Enterprise Budgeting inputs
@@ -1673,15 +1664,19 @@ def make_sce_table(
 #===============================
 #2nd callback to run ALL scenarios
 @app.callback(Output(component_id="yieldbox-container_frst", component_property="children"),
-              Output(component_id="yieldcdf-container_frst", component_property="children"),
-              Output("fcst-yieldtables-container", "children"),
-              Output("sname_cdf", "options"),
-              Output("memory-yield-table_frst", "data"),
-              Input("simulate-button-state_frst", "n_clicks"),
-              State("scenario-table_frst","data"), ### scenario summary table
-              # State("season-slider", "value"), #EJ (5/13/2021) for seasonal total rainfall
-              prevent_initial_call=True,
-)
+                Output(component_id="yieldcdf-container_frst", component_property="children"),
+                # Output(component_id="yieldtimeseries-container_frst", component_property="children"),
+                # Output(component_id="yield-BN-container_frst", component_property="children"),
+                # Output(component_id="yield-NN-container", component_property="children"),
+                # Output(component_id="yield-AN-container", component_property="children"),
+                # Output(component_id="yieldtables-container", component_property="children"),
+                Output("sname_cdf", "options"),
+                Output("memory-yield-table_frst", "data"),
+                Input("simulate-button-state_frst", "n_clicks"),
+                State("scenario-table_frst","data"), ### scenario summary table
+                # State("season-slider", "value"), #EJ (5/13/2021) for seasonal total rainfall
+                prevent_initial_call=True,
+              )
 
 def run_create_figure(n_clicks, sce_in_table): #, slider_range):
     if n_clicks is None:
@@ -1724,31 +1719,31 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
             # # EJ(7/27/2021) RUN WEATHER GENERATOR TO MAKE SYNTHETIC WEATHER REALIZATION
             # i) check if station name and target trimester is repeated or not
             if i ==0:
-              # #1)WGEN
-              # df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)  #pass subset of summary table => NOTE: the scenario names are in reverse order and thus last scenario is selected first
-              # write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)   #by taking into account planting and approximate harvesting dates
-              #2)FResampler\
-              df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
-              write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)  
+              #1)WGEN
+              df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)  #pass subset of summary table => NOTE: the scenario names are in reverse order and thus last scenario is selected first
+              write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)   #by taking into account planting and approximate harvesting dates
+            #   #2)FResampler
+            #   df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
+            #   write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)  
             else:
               if station == scenarios.stn_name.values[i-1] and trimester == scenarios.Trimester1.values[i-1]:
                 if AN1 == scenarios.AN1.values[i-1] and BN1 == scenarios.BN1.values[i-1] and AN2 == scenarios.AN2.values[i-1] and BN2 == scenarios.BN2.values[i-1]:
                   #No need to run WGEN again => use df_wgen from previous scenario
                   write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path) 
                 else:
-                  # #1)WGEN
-                  # df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)
-                  # write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)
-                  #2)FResampler
-                  df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
-                  write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)  
+                  #1)WGEN
+                  df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)
+                  write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)
+                #   #2)FResampler
+                #   df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
+                #   write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)  
               else:
-                # #1)WGEN
-                # df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)
-                # write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)
-                #2)FResampler
-                df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
-                write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path) 
+                #1)WGEN
+                df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)
+                write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)
+                # #2)FResampler
+                # df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
+                # write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path) 
             # # EJ(7/27/2021) end of RUN WEATHER GENERATOR TO MAKE SYNTHETIC WEATHER REALIZATION
             #=====================================================================
             # 1) Write V47 file for climatolgoy
@@ -1779,20 +1774,15 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
             #=====================================================================
             #1-1) Run DSSAT executable for BOTh climatolgoy & forecast => Simulation resutls from both runs are in one Summary.out file
             os.chdir(Wdir_path)  #change directory
-            if scenarios.Crop[i] == "WH":
-                args = "./dscsm047 CSCER047 B DSSBatch.V47"  #===========>for linux system
+            if scenarios.Crop[i] == "BN":
+                args = "./dscsm047 CRGRO047 B DSSBatch.V47" #===========>for linux system
                 # args = "DSCSM047.EXE CSCER047 B DSSBatch.v47"  #===========>for windows
                 # fout_name = path.join(Wdir_path, "ETWH"+scenario+".OSU")   #===========>for windows
-            elif scenarios.Crop[i] == "MZ":
-                args = "./dscsm047 MZCER047 B DSSBatch.V47" #===========>for linux system
+            else: # scenarios.Crop[i] == "MZ":
+                args = "./dscsm047 MZCER047 B DSSBatch.V47"  #===========>for linux system
                 # args = "DSCSM047.EXE MZCER047 B DSSBatch.v47" #===========>for windows
-                # fout_name = path.join(Wdir_path, "ETMZ"+scenario+".OSU") #===========>for windows
-            else:  # SG
-                args = "./dscsm047 SGCER047 B DSSBatch.V47" #===========>for linux system
-                # args = "DSCSM047.EXE SGCER047 B DSSBatch.v47"  #===========>for windows
-                # fout_name = path.join(Wdir_path, "ETSG"+scenario+".OSU")  #===========>for windows
+                # # fout_name = path.join(Wdir_path, "COMZ"+scenario+".OSU") #===========>for windows
 
-            #fout_name = f"ET{scenarios.Crop[i]}{scenario}.OSU"  #Q: Do we need this?
             fout_name = f"CL{scenarios.Crop[i]}{scenario}.OSU"  #simulation start for climatolgoy first
             arg_mv = f"mv Summary.OUT {fout_name}"   #Q: Do we need this? => Yes, DSSAT-Linux does not allow FNAME=Y, and generate only summary.out
 
@@ -1815,7 +1805,7 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
             #============================================================
             # ===compute seasonal rainfall total from climatolgoy for trimester 1 & 2
             # WTD_fname = path.join(Wdir_path, scenarios.stn_name[i]+".WTD")
-            WTH_fname = path.join(Wdir_path, scenarios.sce_name[i] + '_all.WTH') #+repr(scenarios.PltDate[i])[3:5] +"99.WTH")  # e.g., aaaa2199.WTH
+            WTH_fname = path.join(Wdir_path, scenarios.sce_name[i]+ '_all.WTH') #+repr(scenarios.PltDate[i])[3:5] +"99.WTH")  # e.g., aaaa2199.WTH
             if i ==0:
               df_FC = Rain_trimester_gen(WTH_fname, tri_doylist)
               df_CL = Rain_trimester_obs(WTD_fname, tri_doylist)
@@ -1870,7 +1860,7 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
         yld_box = px.box(df, x="SNAME", y="HWAM", color="RUN", title="Yield Boxplot")
         yld_box.add_scatter(x=x_val2, y=TG_yield, mode="markers", 
             marker=dict(color='LightSkyBlue', size=10, line=dict(color='MediumPurple', width=2))) #, mode="lines+markers") #"lines")
-        yld_box.update_xaxes(title= "Scenario Name <br>[*Note:LightBlue dot(s) represents simulated yield(s) <br>using observed weather of the planting year]")
+        yld_box.update_xaxes(title= "Scenario Name [*Note:LightBlue dot(s) represents simulated yield(s) using observed weather of the planting year]")
         yld_box.update_yaxes(title= "Yield [kg/ha]")
 
         yld_exc = go.Figure()
@@ -1898,30 +1888,12 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
         return [
             dcc.Graph(id="yield-boxplot", figure = yld_box, config = graph.config, ), 
             dcc.Graph(id="yield-exceedance", figure = yld_exc, config = graph.config, ),
-            dash_table.DataTable(columns = [{"name": i, "id": i} for i in df.columns],data=df.to_dict("records"),
-              id="yield-table",
-              sort_action = "native",
-              sort_mode = "single",
-              style_table = {
-                "maxHeight": "30vh",
-                "overflow": "auto",
-                "minWidth": "100%",
-              },
-              fixed_rows = { "headers": True, "data": 0 },
-              fixed_columns = { "headers": True, "data": 1 },
-              style_cell = {   # all three widths are needed
-                "minWidth": "120px", "width": "120px", "maxWidth": "150px",
-                "overflow": "hidden",
-                "textOverflow": "ellipsis", 
-              }
-            ),            
             dic_sname, #EJ(7/27/2021)
             df.to_dict("records"),   #df_out.to_dict("records"),    #EJ(7/27/2021) check 
         ]
 #Last callback to create figures for Enterprise budgeting
 @app.callback(Output(component_id="EBbox-container_frst", component_property="children"),
                 Output(component_id="EBcdf-container_frst", component_property="children"),
-                Output(component_id="EBtables-container_frst", component_property="children"),
                 Output("memory-EB-table_frst", "data"),
                 Input("EB-button-state_frst", "n_clicks"),
                 State('yield-multiplier_frst', 'value'), #EJ(6/5/2021)
@@ -2011,7 +1983,7 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
         gmargin_box = px.box(df, x="SNAME", y="GMargin", color="RUN", title="Gross Margin Boxplot")
         gmargin_box.add_scatter(x=x_val2, y=TG_GMargin, mode="markers", 
             marker=dict(color='LightSkyBlue', size=10, line=dict(color='MediumPurple', width=2))) #, mode="lines+markers") #"lines")
-        gmargin_box.update_xaxes(title= "Scenario Name <br>[*Note:LightBlue dot(s) represents gross margin using the simulated yield(s) <br>with observed weather in the planting year]")
+        gmargin_box.update_xaxes(title= "Scenario Name [*Note:LightBlue dot(s) represents gross margin using the simulated yield(s) with observed weather in the planting year]")
         gmargin_box.update_yaxes(title= "Gross Margin[Birr/ha]")
 
         gmargin_exc = go.Figure()
@@ -2035,11 +2007,6 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
         return [
             dcc.Graph(id="EB-boxplot", figure = gmargin_box, config = graph.config, ),
             dcc.Graph(id="EB-exceedance", figure = gmargin_exc, config = graph.config, ),
-            dash_table.DataTable(
-                columns=[{"name": i, "id": i} for i in df.columns],
-                data=df.to_dict("records"),
-                style_cell={"whiteSpace": "normal","height": "auto",},
-            ),
             df.to_dict("records")
             ]
 
@@ -2125,7 +2092,7 @@ def Rain_trimester_obs(fname,tri_doylist):  #sname=> scenario name to make a col
 
     data = {"RainT1": np.array(sum_T1), "RainT2": np.array(sum_T2),}
     df_out = pd.DataFrame(data)
-    # #write dataframe into CSV file for debugging
+    # # #write dataframe into CSV file for debugging
     # df_out.to_csv("C:\\IRI\\Dash_ET_forecast\\ET_forecast_windows\\TEST_ET\\trimester_rain_clim.csv", index=False)
     return df_out
 #====================================================================

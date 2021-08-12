@@ -53,7 +53,7 @@ layout = html.Div([
           html.Div([
             html.Header(
               html.B(
-                "Simulation Input",
+                "SSimulation Input (Forecast)",
               ),
             className=" card-header",
             ),
@@ -940,7 +940,7 @@ layout = html.Div([
                       dbc.Row([
                         dbc.Col("", xs=4, className="p-2"),
                         dbc.Col(
-                          dbc.Button(id="btn_csv_yield", 
+                          dbc.Button(id="btn_csv_yield_frst", 
                           children="Simulated Yield", 
                           className="d-block mx-auto w-100",
                           color="secondary",
