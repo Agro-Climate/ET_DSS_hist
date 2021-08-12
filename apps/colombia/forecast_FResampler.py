@@ -956,18 +956,15 @@ layout = html.Div([
                       ],
                       className="m-1",
                       ),
-                      # dcc.Download(id="download-dataframe-csv"),
                       Download(id="download-dataframe-csv-yield_frst"),
-                      # Download(id="download-dataframe-csv-rain"),
-                      # Download(id="download-dataframe-csv-Pexe"),
-                      # html.Div(
-                      #   dash_table.DataTable(
-                      #     columns = [{"id": "YEAR", "name": "YEAR"}],
-                      #     id="yield-table",
-                      #     style_table = {"height": "10vh"},
-                      #   ),
-                      # id="fcst-yieldtables-container",
-                      # ),  #yield simulated output
+                      html.Div(
+                        dash_table.DataTable(
+                          columns = [{"id": "YEAR", "name": "YEAR"}],
+                          id="yield-table",
+                          style_table = {"height": "10vh"},
+                        ),
+                      id="fcst-yieldtables-container",
+                      ),  #yield simulated output
                     ], ),
                   ],
                   ),
@@ -1032,13 +1029,21 @@ layout = html.Div([
                 className=" card-header"
                 ),
                 html.Div([
-                  html.Br(),
-                  dbc.Button(id="btn_csv_EB_frst",
-                  children="Download",
-                  className="w-50 d-block mx-auto m-1",
-                  color="secondary"
+                  dbc.Row([
+                    dbc.Col("", xs=4, className="p-2"),
+                    dbc.Col(
+                      dbc.Button(id="btn_csv_EB_frst", 
+                      children="Download", 
+                      className="d-block mx-auto w-100",
+                      color="secondary"
+                      ), 
+                    xs=4, 
+                    className="p-2"
+                    ),
+                    dbc.Col("", xs=4, className="p-2"),                    
+                  ],
+                  className="m-1",
                   ),
-                  # dcc.Download(id="download-dataframe-csv"),
                   Download(id="download-dataframe-csv_EB_frst"),
                   html.Div(id="EBtables-container_frst",
                   className="overflow-auto",
@@ -1668,19 +1673,15 @@ def make_sce_table(
 #===============================
 #2nd callback to run ALL scenarios
 @app.callback(Output(component_id="yieldbox-container_frst", component_property="children"),
-                Output(component_id="yieldcdf-container_frst", component_property="children"),
-                # Output(component_id="yieldtimeseries-container_frst", component_property="children"),
-                # Output(component_id="yield-BN-container_frst", component_property="children"),
-                # Output(component_id="yield-NN-container", component_property="children"),
-                # Output(component_id="yield-AN-container", component_property="children"),
-                # Output(component_id="yieldtables-container", component_property="children"),
-                Output("sname_cdf", "options"),
-                Output("memory-yield-table_frst", "data"),
-                Input("simulate-button-state_frst", "n_clicks"),
-                State("scenario-table_frst","data"), ### scenario summary table
-                # State("season-slider", "value"), #EJ (5/13/2021) for seasonal total rainfall
-                prevent_initial_call=True,
-              )
+              Output(component_id="yieldcdf-container_frst", component_property="children"),
+              Output("fcst-yieldtables-container", "children"),
+              Output("sname_cdf", "options"),
+              Output("memory-yield-table_frst", "data"),
+              Input("simulate-button-state_frst", "n_clicks"),
+              State("scenario-table_frst","data"), ### scenario summary table
+              # State("season-slider", "value"), #EJ (5/13/2021) for seasonal total rainfall
+              prevent_initial_call=True,
+)
 
 def run_create_figure(n_clicks, sce_in_table): #, slider_range):
     if n_clicks is None:
@@ -1893,12 +1894,30 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
         return [
             dcc.Graph(id="yield-boxplot", figure = yld_box, config = graph.config, ),
             dcc.Graph(id="yield-exceedance", figure = yld_exc, config = graph.config, ),
+            dash_table.DataTable(columns = [{"name": i, "id": i} for i in df.columns],data=df.to_dict("records"),
+              id="yield-table",
+              sort_action = "native",
+              sort_mode = "single",
+              style_table = {
+                "maxHeight": "30vh",
+                "overflow": "auto",
+                "minWidth": "100%",
+              },
+              fixed_rows = { "headers": True, "data": 0 },
+              fixed_columns = { "headers": True, "data": 1 },
+              style_cell = {   # all three widths are needed
+                "minWidth": "120px", "width": "120px", "maxWidth": "150px",
+                "overflow": "hidden",
+                "textOverflow": "ellipsis", 
+              }
+            ),
             dic_sname, #EJ(7/27/2021)
             df.to_dict("records"),   #df_out.to_dict("records"),    #EJ(7/27/2021) check
         ]
 #Last callback to create figures for Enterprise budgeting
 @app.callback(Output(component_id="EBbox-container_frst", component_property="children"),
                 Output(component_id="EBcdf-container_frst", component_property="children"),
+                Output(component_id="EBtables-container_frst", component_property="children"),
                 Output("memory-EB-table_frst", "data"),
                 Input("EB-button-state_frst", "n_clicks"),
                 State('yield-multiplier_frst', 'value'), #EJ(6/5/2021)
@@ -2012,8 +2031,13 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
         return [
             dcc.Graph(id="EB-boxplot", figure = gmargin_box, config = graph.config, ),
             dcc.Graph(id="EB-exceedance", figure = gmargin_exc, config = graph.config, ),
+            dash_table.DataTable(
+                columns=[{"name": i, "id": i} for i in df.columns],
+                data=df.to_dict("records"),
+                style_cell={"whiteSpace": "normal","height": "auto",},
+            ),
             df.to_dict("records")
-            ]
+        ]
 
 #====================================================================
 #Read observed rainfall for two consecutive trimesters in a row

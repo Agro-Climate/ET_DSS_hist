@@ -91,7 +91,7 @@ layout = html.Div([
                       dbc.Row([
                         dbc.Col(
                           dbc.FormGroup([
-                            dbc.Input(type="text", id="obs_1st", disabled="disabled" ), 
+                            dbc.Input(type="text", id="obs_1st", disabled="disabled" ),
                           ],),
                         ),
                         dbc.Col(
@@ -99,7 +99,7 @@ layout = html.Div([
                         ),
                         dbc.Col(
                           dbc.FormGroup([
-                            dbc.Input(type="text", id="obs_last", disabled="disabled" ), 
+                            dbc.Input(type="text", id="obs_last", disabled="disabled" ),
                           ],),
                         ),
                       ],),
@@ -229,7 +229,7 @@ layout = html.Div([
                           ]),
                         ]),
                       ],
-                      id="scf-table-Comp", 
+                      id="scf-table-Comp",
                       className="w-100",
                       #style={"display": "none"},
                       ),
@@ -246,9 +246,8 @@ layout = html.Div([
                       id="crop-radio_frst",
                       # options=[{"label": k, "value": k} for k in cultivar_options.keys()],
                       options = [
-                        {"label": "Maize", "value": "MZ"}, 
-                        {"label": "Wheat", "value": "WH"}, 
-                        {"label": "Sorghum", "value": "SG"},
+                        {"label": "Drybean", "value": "BN"},
+                        {"label": "Maize", "value": "MZ"},
                       ],
                       labelStyle = {"display": "inline-block","margin-right": 10},
                       value="MZ",
@@ -264,7 +263,7 @@ layout = html.Div([
                     dbc.Label("5) Cultivar", html_for="cultivar-dropdown_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
-                        id="cultivar-dropdown_frst", 
+                        id="cultivar-dropdown_frst",
                         options=[
                           {"label": "DK234", "value": "CI0002 DK234"},
                           {"label": "FNC3056", "value": "CI0003 FNC3056"},
@@ -284,7 +283,7 @@ layout = html.Div([
                     dbc.Label("6) Soil Type", html_for="COsoil_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
-                        id="COsoil_frst", 
+                        id="COsoil_frst",
                         options=[
                           {"label": "CCCereteC1(SICL)", "value": "CCCereteC1"},
                           {"label": "CCCienaga0(SIC)", "value": "CCCienaga0"},
@@ -313,13 +312,13 @@ layout = html.Div([
                     dbc.Label("7) Initial Soil Water Condition", html_for="ini-H2O_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
-                        id="ini-H2O_frst", 
+                        id="ini-H2O_frst",
                         options=[
                           {"label": "30% of AWC", "value": "0.3"},
                           {"label": "50% of AWC", "value": "0.5"},
                           {"label": "70% of AWC", "value": "0.7"},
                           {"label": "100% of AWC", "value": "1.0"},
-                        ], 
+                        ],
                         value="0.5",
                         clearable=False,
                       ),
@@ -334,14 +333,14 @@ layout = html.Div([
                     dbc.Label("8) Initial Soil NO3 Condition", html_for="ini-NO3_frst", sm=3, className="p-2", align="start", ),
                     dbc.Col([
                       dcc.Dropdown(
-                        id="ini-NO3_frst", 
+                        id="ini-NO3_frst",
                         options=[
                           {"label": "High(65 N kg/ha)", "value": "H"},
                           {"label": "Low(23 N kg/ha)", "value": "L"},
-                        ], 
+                        ],
                         value="L",
                         clearable=False,
-                      ),                
+                      ),
                     ],
                     className="py-2",
                     xl=9,
@@ -467,7 +466,7 @@ layout = html.Div([
                           ),
                         ],),
                       ],
-                      id="fert-table-Comp_frst", 
+                      id="fert-table-Comp_frst",
                       className="w-100",
                       style={"display": "none"},
                       ),
@@ -746,7 +745,7 @@ layout = html.Div([
                           ])
                         ),
                       ],
-                      id="EB-table-Comp_frst", 
+                      id="EB-table-Comp_frst",
                       className="w-100",
                       style={"display": "none"},
                       ),
@@ -759,7 +758,7 @@ layout = html.Div([
                   ),
 
                   # INPUT FORM END
-                ], 
+                ],
                 className="p-3"
                 ),
               className="overflow-auto",
@@ -769,9 +768,9 @@ layout = html.Div([
               html.Div([ # SCENARIO TABLE
                 html.Header(html.B("Scenarios"), className="card-header",),
                 dbc.FormGroup([ # SUBMIT - ADD SCENARIO
-                  dbc.Button(id="write-button-state_frst", 
-                  n_clicks=0, 
-                  children="Create or Add a new Scenario", 
+                  dbc.Button(id="write-button-state_frst",
+                  n_clicks=0,
+                  children="Create or Add a new Scenario",
                   className="w-75 d-block mx-auto my-3",
                   color="primary"
                   ),
@@ -834,7 +833,7 @@ layout = html.Div([
                 style_cell = {   # all three widths are needed
                     "minWidth": "120px", "width": "120px", "maxWidth": "150px",
                     "overflow": "hidden",
-                    "textOverflow": "ellipsis", 
+                    "textOverflow": "ellipsis",
                 },
                 row_deletable=True
                 ),
@@ -855,7 +854,7 @@ layout = html.Div([
               # ),
               html.Br(),
               html.Div( ## RUN DSSAT BUTTON
-                dbc.Button(id="simulate-button-state_frst", 
+                dbc.Button(id="simulate-button-state_frst",
                 children="Simulate all scenarios (Run DSSAT)",
                 className="w-75 d-block mx-auto",
                 color="success",
@@ -865,11 +864,11 @@ layout = html.Div([
             className="p-3",
             ),
 
-          ], 
+          ],
           ),
         className="block card",
         ),
-      ], 
+      ],
       md=5,
       className="p-1",
       ),
@@ -903,8 +902,8 @@ layout = html.Div([
                           ],
                           row=True,
                           className="m-2",
-                          ),                        
-                        ),  
+                          ),
+                        ),
                         html.Div(id="yieldcdf-container_indiv"),  #interactive individual cdf graph
                         dbc.Row([
                           dbc.Col(
@@ -917,20 +916,20 @@ layout = html.Div([
                         no_gutters=True,
                         ),
                       ],),
-                    ], 
-                    size="lg", color="primary", type="border", 
+                    ],
+                    size="lg", color="primary", type="border",
                     ),
                   )
-                ], 
-                id="simulation-graphs", 
+                ],
+                id="simulation-graphs",
                 className="overflow-auto",
                 style={"height": "94vh"},
                 ),
               ),
-            ], 
+            ],
             ),
           ),
-          
+
           # CSV FOR SIMULATED YIELD
           html.Div( # ORIGINAL CSV
             html.Div([
@@ -945,8 +944,8 @@ layout = html.Div([
                       dbc.Row([
                         dbc.Col("", xs=4, className="p-2"),
                         dbc.Col(
-                          dbc.Button(id="btn_csv_yield_frst", 
-                          children="Simulated Yield", 
+                          dbc.Button(id="btn_csv_yield_frst",
+                          children="Simulated Yield",
                           className="d-block mx-auto w-100",
                           color="secondary",
                           ),
@@ -957,29 +956,27 @@ layout = html.Div([
                       ],
                       className="m-1",
                       ),
-                      # dcc.Download(id="download-dataframe-csv"),
                       Download(id="download-dataframe-csv-yield_frst"),
-                      # Download(id="download-dataframe-csv-rain"),
-                      # Download(id="download-dataframe-csv-Pexe"),
-                      # html.Div(
-                      #   dash_table.DataTable(
-                      #     columns = [{"id": "YEAR", "name": "YEAR"}],
-                      #     id="yield-table",
-                      #     style_table = {"height": "10vh"},
-                      #   ),
-                      # id="fcst-yieldtables-container", 
-                      # ),  #yield simulated output
+                      html.Div(
+                        dash_table.DataTable(
+                          columns = [{"id": "YEAR", "name": "YEAR"}],
+                          id="yield-table",
+                          style_table = {"height": "10vh"},
+                        ),
+                      id="fcst-yieldtables-container",
+                      ),  #yield simulated output
                     ], ),
                   ],
                   ),
-                ], 
-                id="original-yield-csv-table", 
+                ],
+                id="original-yield-csv-table",
                 className="dash-table-container"
                 ),
               ),
-            ], 
+            ],
             ),
           ),
+
           html.Div( # ENTERPRISE BUDGETING
             html.Div([
               html.Header(
@@ -1000,8 +997,8 @@ layout = html.Div([
                   ],
                   row=True
                   ),
-                  dbc.Button(id="EB-button-state_frst", 
-                  children="Display figures for Enterprise Budgets", 
+                  dbc.Button(id="EB-button-state_frst",
+                  children="Display figures for Enterprise Budgets",
                   className="w-75 d-block mx-auto my-3",
                   color="danger"
                   ),
@@ -1012,16 +1009,16 @@ layout = html.Div([
                 html.Div([
                   html.Div(
                     html.Div([
-                      html.Div(id="EBbox-container_frst"), 
+                      html.Div(id="EBbox-container_frst"),
                       html.Div(id="EBcdf-container_frst"),  #exceedance curve
                       html.Div(id="EBtimeseries-container_frst"), #exceedance curve
 
-                    ], 
+                    ],
                     className="plot-container plotly"),
                   className="js-plotly-plot"
                   )
-                ], 
-                id="enterprise-budgeting", 
+                ],
+                id="enterprise-budgeting",
                 className="overflow-auto",
                 style={"height": "94vh"},
                 ),
@@ -1032,15 +1029,23 @@ layout = html.Div([
                 className=" card-header"
                 ),
                 html.Div([
-                  html.Br(),
-                  dbc.Button(id="btn_csv_EB_frst", 
-                  children="Download", 
-                  className="w-50 d-block mx-auto m-1",
-                  color="secondary"
+                  dbc.Row([
+                    dbc.Col("", xs=4, className="p-2"),
+                    dbc.Col(
+                      dbc.Button(id="btn_csv_EB_frst", 
+                      children="Download", 
+                      className="d-block mx-auto w-100",
+                      color="secondary"
+                      ), 
+                    xs=4, 
+                    className="p-2"
+                    ),
+                    dbc.Col("", xs=4, className="p-2"),                    
+                  ],
+                  className="m-1",
                   ),
-                  # dcc.Download(id="download-dataframe-csv"),
                   Download(id="download-dataframe-csv_EB_frst"),
-                  html.Div(id="EBtables-container_frst", 
+                  html.Div(id="EBtables-container_frst",
                   className="overflow-auto",
                   style={"height": "20vh"},
                   ),   #yield simulated output
@@ -1051,7 +1056,7 @@ layout = html.Div([
             style={"display": "none"},
             ),
           ),
-        ], 
+        ],
         className="block card"
         ),
       ],
@@ -1664,19 +1669,15 @@ def make_sce_table(
 #===============================
 #2nd callback to run ALL scenarios
 @app.callback(Output(component_id="yieldbox-container_frst", component_property="children"),
-                Output(component_id="yieldcdf-container_frst", component_property="children"),
-                # Output(component_id="yieldtimeseries-container_frst", component_property="children"),
-                # Output(component_id="yield-BN-container_frst", component_property="children"),
-                # Output(component_id="yield-NN-container", component_property="children"),
-                # Output(component_id="yield-AN-container", component_property="children"),
-                # Output(component_id="yieldtables-container", component_property="children"),
-                Output("sname_cdf", "options"),
-                Output("memory-yield-table_frst", "data"),
-                Input("simulate-button-state_frst", "n_clicks"),
-                State("scenario-table_frst","data"), ### scenario summary table
-                # State("season-slider", "value"), #EJ (5/13/2021) for seasonal total rainfall
-                prevent_initial_call=True,
-              )
+              Output(component_id="yieldcdf-container_frst", component_property="children"),
+              Output("fcst-yieldtables-container", "children"),
+              Output("sname_cdf", "options"),
+              Output("memory-yield-table_frst", "data"),
+              Input("simulate-button-state_frst", "n_clicks"),
+              State("scenario-table_frst","data"), ### scenario summary table
+              # State("season-slider", "value"), #EJ (5/13/2021) for seasonal total rainfall
+              prevent_initial_call=True,
+)
 
 def run_create_figure(n_clicks, sce_in_table): #, slider_range):
     if n_clicks is None:
@@ -1888,12 +1889,30 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
         return [
             dcc.Graph(id="yield-boxplot", figure = yld_box, config = graph.config, ), 
             dcc.Graph(id="yield-exceedance", figure = yld_exc, config = graph.config, ),
+            dash_table.DataTable(columns = [{"name": i, "id": i} for i in df.columns],data=df.to_dict("records"),
+              id="yield-table",
+              sort_action = "native",
+              sort_mode = "single",
+              style_table = {
+                "maxHeight": "30vh",
+                "overflow": "auto",
+                "minWidth": "100%",
+              },
+              fixed_rows = { "headers": True, "data": 0 },
+              fixed_columns = { "headers": True, "data": 1 },
+              style_cell = {   # all three widths are needed
+                "minWidth": "120px", "width": "120px", "maxWidth": "150px",
+                "overflow": "hidden",
+                "textOverflow": "ellipsis", 
+              }
+            ),
             dic_sname, #EJ(7/27/2021)
             df.to_dict("records"),   #df_out.to_dict("records"),    #EJ(7/27/2021) check 
         ]
 #Last callback to create figures for Enterprise budgeting
 @app.callback(Output(component_id="EBbox-container_frst", component_property="children"),
                 Output(component_id="EBcdf-container_frst", component_property="children"),
+                Output(component_id="EBtables-container_frst", component_property="children"),
                 Output("memory-EB-table_frst", "data"),
                 Input("EB-button-state_frst", "n_clicks"),
                 State('yield-multiplier_frst', 'value'), #EJ(6/5/2021)
@@ -2007,6 +2026,11 @@ def EB_figure(n_clicks, multiplier, sce_in_table): #EJ(6/5/2021) added multiplie
         return [
             dcc.Graph(id="EB-boxplot", figure = gmargin_box, config = graph.config, ),
             dcc.Graph(id="EB-exceedance", figure = gmargin_exc, config = graph.config, ),
+            dash_table.DataTable(
+                columns=[{"name": i, "id": i} for i in df.columns],
+                data=df.to_dict("records"),
+                style_cell={"whiteSpace": "normal","height": "auto",},
+            ),
             df.to_dict("records")
             ]
 
