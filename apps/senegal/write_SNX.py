@@ -109,7 +109,6 @@ def writeSNX_clim(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initi
     else: 
       SA = "0"
     # SA = "0"
-    SA = "0"
     IC = "1"
     MP = "1"
     MR = "0"
