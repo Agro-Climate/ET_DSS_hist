@@ -1762,11 +1762,15 @@ def make_sce_table(
                 
                 if ( # first check that all required inputs have been given
                         scenario == None
-                    # or  start_year == None
-                    # or  end_year == None
-                    # or  target_year == None
+                    or  initial_soil_no3_content == None
                     or  planting_date == None
                     or  planting_density == None
+                    or (
+                            AN1 == None
+                        or  BN1 == None
+                        or  AN2 == None
+                        or  BN2 == None
+                    )
                     or (
                             fd1 == None or fN1 == None  or fP1 == None  or fK1== None 
                         or  fd2 == None or fN2 == None  or fP2 == None  or fK2== None 
@@ -1774,8 +1778,7 @@ def make_sce_table(
                         or  fd4 == None or fN4 == None  or fP4 == None  or fK4== None 
                     )
                     or (
-                            irrig_method == None 
-                        or  ird1 == None  or iramt1 == None
+                            ird1 == None  or iramt1 == None
                         or  ird2 == None  or iramt2 == None
                         or  ird3 == None  or iramt3 == None
                         or  ird4 == None  or iramt4 == None
@@ -1988,11 +1991,15 @@ def make_sce_table(
     if triggered_by == "write-button-state_frst":
         if ( # first check that all required inputs have been given
                 scenario == None
-            # or  start_year == None
-            # or  end_year == None
-            # or  target_year == None
+            or  initial_soil_no3_content == None
             or  planting_date == None
             or  planting_density == None
+            or (
+                    AN1 == None
+                or  BN1 == None
+                or  AN2 == None
+                or  BN2 == None
+            )
             or (
                     fert_app == "Fert"
                 and (
@@ -2051,15 +2058,15 @@ def make_sce_table(
             "Fert_2_DOY": [-99], "N_2_Kg": [-99], "P_2_Kg": [-99], "K_2_Kg": [-99], 
             "Fert_3_DOY": [-99], "N_3_Kg": [-99], "P_3_Kg": [-99], "K_3_Kg": [-99], 
             "Fert_4_DOY": [-99], "N_4_Kg": [-99], "P_4_Kg": [-99], "K_4_Kg": [-99], 
-            "P_level": [-99],   #P simulation    EJ(7/72021)
-            "IR_method": [-99], #Irrigation on reported date
+            "P_level": [p_level],   #P simulation    EJ(7/72021)
+            "IR_method": [irrig_method], #Irrigation on reported date
             "IR_1_DOY": [-99], "IR_1_amt": [-99],
             "IR_2_DOY": [-99], "IR_2_amt": [-99],
             "IR_3_DOY": [-99], "IR_3_amt": [-99],
             "IR_4_DOY": [-99], "IR_4_amt": [-99],
             "IR_5_DOY": [-99], "IR_5_amt": [-99],
             "AutoIR_depth":  [-99], "AutoIR_thres": [-99], "AutoIR_eff": [-99], #Irrigation automatic
-            "CropPrice": [-99], "NFertCost": [-99], "SeedCost": [-99], "IrrigCost": [-99], "OtherVariableCosts": [-99], "FixedCosts": [-99],  
+            "CropPrice": [-99], "NFertCost": [-99], "SeedCost": [-99], "IrrigCost": ["-99"], "OtherVariableCosts": [-99], "FixedCosts": [-99],  
         })
 
         #=====================================================================

@@ -1195,7 +1195,7 @@ def download_scenarios(n_clicks, scenario_table):
 
     # take timestamp and download as csv
     timestamp = datetime.datetime.now().strftime("%d-%m-%Y_%H:%M:%S")
-    return [dcc.send_data_frame(scenarios.to_csv, f"simagri_ET_scenarios_{timestamp}.csv"), {"display": "none"}]
+    return [dcc.send_data_frame(scenarios.to_csv, f"simagri_ET_hist_scenarios_{timestamp}.csv"), {"display": "none"}]
 #==============================================================
 # submit to scenario table or import CSV
 @app.callback(Output("scenario-table", "data"),
@@ -1216,15 +1216,6 @@ def download_scenarios(n_clicks, scenario_table):
               State("plt-density", "value"),
               State("sce-name", "value"),
               State("target-year", "value"),
-              # State("fert_input", "value"),
-              # State("fert-day1","value"),
-              # State("fert-amt1","value"),
-              # State("fert-day2","value"),
-              # State("fert-amt2","value"),
-              # State("fert-day3","value"),
-              # State("fert-amt3","value"),
-              # State("fert-day4","value"),
-              # State("fert-amt4","value"),
               State("fert_input", "value"),
               State("fert-day1","value"),
               State("N-amt1","value"),

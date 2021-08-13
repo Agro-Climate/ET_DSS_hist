@@ -21,18 +21,18 @@ country = sys.argv[1]
 if country == "ethiopia":
     from apps.ethiopia import about
     from apps.ethiopia import historical
-    from apps.ethiopia import forecast_FResampler as forecast
-    # from apps.ethiopia import forecast_WGEN as forecast
+    from apps.ethiopia import forecast_FResampler as forecast # mismatched callbacks
+    # from apps.ethiopia import forecast_WGEN as forecast # mismatched callbacks
 elif country == "senegal":
     from apps.senegal import about
     from apps.senegal import historical
-    # from apps.senegal import forecast_FResampler as forecast
-    from apps.senegal import forecast_WGEN as forecast
+    # from apps.senegal import forecast_FResampler as forecast # Insufficient soil P data provided.  Program will stop.
+    from apps.senegal import forecast_WGEN as forecast # Insufficient soil P data provided.  Program will stop.
 elif country == "colombia":
     from apps.colombia import about
     from apps.colombia import historical
-    # from apps.colombia import forecast_FResampler as forecast
-    from apps.colombia import forecast_WGEN as forecast
+    from apps.colombia import forecast_FResampler as forecast # OK. still needs scenario dl/import
+    # from apps.colombia import forecast_WGEN as forecast # OK. still needs scenario dl/import
 else:
     pass
 
