@@ -10,6 +10,8 @@ Three versions of SIMAGRI have been developed for the following countries:
 
 For each country SIMAGRI enables crop simulation either based on historical weather data or as a forecast.
 
+SIMAGRI Ethiopia: http://simagri-ethiopia1.iri.columbia.edu/historical
+
 ## Instructions to run SIMAGRI locally:
 
 1. Install Docker. The installer can be found here: [[WIN]](https://docs.docker.com/docker-for-windows/install/) [[OSX]](https://docs.docker.com/docker-for-mac/install/) [[LINUX]](https://docs.docker.com/engine/install/). 
