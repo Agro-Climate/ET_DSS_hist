@@ -1,101 +1,74 @@
-# ET DSS Tool 
+# SIMAGRI Agricultural Simulator
 
-A minimal working version of ET DSS using Docker, Flask and Heroku.
+Built using Docker, Podman, Python 3.8, Dash Plotly, and DSSAT (https://dssat.net/).
 
-The first demo is hosted [here](https://ethiopia-dss-demo.herokuapp.com/).
-Actual working version for Ethiopia is hosted [here] (https://simagri-et.herokuapp.com/).
+Three versions of SIMAGRI have been developed for the following countries:
 
-## Warning for Deployment on Linux:
-- `Summary.OUT` (not SUMMARY)
--  There shouldn't be any executable named `DSCSM047.EXE`.
+- Ethiopia
+- Senegal
+- Colombia
 
-## Prerequisites:
+For each country SIMAGRI enables crop simulation either based on historical weather data or as a forecast.
 
-- Docker
-- Terraform
-- Heroku
-- VS Code + Docker Extension
+## Instructions to run SIMAGRI locally:
 
-## Steps (Local test) 
+1. Install Docker. The installer can be found here: [[WIN]](https://docs.docker.com/docker-for-windows/install/) [[OSX]](https://docs.docker.com/docker-for-mac/install/) [[LINUX]](https://docs.docker.com/engine/install/). 
 
-# Terraform Setup (Linux)
-# https://computingforgeeks.com/how-to-install-terraform-on-ubuntu-centos-7/
+2. Install Podman. The installer can be found [HERE](https://podman.io/getting-started/installation). 
 
-# assumes docker is installed
+3. Clone this repo: 
 
-# get terraform latest version:
-
-curl -s https://api.github.com/repos/hashicorp/terraform/releases/latest | grep tag_name | cut -d: -f2 | tr -d \"\,\v | awk '{$1=$1};1'
-
-# install the latest terraform (currently 1.0.1)
-
-wget https://releases.hashicorp.com/terraform/[version]/terraform_[version]_linux_amd64.zip
-
-mv terraform_[version]_linux_amd64.zip ~
-cd
-
-unzip terraform_[version]_linux_amd64.zip
-
-# install the terraform executable
-sudo mv terraform /usr/local/bin/
-
-# 'terraform -v' should now work
-
-# main.tf contains the terraform configuration
-
-# build terraform infrastructure 
-terraform init
-terraform plan
-terraform apply
-# now you have the docker container for simagri deployed locally with terraform
-
-
-Following are the steps for testing this app on Windows.
-
-
-Steps `4` and `5` are not necessary if the Heroku app is connected to the Github repo (from the heroku dashboard) 
-
-1. The first step requires the installation of Docker. The installer can be found [here](https://docs.docker.com/docker-for-windows/install/). 
-
-2. Clone this repo: 
-
-> `git clone https://github.com/Agro-Climate/ET_DSS_hist`
-> 
+> `git clone git@github.com:Agro-Climate/ET_DSS_hist.git`
+>
 > `cd ET_DSS_hist`
+>
+> `git checkout ET_DSS_hist_Linux`
 
-3. From within the local repo, build the Dockerfile:
+<br> 
 
-> `docker.exe build --tag <container_name_here> .`
+## Steps `4-6` should be used if using Docker and steps `7-9` should be used if using Podman.
+## Due to the similarities of the different localizations of SIMAGRI the app is structured so files unique to each country are stored in apps/\<country>
+## The following commands will allow building Docker images for each country and running them as Docker containers
+<br> 
 
-4. Then run the app locally:
+## Docker Instructions
 
-> `docker.exe run -p 5000:5000 <container_name_here> `
+4. Build a Docker image for desired country:
 
+> `docker build -f ./apps/<country>/Dockerfile -t simagri_<country>_img:latest .`
 
-5. (First Time) For registering and deploying the app on Heroku:
+5. Run a Docker container for desired country:
 
-> `heroku login`
->
-> `heroku container:login`
->
-> `heroku create <app_name_here>`
->
-> `heroku container:push web --app <app_name_here>`
->
-> `heroku container:release web --app <app_name_here>`
+> `docker run --name=simagri_<country> -e PYTHONUNBUFFERED=1 --rm -dp <port>:5000 simagri_<country>_img:latest`
 
-6. For existing app
+After running this command the app may be viewed at localhost:\<port> (when deploying to production on a server port 80 should be used)
 
-> `heroku login`
->
-> `heroku container:login`
->
-> `heroku git:remote -a <app_name_here>`
->
-> `git add .`
->
-> `git commit -am "description"`
->
-> `heroku container:push web --app <app_name_here>`
->
-> `heroku container:release web --app <app_name_here>`
+The following command may also be used to allow tracking of the command line output of the docker container:
+> `docker logs --follow simagri_<country>`
+
+6. Kill a running container and clear unused resources `(optional)`:
+
+> `docker kill simagri_<country>`
+
+> `docker image prune -af`
+
+## Podman Instructions `(requires root privileges)`
+
+7. Build an image for desired country using Podman:
+
+> `podman build -f ./apps/<country>/Dockerfile --pull-never -t simagri_<country>_img .`
+
+8. Run a container for desired country using Podman:
+
+> `sudo podman run --name=simagri_<country> -e PYTHONUNBUFFERED=1 --rm -dp <port>:5000 simagri_<country>_img`
+
+After running this command the app may be viewed at localhost:\<port> (when deploying to production on a server port 80 should be used)
+
+The following command may also be used to allow tracking of the command line output of the container:
+> `sudo podman logs --follow simagri_<country>`
+
+9. Kill a running container and clear unused resources `(optional)`:
+
+> `sudo podman kill simagri_<country>`
+
+> `podman image prune -f`
