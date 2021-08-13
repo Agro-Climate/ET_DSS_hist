@@ -1,6 +1,6 @@
 # SIMAGRI Agricultural Simulator
 
-Built using Docker, Podman, Python 3.8, Dash Plotly, and DSSAT (https://dssat.net/).
+Built using Docker, Podman, Python 3.8, Dash Plotly, and DSSAT (https://dssat.net/), How to compile DSSAT on Linux (https://dssat.net/210/).
 
 Three versions of SIMAGRI have been developed for the following countries:
 
