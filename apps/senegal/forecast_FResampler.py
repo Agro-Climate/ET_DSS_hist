@@ -1557,7 +1557,7 @@ def download_scenarios(n_clicks, scenario_table):
 
     # take timestamp and download as csv
     timestamp = datetime.datetime.now().strftime("%d-%m-%Y_%H:%M:%S")
-    return [dcc.send_data_frame(scenarios.to_csv, f"simagri_SN_scenarios_{timestamp}.csv"), {"display": "none"}]
+    return [dcc.send_data_frame(scenarios.to_csv, f"simagri_SN_fcst_scenarios_{timestamp}.csv"), {"display": "none"}]
 #==============================================================
 # submit to scenario table or import CSV
 @app.callback(Output("scenario-table_frst", "data"),
