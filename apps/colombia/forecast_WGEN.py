@@ -757,24 +757,25 @@ layout = html.Div([
                   row=True
                   ),
 
-                  # INPUT FORM END
                 ],
                 className="p-3"
                 ),
               className="overflow-auto",
               style={"height": "63vh"},
               ),
-
+              html.Header(html.B("Scenarios"), className="card-header",),
+              dbc.FormGroup([ # SUBMIT - ADD SCENARIO
+                dbc.Button(id="write-button-state_frst",
+                n_clicks=0,
+                children="Create or Add a new Scenario",
+                className="w-75 d-block mx-auto my-3",
+                color="primary"
+                ),
+              ]),
+            ]),
+            # FORM END
+            html.Div([
               html.Div([ # SCENARIO TABLE
-                html.Header(html.B("Scenarios"), className="card-header",),
-                dbc.FormGroup([ # SUBMIT - ADD SCENARIO
-                  dbc.Button(id="write-button-state_frst",
-                  n_clicks=0,
-                  children="Create or Add a new Scenario",
-                  className="w-75 d-block mx-auto my-3",
-                  color="primary"
-                  ),
-                ]),
                 dash_table.DataTable(
                 id="scenario-table_frst",
                 columns=([
@@ -838,20 +839,68 @@ layout = html.Div([
                 row_deletable=True
                 ),
               ]),
+              html.Div([
+                dbc.Row([ # IMPORT/DOWNLOAD SCENARIOS
+                  dbc.Col(
+                    dcc.Upload([
+                      html.Div([
+                        html.Div(html.B("Import Scenarios:")),
+                        "Drag and Drop or ",
+                        dcc.Link("Select a File", href="", )
+                      ],
+                      className="d-block mx-auto text-center p-2"
+                      )
+                    ],
+                    id="import-sce", 
+                    className="w-75 d-block mx-auto m-3",
+                    style={
+                        "borderWidth": "1px",
+                        "borderStyle": "dashed",
+                        "borderRadius": "5px",
+                        # "textAlign": "center",
+                        "background-color": "lightgray"
+                    },
+                    ),
+                  ),
+                  dbc.Col([
+                    dbc.Button(
+                      "Download Scenarios",
+                    id="download-btn-sce-fcst", 
+                    n_clicks=0, 
+                    className="w-75 h-50 d-block mx-auto m-4",
+                    color="secondary"
+                    ),
+                    dcc.Download(id="download-sce-fcst")
+                  ],),
+                ],
+                className="mx-3", 
+                no_gutters=True
+                ),
+                html.Div( # IMPORT/DOWNLOAD ERROR MESSAGES
+                  dbc.Row([
+                    dbc.Col(
+                      html.Div("",
+                      id="import-sce-error",
+                      style={"display": "none"},
+                      ),
+                    ),
+                    dbc.Col([
+                      html.Div(
+                        html.Div("Nothing to Download",
+                        className="d-block mx-auto m-2", 
+                        style={"color": "red"},
+                        ),
+                      id="download-sce-fcst-error",
+                      style={"display": "none"}, 
+                      ),
+                    ]),
+                  ]),
+                className="text-center mx-3",
+                ),
+              ]),
             ]),
 
             html.Div([ # AFTER SCENARIO TABLE
-              # dbc.FormGroup([ # Approximate Growing Season
-              #   dbc.Label("15) Critical growing period to relate rainfall amount with crop yield", html_for="season-slider"),
-              #   dbc.FormText("Selected period is used to sort drier/wetter years based on the seasonal total rainfall"),
-              #   dcc.RangeSlider(
-              #     id="season-slider",
-              #     min=1, max=12, step=1,
-              #     marks={1: "Jan", 2: "Feb",3: "Mar", 4: "Apr", 5: "May", 6: "Jun", 7: "Jul", 8: "Aug", 9: "Sep", 10: "Oct", 11: "Nov", 12: "Dec"},
-              #     value=[6, 9]
-              #   ),
-              # ],
-              # ),
               html.Br(),
               html.Div( ## RUN DSSAT BUTTON
                 dbc.Button(id="simulate-button-state_frst",
@@ -1367,6 +1416,26 @@ def show_hide_EBtable(EB_radio_frst, scenarios):
             return {"display": "none"} if existing_sces.sce_name.values[0] == "N/A" or set(existing_sces.CropPrice.values) == {"-99"} else {}
 
 #==============================================================
+# callback for downloading scenarios
+@app.callback(Output("download-sce-fcst", "data"),
+              Output("download-sce-fcst-error", component_property="style"),
+              Input("download-btn-sce-fcst", "n_clicks"),
+              State("scenario-table_frst","data"),
+)
+def download_scenarios(n_clicks, scenario_table):
+    scenarios = pd.DataFrame(scenario_table)
+    # first validate that there is relevant data in the scenario table. TODO: finish validation
+    if scenarios.empty:
+        return [None, {}]
+    else:
+        if scenarios.sce_name.values[0] == "N/A":
+            return [None, {}]
+
+    # take timestamp and download as csv
+    timestamp = datetime.datetime.now().strftime("%d-%m-%Y_%H:%M:%S")
+    return [dcc.send_data_frame(scenarios.to_csv, f"simagri_CO_fcst_scenarios_{timestamp}.csv"), {"display": "none"}]
+#==============================================================
+# submit to scenario table or import CSV
 @app.callback(Output("scenario-table_frst", "data"),
                 Input("write-button-state_frst", "n_clicks"),
                 State("COstation_frst", "value"),
