@@ -7,10 +7,10 @@ import calendar
 import sys
 
 import time #just for checking processign time => delete later 
-from utilities.WGEN_generator import WGEN_generator   #EJ(7/27/2021)
-from utilities.WGEN_PAR_biweekly import WGEN_PAR_biweekly  
-from utilities.low_freq_correction import low_freq_correction  
-from utilities.season_bias_corr import season_bias_corr  #EJ(7/12/2021) bias correction for seasonal total rainfall
+from shared.WGEN_generator import WGEN_generator   #EJ(7/27/2021)
+from shared.WGEN_PAR_biweekly import WGEN_PAR_biweekly  
+from shared.low_freq_correction import low_freq_correction  
+from shared.season_bias_corr import season_bias_corr  #EJ(7/12/2021) bias correction for seasonal total rainfall
 
 # Start the stopwatch / counter  
 start_time = time.process_time() 
