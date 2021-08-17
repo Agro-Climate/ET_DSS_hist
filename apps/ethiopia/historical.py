@@ -1658,7 +1658,7 @@ def make_sce_table(
             "IR_5_DOY": [-99], "IR_5_amt": [-99],
             #Irrigation automatic
             "AutoIR_depth":  [-99], "AutoIR_thres": [-99], "AutoIR_eff": [-99],
-            "CropPrice": [-99], "NFertCost": [-99], "SeedCost": [-99], "IrrigCost": ["-99"], "OtherVariableCosts": [-99], "FixedCosts": [-99],
+            "CropPrice": [-99], "NFertCost": [-99], "SeedCost": [-99], "IrrigCost": [-99], "OtherVariableCosts": [-99], "FixedCosts": [-99],
         })
 
         #=====================================================================
@@ -2414,12 +2414,12 @@ def writeSNX_main_hist(Wdir_path,station,start_year,end_year,planting_date,crop,
         FACD = "AP001"  #Broadcast, not incorporated    
         FDEP = "5"   #5cm depth
         FAMN = df_filtered.NAmount.values
-        FAMP = "-99"
-        FAMK = "-99"
+        FAMP = -99
+        FAMK = -99
 
         if fert_count > 0:   # fertilizer applied
             for i in range(fert_count):
-                new_str = temp_str[0:5] + repr(int(FDATE[i])).rjust(3) + " " + FMCD.rjust(5) + " " + FACD.rjust(5) + " " + FDEP.rjust(5) + " " + repr(FAMN[i]).rjust(5) + " " + FAMP.rjust(5) + " " + FAMK.rjust(5) + temp_str[44:]
+                new_str = temp_str[0:5] + repr(int(FDATE[i])).rjust(3) + " " + FMCD.rjust(5) + " " + FACD.rjust(5) + " " + FDEP.rjust(5) + " " + repr(FAMN[i]).rjust(5) + " " + f"{FAMP}".rjust(5) + " " + f"{FAMK}".rjust(5) + temp_str[44:]
                 fw.write(new_str)
             fw.write(" \n")
 #-------------------------------------------

@@ -574,7 +574,7 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="crop-price", value="0", min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="crop-price", value=0, min=0, step=0.1, required="required", ),
                               dbc.FormText("[USD/kg]"),
                             ],),
                           ),
@@ -585,7 +585,7 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="fert-cost", value="0", min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="fert-cost", value=0, min=0, step=0.1, required="required", ),
                               dbc.FormText("[USD/N kg]"),
                             ],),
                           ),
@@ -596,7 +596,7 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="seed-cost", value="0", min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="seed-cost", value=0, min=0, step=0.1, required="required", ),
                               dbc.FormText("[USD/ha]"),
                             ],),
                           ),
@@ -618,7 +618,7 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="variable-costs", value="0", min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="variable-costs", value=0, min=0, step=0.1, required="required", ),
                               dbc.FormText("[USD/ha]"),
                             ],),
                           ),
@@ -629,7 +629,7 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="fixed-costs", value="0", min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="fixed-costs", value=0, min=0, step=0.1, required="required", ),
                               dbc.FormText("[USD/ha]"),
                             ],),
                           ),
@@ -1682,7 +1682,7 @@ def make_sce_table(
             "IR_5_DOY": [-99], "IR_5_amt": [-99],
             #Irrigation automatic
             "AutoIR_depth":  [-99], "AutoIR_thres": [-99], "AutoIR_eff": [-99],
-            "CropPrice": [-99], "NFertCost": [-99], "SeedCost": [-99], "IrrigCost": ["-99"],"OtherVariableCosts": [-99], "FixedCosts": [-99],
+            "CropPrice": [-99], "NFertCost": [-99], "SeedCost": [-99], "IrrigCost": [-99],"OtherVariableCosts": [-99], "FixedCosts": [-99],
         })
 
         #=====================================================================

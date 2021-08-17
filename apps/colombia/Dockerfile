@@ -22,4 +22,3 @@ COPY ./TEST_CO/* DSSAT/dssat-base-files/
 
 WORKDIR /home/SIMAGRI/
 CMD ["python3", "index.py", "colombia"]
-# CMD ["python3", "debug.py", "colombia"]

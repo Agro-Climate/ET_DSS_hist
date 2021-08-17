@@ -26,8 +26,8 @@ if country == "ethiopia":
 elif country == "senegal":
     from apps.senegal import about
     from apps.senegal import historical
-    # from apps.senegal import forecast_FResampler as forecast # OK
-    from apps.senegal import forecast_WGEN as forecast # 
+    from apps.senegal import forecast_FResampler as forecast # OK
+    # from apps.senegal import forecast_WGEN as forecast # 
 elif country == "colombia":
     from apps.colombia import about
     from apps.colombia import historical

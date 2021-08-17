@@ -2066,7 +2066,7 @@ def make_sce_table(
             "IR_4_DOY": [-99], "IR_4_amt": [-99],
             "IR_5_DOY": [-99], "IR_5_amt": [-99],
             "AutoIR_depth":  [-99], "AutoIR_thres": [-99], "AutoIR_eff": [-99], #Irrigation automatic
-            "CropPrice": [-99], "NFertCost": [-99], "SeedCost": [-99], "IrrigCost": ["-99"], "OtherVariableCosts": [-99], "FixedCosts": [-99],  
+            "CropPrice": [-99], "NFertCost": [-99], "SeedCost": [-99], "IrrigCost": [-99], "OtherVariableCosts": [-99], "FixedCosts": [-99],  
         })
 
         #=====================================================================
