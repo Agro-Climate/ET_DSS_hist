@@ -30,8 +30,9 @@ import bisect   # an element into sorted list
 import graph
 
 from apps.senegal.write_SNX import writeSNX_clim, writeSNX_frst
-from apps.senegal.run_WGEN import run_WGEN  # Downscaling method 1) WGEN (weather generator) to make 100 synthetic daily weather data
 from apps.senegal.write_WTH import write_WTH   #save WTH from the output fo WGEN
+
+from shared.run_WGEN import run_WGEN  # Downscaling method 1) WGEN (weather generator) to make 100 synthetic daily weather data
 
 sce_col_names=[ "sce_name", "Trimester1", "AN1","BN1", "AN2","BN2",
                 "Crop", "Cultivar","stn_name", "PltDate", #"FirstYear", "LastYear", 

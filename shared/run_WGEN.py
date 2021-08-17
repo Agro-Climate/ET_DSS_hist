@@ -7,15 +7,17 @@ import calendar
 import sys
 
 import time #just for checking processign time => delete later 
+from utilities.WGEN_generator import WGEN_generator   #EJ(7/27/2021)
+from utilities.WGEN_PAR_biweekly import WGEN_PAR_biweekly  
+from utilities.low_freq_correction import low_freq_correction  
+from utilities.season_bias_corr import season_bias_corr  #EJ(7/12/2021) bias correction for seasonal total rainfall
 
 # Start the stopwatch / counter  
 start_time = time.process_time() 
 
-def run_FResampler(df_tab, tri_doylist, Wdir_path):   
+def run_WGEN(df_tab, tri_doylist, Wdir_path):   
     WSTA =df_tab.stn_name.values[0] 
-    print("inside run_FResampler")
     WTD_fname = path.join(Wdir_path, WSTA+".WTD")
-    print(WTD_fname)
     trimester1 = df_tab.Trimester1.values[0]  #"JJA followed by SON"
     planting_date = df_tab.PltDate.values[0]
     plt_year = planting_date[:4] 
@@ -183,26 +185,24 @@ def run_FResampler(df_tab, tri_doylist, Wdir_path):
     #===========================================================================================
     #===========================================================================================
     # ======================END of making resampled matrix for all cases
-    Gndays = 365
-    #save dataframe into a csv file
-    df_out = pd.DataFrame(np.zeros((nsample*Gndays, 7)))   #4 matrix [3 by 3]
-    df_out.columns = ['iyear', 'YEAR','DOY','SRAD','TMAX','TMIN','RAIN']  #iyear => ith year
-    df_out.name = 'FResampler_out_'+str(target_year)
-    k = 0
-    for i in range(nsample):
-        df_out.iyear.iloc[k:Gndays*(i+1)] = np.tile(i+1,(Gndays,))
-        df_out.YEAR.iloc[k:Gndays*(i+1)] = np.tile(target_year,(Gndays,))
-        df_out.DOY.iloc[k:Gndays*(i+1)]= np.asarray(range(1,Gndays+1))
-        df_out.SRAD.iloc[k:Gndays*(i+1)]= np.transpose(srad_resampled[i,:])
-        df_out.TMAX.iloc[k:Gndays*(i+1)]= np.transpose(tmax_resampled[i,:])
-        df_out.TMIN.iloc[k:Gndays*(i+1)]= np.transpose(tmin_resampled[i,:])
-        df_out.RAIN.iloc[k:Gndays*(i+1)]= np.transpose(rain_resampled[i,:])
-        k=k+Gndays
-    #write dataframe into CSV file
-    fname = path.join(Wdir_path, df_out.name + '.csv') 
-    df_out.to_csv(fname, index=False)
-
-    return df_out
+    #=====save resampled dataframe into a csv for bias correction later on
+    Compute_resampled_monthly(target_year, rain_resampled, tmin_resampled, tmax_resampled, srad_resampled,Wdir_path)
+    print ("1)Estimate rainfall parameters (running WGEN_PAR_biweekly). Please wait....")
+    #Estimate parameters for rainfall models and Fourier coefficients for Tmin/Tmax/Srad
+    WGEN_PAR_biweekly(target_year, rain_resampled, tmin_resampled, tmax_resampled, srad_resampled, Wdir_path)
+    print("It took {0:5.1f}, sec to estimate biweekly weather parameters, WGEN_PAR_biweekly". format(time.process_time() - start_time)) 
+    print ("2) Gnerating weather realization (running WGEN_generator). Please wait....")
+    #Generate daily weather realizations based on the estimated parameters
+    df_gen = WGEN_generator(target_year,nrealiz, Wdir_path)
+    #Correct low frequency (inter-annual variability of monthly weather data)
+    print ("3) Correcting low-frequency bias (running low_freq_correction). Please wait....")
+    # df_gen_lf = low_freq_correction(df_obs, df_gen, target_year, Wdir_path)
+    df_gen_lf = low_freq_correction(df_gen, target_year, Wdir_path)
+    print("It took {0:5.1f}, sec to finish calling MONTHLY low frequency correction". format(time.process_time() - start_time)) 
+    print ("4) Correcting seasonal bias (running season_bias_corr). Please wait....")
+    df_WGEN_corr = season_bias_corr(df_gen_lf, target_year, trimester1,Wdir_path)
+    print("It took {0:5.1f}, sec to finish calling SEASONAL bias correction". format(time.process_time() - start_time))
+    return df_WGEN_corr
 
 
 
@@ -210,7 +210,6 @@ def run_FResampler(df_tab, tri_doylist, Wdir_path):
 #===============================================================
 # === Read daily observations into a dataframe (note: Feb 29th was skipped in df_obs)
 def read_WTD(fname):
-    print(fname)
     #1) Read daily observations into a matrix (note: Feb 29th was skipped)
     # WTD_fname = r'C:\Users\Eunjin\IRI\Hybrid_WGEN\CNRA.WTD'
     #1) read observed weather *.WTD (skip 1st row - heading)
@@ -346,3 +345,82 @@ def get_ind_sorted_yr(WTD_df, sdoy, edoy):
     # df_sorted.to_csv(wdir + '//'+df_sorted.name + '.csv', index=False)
 
     return df_sorted
+    #=================================================
+def Compute_resampled_monthly(target_year, rain_resampled, tmin_resampled, tmax_resampled, srad_resampled, Wdir_path):
+   #==================================================================================
+   #=====EJ(12/30/2020) save resampled dataframe into a csv for bias correction later on
+    #save dataframe into a csv file [Note: Feb 29th was excluded]
+    nsample = rain_resampled.shape[0]
+    df_resmp = pd.DataFrame(np.zeros((nsample*365, 7)))   
+    df_resmp.columns = ['iyear', 'YEAR','DOY','SRAD','TMAX','TMIN','RAIN']  #iyear => ith year
+    df_resmp.name = 'WGEN_resampled_'+repr(target_year)
+    k = 0
+    for i in range(nsample):
+        df_resmp.iyear.iloc[k:365*(i+1)]= i+1
+        iyear = target_year #np.unique(year_WTD)[i]
+        df_resmp.YEAR.iloc[k:365*(i+1)] = np.tile(iyear,(365,))
+        df_resmp.DOY.iloc[k:365*(i+1)]= np.asarray(range(1,366))
+        df_resmp.SRAD.iloc[k:365*(i+1)]= np.transpose(srad_resampled[i,:])
+        df_resmp.TMAX.iloc[k:365*(i+1)]= np.transpose(tmax_resampled[i,:])
+        df_resmp.TMIN.iloc[k:365*(i+1)]= np.transpose(tmin_resampled[i,:])
+        df_resmp.RAIN.iloc[k:365*(i+1)]= np.transpose(rain_resampled[i,:])
+        k=k+365
+    #write dataframe into CSV file
+    fname = path.join(Wdir_path, df_resmp.name + '.csv') 
+    df_resmp.to_csv(fname, index=False)
+
+    #2) Compute monthly weather variables from the historical observation
+    m_doys_list = [1,32,60,91,121,152,182,213,244,274,305,335]
+    m_doye_list = [31,59,90,120,151,181,212,243,273,304,334,365]
+    # numday_list = [31,28,31,30,31,30,31,31,30,31,30,31]
+    #a) rainfall
+    df_res_rain = pd.DataFrame(np.zeros((nsample, 13))) 
+    df_res_rain.columns = ['Year','1','2','3','4','5','6','7','8','9','10','11','12']
+    df_res_rain.name = 'Resampled_monthly_RAIN'+repr(target_year)
+    df_res_rain.Year.iloc[:]= np.unique(df_resmp.iyear.values)
+    for i in range(12):
+        t1 = m_doys_list[i] -1
+        t2 = m_doye_list[i]
+        df_res_rain.iloc[:,i+1] = np.sum(rain_resampled[:,t1:t2], axis=1) 
+    fname = path.join(Wdir_path, df_res_rain.name + '.csv') 
+    df_res_rain.to_csv(fname) #write dataframe into CSV file
+
+    #b) Srad
+    df_res_srad = pd.DataFrame(np.zeros((nsample, 13))) 
+    df_res_srad.columns = ['Year','1','2','3','4','5','6','7','8','9','10','11','12']
+    df_res_srad.name = 'Resampled_monthly_SRAD'+repr(target_year)
+    df_res_srad.Year.iloc[:]= np.unique(df_resmp.iyear.values)
+    for i in range(12):
+        t1 = m_doys_list[i] -1
+        t2 = m_doye_list[i]
+        df_res_srad.iloc[:,i+1] = np.mean(srad_resampled[:,t1:t2], axis=1)
+    fname = path.join(Wdir_path, df_res_srad.name + '.csv') 
+    df_res_srad.to_csv(fname) #write dataframe into CSV file
+
+    #c) Tmax
+    df_res_tmax = pd.DataFrame(np.zeros((nsample, 13))) 
+    df_res_tmax.columns = ['Year','1','2','3','4','5','6','7','8','9','10','11','12']
+    df_res_tmax.name = 'Resampled_monthly_TMAX'+repr(target_year)
+    df_res_tmax.Year.iloc[:]= np.unique(df_resmp.iyear.values)
+    for i in range(12):
+        t1 = m_doys_list[i] -1
+        t2 = m_doye_list[i]
+        df_res_tmax.iloc[:,i+1] = np.mean(tmax_resampled[:,t1:t2], axis=1)
+    fname = path.join(Wdir_path, df_res_tmax.name + '.csv') 
+    df_res_tmax.to_csv(fname) #write dataframe into CSV file
+
+    #d) Tmin
+    df_res_tmin = pd.DataFrame(np.zeros((nsample, 13))) 
+    df_res_tmin.columns = ['Year','1','2','3','4','5','6','7','8','9','10','11','12']
+    df_res_tmin.name = 'Resampled_monthly_TMIN'+repr(target_year)
+    df_res_tmin.Year.iloc[:]= np.unique(df_resmp.iyear.values)
+    for i in range(12):
+        t1 = m_doys_list[i] -1
+        t2 = m_doye_list[i]
+        df_res_tmin.iloc[:,i+1] = np.mean(tmin_resampled[:,t1:t2], axis=1)
+    fname = path.join(Wdir_path, df_res_tmin.name + '.csv') 
+    df_res_tmin.to_csv(fname) #write dataframe into CSV file
+    del df_res_tmin; del df_res_tmax; del df_res_rain; del df_res_srad; del df_resmp
+
+
+

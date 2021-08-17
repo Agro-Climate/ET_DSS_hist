@@ -18,6 +18,7 @@ COPY ./*.py /home/SIMAGRI/
 COPY ./apps/ /home/SIMAGRI/apps/
 COPY ./assets/ /home/SIMAGRI/assets/
 COPY ./data/ /home/SIMAGRI/data/
+COPY ./shared/ /home/SIMAGRI/shared/
 COPY ./TEST_SN/* DSSAT/dssat-base-files/
 
 WORKDIR /home/SIMAGRI/

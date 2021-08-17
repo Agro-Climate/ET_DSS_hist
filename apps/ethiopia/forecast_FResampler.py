@@ -27,11 +27,10 @@ import time
 import graph
 
 from apps.ethiopia.write_SNX import writeSNX_clim, writeSNX_frst_FR 
-#from write_SNX import writeSNX_main_hist, writeSNX_main_frst  #EJ(7/26/2021) This is not working!!!
-# from apps.ethiopia.run_WGEN import run_WGEN  # Downscaling method 1) WGEN (weather generator) to make 100 synthetic daily weather data
 from apps.ethiopia.write_WTH import write_WTH   #save WTH from the output fo WGEN
-from apps.ethiopia.run_FResampler import run_FResampler  # Downscaling method 1) FResampler 
 from apps.ethiopia.write_WTH_FR import write_WTH_FR   #save WTH from the output fo FREsampler
+
+from shared.run_FResampler import run_FResampler  # Downscaling method 1) FResampler 
 
 sce_col_names=[ "sce_name", "Trimester1", "AN1","BN1", "AN2","BN2",
                 "Crop", "Cultivar","stn_name", "PltDate", #"FirstYear", "LastYear", 
