@@ -671,7 +671,7 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="crop-price", value="0", min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="crop-price", value=0, min=0, step=0.1, required="required", ),
                               dbc.FormText("[ETB/kg]"),
                             ],),
                           ),
@@ -682,7 +682,7 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="fert-cost", value="0", min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="fert-cost", value=0, min=0, step=0.1, required="required", ),
                               dbc.FormText("[ETB/N kg]"),
                             ],),
                           ),
@@ -693,7 +693,7 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="seed-cost", value="0", min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="seed-cost", value=0, min=0, step=0.1, required="required", ),
                               dbc.FormText("[ETB/ha]"),
                             ],),
                           ),
@@ -715,7 +715,7 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="variable-costs", value="0", min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="variable-costs", value=0, min=0, step=0.1, required="required", ),
                               dbc.FormText("[ETB/ha]"),
                             ],),
                           ),
@@ -726,7 +726,7 @@ layout = html.Div([
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="fixed-costs", value="0", min="0", step="0.1", required="required", ),
+                              dbc.Input(type="number", id="fixed-costs", value=0, min=0, step=0.1, required="required", ),
                               dbc.FormText("[ETB/ha]"),
                             ],),
                           ),
