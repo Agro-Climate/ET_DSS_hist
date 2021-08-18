@@ -1574,6 +1574,19 @@ def make_sce_table(
                 if existing_sces.sce_name.values[0] == "N/A": # overwrite if "N/A"
                     return [val_csv.to_dict("rows"), {"display": "none"}, ""]                    
                 if bool(shared_scenarios): # duplicate scenario names exist
+                    print("shared_scenarios:")
+                    print(shared_scenarios)
+                    print("val_csv")
+                    print(val_csv)
+                    print("existing_sces")
+                    print(existing_sces)
+
+                    for i in range(len(shared_scenarios)):
+                        val_csv = val_csv[val_csv.sce_name != shared_scenarios[i]] 
+
+                    print("val_csv")
+                    print(val_csv)
+                    
                     updated_sces = val_csv.append(existing_sces, ignore_index=True)
                     duplicates = ", ".join(f"'{s}'" for s in shared_scenarios)
                     return [updated_sces.to_dict("rows"), {"color": "red"}, f"Could not import scenarios: {duplicates} because they already exist in the table"]
@@ -1632,7 +1645,7 @@ def make_sce_table(
                 )
             )
         ):
-            return existing_sces
+            return [existing_sces, {"display": "none"}, ""]
 
         # convert integer inputs to string
         start_year = str(start_year)
