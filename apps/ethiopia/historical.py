@@ -722,7 +722,8 @@ layout = html.Div([
                     "overflow": "hidden",
                     "textOverflow": "ellipsis", 
                 },
-                row_deletable=True
+                row_deletable=True,
+                editable=True
                 ),
               ]),
               html.Div([
