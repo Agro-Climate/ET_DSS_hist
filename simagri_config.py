@@ -20,7 +20,7 @@ from apps.ethiopia import forecast_WGEN as ETforecastWGEN
 
 apps = {
   "ethiopia": { 
-    "logo": app.get_asset_url("ethioagroclimate.png"),
+    "logo": app.get_asset_url("simagri-logo-2.png"), #ethioagroclimate.png"),
     "tutorial": "https://sites.google.com/iri.columbia.edu/simagri-ethiopia/simagri-tutorial",
     "feedback": "https://sites.google.com/iri.columbia.edu/simagri-ethiopia/user-feedback-survey-form",
     "paths": {

@@ -7,7 +7,7 @@ layout = html.Div(
       html.Br(),
       html.Div(
         children= """
-                    CAMDT is a tool designed to guide decision-makers in adopting appropriate crop and management practices that can improve crop yields given a seasonal climatic condition.
+                    Climate-Agriculture Modeling Decision/Discussion Support Tool,  SIMAGRI-Colombia overview
                   """, 
       ),
       html.Br(),

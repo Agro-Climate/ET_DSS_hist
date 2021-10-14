@@ -30,6 +30,7 @@ if country == "ethiopia":
 elif country == "senegal":
     from apps.senegal import about
     from apps.senegal import historical
+    # from apps.senegal import historical_FR
     from apps.senegal import forecast_FResampler as forecast
     # from apps.senegal import forecast_WGEN as forecast
 elif country == "colombia":
@@ -42,7 +43,7 @@ else:
 
 apps = {
     "ethiopia": { 
-        "logo": app.get_asset_url("ethioagroclimate.png"),
+        "logo": app.get_asset_url("CWP_IRI_ET.gif"), #simagri-logo-2.png"), #ethioagroclimate.png"),
         "tutorial": "https://sites.google.com/iri.columbia.edu/simagri-ethiopia/simagri-tutorial",
         "feedback": "https://sites.google.com/iri.columbia.edu/simagri-ethiopia/user-feedback-survey-form",
         "paths": {
@@ -55,8 +56,9 @@ apps = {
         },
     },
     "senegal":  { 
-        "logo": app.get_asset_url("IRI_ISRA_senegal.gif"),
-        "tutorial": "https://sites.google.com/iri.columbia.edu/simagri-senegal/simagri-tutorial",
+        "logo": app.get_asset_url("CWP_IRI_ISRA_senegal.GIF"), #IRI_ISRA_senegal.gif"),
+        # "tutorial": "https://sites.google.com/iri.columbia.edu/simagri-senegal/simagri-tutorial",
+        "tutorial": "https://sites.google.com/iri.columbia.edu/simagri-french/simagri-tutorial",
         "feedback": "https://sites.google.com/iri.columbia.edu/simagri-senegal/user-feedback-survey-form",
         "paths": {
             "/about": about.layout,
@@ -65,7 +67,7 @@ apps = {
         },
     },
     "colombia": { 
-        "logo": app.get_asset_url("SIMAGRI_CO_logo.GIF"), 
+        "logo": app.get_asset_url("CWP_IRI_CO_logo.GIF"), #SIMAGRI_CO_logo.GIF"), #
         "tutorial": "https://sites.google.com/iri.columbia.edu/simagri-colombia/home",
         "feedback": "https://sites.google.com/iri.columbia.edu/simagri-colombia/user-feedback-survey-form",
         "paths": {
@@ -93,7 +95,9 @@ app.layout = html.Div([navbar(apps[country]["logo"], country.capitalize(), apps[
 def display_page(pathname):
     if pathname in [*apps[country]["paths"]]:
         return apps[country]["paths"][pathname]
-    return "Nothing here"
+    # return "Nothing here"
+    return "Climate-Agriculture Modeling Decision Support Tool,  SIMAGRI. Please click the main menu bars for SIMAGRI analysis"
+    
 
 port = int(os.environ.get("PORT", 5000))
 
