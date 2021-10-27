@@ -260,6 +260,12 @@ layout = html.Div([
                       dcc.Dropdown(
                         id="SNsoil_frst", 
                         options=[
+                          {"label": "CNCNioro14(S)", "value": "CNCNioro14"},
+                          {"label": "CNNior14_S(S)-shallow", "value": "CNNior14_S"},
+                          {"label": "CNCNNior15(SL)", "value": "CNCNNior15"},
+                          {"label": "CNNior15_S(S)-shallow", "value": "CNNior15_S"},
+                          {"label": "CNBambey14(LS)", "value": "CNBambey14"},
+                          {"label": "CNBambey14(S)-shallow", "value": "CNBambey14"},
                           {"label": "SN-N15Rain(S)", "value": "SN-N15Rain"},
                           {"label": "SN-N15Irrg(S)", "value": "SN-N15Irrg"},
                           {"label": "SN-N16Rain(S)", "value": "SN-N16Rain"},
@@ -269,12 +275,13 @@ layout = html.Div([
                           {"label": "SN00840067(SL)", "value": "SN00840067"},
                           {"label": "SN00840080(SL)", "value": "SN00840080"},
                           {"label": "SN00840042(SL)", "value": "SN00840042"},
-                          {"label": "SN00840056(SL)", "value": "ET00990_66"},
-                          {"label": "ET00920067(KOBO,CL)", "value": "SN00840056"},
+                          {"label": "SN00840056(SL)", "value": "SN00840056"},
                         ],
                         value="SN-N15Rain",
                         clearable=False,
                       ),
+                    # dbc.FormText("S, LS, and SL in parenthesis represent Sand, Loamy sand, and Sandy loam, respectively."),
+                    dbc.FormText("S, LS et SL entre les parenthèses représentent respectivement le Sable, le Sable Limoneux et le Limon Sableux."),
                     ],
                     className="py-2",
                     xl=9,
@@ -345,6 +352,8 @@ layout = html.Div([
                     dbc.Label(["10) Densité de semis", html.Span(" (plants/m"), html.Sup("2"), html.Span(")"), ], html_for="plt-density_frst", sm=3, align="start", ),
                     dbc.Col([
                       dbc.Input(type="number", id="plt-density_frst", value=5, min=1, max=300, step=0.1, required="required", ),
+                      # dbc.FormText("Typical planting density is 4, 6 and 17 plants/m2 for millet, sorghum and peanut respectively."),
+                      dbc.FormText("La densité de semi recommandée est respectivement de 4, 6 et 17 plantes/m2 pour le mil, le sorgho et l'arachide."),
                     ],
                     className="py-2",
                     xl=9,
@@ -366,9 +375,9 @@ layout = html.Div([
                       ),
                       html.Div([ # FERTILIZER INPUT TABLE
                         dbc.Row([
-                          dbc.Col(
-                            dbc.Label("No.", className="text-center", ),
-                          ),
+                          # dbc.Col(
+                          #   dbc.Label("No.", className="text-center", ),
+                          # ),
                           dbc.Col(
                             dbc.Label("Jours après semis", className="text-center", ),
                           ),
@@ -386,12 +395,11 @@ layout = html.Div([
                           ),
                         ],),
                         dbc.Row([
-                          dbc.Col(
-                            dbc.Label("1st", className="text-center", ),
-                          ),
+                          # dbc.Col(
+                          #   dbc.Label("1st", className="text-center", ),
+                          # ),
                           dbc.Col(
                             dbc.FormGroup([
-                              # dbc.Label("1st", html_for="fert-day1", ),
                               dbc.Input(type="number", id="fert-day1_frst", value=0, min="0", max="365", required="required", ),
                             ],),
                           ),
@@ -403,30 +411,26 @@ layout = html.Div([
                           # ),
                           dbc.Col(
                             dbc.FormGroup([
-                              # dbc.Label("1st", html_for="N-amt1", ),
                               dbc.Input(type="number", id="N-amt1_frst", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              # dbc.Label("1st", html_for="P-amt1", ),
                               dbc.Input(type="number", id="P-amt1_frst", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              # dbc.Label("1st", html_for="K-amt1", ),
                               dbc.Input(type="number", id="K-amt1_frst", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                         ],),
                         dbc.Row([
-                          dbc.Col(
-                            dbc.Label("2nd", className="text-center", ),
-                          ),
+                          # dbc.Col(
+                          #   dbc.Label("2nd", className="text-center", ),
+                          # ),
                           dbc.Col(
                             dbc.FormGroup([
-                              # dbc.Label("2nd", html_for="fert-day2", ),
                               dbc.Input(type="number", id="fert-day2_frst", value=0, min="0", max="365", required="required", ),
                             ],),
                           ),
@@ -438,30 +442,26 @@ layout = html.Div([
                           # ),
                           dbc.Col(
                             dbc.FormGroup([
-                              # dbc.Label("2nd", html_for="N-amt2", ),
                               dbc.Input(type="number", id="N-amt2_frst", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              # dbc.Label("2nd", html_for="P-amt2", ),
                               dbc.Input(type="number", id="P-amt2_frst", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              # dbc.Label("2nd", html_for="K-amt2", ),
                               dbc.Input(type="number", id="K-amt2_frst", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                         ],),
                         dbc.Row([
-                          dbc.Col(
-                            dbc.Label("3rd", className="text-center", ),
-                          ),
+                          # dbc.Col(
+                          #   dbc.Label("3rd", className="text-center", ),
+                          # ),
                           dbc.Col(
                             dbc.FormGroup([
-                              # dbc.Label("3rd", html_for="fert-day3", ),
                               dbc.Input(type="number", id="fert-day3_frst", value=0, min="0", max="365", required="required", ),
                             ],),
                           ),
@@ -473,30 +473,26 @@ layout = html.Div([
                           # ),
                           dbc.Col(
                             dbc.FormGroup([
-                              # dbc.Label("3rd", html_for="N-amt3", ),
                               dbc.Input(type="number", id="N-amt3_frst", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              # dbc.Label("3rd", html_for="P-amt3", ),
                               dbc.Input(type="number", id="P-amt3_frst", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              # dbc.Label("3rd", html_for="K-amt3", ),
                               dbc.Input(type="number", id="K-amt3_frst", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                         ],),
                         dbc.Row([
-                          dbc.Col(
-                            dbc.Label("4th", className="text-center", ),
-                          ),
+                          # dbc.Col(
+                          #   dbc.Label("4th", className="text-center", ),
+                          # ),
                           dbc.Col(
                             dbc.FormGroup([
-                              # dbc.Label("4th", html_for="fert-day4", ),
                               dbc.Input(type="number", id="fert-day4_frst", value=0, min="0", max="365", required="required", ),
                             ],),
                           ),
@@ -508,19 +504,16 @@ layout = html.Div([
                           # ),
                           dbc.Col(
                             dbc.FormGroup([
-                              # dbc.Label("4th", html_for="N-amt4", ),
                               dbc.Input(type="number", id="N-amt4_frst", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              # dbc.Label("4th", html_for="P-amt4", ),
                               dbc.Input(type="number", id="P-amt4_frst", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              # dbc.Label("4th", html_for="K-amt4", ),
                               dbc.Input(type="number", id="K-amt4_frst", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
@@ -538,7 +531,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Phosphorous simualtion
-                    dbc.Label("12) Simulation du phosphore ?[cacahuète seulement]", html_for="P_input_frst", sm=3, align="start", ),
+                    dbc.Label("12) Simulation du phosphore ?[arachide seulement]", html_for="P_input_frst", sm=3, align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                         id="P_input_frst",
@@ -554,10 +547,10 @@ layout = html.Div([
                         dcc.Dropdown(
                           id="extr_P_frst", 
                           options=[
-                            {"label": "très lent(2 ppm)", "value": "VL"},
-                            {"label": "meugler (7 ppm)", "value": "L"},
-                            {"label": "moyen (12 ppm)", "value": "M"},
-                            {"label": "haute (18 ppm)", "value": "H"},
+                            {"label": "Tés lent (2 ppm)", "value": "VL"},
+                            {"label": "Lent (7 ppm)", "value": "L"},
+                            {"label": "Moyen (12 ppm)", "value": "M"},
+                            {"label": "Elevé (18 ppm)", "value": "H"},
                           ], 
                           value="L",
                           clearable=False,
@@ -595,6 +588,7 @@ layout = html.Div([
                             id="ir_method_frst", 
                             options=[
                               {"label": "asperseur", "value": "IR004"},
+                              {"label": "irrigation goutte à goutte", "value": "IR005"},  #IR005    Drip or trickle, mm   
                               {"label": "sillon", "value": "IR001"},
                               {"label": "inondation", "value": "IR001"},
                             ], 
@@ -744,7 +738,7 @@ layout = html.Div([
                   row=True
                   ),
                   dbc.FormGroup([ # Enterprise Budgeting?
-                    dbc.Label("14) Budgétisation de la compagnie?", html_for="EB_radio_frst", sm=3, align="start", ),
+                    dbc.Label("14) Budgétisation de la Campagne?", html_for="EB_radio_frst", sm=3, align="start", ),
                     dbc.Col([
                       dcc.RadioItems(
                         id="EB_radio_frst",
@@ -775,6 +769,8 @@ layout = html.Div([
                             dbc.FormGroup([
                               dbc.Input(type="number", id="fert-cost_frst", value=0, min=0, step=0.1, required="required", ),
                               dbc.FormText("[CFA/N kg]"),
+                              # dbc.FormText("If you pay X CFA for 1 bag of 50kg fertilizer (N:P:K = 6:20:10 for peanut), your fertilizer cost = X*100/(6*50) [CFA/N kg]"),
+                              dbc.FormText("Si vous payez X FCFA pour 1 sac d'engrais de 50 kg (N:P:K = 6:20:10 pour l'arachide), votre coût d'engrais = X*100/(6*50) [CFA/N kg]."),
                             ],),
                           ),
                         ],),
@@ -865,22 +861,22 @@ layout = html.Div([
                 dash_table.DataTable(
                 id="scenario-table_frst",
                 columns=([
-                    {"id": "sce_name", "name": "Scenario Name"},
+                    {"id": "sce_name", "name": "Nom du scénario" }, #Scenario Name"},
                     {"id": "Trimester1", "name": "Trimester1"},  #First trimester e.g., JJA
                     {"id": "AN1", "name": "AN1"},  #AN of the first trimeter
                     {"id": "BN1", "name": "BN1"},  #BN of the first trimester
                     {"id": "AN2", "name": "AN2"},  #AN of the second (following) trimester
                     {"id": "BN2", "name": "BN2"},  #BN of the second (following)
-                    {"id": "Crop", "name": "Crop"},
+                    {"id": "Crop", "name": "Culture"}, # Crop"},
                     {"id": "Cultivar", "name": "Cultivar"},
                     {"id": "stn_name", "name": "Station"},
-                    {"id": "PltDate", "name": "Planting Date"},
+                    {"id": "PltDate", "name": "Date de semis"}, # Planting Date"},
                     # {"id": "FirstYear", "name": "First Year"},
                     # {"id": "LastYear", "name": "Last Year"},
-                    {"id": "soil", "name": "Soil Type"},
+                    {"id": "soil", "name": "Type de sol"}, #   Soil Type"},
                     {"id": "iH2O", "name": "Initial H2O"}, #"Initial Soil Water Content"},
                     {"id": "iNO3", "name": "Initial NO3"}, #"Initial Soil Nitrate Content"},
-                    {"id": "plt_density", "name": "Planting Density"},
+                    {"id": "plt_density", "name": "Densité de semis"}, #  Planting Density"},
                     # {"id": "TargetYr", "name": "Target Yr"},
                     {"id": "Fert_1_DOY", "name": "FDOY(1)"},
                     {"id": "N_1_Kg", "name": "N(Kg/ha)(1)"},
@@ -898,8 +894,8 @@ layout = html.Div([
                     {"id": "N_4_Kg", "name": "N(Kg/ha)(4)"},
                     {"id": "P_4_Kg", "name": "P(Kg/ha)(4)"},
                     {"id": "K_4_Kg", "name": "K(Kg/ha)(4)"},
-                    {"id": "P_level", "name": "Extractable P"},
-                    {"id": "IR_method", "name": "Irrigation Method"},
+                    {"id": "P_level", "name": "P extractible"}, # Extractable P"},
+                    {"id": "IR_method", "name": "Méthode d'irrigation" }, # Irrigation Method"},
                     {"id": "IR_1_DOY", "name": "IDOY(1)"},
                     {"id": "IR_1_amt", "name": "IR(mm)(1)"},
                     {"id": "IR_2_DOY", "name": "IDOY(2)"},
@@ -913,12 +909,12 @@ layout = html.Div([
                     {"id": "AutoIR_depth", "name": "AutoIR_depth"},
                     {"id": "AutoIR_thres", "name": "AutoIR_thres"},
                     {"id": "AutoIR_eff", "name": "AutoIR_eff"},
-                    {"id": "CropPrice", "name": "Crop Price"},
-                    {"id": "NFertCost", "name": "Fertilizer Cost"},
-                    {"id": "SeedCost", "name": "Seed Cost"},
-                    {"id": "IrrigCost", "name": "Irrigation Cost"},
-                    {"id": "OtherVariableCosts", "name": "Other Variable Costs"},
-                    {"id": "FixedCosts", "name": "Fixed Costs"},
+                    {"id": "CropPrice", "name": "Coût de la culture à la récolte" }, #Crop Price"},
+                    {"id": "NFertCost", "name": "Coût de l'engrais"}, # Fertilizer Cost"},
+                    {"id": "SeedCost", "name": "Coût des semences"}, # Seed Cost"},
+                    {"id": "IrrigCost", "name": "Coût de l'irrigation"}, # Irrigation Cost"},
+                    {"id": "OtherVariableCosts", "name": "Autres coûts variables"}, # Other Variable Costs"},
+                    {"id": "FixedCosts", "name": "Coûts fixes" }, #Fixed Costs"},
                 ]),
                 data=[
                     dict(**{param: "N/A" for param in sce_col_names}) for i in range(1, 2)

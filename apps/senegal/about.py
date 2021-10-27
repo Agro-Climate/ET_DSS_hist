@@ -27,6 +27,7 @@ layout = html.Div(
 
                 """, 
       ),
+      html.Br(),
       html.Div(
       children= """
                   La planification intelligente de la production de cultures annuelles nécessite la prise en compte de scénarios possibles.
@@ -37,6 +38,15 @@ layout = html.Div(
                 """, 
       ),
       html.Br(),
+      html.Div([
+      html.Div("Credits:"),
+      html.Div("Eunjin Han, Ph.D. at IRI"),
+      html.Div("Walter Baethgen, Ph.D. at IRI"),
+      html.Div("James Hansen, Ph.D. at IRI"),
+      html.Div("Kesha Kumshayev, at IRI "),
+      html.Div("Adama Faye, Institut Sénégalais de Recherches Agricoles (ISRA), Senegal"),
+      html.Div("Mbaye Diop, Institut Sénégalais de Recherches Agricoles (ISRA), Senegal"),
+      ],),
     ],
     className="text-center"
     )

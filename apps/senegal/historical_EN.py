@@ -170,6 +170,12 @@ layout = html.Div([
                       dcc.Dropdown(
                         id="SNsoil", 
                         options=[
+                          {"label": "CNCNioro14(S)", "value": "CNCNioro14"},
+                          {"label": "CNNior14_S(S)-shallow", "value": "CNNior14_S"},
+                          {"label": "CNCNNior15(SL)", "value": "CNCNNior15"},
+                          {"label": "CNNior15_S(S)-shallow", "value": "CNNior15_S"},
+                          {"label": "CNBambey14(LS)", "value": "CNBambey14"},
+                          {"label": "CNBambey14(S)-shallow", "value": "CNBambey14"},
                           {"label": "SN-N15Rain(S)", "value": "SN-N15Rain"},
                           {"label": "SN-N15Irrg(S)", "value": "SN-N15Irrg"},
                           {"label": "SN-N16Rain(S)", "value": "SN-N16Rain"},
@@ -179,12 +185,12 @@ layout = html.Div([
                           {"label": "SN00840067(SL)", "value": "SN00840067"},
                           {"label": "SN00840080(SL)", "value": "SN00840080"},
                           {"label": "SN00840042(SL)", "value": "SN00840042"},
-                          {"label": "SN00840056(SL)", "value": "ET00990_66"},
-                          {"label": "ET00920067(KOBO,CL)", "value": "SN00840056"},
+                          {"label": "SN00840056(SL)", "value": "SN00840056"},
                         ],
                         value="SN-N15Rain",
                         clearable=False,
                       ),
+                    dbc.FormText("S, LS, and SL in parenthesis represent Sand, Loamy sand, and Sandy loam, respectively."),
                     ],
                     className="py-2",
                     xl=9,
@@ -254,6 +260,7 @@ layout = html.Div([
                     dbc.Label(["12) Planting Density", html.Span(" (plants/m"), html.Sup("2"), html.Span(")"), ], html_for="plt-density", sm=3, align="start", ),
                     dbc.Col([
                       dbc.Input(type="number", id="plt-density", value=5, min=1, max=300, step=0.1, required="required", ),
+                      dbc.FormText("Typical planting density is 4, 6 and 17 plants/m2 for millet, sorghum and peanut respectively."),
                     ],
                     className="py-2",
                     xl=9,
@@ -504,6 +511,7 @@ layout = html.Div([
                             id="ir_method", 
                             options=[
                               {"label": "Sprinkler", "value": "IR004"},
+                              {"label": "Drip or trickle", "value": "IR005"},  #IR005    Drip or trickle, mm   
                               {"label": "Furrow", "value": "IR001"},
                               {"label": "Flood", "value": "IR001"},
                             ], 
@@ -684,6 +692,7 @@ layout = html.Div([
                             dbc.FormGroup([
                               dbc.Input(type="number", id="fert-cost", value=0, min=0, step=0.1, required="required", ),
                               dbc.FormText("[CFA/N kg]"),
+                              dbc.FormText("If you pay X CFA for 1 bag of 50kg fertilizer (N:P:K = 6:20:10 for peanut), your fertilizer cost = X*100/(6*50) [CFA/N kg]"),
                             ],),
                           ),
                         ],),
