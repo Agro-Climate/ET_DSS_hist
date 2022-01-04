@@ -12,6 +12,7 @@
 
 FROM irikesha/simagridssat:latest
 
+RUN apt-get install -y zlib1g zlib1g-dev libjpeg-dev
 RUN pip3 install exp-mixture-model
 
 COPY ./*.py /home/SIMAGRI/
