@@ -71,12 +71,41 @@ layout = html.Div([
                     dbc.Col([
                       dcc.Dropdown(
                       id="SNstation",
+                      # options=[
+                      #   {"label": "Bambey", "value": "CNRA"},
+                      #   {"label": "Nioro", "value": "NRIP"},
+                      #   {"label": "Sinthiou Malem", "value": "SNTH"}
+                      # ],
+                      # value="CNRA",
                       options=[
-                        {"label": "Bambey", "value": "CNRA"},
-                        {"label": "Nioro", "value": "NRIP"},
-                        {"label": "Sinthiou Malem", "value": "SNTH"}
+                        {"label": "Dakar(14.7N, 17.5W),", "value": "0002"}, #1
+                        {"label": "Bambey(15.0N, 16.5W)", "value": "0032"}, #2
+                        {"label": "Mbacke(14.8N, 15.9W)", "value": "4871"}, #3
+                        {"label": "Fatick(14.5N, 16.4W)", "value": "1669"}, #4
+                        {"label": "Foundiougne(13.9N, 16.4W)", "value": "2014"}, #5
+                        {"label": "Birkelane(14.1N, 15.8W)", "value": "2843"}, #6
+                        {"label": "Koungheul(14.0N, 14.8W)", "value": "2454"}, #7
+                        {"label": "Kaolack(14.1N, 16.1W)", "value": "3292"}, #8
+                        {"label": "Nioro Du Rip(13.7N, 15.8W)", "value": "5699"}, #9
+                        {"label": "Kolda(12.8N, 14.6W)", "value": "4051"}, #10
+                        {"label": "Medina Yoroufoula(13.1N, 14.6W)", "value": "2127"}, #11
+                        {"label": "Velingara(12.9N, 14.1W)", "value": "5976"}, #12
+                        {"label": "Linguere(15.3N, 15.5W)", "value": "5884"}, #13
+                        {"label": "Louga(15.5N, 16.0W)", "value": "2898"}, #14
+                        {"label": "Saint Louis(16.1N, 16.5W)", "value": "5017"}, #15
+                        {"label": "Sedhiou(12.7N, 15.6W)", "value": "1758"}, #16
+                        {"label": "Koumpentoum(14.0N, 14.6W)", "value": "0171"}, #17
+                        {"label": "Tambacounda(13.1N, 13.3W)", "value": "4506"}, #18
+                        {"label": "Tambacounda(13.8N, 13.7W)", "value": "3317"}, #19
+                        {"label": "Tambacounda(13.9N, 14.1W)", "value": "3366"}, #20
+                        {"label": "Mbour(14.4N, 17.0W)", "value": "6083"}, #21
+                        {"label": "Thies(14.8N, 17.0W)", "value": "3167"}, #22
+                        {"label": "Tivaoune(15.0N, 16.8W)", "value": "5664"}, #23
+                        {"label": "Bignona(13.0N, 16.2W)", "value": "6120"}, #24
+                        {"label": "Oussouye(12.5N, 16.5W)", "value": "1171"}, #25
+                        {"label": "Ziguinchor(12.5N, 16.0W)", "value": "5457"}, #25
                       ],
-                      value="CNRA",
+                      value="0032",  #"CNRA"
                       clearable=False,
                       ),
                     ],
@@ -131,8 +160,8 @@ layout = html.Div([
                   dbc.FormGroup([ # Start Year
                     dbc.Label("5) Start Year", html_for="year1", sm=3, align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="year1", placeholder="YYYY", value="1981", min=1981, max=2015, required="required", ),
-                      dbc.FormText("(No earlier than 1981)"),
+                      dbc.Input(type="number", id="year1", placeholder="YYYY", value="1983", min=1983, max=2016, required="required", ),
+                      dbc.FormText("(No earlier than 1983)"),
                     ],
                     className="py-2",
                     xl=9,
@@ -143,8 +172,8 @@ layout = html.Div([
                   dbc.FormGroup([ # End Year
                     dbc.Label("6) End Year", html_for="year2", sm=3, align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="year2", placeholder="YYYY", value="2015", min=1981, max=2015,   required="required", ),
-                      dbc.FormText("(No later than 2015)"),
+                      dbc.Input(type="number", id="year2", placeholder="YYYY", value="2015", min=1983, max=2016,   required="required", ),
+                      dbc.FormText("(No later than 2016)"),
                     ],
                     className="py-2",
                     xl=9,
@@ -155,7 +184,7 @@ layout = html.Div([
                   dbc.FormGroup([ # Year to Highlight
                     dbc.Label("7) Year to Highlight", html_for="target-year", sm=3, align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="target-year", placeholder="YYYY", value="2015",min=1981, max=2018,   required="required", ),
+                      dbc.Input(type="number", id="target-year", placeholder="YYYY", value="2015",min=1983, max=2016,   required="required", ),
                       dbc.FormText("Type a specific year you remember (e.g., drought year) and want to compare with a full climatology distribution"),
                     ],
                     className="py-2",
@@ -441,6 +470,10 @@ layout = html.Div([
                             ],),
                           ),
                         ],),
+                      dbc.Row([
+                        dbc.FormText("User Needs to drive N amount from the total fertilizer amount. For instance, 150kg/ha of NPK (15-15-15) is applied, N amount would be 150*15/100 = 22.5 N kg/ha."),
+                        ],
+                        ),
                       ],
                       id="fert-table-Comp", 
                       className="w-100",
@@ -1713,9 +1746,9 @@ def make_sce_table(
 
                 csv_sce_valid = (
                         re.match("....", scenario)
-                    and int(start_year) >= 1981 and int(start_year) <= 2018
-                    and int(end_year) >= 1981 and int(end_year) <= 2018
-                    and int(target_year) >= 1981 and int(target_year) <= 2018
+                    and int(start_year) >= 1983 and int(start_year) <= 2016
+                    and int(end_year) >= 1983 and int(end_year) <= 2016
+                    and int(target_year) >= 1983 and int(target_year) <= 2016
                     and float(planting_density) >= 1 and float(planting_density) <= 300
                     and planting_date_valid and fert_valid and IR_reported_valid and EB_valid
                 )
@@ -1993,9 +2026,9 @@ def make_sce_table(
         # required="required" triggers tooltips. This validation actually prevents improper forms being submitted. BOTH are necessary
         form_valid = (
                 re.match("....", current_sce.sce_name.values[0])
-            and int(current_sce.FirstYear.values[0]) >= 1981 and int(current_sce.FirstYear.values[0]) <= 2018
-            and int(current_sce.LastYear.values[0]) >= 1981 and int(current_sce.LastYear.values[0]) <= 2018
-            and int(current_sce.TargetYr.values[0]) >= 1981 and int(current_sce.TargetYr.values[0]) <= 2018
+            and int(current_sce.FirstYear.values[0]) >= 1983 and int(current_sce.FirstYear.values[0]) <= 2016
+            and int(current_sce.LastYear.values[0]) >= 1983 and int(current_sce.LastYear.values[0]) <= 2016
+            and int(current_sce.TargetYr.values[0]) >= 1983 and int(current_sce.TargetYr.values[0]) <= 2016
             and float(current_sce.plt_density.values[0]) >= 1 and float(current_sce.plt_density.values[0]) <= 300
             and planting_date_valid and fert_valid and IR_reported_valid and EB_valid
         )

@@ -78,12 +78,41 @@ layout = html.Div([
                     dbc.Col([
                       dcc.Dropdown(
                       id="SNstation_frst",
+                      # options=[
+                      #   {"label": "Bambey", "value": "CNRA"},
+                      #   {"label": "Nioro", "value": "NRIP"},
+                      #   {"label": "Sinthiou Malem", "value": "SNTH"}
+                      # ],
+                      # value="CNRA",
                       options=[
-                        {"label": "Bambey", "value": "CNRA"},
-                        {"label": "Nioro", "value": "NRIP"},
-                        {"label": "Sinthiou Malem", "value": "SNTH"}
+                        {"label": "Dakar(14.7N, 17.5W),", "value": "0002"}, #1
+                        {"label": "Bambey(15.0N, 16.5W)", "value": "0032"}, #2
+                        {"label": "Mbacke(14.8N, 15.9W)", "value": "4871"}, #3
+                        {"label": "Fatick(14.5N, 16.4W)", "value": "1669"}, #4
+                        {"label": "Foundiougne(13.9N, 16.4W)", "value": "2014"}, #5
+                        {"label": "Birkelane(14.1N, 15.8W)", "value": "2843"}, #6
+                        {"label": "Koungheul(14.0N, 14.8W)", "value": "2454"}, #7
+                        {"label": "Kaolack(14.1N, 16.1W)", "value": "3292"}, #8
+                        {"label": "Nioro Du Rip(13.7N, 15.8W)", "value": "5699"}, #9
+                        {"label": "Kolda(12.8N, 14.6W)", "value": "4051"}, #10
+                        {"label": "Medina Yoroufoula(13.1N, 14.6W)", "value": "2127"}, #11
+                        {"label": "Velingara(12.9N, 14.1W)", "value": "5976"}, #12
+                        {"label": "Linguere(15.3N, 15.5W)", "value": "5884"}, #13
+                        {"label": "Louga(15.5N, 16.0W)", "value": "2898"}, #14
+                        {"label": "Saint Louis(16.1N, 16.5W)", "value": "5017"}, #15
+                        {"label": "Sedhiou(12.7N, 15.6W)", "value": "1758"}, #16
+                        {"label": "Koumpentoum(14.0N, 14.6W)", "value": "0171"}, #17
+                        {"label": "Tambacounda(13.1N, 13.3W)", "value": "4506"}, #18
+                        {"label": "Tambacounda(13.8N, 13.7W)", "value": "3317"}, #19
+                        {"label": "Tambacounda(13.9N, 14.1W)", "value": "3366"}, #20
+                        {"label": "Mbour(14.4N, 17.0W)", "value": "6083"}, #21
+                        {"label": "Thies(14.8N, 17.0W)", "value": "3167"}, #22
+                        {"label": "Tivaoune(15.0N, 16.8W)", "value": "5664"}, #23
+                        {"label": "Bignona(13.0N, 16.2W)", "value": "6120"}, #24
+                        {"label": "Oussouye(12.5N, 16.5W)", "value": "1171"}, #25
+                        {"label": "Ziguinchor(12.5N, 16.0W)", "value": "5457"}, #25
                       ],
-                      value="CNRA",
+                      value="0032",  #"CNRA"
                       clearable=False,
                       ),
                       dbc.Label("Observed Weather:", html_for="ETstation_frst", className="p-2", align="start", ),
@@ -530,6 +559,10 @@ layout = html.Div([
                             ],),
                           ),
                         ],),
+                      dbc.Row([
+                        dbc.FormText("User Needs to drive N amount from the total fertilizer amount. For instance, 150kg/ha of NPK (15-15-15) is applied, N amount would be 150*15/100 = 22.5 N kg/ha."),
+                        ],
+                        ),
                       ],
                       id="fert-table-Comp_frst", 
                       className="w-100",

@@ -514,11 +514,39 @@ def write_WTH_obs_ensemble(IC_date, frst_date1, WTD_df, df_gen, Wdir_path, LAT, 
 #===================================================================
 def find_station_info(station_name):
   station_dic = {
-    'CNRA': {'LAT': 14.708, 'LONG':-16.484, 'ELEV': 20, 'TAV': 27.6 , 'AMP': 5.3},  #Bambey research station from Adama
-    'NRIP': {'LAT': 13.759, 'LONG':-15.783, 'ELEV': 20, 'TAV': 28.2, 'AMP': 6.0},   #Nioro research station
-    'SNTH': {'LAT': 13.817, 'LONG':-13.900, 'ELEV': 20, 'TAV': 29.2, 'AMP': 7.3},  #Sinthiou Malem research station
-    'KOLD': {'LAT': 12.883, 'LONG':-14.25, 'ELEV': 22, 'TAV': 27.2, 'AMP': 6.9},  #Ziguinchor
+    '0002': {'LAT': 14.738, 'LONG':-17.512, 'ELEV': 25, 'TAV': -99.0 , 'AMP': -99.0},   #1
+    '0032': {'LAT': 14.963, 'LONG':-16.500, 'ELEV': 26, 'TAV': -99.0, 'AMP': -99.0},   #2
+    '4871': {'LAT': 14.813, 'LONG':-15.938, 'ELEV': 42, 'TAV': -99.0, 'AMP': -99.0}, #3
+    '1669': {'LAT': 14.475, 'LONG':-16.387, 'ELEV': 4, 'TAV': -99.0, 'AMP': -99.0},   #4
+    '2014': {'LAT': 13.875, 'LONG':-16.387, 'ELEV': 23, 'TAV': -99.0 , 'AMP': -99.0},   #5
+    '2843': {'LAT': 14.137, 'LONG':-15.750, 'ELEV': 14, 'TAV': -99.0, 'AMP': -99.0},  #6
+    '2454': {'LAT': 13.988, 'LONG':-14.850, 'ELEV': 35, 'TAV': -99.0, 'AMP': -99.0}, #7
+    '3292': {'LAT': 14.137, 'LONG':-16.087, 'ELEV': 8, 'TAV': -99.0, 'AMP': -99.0},  #8
+    '5699': {'LAT': 13.725, 'LONG':-15.787, 'ELEV': 2, 'TAV': -99.0 , 'AMP': -99.0},   #9
+    '4051': {'LAT': 12.788, 'LONG':-14.625, 'ELEV': 32, 'TAV': -99.0, 'AMP': -99.0},   #10
+    '2127': {'LAT': 13.088, 'LONG':-14.588, 'ELEV': 27, 'TAV': -99.0, 'AMP': -99.0}, #11
+    '5976': {'LAT': 12.938, 'LONG':-14.100, 'ELEV': 12, 'TAV': -99.0, 'AMP': -99.0},   #12
+    '5884': {'LAT': 15.338, 'LONG':-15.488, 'ELEV': 61, 'TAV': -99.0 , 'AMP': -99.0},   #13
+    '2898': {'LAT': 15.525, 'LONG':-16.012, 'ELEV': 48, 'TAV': -99.0, 'AMP': -99.0},  #14
+    '5017': {'LAT': 16.050, 'LONG':-16.462, 'ELEV': 28, 'TAV': -99.0, 'AMP': -99.0}, #15
+    '1758': {'LAT': 12.713, 'LONG':-15.562, 'ELEV': 35, 'TAV': -99.0, 'AMP': -99.0},  #16
+    '0171': {'LAT': 13.988, 'LONG':-14.550, 'ELEV': 7, 'TAV': -99.0 , 'AMP': -99.0},   #17
+    '4506': {'LAT': 13.050, 'LONG':-13.312, 'ELEV': 25, 'TAV': -99.0, 'AMP': -99.0},   #18
+    '3317': {'LAT': 13.762, 'LONG':-13.688, 'ELEV': 50, 'TAV': -99.0, 'AMP': -99.0}, #19
+    '3366': {'LAT': 13.875, 'LONG':-14.100, 'ELEV': 4, 'TAV': -99.0, 'AMP': -99.0},   #20
+    '6083': {'LAT': 14.438, 'LONG':-16.988, 'ELEV': 19, 'TAV': -99.0 , 'AMP': -99.0},   #21
+    '3167': {'LAT': 14.813, 'LONG':-16.950, 'ELEV': 77, 'TAV': -99.0, 'AMP': -99.0},  #22
+    '5664': {'LAT': 14.963, 'LONG':-16.837, 'ELEV': 59, 'TAV': -99.0, 'AMP': -99.0}, #23
+    '6120': {'LAT': 12.938, 'LONG':-16.163, 'ELEV': 43, 'TAV': -99.0, 'AMP': -99.0},  #24
+    '1171': {'LAT': 12.488, 'LONG':-16.538, 'ELEV': 29, 'TAV': -99.0 , 'AMP': -99.0},   #25
+    '5457': {'LAT': 12.488, 'LONG':-16.012, 'ELEV': 45, 'TAV': -99.0, 'AMP': -99.0},   #26
     }
+#   station_dic = {
+#     'CNRA': {'LAT': 14.708, 'LONG':-16.484, 'ELEV': 20, 'TAV': 27.6 , 'AMP': 5.3},  #Bambey research station from Adama
+#     'NRIP': {'LAT': 13.759, 'LONG':-15.783, 'ELEV': 20, 'TAV': 28.2, 'AMP': 6.0},   #Nioro research station
+#     'SNTH': {'LAT': 13.817, 'LONG':-13.900, 'ELEV': 20, 'TAV': 29.2, 'AMP': 7.3},  #Sinthiou Malem research station
+#     'KOLD': {'LAT': 12.883, 'LONG':-14.25, 'ELEV': 22, 'TAV': 27.2, 'AMP': 6.9},  #Ziguinchor
+#     }
         # 'BAMB': {'LAT': 14.700, 'LONG':-16.483, 'ELEV': 10, 'TAV': 28.1 , 'AMP': 6.7},  #Bambey research station
         # 'NIOR': {'LAT': 13.750, 'LONG':-15.767, 'ELEV': 10, 'TAV': 28.0, 'AMP': 7.0},   #Nioro research station
         # 'SINT': {'LAT': 13.817, 'LONG':-13.900, 'ELEV': 10, 'TAV': 29.0, 'AMP': 8.7},  #Sinthiou Malem research station
