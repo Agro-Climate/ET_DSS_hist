@@ -976,26 +976,26 @@ layout = html.Div([
               ]),
               html.Div([
                 dbc.Row([ # IMPORT/DOWNLOAD SCENARIOS
-                  dbc.Col(
-                    dcc.Upload([
-                      html.Div([
-                        html.Div(html.B("Import Scenarios:")),
-                        "Drag and Drop or ",
-                        dcc.Link("Select a File", href="", )
-                      ],
-                      className="d-block mx-auto text-center p-2"
-                      )
-                    ],
-                    id="import-sce_frst", 
-                    className="w-75 d-block mx-auto m-3",
-                    style={
-                        "borderWidth": "1px",
-                        "borderStyle": "dashed",
-                        "borderRadius": "5px",
-                        "background-color": "lightgray"
-                    },
-                    ),
-                  ),
+                  # dbc.Col(
+                  #   dcc.Upload([
+                  #     html.Div([
+                  #       html.Div(html.B("Import Scenarios:")),
+                  #       "Drag and Drop or ",
+                  #       dcc.Link("Select a File", href="", )
+                  #     ],
+                  #     className="d-block mx-auto text-center p-2"
+                  #     )
+                  #   ],
+                  #   id="import-sce_frst", 
+                  #   className="w-75 d-block mx-auto m-3",
+                  #   style={
+                  #       "borderWidth": "1px",
+                  #       "borderStyle": "dashed",
+                  #       "borderRadius": "5px",
+                  #       "background-color": "lightgray"
+                  #   },
+                  #   ),
+                  # ),
                   dbc.Col([
                     dbc.Button(
                       "Download Scenarios",

@@ -184,7 +184,7 @@ layout = html.Div([
                   dbc.FormGroup([ # Year to Highlight
                     dbc.Label("7) Une année à mettre en évidence", html_for="target-year", sm=3, align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="target-year", placeholder="YYYY", value="2015",min=1983, max=2016,   required="required", ),
+                      dbc.Input(type="number", id="target-year", placeholder="YYYY", value="2016",min=1983, max=2016,   required="required", ),
                       dbc.FormText("Tapez une année spécifique dont vous vous souvenez (par exemple, une année de sécheresse) et que vous souhaitez comparer avec une distribution climatologique complète."),
                     ],
                     className="py-2",
@@ -874,26 +874,26 @@ layout = html.Div([
               ]),
               html.Div([
                 dbc.Row([ # IMPORT/DOWNLOAD SCENARIOS
-                  dbc.Col(
-                    dcc.Upload([
-                      html.Div([
-                        html.Div(html.B("Importer des scénarios ")),
-                        "Glisser-déposer ou ",
-                        dcc.Link("sélectionner un fichier", href="", )
-                      ],
-                      className="d-block mx-auto text-center p-2"
-                      )
-                    ],
-                    id="import-sce",
-                    className="w-75 d-block mx-auto m-3",
-                    style={
-                        "borderWidth": "1px",
-                        "borderStyle": "dashed",
-                        "borderRadius": "5px",
-                        "background-color": "lightgray"
-                    },
-                    ),
-                  ),
+                  # dbc.Col(
+                  #   dcc.Upload([
+                  #     html.Div([
+                  #       html.Div(html.B("Importer des scénarios ")),
+                  #       "Glisser-déposer ou ",
+                  #       dcc.Link("sélectionner un fichier", href="", )
+                  #     ],
+                  #     className="d-block mx-auto text-center p-2"
+                  #     )
+                  #   ],
+                  #   id="import-sce",
+                  #   className="w-75 d-block mx-auto m-3",
+                  #   style={
+                  #       "borderWidth": "1px",
+                  #       "borderStyle": "dashed",
+                  #       "borderRadius": "5px",
+                  #       "background-color": "lightgray"
+                  #   },
+                  #   ),
+                  # ),
                   dbc.Col([
                     dbc.Button(
                       "Télécharger des scénarios",

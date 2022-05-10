@@ -172,7 +172,7 @@ layout = html.Div([
                   dbc.FormGroup([ # End Year
                     dbc.Label("6) End Year", html_for="year2", sm=3, align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="year2", placeholder="YYYY", value="2015", min=1983, max=2016,   required="required", ),
+                      dbc.Input(type="number", id="year2", placeholder="YYYY", value="2016", min=1983, max=2016,   required="required", ),
                       dbc.FormText("(No later than 2016)"),
                     ],
                     className="py-2",
@@ -884,26 +884,26 @@ layout = html.Div([
               ]),
               html.Div([
                 dbc.Row([ # IMPORT/DOWNLOAD SCENARIOS
-                  dbc.Col(
-                    dcc.Upload([
-                      html.Div([
-                        html.Div(html.B("Import Scenarios:")),
-                        "Drag and Drop or ",
-                        dcc.Link("Select a File", href="", )
-                      ],
-                      className="d-block mx-auto text-center p-2"
-                      )
-                    ],
-                    id="import-sce", 
-                    className="w-75 d-block mx-auto m-3",
-                    style={
-                        "borderWidth": "1px",
-                        "borderStyle": "dashed",
-                        "borderRadius": "5px",
-                        "background-color": "lightgray"
-                    },
-                    ),
-                  ),
+                  # dbc.Col(
+                  #   dcc.Upload([
+                  #     # html.Div([
+                  #     #   html.Div(html.B("Import Scenarios:")),
+                  #     #   "Drag and Drop or ",
+                  #     #   dcc.Link("Select a File", href="", )
+                  #     # ],
+                  #     # className="d-block mx-auto text-center p-2"
+                  #     # )
+                  #   ],
+                  #   id="import-sce", 
+                  #   className="w-75 d-block mx-auto m-3",
+                  #   style={
+                  #       "borderWidth": "1px",
+                  #       "borderStyle": "dashed",
+                  #       "borderRadius": "5px",
+                  #       "background-color": "lightgray"
+                  #   },
+                  #   ),
+                  # ),
                   dbc.Col([
                     dbc.Button(
                       "Download Scenarios",
