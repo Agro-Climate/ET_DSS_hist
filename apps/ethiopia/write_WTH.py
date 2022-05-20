@@ -512,7 +512,7 @@ def write_WTH_obs_ensemble(IC_date, frst_date1, WTD_df, df_gen, Wdir_path, LAT, 
     return
 
 #===================================================================
-def find_station_info(station_name):
+def _station_info(station_name):
   station_dic = {
     'ASEL': {'LAT': 7.950, 'LONG':39.133, 'ELEV': 2413, 'TAV': 15.4, 'AMP': 3.5},  #Assela
     'AWAS': {'LAT': 7.050, 'LONG':38.467, 'ELEV': 1694, 'TAV': 20.3, 'AMP': 1.9},   #Awassa
