@@ -2200,24 +2200,27 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
               df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
               write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)  
             else:
-              if station == scenarios.stn_name.values[i-1] and trimester == scenarios.Trimester1.values[i-1]:
-                if AN1 == scenarios.AN1.values[i-1] and BN1 == scenarios.BN1.values[i-1] and AN2 == scenarios.AN2.values[i-1] and BN2 == scenarios.BN2.values[i-1]:
-                  #No need to run WGEN again => use df_wgen from previous scenario
-                  write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path) 
-                else:
-                  # #1)WGEN
-                  # df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)
-                  # write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)
-                  #2)FResampler
-                  df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
-                  write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)  
-              else:
-                # #1)WGEN
-                # df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)
-                # write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)
-                #2)FResampler
-                df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
-                write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path) 
+              df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
+              write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path) 
+              # if station == scenarios.stn_name.values[i-1] and trimester == scenarios.Trimester1.values[i-1]:
+              #   if AN1 == scenarios.AN1.values[i-1] and BN1 == scenarios.BN1.values[i-1] and AN2 == scenarios.AN2.values[i-1] and BN2 == scenarios.BN2.values[i-1]:
+              #     #No need to run WGEN again => use df_wgen from previous scenario
+              #     #write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path) 
+              #     write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path) 
+              #   else:
+              #     # #1)WGEN
+              #     # df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)
+              #     # write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)
+              #     #2)FResampler
+              #     df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
+              #     write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)  
+              # else:
+              #   # #1)WGEN
+              #   # df_wgen = run_WGEN(scenarios[i:i+1], tri_doylist, Wdir_path)
+              #   # write_WTH(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path)
+              #   #2)FResampler
+              #   df_wgen = run_FResampler(scenarios[i:i+1], tri_doylist, Wdir_path)  
+              #   write_WTH_FR(scenarios[i:i+1], df_wgen, WTD_fname, Wdir_path) 
             # # EJ(7/27/2021) end of RUN WEATHER GENERATOR TO MAKE SYNTHETIC WEATHER REALIZATION
             #=====================================================================
             # 1) Write V47 file for climatolgoy
@@ -2290,17 +2293,20 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
               df_CL = Rain_trimester_obs(WTD_fname, tri_doylist)
               df_rain = df_CL.append(df_FC, ignore_index=True)
             else:
-              if station == scenarios.stn_name.values[i-1] and trimester == scenarios.Trimester1.values[i-1]:
-                if AN1 == scenarios.AN1.values[i-1] and BN1 == scenarios.BN1.values[i-1] and AN2 == scenarios.AN2.values[i-1] and BN2 == scenarios.BN2.values[i-1]:
-                  print("---no need to estimate rainfall total for each trimester => use old df")
-                else:
-                  df_FC = Rain_trimester_gen(WTH_fname, tri_doylist)
-                  # df_CL = Rain_trimester_obs(WTD_fname, tri_doylist)
-                  df_rain = df_CL.append(df_FC, ignore_index=True)
-              else:
-                df_FC = Rain_trimester_gen(WTH_fname, tri_doylist)
-                df_CL = Rain_trimester_obs(WTD_fname, tri_doylist)
-                df_rain = df_CL.append(df_FC, ignore_index=True)
+              df_FC = Rain_trimester_gen(WTH_fname, tri_doylist)
+              df_CL = Rain_trimester_obs(WTD_fname, tri_doylist)
+              df_rain = df_CL.append(df_FC, ignore_index=True)
+              # if station == scenarios.stn_name.values[i-1] and trimester == scenarios.Trimester1.values[i-1]:
+              #   if AN1 == scenarios.AN1.values[i-1] and BN1 == scenarios.BN1.values[i-1] and AN2 == scenarios.AN2.values[i-1] and BN2 == scenarios.BN2.values[i-1]:
+              #     print("---no need to estimate rainfall total for each trimester => use old df")
+              #   else:
+              #     df_FC = Rain_trimester_gen(WTH_fname, tri_doylist)
+              #     # df_CL = Rain_trimester_obs(WTD_fname, tri_doylist)
+              #     df_rain = df_CL.append(df_FC, ignore_index=True)
+              # else:
+              #   df_FC = Rain_trimester_gen(WTH_fname, tri_doylist)
+              #   df_CL = Rain_trimester_obs(WTD_fname, tri_doylist)
+              #   df_rain = df_CL.append(df_FC, ignore_index=True)
 
             #=========================================================end of seasonal rainfall total estimation            
             # Make a new dataframe for plotting

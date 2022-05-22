@@ -820,7 +820,7 @@ layout = html.Div([
 
             html.Div([ # AFTER SCENARIO TABLE
               dbc.FormGroup([ # Approximate Growing Season
-                dbc.Label("15) Critical growing period to relate rainfall amount with crop yield", html_for="season-slider"),
+                dbc.Label("16) Critical growing period to relate rainfall amount with crop yield", html_for="season-slider"),
                 dbc.FormText("Selected period is used to sort drier/wetter years based on the seasonal total rainfall"),
                 dcc.RangeSlider(
                   id="season-slider",
