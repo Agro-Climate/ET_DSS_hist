@@ -43,7 +43,7 @@ def writeSNX_clim(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initi
         IC_date = first_year * 1000 + (plt_doy - 1)
         PDATE = repr(first_year)[2:] + repr(plt_doy).zfill(3)
     ICDAT = repr(IC_date)[2:]
-    hv_doy = plt_doy + 210  # tentative harvest date => long enough considering delayed growth
+    hv_doy = plt_doy + 150  # tentative harvest date => long enough considering delayed growth
     # adjust hv_date if harvest moves to a next year
     if hv_doy > 365:
         hv_doy = hv_doy - 365
@@ -636,7 +636,7 @@ def writeSNX_frst_FR(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,in
         ICDAT = plt_year + repr(plt_doy-1).zfill(3)  #IC date is one day before planting
         ICDAT = ICDAT[2:]
     #EJ(5/22/2021)
-    hv_doy = plt_doy + 210  # tentative harvest date => long enough considering delayed growth
+    hv_doy = plt_doy + 150  # tentative harvest date => long enough considering delayed growth
     if hv_doy > 365:
         NYERS = 199  
     else:
