@@ -47,8 +47,12 @@ def writeSNX_clim(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,initi
     # adjust hv_date if harvest moves to a next year
     if hv_doy > 365:
         hv_doy = hv_doy - 365
-    last_year = WTD_df.YEAR[WTD_df["DOY"] == (hv_doy)].values[-1]
+        last_year = WTD_df.YEAR[WTD_df["DOY"] == (hv_doy)].values[-2]   #EJ temporary fix in case the growing season move to the next year
+    else:
+        last_year = WTD_df.YEAR[WTD_df["DOY"] == (hv_doy)].values[-1]
+
     NYERS = repr(last_year - first_year + 1)
+
     # ============
     # NYERS = repr(int(end_year) - int(start_year) + 1)
     # plt_year = start_year
@@ -631,8 +635,12 @@ def writeSNX_frst_FR(DSSAT_PATH,station,planting_date,crop,cultivar,soil_type,in
         PDATE = PDATE[2:]
         ICDAT = plt_year + repr(plt_doy-1).zfill(3)  #IC date is one day before planting
         ICDAT = ICDAT[2:]
-
-    NYERS = 200  #EJ(8/2/2021) temporary => hard-coded by fixing 300 simulation for FResampler
+    #EJ(5/22/2021)
+    hv_doy = plt_doy + 210  # tentative harvest date => long enough considering delayed growth
+    if hv_doy > 365:
+        NYERS = 199  
+    else:
+        NYERS = 200  #EJ(8/2/2021) temporary => hard-coded by fixing 300 simulation for FResampler
     SDATE = ICDAT
     INGENO = cultivar[0:6]  
     CNAME = cultivar[7:]  

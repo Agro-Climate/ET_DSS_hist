@@ -2307,7 +2307,9 @@ def run_create_figure(n_clicks, sce_in_table): #, slider_range):
               #   df_FC = Rain_trimester_gen(WTH_fname, tri_doylist)
               #   df_CL = Rain_trimester_obs(WTD_fname, tri_doylist)
               #   df_rain = df_CL.append(df_FC, ignore_index=True)
-
+            print ('shep of df_FC=', df_FC.shape)
+            print ('shep of df_CL=', df_CL.shape)
+            print ('shep of df_rain=', df_rain.shape)
             #=========================================================end of seasonal rainfall total estimation            
             # Make a new dataframe for plotting
             data = {"EXPERIMENT":EXPERIMENT, "YEAR":YEAR, "PDAT": PDAT, "ADAT":ADAT,"MDAT":MDAT, "HWAM":HWAM, 
