@@ -6,7 +6,7 @@ The SIMAGRI (Simulador de Agricultura, initially developed for Uruguay in Spanis
 
 The SIMAGRI enables DSSAT crop simulation either based on historical weather data or as a forecast.
 
-SIMAGRI Ethiopia: [http://simagri-ethiopia1.iri.columbia.edu/historical](http://simagri-senegal.iri.columbia.edu/historical)
+SIMAGRI Senegal: [http://simagri-senegal.iri.columbia.edu/historical]
 
 ## Instructions to run SIMAGRI locally:
 
