@@ -2,15 +2,11 @@
 
 Built using Docker, Python 3.8, Dash Plotly, and DSSAT (https://dssat.net/), How to compile DSSAT on Linux (https://dssat.net/210/).
 
-Three versions of SIMAGRI have been developed for the following countries:
+The SIMAGRI (Simulador de Agricultura, initially developed for Uruguay in Spanish) have been modified and updated for Senegal:
 
-- Ethiopia
-- Senegal
-- Colombia
+The SIMAGRI enables DSSAT crop simulation either based on historical weather data or as a forecast.
 
-For each country SIMAGRI enables crop simulation either based on historical weather data or as a forecast.
-
-SIMAGRI Ethiopia: http://simagri-ethiopia1.iri.columbia.edu/historical
+SIMAGRI Ethiopia: [http://simagri-ethiopia1.iri.columbia.edu/historical](http://simagri-senegal.iri.columbia.edu/historical)
 
 ## Instructions to run SIMAGRI locally:
 
@@ -26,7 +22,7 @@ SIMAGRI Ethiopia: http://simagri-ethiopia1.iri.columbia.edu/historical
 
 <br> 
 
-## Due to the similarities of the different localizations of SIMAGRI the app is structured so files unique to each country are stored in apps/\<country>
+## Due to the similarities of the different localizations of SIMAGRI the app is structured so files unique to each country (in this case Senegal) are stored in apps/\<country>
 ## Steps `3-5` will allow building Docker images for each country and running them as Docker containers
 <br> 
 
