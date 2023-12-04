@@ -16,8 +16,8 @@ import dash_table
 from dash.dependencies import Input, Output, State
 from dash_extensions import Download
 from dash.exceptions import PreventUpdate
-#import folium
-#from folium.plugins import MarkerCluster
+import folium
+from folium.plugins import MarkerCluster
 from app import app
 
 from os import path # path
@@ -72,11 +72,11 @@ Position= { "Dakar":  [14.700047543225823, -17.50001290971342 ] ,
             "Oussouye":  [12.50016758003306, -16.499989276855867 ],
             "Ziguinchor":  [12.500157105519985, -16.00004292103381 ],
           }
-#a=folium.Map(location=(14.700047543225823, -17.50001290971342))      # afficher la carte
+a=folium.Map(location=(14.700047543225823, -17.50001290971342))      # afficher la carte
 
-#for ville,coords in Position.items():
-#     folium.Marker(coords,popup=f"<b>{ville}</b><br>{coords}",
-#     tooltip=ville, icon=folium.Icon(icon="cloud")).add_to(a)
+for ville,coords in Position.items():
+     folium.Marker(coords,popup=f"<b>{ville}</b><br>{coords}",
+     tooltip=ville, icon=folium.Icon(icon="cloud")).add_to(a)
 
 
 layout = html.Div([
@@ -1255,7 +1255,7 @@ layout = html.Div([
                     {"id": "FixedCosts", "name": "Coûts fixes" }, #Fixed Costs"},
                 ]),
                 data=[
-                #    dict(**{param: "N/A" for param in sce_col_names}) for i in range(1, 2)
+                    dict(**{param: "N/A" for param in sce_col_names}) for i in range(1, 2)
                 #    list("N/A" for param in sublist) for i in range(1, 2) for sublist in sce_col_names
                 ],
                 style_table = {
@@ -1366,7 +1366,7 @@ layout = html.Div([
                                                                     
   dbc.Col([ ## RIGHT HAND SIDE -- CARDS WITH SIMULATION ETC
   
-# dcc.Graph(figure=html.Iframe(srcDoc=a.get_root().render(), width="30%", height="30")), #   # Affichage de la cate
+ dcc.Graph(figure=html.Iframe(srcDoc=a.get_root().render(), width="30%", height="30")), #   # Affichage de la cate
 
         html.Div([
             dbc.Label(" on va mettre la carte ici pour le tester"),
