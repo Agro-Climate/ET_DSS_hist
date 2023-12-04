@@ -58,7 +58,7 @@ layout = html.Div([
                   dbc.FormGroup([ # Scenario
                     dbc.Label("1) Nom du scénario", html_for="sce-name", sm=3, align="start", ),
                     dbc.Col([
-                      dbc.Input(type="text", id="sce-name", value="", minLength=4, maxLength=4, required="required", ),
+                      dbc.Input(type="text", id="sce-name", value="", minLength=4, maxLength=10, required="required", ),
                     ],
                     className="py-2",
                     xl=9,
@@ -159,7 +159,7 @@ layout = html.Div([
                   dbc.FormGroup([ # Start Year
                     dbc.Label("5) Année de début de la simulation ", html_for="year1", sm=3, align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="year1", placeholder="YYYY", value="1983", min=1983, max=2016, required="required", ),
+                      dbc.Input(type="number", id="year1", placeholder="YYYY", value="1983", min=1983, max=2023, required="required", ),
                       dbc.FormText("(au plus tôt en 1983)"),
                     ],
                     className="py-2",
@@ -171,8 +171,8 @@ layout = html.Div([
                   dbc.FormGroup([ # End Year
                     dbc.Label("6) Année de fin de la simulation ", html_for="year2", sm=3, align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="year2", placeholder="YYYY", value="2016", min=1983, max=2016,   required="required", ),
-                      dbc.FormText("(pas plus tard que 2016)"),
+                      dbc.Input(type="number", id="year2", placeholder="YYYY", value="2016", min=1983, max=2022,   required="required", ),
+                      dbc.FormText("(pas plus tard que 2022)"),
                     ],
                     className="py-2",
                     xl=9,
@@ -183,7 +183,7 @@ layout = html.Div([
                   dbc.FormGroup([ # Year to Highlight
                     dbc.Label("7) Une année à mettre en évidence", html_for="target-year", sm=3, align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="target-year", placeholder="YYYY", value="2016",min=1983, max=2016,   required="required", ),
+                      dbc.Input(type="number", id="target-year", placeholder="YYYY", value="2016",min=1983, max=2022,   required="required", ),
                       dbc.FormText("Tapez une année spécifique dont vous vous souvenez (par exemple, une année de sécheresse) et que vous souhaitez comparer avec une distribution climatologique complète."),
                     ],
                     className="py-2",
@@ -273,7 +273,7 @@ layout = html.Div([
                       dcc.DatePickerSingle(
                       id="PltDate-picker",
                       min_date_allowed=date(2021, 1, 1),
-                      max_date_allowed=date(2021, 12, 31),
+                      max_date_allowed=date(2023, 12, 31),
                       initial_visible_month=date(2021, 6, 5),
                       display_format="DD/MM/YYYY",
                       date=date(2021, 6, 15),
