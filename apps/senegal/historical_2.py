@@ -1369,7 +1369,7 @@ layout = html.Div([
  dcc.Graph(figure=html.Iframe(srcDoc=a.get_root().render(), width="30%", height="30")), #   # Affichage de la cate
 
         html.Div([
-            dbc.Label(" on va mettre la carte ici pour le tester"),
+            dbc.Label(" on va mettre la carte ici pour le tester"),  # We want to place the card here, at the disappointment of the historical simulation chart.
           html.Div( # SIMULATIONS
             html.Div([
               html.Header(
