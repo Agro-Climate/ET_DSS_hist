@@ -12,8 +12,15 @@
 
 FROM irikesha/simagridssat:latest
 
-RUN apt-get install -y zlib1g zlib1g-dev libjpeg-dev
-RUN pip3 install exp-mixture-model
+# RUN apt-get install -y zlib1g zlib1g-dev libjpeg-dev
+# RUN pip3 install exp-mixture-model
+
+RUN apt-get install zlib1g
+RUN apt-get install zlib1g-dev
+# RUN pip3 install exp-mixture-model  => error! did not complete successfully
+# RUN apt-get install libjpeg-dev   => error! did not complete successfully
+# RUN apt-get install -y zlib1g zlib1g-dev libjpeg-dev
+# RUN pip3 install exp-mixture-model
 
 COPY ./*.py /home/SIMAGRI/
 COPY ./apps/ /home/SIMAGRI/apps/
