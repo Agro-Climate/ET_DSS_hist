@@ -29,8 +29,7 @@ if country == "ethiopia":
     # from apps.ethiopia import forecast_WGEN as forecast_wg
 elif country == "senegal":
     from apps.senegal import about
-  # from apps.senegal import historical
-    from apps.senegal import historical1
+    from apps.senegal import historical
     # from apps.senegal import historical_FR
     from apps.senegal import forecast_FResampler1 as forecast
     # from apps.senegal import forecast_WGEN as forecast
@@ -62,8 +61,8 @@ apps = {
         "tutorial": "https://sites.google.com/iri.columbia.edu/simagri-french/simagri-tutorial",
         "feedback": "https://sites.google.com/iri.columbia.edu/simagri-senegal/user-feedback-survey-form",
         "paths": {
-            "/about": about1.layout,
-            "/historical": historical1.layout, 
+            "/about": about.layout,
+            "/historical": historical.layout, 
             "/forecast": forecast.layout,
         },
     },

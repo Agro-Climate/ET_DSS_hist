@@ -31,19 +31,16 @@ import bisect   # an element into sorted list
 import graph
 
 sce_col_names=[ "sce_name", "Crop", "Cultivar", "stn_name", "PltDate", "FirstYear", "LastYear", "soil", "iH2O", "iNO3", "plt_density", "TargetYr",
-                "Fert_1_DOY", "N_1_Kg", "P_1_Kg", "K_1_Kg", "Fert_2_DOY", "N_2_Kg", "P_2_Kg", "K_2_Kg", "Fert_3_DOY", "N_3_Kg", "P_3_Kg", "K_3_Kg","Fert_4_DOY",
-                  "N_4_Kg", "P_4_Kg", "K_4_Kg", "P_level", "IR_method", "IR_1_DOY", "IR_1_amt", "IR_2_DOY", "IR_2_amt", "IR_3_DOY", "IR_3_amt",
+                "Fert_1_DOY", "N_1_Kg", "P_1_Kg", "K_1_Kg", "Fert_2_DOY", "N_2_Kg", "P_2_Kg", "K_2_Kg", "Fert_3_DOY", "N_3_Kg", "P_3_Kg", "K_3_Kg",
+                "Fert_4_DOY", "N_4_Kg", "P_4_Kg", "K_4_Kg", "P_level", "IR_method", "IR_1_DOY", "IR_1_amt", "IR_2_DOY", "IR_2_amt", "IR_3_DOY", "IR_3_amt",
                 "IR_4_DOY", "IR_4_amt", "IR_5_DOY", "IR_5_amt", "AutoIR_depth", "AutoIR_thres", "AutoIR_eff",
                 "CropPrice", "NFertCost", "SeedCost", "IrrigCost","OtherVariableCosts", "FixedCosts"
-]  #  
-#Fert_3_DOY=0,
-#N_3_Kg=0,
-#P_3_Kg=0,
-#K_3_Kg=0,
-Fert_4_DOY=0,
-N_4_Kg=0,
-P_4_Kg=0,
-K_4_Kg=0,
+],  #  
+
+#Fert_4_DOY=0,
+#N_4_Kg=0,
+#P_4_Kg=0,
+#K_4_Kg=0,
 
 Position= { "Dakar":  [14.700047543225823, -17.50001290971342 ] , 
             "Bambey": [15.000134707867867, -16.49997854796095 ], 
@@ -201,7 +198,7 @@ layout = html.Div([
                   dbc.FormGroup([ # Start Year
                     dbc.Label("5) Année de début de la simulation ", html_for="year1", sm=3, align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="year1", placeholder="YYYY", value="1983", min=1983, max=2022, required="required", ),
+                      dbc.Input(type="number", id="year1", placeholder="YYYY", value="1983", min=1983, max=2016, required="required", ),
                       dbc.FormText("(au plus tôt en 1983)"),
                     ],
                     className="py-2",
@@ -213,8 +210,8 @@ layout = html.Div([
                   dbc.FormGroup([ # End Year
                     dbc.Label("6) Année de fin de la simulation ", html_for="year2", sm=3, align="start", ),
                     dbc.Col([
-                      dbc.Input(type="number", id="year2", placeholder="YYYY", value="2016", min=1983, max=2023,   required="required", ),
-                      dbc.FormText("(pas plus tard que 2023)"),
+                      dbc.Input(type="number", id="year2", placeholder="YYYY", value="2016", min=1983, max=2016,   required="required", ),
+                      dbc.FormText("(pas plus tard que 2016)"),
                     ],
                     className="py-2",
                     xl=9,
@@ -315,8 +312,8 @@ layout = html.Div([
                       dcc.DatePickerSingle(
                       id="PltDate-picker",
                       min_date_allowed=date(2021, 1, 1),
-                      max_date_allowed=date(2023, 12, 31),
-                      initial_visible_month=date(2021, 6, 15),
+                      max_date_allowed=date(2021, 12, 31),
+                      initial_visible_month=date(2021, 6, 5),
                       display_format="DD/MM/YYYY",
                       date=date(2021, 6, 15),
                       ),
@@ -356,7 +353,7 @@ layout = html.Div([
                       ),
                       html.Div([ # FERTILIZER INPUT TABLE
                         dbc.Row(
-                        dbc.FormText("1ere Application d'angrais",color="green",className="text-center"),
+                        dbc.FormText("1ere Application d'engrais",color="green",className="text-center"),
                                ),  
                         dbc.Row([
                             
@@ -367,7 +364,7 @@ layout = html.Div([
                                 dbc.Label("Quantite (kg/ha)", className="text-center", ),
                             ),
                             dbc.Col(
-                                dbc.Label("Formule d'angrais ", className="text-center", ),
+                                dbc.Label("Formule d'engrais ", className="text-center", ),
                             ),
                             
                                 ]),
@@ -378,6 +375,7 @@ layout = html.Div([
                               options=[
                                {"label":"NPK", "value":"NPK"},
                                {"label":"Uree","value":"Uree"},
+                               {"label":"DAP","value":"DAP"},
                             ],
                          value="NPK",
                           clearable=False
@@ -406,6 +404,8 @@ layout = html.Div([
                           {"label": "15-15-15", "value": "15-15-15"}, # formule d'angrais
                           {"label": "15-10-10", "value": "15-10-10"},
                           {"label": "6-10-20", "value": "6-10-20"},
+                          {"label": "46-0-0", "value": "46-0-0"},
+                          {"label": "18-46-0", "value": "18-46-0"},
                           
                          
                         ],
@@ -436,45 +436,46 @@ layout = html.Div([
                           ),
                         ],),
                         dbc.Row([
-                          # dbc.Col(
-                          #   dbc.Label("1st", className="text-center", ),
-                          # ),
-                          dbc.Col(
+                           dbc.Col(""),                                    
+                          dbc.Col(                      
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="Fert_1_DOY", value=0, min="0", max="365", required="required", ),
-                            ],),
-                          ),
-                          # dbc.Col(
-                          #   dbc.FormGroup([
-                          #     # dbc.Label("1st", html_for="depth1", ),
-                          #     dbc.Input(type="number", id="depth1", value=0, min="0", step="0.1", required="required", ),
-                          #   ],),
-                          # ),
-                          dbc.Col(
-                            dbc.FormGroup([
-                          #  dbc.Input(type="number", id="N-amt1", value=0, min="0", step="0.1", required="required", ),
-                          #   dbc.Input(id="N_1",),
-                             html.Div(id="N_1_Kg")
-                            ],),
-                      #  html.Div(id='Quantite_1')  # valeur de sortie
-                          
+                             html.Div(id="N_1")
+                            ],),                         
                           ),
                           dbc.Col(
-                            dbc.FormGroup([
-                          #  dbc.Input(type="number", id="P-amt1", value=0, min="0", step="0.1", required="required", ),
-                          # dbc.Input(type="number", id="P_1", value=15, min="10", step="1",max="15", required="required", ),  
-                              html.Div(id="P_1_Kg")
+                            dbc.FormGroup([               
+                              html.Div(id="P_1")
                             ],),
-                       #   html.Div(id='Ferti_1')  # valeur de sortie
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                            #  dbc.Input(type="number", id="K-amt1", value=0, min="0", step="0.1", required="required", ),
-                            # dbc.Input(type="number", id="K_1", value=15, min="10", step="1",max="20", required="required", ),
-                            html.Div(id="K_1_Kg")
+                            html.Div(id="K_1")
                             ],),
                           ),
                         ],),
+                        dbc.Row([
+                            dbc.Col(
+                            dbc.FormGroup([
+                              dbc.Input(type="number", id="fert-day1", value=0, min="0", max="365", required="required", ),
+                            ],),
+                          ),
+                            
+                           dbc.Col( 
+                               dbc.FormGroup([
+                            dbc.Input(type="number", id="N-amt1", value=0, min="0", step="0.1", required="required", ),
+                                             ],), 
+                                     ),
+                          dbc.Col(
+                               dbc.FormGroup([      
+                            dbc.Input(type="number", id="P-amt1", value=0, min="0", step="0.1", required="required", ),
+                                            ],),
+                                 ),
+                          dbc.Col(
+                              dbc.FormGroup([ 
+                            dbc.Input(type="number", id="K-amt1", value=0, min="0", step="0.1", required="required", ), 
+                                            ],),                                
+                                 ),
+                              ], ),
 # pour Ajouter 
                       dbc.Row(
                     dcc.RadioItems(
@@ -516,6 +517,7 @@ layout = html.Div([
                               options=[
                                {"label":"NPK", "value":"NPK"},
                                {"label":"Uree","value":"Uree"},
+                               {"label":"DAP","value":"DAP"},
                                {"label":"Sans Fertilisation","value":"Sans_fertilisation"}
                             ],
                          value="Sans fertilisation",
@@ -545,7 +547,8 @@ layout = html.Div([
                           {"label": "15-15-15", "value": "15-15-15"}, # formule d'angrais
                           {"label": "15-10-10", "value": "15-10-10"},
                           {"label": "6-10-20", "value": "6-10-20"},
-                          {"label": "46-0-0", "value": "46-0-0"}
+                          {"label": "46-0-0", "value": "46-0-0"},
+                          {"label": "18-46-0", "value": "18-46-0"},
                           
                          
                         ],
@@ -559,20 +562,39 @@ layout = html.Div([
 
                       dbc.Row([
 
-                     dbc.Col(
-                     dbc.Input(type="number", id="Fert_2_DOY", value=0, min="0", max="365", required="required" )
-                      ),
-                      dbc.Col( html.Div(id="N_2_Kg")),
-                      dbc.Col( html.Div(id="P_2_Kg")),
-                      dbc.Col( html.Div(id="K_2_Kg")),
+                      dbc.Col(""),
+                      dbc.Col( html.Div(id="N_2")),
+                      dbc.Col( html.Div(id="P_2")),
+                      dbc.Col( html.Div(id="K_2")),
                             ] ),
+                       dbc.Row([ 
+                          dbc.Col(
+                     dbc.Input(type="number", id="fert-day2", value=0, min="0", max="365", required="required" )
+                      ), 
+
+                          dbc.Col(
+                              dbc.FormGroup([
+                                dbc.Input(type="number", id="N-amt2", value=0, min="0", step="0.1", required="required", ),
+                                           ],),      
+                                 ),
+                          dbc.Col( 
+                                 dbc.FormGroup([
+                                dbc.Input(type="number", id="P-amt2", value=0, min="0", step="0.1", required="required", ),
+                                              ],),
+                                 ), 
+                          dbc.Col( 
+                               dbc.FormGroup([
+                                dbc.Input(type="number", id="K-amt2", value=0, min="0", step="0.1", required="required", ), 
+                                            ],),
+                                 ), 
+                              ], ),
                       ],id="aff_1" ,
                       style={"display":"none"}
                       
                       ),          
 #
                         dbc.Row(
-                        dbc.FormText("2eme Application d'angrais",color="green",className="text-center"),
+                        dbc.FormText(" Application d'angrais",color="green",className="text-center"),
                                ),
 
                         dbc.Row([
@@ -595,6 +617,7 @@ layout = html.Div([
                               options=[
                                {"label":"NPK", "value":"NPK"},
                                {"label":"Uree","value":"Uree"},
+                               {"label":"DAP","value":"DAP"},
                                {"label":"Sans Fertilisation","value":"Sans_fertilisation"}
                             ],
                          value="Sans fertilisation",
@@ -625,6 +648,8 @@ layout = html.Div([
                           {"label": "15-15-15", "value": "15-15-15"}, # formule d'angrais
                           {"label": "15-10-10", "value": "15-10-10"},
                           {"label": "6-10-20", "value": "6-10-20"},
+                          {"label": "46-0-0", "value": "46-0-0"},
+                          {"label": "18-46-0", "value": "18-46-0"},
                           
                          
                         ],
@@ -657,210 +682,75 @@ layout = html.Div([
 
                         dbc.Row([
                           
-                          dbc.Col(
-                            dbc.FormGroup([
-                              dbc.Input(type="number", id="Fert_3_DOY", value=0, min="0", max="365", required="required", ),
-                           
-                            ],),
-                          ),
+                          dbc.Col(""),
                           
                           dbc.Col(
                             dbc.FormGroup([
-                            #  dbc.Input(type="number", id="N-amt2", value=0, min="0", step="0.1", required="required", ),
-                          #  dbc.Input(type="number", id="N_2", value=0, min="6", step="1",max="100" ,required="required", ),
-                            html.Div(id="N_3_Kg")
+                            html.Div(id="N_3")
                             ],),
                         
                           ),
                         
                           dbc.Col(
-                            dbc.FormGroup([
-                          #    dbc.Input(type="number", id="P-amt2", value=0, min="0", step="0.1", required="required", ),
-                          #  dbc.Input(type="number", id="P_2", value=0, min="0", step="1",max="15", required="required", ),
-                           html.Div(id="P_3_Kg")
+                            dbc.FormGroup([                          
+                           html.Div(id="P_3")
                             ],),
                           ),
                         dbc.Col(
                             dbc.FormGroup([
-                          #    dbc.Input(type="number", id="K-amt2", value=0, min="0", step="0.1", required="required", ),
-                          #dbc.Input(type="number", id="K_2", value=0, min="0", step="1",max="20", required="required", ),
-                          html.Div(id="K_3_Kg") 
+                            html.Div(id="K_3") 
+                            ],),
+                          ), 
+
+                        ],), 
+                        dbc.Row([ 
+                          dbc.Col(
+                            dbc.FormGroup([
+                              dbc.Input(type="number", id="fert-day3", value=0, min="0", max="365", required="required", ),
+                           
                             ],),
                           ),  
-                        ],),
-# pour Ajouter 2
-                  #    dbc.Row(
-                  #    dcc.RadioItems(
-                  #      id="ajout2",          # la fertilisation
-                  #      options=[
-                  #        {"label": "Non", "value": "No_ajout_2"},
-                  #      ],
-                  #      labelStyle = {"display": "inline-block","marginRight": 10},
-                  #      value="No_ajout_2",
-                  #    ),
-                  #           ),
-                  #    html.Div([
-                  #    dbc.Row([
-                  #        
-                   #         dbc.Col(""),
-                   #       
-                    #        dbc.Col(
-                    #            dbc.Label("Fertilisation", className="text-center")
-                  #          ),
-                   #         dbc.Col(
-                   #             dbc.Label("Quantite", className="text-center" ),
-                   #         ),
-                   #         dbc.Col(
-                   #             dbc.Label("Formule ", className="text-center" ),
-                    #        ),
-                            
-                               
-                    #  ]),
 
-                 # dbc.Row([
-                 #         dbc.Col(
-                 #           dbc.Label("Jours après semis", className="text-center" ),
-                 #         ),
-
-                 #         dbc.Col(
-                  #         dcc.Dropdown(
-                  #            id="typ_fert4",
-                  #            options=[
-                 #              {"label":"NPK", "value":"NPK"},
-                  #             {"label":"Uree","value":"Uree"},
-                  #             {"label":"Sans Fertilisation","value":"Sans_fertilisation"}
-                  #          ],
-                  #       value="Sans fertilisation",
-                  #        clearable=False
-                  #                      )   
-                  #                ),
-                  #          dbc.Col(
-                 #           dcc.Dropdown(
-                  #      id="Q_4",
-                 #        {"label": "50", "value":   50}, # choix des valeurs
-                 #         {"label": "100", "value": 100},  # essayons avec input mais en changeant les entrees
-                  #        {"label": "150", "value": 150},
-                  #        {"label": "200", "value": 200},
-                          
-                          
-                  #      ],
-                  #      value=0,
-                  #      clearable=False,
+                          dbc.Col( 
+                              dbc.FormGroup([
+                          dbc.Input(type="number", id="N-amt3", value=0, min="0", step="0.1", required="required", ),
+                                          ],),
+                                 ),
+                          dbc.Col( 
+                              dbc.FormGroup([
+                                dbc.Input(type="number", id="P-amt3", value=0, min="0", step="0.1", required="required", ),
+                                           ],),
+                                 ), 
+                          dbc.Col( 
+                              dbc.FormGroup([
+                                dbc.Input(type="number", id="K-amt3", value=0, min="0", step="0.1", required="required", ), 
+                                          ],),
+                                 ), 
+                               ], ),
                       
-                   #                       ),
-                  #                   ),
-                  #         dbc.Col(
-                  #      dcc.Dropdown(
-                  #      id="Form_ang4",          
-                  #      options=[
-                  #        {"label": "15-15-15", "value": "15-15-15"}, # formule d'angrais
-                  #        {"label": "15-10-10", "value": "15-10-10"},
-                  #        {"label": "6-10-20", "value": "6-10-20"},
-                  #        {"label": "46-0-0", "value": "46-0-0"}
-                          
                          
-                  #      ],
-                  #       value="Pas d'angrais",
-                  #      clearable=False,
-                  #                    )    
+                       
 
-                  #                  ) 
-
-                  #        ] ),
-# Pour afficher les donnees ajoutees
-                   #   dbc.Row([
-
-                  #   dbc.Col(
-                  #   dbc.Input(type="number", id="fert-day4", value=0, min="0", max="365", required="required" )
-                  #    ),
-                  #    dbc.Col( html.Div(id="N_4")),
-                  #    dbc.Col( html.Div(id="P_4")),
-                  #    dbc.Col( html.Div(id="K_4")),
-                  #          ] ),
-                  #    ], 
-                  #    id="aff_2"),
-                             
-                      
-
-#                      html.Button("Ajouter",id="ajout_2",n_clicks=0),
-                      
-#                      dbc.Row(
-#                      html.Div(id="a_afficher_2"),
-#                              ),
-
-                        dbc.Row(
-                      #  dbc.FormText("Choisir les Valeurs de N, P et K en fonction du type d'angrais choisi,On mettra par exemple: N=15, P=15 et K=15 pour l'angrais 15-15-15"),
                         
-                               ),
-                      #  dbc.Row([
-                          # dbc.Col(
-                          #   dbc.Label("3rd", className="text-center", ),
-                          # ),
-                         # dbc.Col(
-                         #   dbc.FormGroup([
-                          #    dbc.Input(type="number", id="fert-day3", value=0, min="0", max="365", required="required", ),
-                        #    ],),
-                        #  ),
-                          # dbc.Col(
-                          #   dbc.FormGroup([
-                          #     # dbc.Label("3rd", html_for="depth3", ),
-                          #     dbc.Input(type="number", id="depth3", value=0, min="0", step="0.1", required="required", ),
-                          #   ],),
-                          # ),
-                       #   dbc.Col(
-                       #     dbc.FormGroup([
-                          #    dbc.Input(type="number", id="N-amt3", value=0, min="0", step="0.1", required="required", ),
-                       #     ],),
-                      #    ),
-                      #    dbc.Col(
-                      #      dbc.FormGroup([
-                          #    dbc.Input(type="number", id="P-amt3", value=0, min="0", step="0.1", required="required", ),
-                      #      ],),
-                      #    ),
-                      #    dbc.Col(
-                      #      dbc.FormGroup([
-                          #    dbc.Input(type="number", id="K-amt3", value=0, min="0", step="0.1", required="required", ),
-                      #      ],),
-                      #    ),
-                      #  ],),
-                      #  dbc.Row([
-                          # dbc.Col(
-                          #   dbc.Label("4th", className="text-center", ),
-                          # ),
-                        #  dbc.Col(
-                        #    dbc.FormGroup([
-                          #    dbc.Input(type="number", id="fert-day4", value=0, min="0", max="365", required="required", ),
-                        #    ],),
-                        #  ),
-                          # dbc.Col(
-                          #   dbc.FormGroup([
-                          #     # dbc.Label("4th", html_for="depth4", ),
-                          #     dbc.Input(type="number", id="depth4", value=0, min="0", step="0.1", required="required", ),
-                          #   ],),
-                          # ),
-                        #  dbc.Col(
-                        #    dbc.FormGroup([
-                            #  dbc.Input(type="number", id="N-amt4", value=0, min="0", step="0.1", required="required", ),
-                        #    ],),
-                        #  ),
-                        #  dbc.Col(
-                        #    dbc.FormGroup([
-                            #  dbc.Input(type="number", id="P-amt4", value=0, min="0", step="0.1", required="required", ),
-                        #    ],),
-                        #  ),
-                         # dbc.Col(
-                         #   dbc.FormGroup([
-                            #  dbc.Input(type="number", id="K-amt4", value=0, min="0", step="0.1", required="required", ),
-                         #   ],),
-                         # ),
-                      #  ],)
-                      #  ,
-                     # dbc.Row([
-                      #  dbc.FormText(" L'utilisateur doit déduire la quantité de N de la quantité totale d'engrais. Par exemple, si l'on applique 150 kg/ha de NPK (15-15-15), la quantité de N sera de 150*15/100 = 22,5 N kg/ha."),
-                      #  dbc.FormText("Choisoir la Quantite et la formule d'angrais utilisee"),
-                      #  ],
-                      #  ),
-                      ],
+                        dbc.Row( [     
+                          dbc.Col( 
+                              dbc.FormGroup([
+                            #    dbc.Input(type="number", id="N-amt4", value=0, min="0", step="0.1", required="required", ),
+                                           ],),
+                                 ),
+                          dbc.Col( 
+                              dbc.FormGroup([
+                            #    dbc.Input(type="number", id="P-amt4", value=0, min="0", step="0.1", required="required", ),
+                                           ],),
+                                 ), 
+                          dbc.Col(
+                              dbc.FormGroup([ 
+                            #    dbc.Input(type="number", id="K-amt4", value=0, min="0", step="0.1", required="required", ), 
+                                      ],),
+                                 ), 
+                              ] ,),
+                       
+                       ],
                       id="fert-table-Comp", 
                       className="w-100",
                       style={"display": "none"},
@@ -1228,10 +1118,10 @@ layout = html.Div([
                     {"id": "N_3_Kg", "name": "N(Kg/ha)(3)"},
                     {"id": "P_3_Kg", "name": "P(Kg/ha)(3)"},
                     {"id": "K_3_Kg", "name": "K(Kg/ha)(3)"},
-                    {"id": "Fert_4_DOY", "name": "FDOY(4)"},
-                    {"id": "N_4_Kg", "name": "N(Kg/ha)(4)"},
-                    {"id": "P_4_Kg", "name": "P(Kg/ha)(4)"},
-                    {"id": "K_4_Kg", "name": "K(Kg/ha)(4)"},
+                  #  {"id": "Fert_4_DOY", "name": "FDOY(4)"},
+                  #  {"id": "N_4_Kg", "name": "N(Kg/ha)(4)"},
+                  #  {"id": "P_4_Kg", "name": "P(Kg/ha)(4)"},
+                  #  {"id": "K_4_Kg", "name": "K(Kg/ha)(4)"},
                     {"id": "P_level", "name": "P extractible"}, # Extractable P"},
                     {"id": "IR_method", "name": "Méthode d'irrigation" }, # Irrigation Method"},
                     {"id": "IR_1_DOY", "name": "IDOY(1)"},
@@ -1255,8 +1145,8 @@ layout = html.Div([
                     {"id": "FixedCosts", "name": "Coûts fixes" }, #Fixed Costs"},
                 ]),
                 data=[
-            #        dict(**{param: "N/A" for param in sce_col_names}) for i in range(1, 2)
-                #    list("N/A" for param in sublist) for i in range(1, 2) for sublist in sce_col_names
+              #      dict(**{param: "N/A" for param in sce_col_names}) for i in range(1, 2)
+                   # list("N/A" for param in sublist) for i in range(1, 2) for sublist in sce_col_names
                 ],
                 style_table = {
                     "overflowX": "auto",
@@ -1369,7 +1259,7 @@ layout = html.Div([
 # dcc.Graph(figure=html.Iframe(srcDoc=a.get_root().render(), width="30%", height="30")), #   # Affichage de la cate
 
         html.Div([
-            dbc.Label(" on va mettre la carte ici pour le tester"),
+        #    dbc.Label(" on va mettre la carte ici pour le tester"),
           html.Div( # SIMULATIONS
             html.Div([
               html.Header(
@@ -1592,6 +1482,7 @@ soil_options = {
 type_angrais = {
     "NPK": ["15-15-15","15-10-10", "6-10-20"],
     "Uree":["46-0-0"],
+    "DAP":["18-46-0"],
     "Sans_fertilisation":["0-0-0"]
 }
 #Q_1 = 50 or 100 or 150 or 200,
@@ -1635,9 +1526,9 @@ def set_Form_ang3(option3_valide):
 
 #--------------- 1ere Application ----------------------------------
 
-#----------- Remplissage de N_1_Kg------------------------------------
+#----------- Remplissage de N_1------------------------------------
 @app.callback(                       # Recuperer la quantite d'angrais
-        Output("N_1_Kg", "children"),      
+        Output("N_1", "children"),      
         [Input("Q_1","value"),
          Input("Form_ang1","value")
         ],
@@ -1645,19 +1536,21 @@ def set_Form_ang3(option3_valide):
 
 def quantite_N1(Q_1 ,Form_ang1):   
    if Form_ang1 == "15-15-15":
-       N_1_Kg= Q_1 * 0.15
+       N_1= Q_1 * 0.15
    elif Form_ang1 == "15-10-10":
-       N_1_Kg= Q_1 * 0.15
+       N_1= Q_1 * 0.15
    elif Form_ang1 == "6-10-20":
-        N_1_Kg= Q_1 * 0.06
+        N_1= Q_1 * 0.06
    elif Form_ang1 == "46-0-0":
-       N_1_Kg= Q_1 * 0.46
+       N_1= Q_1 * 0.46
+   elif Form_ang1 == "18-46-0":
+       N_1=Q_1 * 0.18
    else :
-       N_1_Kg= "Entrer les valeurs"
-   return N_1_Kg     
+       N_1= "Entrer les valeurs"
+   return N_1     
 #------------Remlissage de P_1_Kg---------------------------------
 @app.callback(                   
-        Output("P_1_Kg", "children"),      
+        Output("P_1", "children"),      
         [Input("Q_1","value"),
          Input("Form_ang1","value")
         ],
@@ -1665,19 +1558,21 @@ def quantite_N1(Q_1 ,Form_ang1):
 )
 def quantite_P1(Q_1 ,Form_ang1 ):
     if Form_ang1 == "15-15-15":
-        P_1_Kg= Q_1 * 0.15
+        P_1= Q_1 * 0.15
     elif Form_ang1 == "15-10-10":
-        P_1_Kg= Q_1 * 0.10
+        P_1= Q_1 * 0.10
     elif Form_ang1 == "6-10-20":
-        P_1_Kg= Q_1 * 0.10
+        P_1= Q_1 * 0.10
     elif Form_ang1 == "46-0-0":
-        P_1_Kg= Q_1 * 0
+        P_1= Q_1 * 0
+    elif Form_ang1 == "18-46-0":
+        P_1= Q_1 * 0.46
     else :
-        P_1_Kg="Entrer les valeurs"
-    return P_1_Kg     
+        P_1="Entrer les valeurs"
+    return P_1     
 #---------------- Remplissage de K_1_Kg--------------------------
 @app.callback(                    
-        Output("K_1_Kg", "children"),       
+        Output("K_1", "children"),       
         [Input("Q_1","value"),
          Input("Form_ang1","value")
         ],
@@ -1685,16 +1580,18 @@ def quantite_P1(Q_1 ,Form_ang1 ):
 )
 def quantite_K1(Q_1 ,Form_ang1 ):
     if Form_ang1 == "15-15-15":
-        K_1_Kg= Q_1 * 0.15
+        K_1= Q_1 * 0.15
     elif Form_ang1 == "15-10-10":
-        K_1_Kg= Q_1 * 0.10
+        K_1= Q_1 * 0.10
     elif Form_ang1 == "6-10-20":
-        K_1_Kg= Q_1 * 0.20
+        K_1= Q_1 * 0.20
     elif Form_ang1 == "46-0-0":
-        K_1_Kg= Q_1 * 0
+        K_1= Q_1 * 0
+    elif Form_ang1 == "18-46-0":
+        K_1= Q_1 * 0
     else :
-        K_1_Kg="Entrer les valeurs"
-    return K_1_Kg     
+        K_1="Entrer les valeurs"
+    return K_1    
 
 # Pour le premier Ajout
 #@app.callback(
@@ -1713,29 +1610,31 @@ def quantite_K1(Q_1 ,Form_ang1 ):
 #--------- 2eme Application -----------------------------
 # -----------Remplissage N_2------------------
 @app.callback(
-      Output("N_2_Kg","children"),
+      Output("N_2","children"),
       [Input("Q_2","value"),
          Input("Form_ang2","value")
         ]
 )
 def quantite_N2(Q_2 ,Form_ang2):   
    if Form_ang2 == "15-15-15":
-       N_2_Kg= Q_2 * 0.15
+       N_2= Q_2 * 0.15
    elif Form_ang2 == "15-10-10":
-       N_2_Kg= Q_2 * 0.15
+       N_2= Q_2 * 0.15
    elif Form_ang2 == "6-10-20":
-        N_2_Kg= Q_2 * 0.06
+        N_2= Q_2 * 0.06
    elif Form_ang2 == "46-0-0":
-       N_2_Kg= Q_2 * 0.46
+       N_2= Q_2 * 0.46
+   elif Form_ang2 == "18-46-0":
+       N_2=Q_2 * 0.18
    elif Form_ang2 == "0-0-0":
-       N_2_Kg=Q_2 * 0
+       N_2=Q_2 * 0
    else :
-       N_2_Kg= "Entrer les valeurs"
-   return N_2_Kg
+       N_2= "Entrer les valeurs"
+   return N_2
 
 # ---------- Remplissage de P_2_Kg---------------
 @app.callback(                      
-        Output("P_2_Kg", "children"),      
+        Output("P_2", "children"),      
         [Input("Q_2","value"),
          Input("Form_ang2","value")
         ],
@@ -1743,22 +1642,24 @@ def quantite_N2(Q_2 ,Form_ang2):
 
 def quantite_P2(Q_2 ,Form_ang2):   
    if Form_ang2 == "15-15-15":
-       P_2_Kg= Q_2 * 0.15
+       P_2= Q_2 * 0.15
    elif Form_ang2 == "15-10-10":
-       P_2_Kg= Q_2 * 0.1
+       P_2= Q_2 * 0.1
    elif Form_ang2 == "6-10-20":
-        P_2_Kg= Q_2 * 0.1
+        P_2= Q_2 * 0.1
    elif Form_ang2 == "46-0-0":
-       P_2_Kg= Q_2 * 0
+       P_2= Q_2 * 0
+   elif Form_ang2 == "18-46-0":
+       P_2=Q_2 * 0.46
    elif Form_ang2 == "0-0-0":
-       P_2_Kg=Q_2 * 0
+       P_2=Q_2 * 0
    else :
-       P_2_Kg= "Entrer les valeurs"
-   return P_2_Kg
+       P_2= "Entrer les valeurs"
+   return P_2
 
 #---------- Remplissage K_2_Kg------------------
 @app.callback(                      
-        Output("K_2_Kg", "children"),      
+        Output("K_2", "children"),      
         [Input("Q_2","value"),
          Input("Form_ang2","value")
         ],
@@ -1766,18 +1667,20 @@ def quantite_P2(Q_2 ,Form_ang2):
 
 def quantite_K2(Q_2 ,Form_ang2):   
    if Form_ang2 == "15-15-15":
-       K_2_Kg= Q_2 * 0.15
+       K_2= Q_2 * 0.15
    elif Form_ang2 == "15-10-10":
-       K_2_Kg= Q_2 * 0.1
+       K_2= Q_2 * 0.1
    elif Form_ang2 == "6-10-20":
-        K_2_Kg= Q_2 * 0.2
+        K_2= Q_2 * 0.2
    elif Form_ang2 == "46-0-0":
-       K_2_Kg= Q_2 * 0
+       K_2= Q_2 * 0
+   elif Form_ang2 == "18-46-0":
+       K_2=Q_2 * 0
    elif Form_ang2 == "0-0-0":
-       K_2_Kg=Q_2 * 0
+       K_2=Q_2 * 0
    else :
-       K_2_Kg= "Entrer les valeurs"
-   return K_2_Kg
+       K_2= "Entrer les valeurs"
+   return K_2
 
 
 ##### ---------- 3eme application -----------------------
@@ -1785,7 +1688,7 @@ def quantite_K2(Q_2 ,Form_ang2):
 #-------------- Remplissage de N_3_Kg--------------------
 
 @app.callback(                       # Recuperer la quantite d'angrais
-        Output("N_3_Kg", "children"),      
+        Output("N_3", "children"),      
         [Input("Q_3","value"),
          Input("Form_ang3","value")
         ],
@@ -1793,23 +1696,25 @@ def quantite_K2(Q_2 ,Form_ang2):
 
 def quantite_N3(Q_3 ,Form_ang3):   
    if Form_ang3 == "15-15-15":
-       N_3_Kg= Q_3 * 0.15
+       N_3= Q_3 * 0.15
    elif Form_ang3 == "15-10-10":
-       N_3_Kg= Q_3 * 0.15
+       N_3= Q_3 * 0.15
    elif Form_ang3 == "6-10-20":
-        N_3_Kg= Q_3 * 0.06
+        N_3= Q_3 * 0.06
    elif Form_ang3 == "46-0-0":
-       N_3_Kg= Q_3 * 0.46
+       N_3= Q_3 * 0.46
+   elif Form_ang3 == "18-46-0":
+       N_3=Q_3 * 0.18
    elif Form_ang3 == "0-0-0":
-       N_3_Kg=Q_3 * 0
+       N_3=Q_3 * 0
    else :
-       N_3_Kg= "Entrer les valeurs"
-   return N_3_Kg
+       N_3= "Entrer les valeurs"
+   return N_3
 
 #------------ Remplissage de P_3_Kg--------------------
 
 @app.callback(                      
-        Output("P_3_Kg", "children"),      
+        Output("P_3", "children"),      
         [Input("Q_3","value"),
          Input("Form_ang3","value")
         ],
@@ -1817,23 +1722,25 @@ def quantite_N3(Q_3 ,Form_ang3):
 
 def quantite_P3(Q_3 ,Form_ang3):   
    if Form_ang3 == "15-15-15":
-       P_3_Kg= Q_3 * 0.15
+       P_3= Q_3 * 0.15
    elif Form_ang3 == "15-10-10":
-       P_3_Kg= Q_3 * 0.1
+       P_3= Q_3 * 0.1
    elif Form_ang3 == "6-10-20":
-        P_3_Kg= Q_3 * 0.1
+        P_3= Q_3 * 0.1
    elif Form_ang3 == "46-0-0":
-       P_3_Kg= Q_3 * 0
+       P_3= Q_3 * 0
+   elif Form_ang3 == "18-46-0":
+       P_3=Q_3 * 0.46
    elif Form_ang3 == "0-0-0":
-       P_3_Kg=Q_3 * 0
+       P_3=Q_3 * 0
    else :
-       P_3_Kg= "Entrer les valeurs"
-   return P_3_Kg
+       P_3= "Entrer les valeurs"
+   return P_3
 
 # --------------- Remplissage de K_3_Kg---------------------
 
 @app.callback(                     
-        Output("K_3_Kg", "children"),      
+        Output("K_3", "children"),      
         [Input("Q_3","value"),
          Input("Form_ang3","value")
         ],
@@ -1841,18 +1748,20 @@ def quantite_P3(Q_3 ,Form_ang3):
 
 def quantite_K3(Q_3 ,Form_ang3):   
    if Form_ang3 == "15-15-15":
-       K_3_Kg= Q_3 * 0.15
+       K_3= Q_3 * 0.15
    elif Form_ang3 == "15-10-10":
-       K_3_Kg= Q_3 * 0.1
+       K_3= Q_3 * 0.1
    elif Form_ang3 == "6-10-20":
-        K_3_Kg= Q_3 * 0.2
+        K_3= Q_3 * 0.2
    elif Form_ang3 == "46-0-0":
-       K_3_Kg= Q_3 * 0
+       K_3= Q_3 * 0
+   elif Form_ang3 == "18-46-0":
+       K_3=Q_3 * 0
    elif Form_ang3 == "0-0-0":
-       K_3_Kg=Q_3 * 0   
+       K_3=Q_3 * 0   
    else :
-       K_3_Kg= "Entrer les valeurs"
-   return K_3_Kg
+       K_3= "Entrer les valeurs"
+   return K_3
 
 # ---------- 4eme application -------------
 # -----------Remplissage N_4------------------
@@ -1935,9 +1844,9 @@ def quantite_K3(Q_3 ,Form_ang3):
 )
 def afficher1(visibility_state):
     if visibility_state =="No_ajout_1":
-        N_2_Kg=0,
-        P_2_Kg=0,
-        K_2_Kg=0,
+        N_2=0,
+        P_2=0,
+        K_2=0,
         return {"display":"none"}
     
     else:
@@ -2164,6 +2073,21 @@ def download_scenarios(n_clicks, scenario_table):
               State("target-year", "value"),
               State("fert_input", "value"),   # de la
               State("fert-day1","value"),
+        #     State("N_1","value"),
+        #     State("P_1","value"),
+        #     State("K_1","value"),
+        #     State("fert-day2","value"),
+        #     State("N_2","value"),
+        #     State("P_2","value"),
+        #     State("K_2","value"),
+        #     State("fert-day3","value"),
+        #     State("N_3","value"),
+        #     State("P_3","value"),
+        #     State("K_3","value"),
+        #     State("fert-day4","value"),
+        #     State("N_4","value"),
+        #     State("P_4","value"),
+        #     State("K_4","value"),
               State("N-amt1","value"),
               State("P-amt1","value"),
               State("K-amt1","value"),
@@ -2175,10 +2099,10 @@ def download_scenarios(n_clicks, scenario_table):
               State("N-amt3","value"),
               State("P-amt3","value"),
               State("K-amt3","value"),
-              State("fert-day4","value"),
-              State("N-amt4","value"),
-              State("P-amt4","value"),
-              State("K-amt4","value"),     # a ici
+            # State("fert-day4","value"),
+            # State("N-amt4","value"),
+            # State("P-amt4","value"),
+            # State("K-amt4","value"),      
               State("P_input", "value"),
               State("extr_P", "value"),
               State("irrig_input", "value"),
@@ -2205,7 +2129,7 @@ def download_scenarios(n_clicks, scenario_table):
               State("variable-costs","value"),
               State("scenario-table","data")
 )
-def make_sce_table(
+def make_sce_table( # 53 valeurs
     n_clicks, file_contents, filename, station, start_year, end_year, planting_date, crop, cultivar, soil_type,
     initial_soil_moisture, initial_soil_no3, planting_density, scenario, target_year,
     fert_app,
@@ -2213,7 +2137,7 @@ def make_sce_table(
     fd1, fN1,fP1,fK1, #EJ(7/7/2021) added P and K as well as N
     fd2, fN2,fP2,fK2,
     fd3, fN3,fP3,fK3,
-    fd4, fN4,fP4,fK4,
+#    fd4, fN4,fP4,fK4,
     p_sim, p_level,  #EJ(7/7/2021) Phosphorous simualtion
     irrig_app,  #EJ(7/7/2021) irrigation option
     irrig_method,  #on reported date
@@ -2293,16 +2217,16 @@ def make_sce_table(
                 fN3 = float(csv_df.N_3_Kg[i]) # float
                 fP3 = float(csv_df.P_3_Kg[i]) # float
                 fK3 = float(csv_df.K_3_Kg[i]) # float
-                fd4 = int(csv_df.Fert_4_DOY[i]) # int
-                fN4 = float(csv_df.N_4_Kg[i]) # float
-                fP4 = float(csv_df.P_4_Kg[i]) # float
-                fK4 = float(csv_df.K_4_Kg[i]) # float
+               # fd4 = int(csv_df.Fert_4_DOY[i]) # int
+               # fN4 = float(csv_df.N_4_Kg[i]) # float
+               # fP4 = float(csv_df.P_4_Kg[i]) # float
+               # fK4 = float(csv_df.K_4_Kg[i]) # float
 
                 current_fert = pd.DataFrame({
-                    "DAP": [fd1, fd2, fd3, fd4],      #, , sortie de crochets
-                    "NAmount": [fN1, fN2 ,fN3, fN4],  #, ,
-                    "PAmount": [fP1, fP2 ,fP3, fP4],  #, 
-                    "KAmount": [fK1, fK2, fK3, fK4],  #, ,
+                    "DAP": [fd1, fd2, fd3, ],     #,fd4 , sortie de crochets
+                    "NAmount": [fN1, fN2 ,fN3, ], #,fN4 ,
+                    "PAmount": [fP1, fP2 ,fP3,],  #, fP4 
+                    "KAmount": [fK1, fK2, fK3, ], #fK4 ,
                 })
 
                 # Phosphorous simualtion
@@ -2353,7 +2277,7 @@ def make_sce_table(
                             fd1 == None or fN1 == None  or fP1 == None  or fK1== None
                         or  fd2 == None or fN2 == None  or fP2 == None  or fK2== None
                         or  fd3 == None or fN3 == None  or fP3 == None  or fK3== None
-                        or  fd4 == None or fN4 == None  or fP4 == None  or fK4== None
+   #                     or  fd4 == None or fN4 == None  or fP4 == None  or fK4== None
                     )
                     or (
                             irrig_method == None
@@ -2386,13 +2310,13 @@ def make_sce_table(
                         (fd1 < 0 or 365 < fd1) or fN1 < 0 or fP1 < 0 or fK1 < 0
                     or  (fd2 < 0 or 365 < fd2) or fN2 < 0 or fP2 < 0 or fK2 < 0
                     or  (fd3 < 0 or 365 < fd3) or fN3 < 0 or fP3 < 0 or fK3 < 0     # enlever
-                    or  (fd4 < 0 or 365 < fd4) or fN4 < 0 or fP4 < 0 or fK4 < 0
+    #                or  (fd4 < 0 or 365 < fd4) or fN4 < 0 or fP4 < 0 or fK4 < 0
                 ):
                     if not (
                             fd1 == -99 and fN1 == -99 and fP1 == -99 and fK1 == -99
                         and fd2 == -99 and fN2 == -99 and fP2 == -99 and fK2 == -99
                         and fd3 == -99 and fN3 == -99 and fP3 == -99 and fK3 == -99    # enlever
-                        and fd4 == -99 and fN4 == -99 and fP4 == -99 and fK4 == -99
+   #                     and fd4 == -99 and fN4 == -99 and fP4 == -99 and fK4 == -99
                     ):
                         fert_valid = False
                 else:
@@ -2400,7 +2324,7 @@ def make_sce_table(
                             float(fd1).is_integer() and (fN1*10.0).is_integer() and (fP1*10.0).is_integer() and (fK1*10.0).is_integer()
                         and float(fd2).is_integer() and (fN2*10.0).is_integer() and (fP2*10.0).is_integer() and (fK2*10.0).is_integer()
                         and float(fd3).is_integer() and (fN3*10.0).is_integer() and (fP3*10.0).is_integer() and (fK3*10.0).is_integer()   # enlever
-                        and float(fd4).is_integer() and (fN4*10.0).is_integer() and (fP4*10.0).is_integer() and (fK4*10.0).is_integer()
+   #                     and float(fd4).is_integer() and (fN4*10.0).is_integer() and (fP4*10.0).is_integer() and (fK4*10.0).is_integer()
                     ):
                         fert_valid = False
 
@@ -2517,7 +2441,7 @@ def make_sce_table(
                         "Fert_1_DOY": [fd1], "N_1_Kg": [fN1],"P_1_Kg": [fP1],"K_1_Kg": [fK1],
                         "Fert_2_DOY": [fd2], "N_2_Kg": [fN2],"P_2_Kg": [fP2],"K_2_Kg": [fK2],
                         "Fert_3_DOY": [fd3], "N_3_Kg": [fN3],"P_3_Kg": [fP3],"K_3_Kg": [fK3],   # enlever
-                        "Fert_4_DOY": [fd4], "N_4_Kg": [fN4],"P_4_Kg": [fP4],"K_4_Kg": [fK4],
+          #              "Fert_4_DOY": [fd4], "N_4_Kg": [fN4],"P_4_Kg": [fP4],"K_4_Kg": [fK4],
                         "P_level": [p_level],
                         "IR_method": [irrig_method],
                         "IR_1_DOY": [ird1], "IR_1_amt": [iramt1],
@@ -2567,7 +2491,7 @@ def make_sce_table(
                         fd1 == None or fN1 == None  or fP1 == None  or fK1== None
                     or  fd2 == None or fN2 == None  or fP2 == None  or fK2== None
                     or  fd3 == None or fN3 == None  or fP3 == None  or fK3== None   # enlever
-                   or  fd4 == None or fN4 == None  or fP4 == None  or fK4== None
+    #               or  fd4 == None or fN4 == None  or fP4 == None  or fK4== None
                 )
             )
             or (
@@ -2635,17 +2559,17 @@ def make_sce_table(
         current_fert = pd.DataFrame(columns=["DAP", "FDEP", "NAmount", "PAmount", "KAmount"])
         if fert_app == "Fert":
             current_fert = pd.DataFrame({
-                "DAP": [fd1, fd2,fd3, fd4 ],      # sortie
-                "NAmount": [fN1, fN2, fN3, fN4 ],  #
-                "PAmount": [fP1, fP2, fP3, fP4, ],  #
-                "KAmount": [fK1, fK2, fK3, fK4, ],  #
+                "DAP": [fd1, fd2,fd3,  ],      # fd4 sortie
+                "NAmount": [fN1, fN2, fN3, ],  # fN4 
+                "PAmount": [fP1, fP2, fP3,  ],  # fP4,
+                "KAmount": [fK1, fK2, fK3,  ],  # fK4,
             })
 
             fert_frame =  pd.DataFrame({
                 "Fert_1_DOY": [fd1], "N_1_Kg": [fN1],"P_1_Kg": [fP1],"K_1_Kg": [fK1],
                 "Fert_2_DOY": [fd2], "N_2_Kg": [fN2],"P_2_Kg": [fP2],"K_2_Kg": [fK2],
                 "Fert_3_DOY": [fd3], "N_3_Kg": [fN3],"P_3_Kg": [fP3],"K_3_Kg": [fK3],  # enlever
-                "Fert_4_DOY": [fd4], "N_4_Kg": [fN4],"P_4_Kg": [fP4],"K_4_Kg": [fK4],
+    #            "Fert_4_DOY": [fd4], "N_4_Kg": [fN4],"P_4_Kg": [fP4],"K_4_Kg": [fK4],
             })
             current_sce.update(fert_frame)
 
@@ -2654,7 +2578,7 @@ def make_sce_table(
                     (fd1 < 0 or 365 < fd1) or fN1 < 0 or fP1 < 0 or fK1 < 0
                 or  (fd2 < 0 or 365 < fd2) or fN2 < 0 or fP2 < 0 or fK2 < 0
                 or  (fd3 < 0 or 365 < fd3) or fN3 < 0 or fP3 < 0 or fK3 < 0   # enlever
-                or  (fd4 < 0 or 365 < fd4) or fN4 < 0 or fP4 < 0 or fK4 < 0
+     #           or  (fd4 < 0 or 365 < fd4) or fN4 < 0 or fP4 < 0 or fK4 < 0
             ):
                 fert_valid = False
             else:
@@ -2662,7 +2586,7 @@ def make_sce_table(
                         float(fd1).is_integer() and (fN1*10.0).is_integer() and (fP1*10.0).is_integer() and (fK1*10.0).is_integer()
                     and float(fd2).is_integer() and (fN2*10.0).is_integer() and (fP2*10.0).is_integer() and (fK2*10.0).is_integer()
                     and float(fd3).is_integer() and (fN3*10.0).is_integer() and (fP3*10.0).is_integer() and (fK3*10.0).is_integer()
-                    and float(fd4).is_integer() and (fN4*10.0).is_integer() and (fP4*10.0).is_integer() and (fK4*10.0).is_integer()
+     #               and float(fd4).is_integer() and (fN4*10.0).is_integer() and (fP4*10.0).is_integer() and (fK4*10.0).is_integer()
                 ):
                     fert_valid = False
 
