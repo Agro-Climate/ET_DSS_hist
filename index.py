@@ -57,7 +57,7 @@ apps = {
     },
     "senegal":  { 
         # "logo": app.get_asset_url("CWP_IRI_ISRA_senegal.GIF"), #IRI_ISRA_senegal.gif"),
-        "logo": app.get_asset_url("SIMAGRI_senegal_AICCRA_logo.GIF"), 
+        "logo": app.get_asset_url("SIMAGRI_senegal_AICCRA_logo.gif"), 
         # "tutorial": "https://sites.google.com/iri.columbia.edu/simagri-senegal/simagri-tutorial",
         "tutorial": "https://sites.google.com/iri.columbia.edu/simagri-french/simagri-tutorial",
         "feedback": "https://sites.google.com/iri.columbia.edu/simagri-senegal/user-feedback-survey-form",
