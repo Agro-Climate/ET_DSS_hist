@@ -10,7 +10,7 @@ Three versions of SIMAGRI have been developed for the following countries:
 
 For each country SIMAGRI enables crop simulation either based on historical weather data or as a forecast.
 
-SIMAGRI Ethiopia: http://simagri-ethiopia1.iri.columbia.edu/historical
+SIMAGRI Ethiopia: http://simagri-ethiopia.iri.columbia.edu/historical
 
 ## Instructions to run SIMAGRI locally:
 
@@ -32,7 +32,7 @@ SIMAGRI Ethiopia: http://simagri-ethiopia1.iri.columbia.edu/historical
 
 3. Build a Docker image for desired country:
 
-> `docker build -f ./apps/<country>/Dockerfile -t simagri_<country>_img:latest .`
+> `docker build -f ./apps/<country>/Dockerfile -t simagri_<country>_img:latest --network=host .`
 
 4. Run a Docker container for desired country:
 

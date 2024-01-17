@@ -1,5 +1,5 @@
 FROM ubuntu:18.04
-RUN apt-get update; apt-get install python3.8 python3-pip make ca-certificates cmake gfortran -y
+RUN apt-get update; apt-get install python3.8 python3-pip make ca-certificates cmake gfortran zlib1g zlib1g-dev libjpeg9 libjpeg9-dev libtiff5 -y
 
 COPY ./DSSAT /home/SIMAGRI/DSSAT
 WORKDIR /home/SIMAGRI/DSSAT/dssat-csm-os/build
