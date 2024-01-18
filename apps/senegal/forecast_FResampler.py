@@ -42,7 +42,41 @@ sce_col_names=[ "sce_name", "Trimester1", "AN1","BN1", "AN2","BN2",
                 "Fert_4_DOY", "N_4_Kg", "P_4_Kg", "K_4_Kg", "P_level", "IR_method", "IR_1_DOY", "IR_1_amt", "IR_2_DOY", "IR_2_amt", "IR_3_DOY", "IR_3_amt", 
                 "IR_4_DOY", "IR_4_amt", "IR_5_DOY", "IR_5_amt", "AutoIR_depth", "AutoIR_thres", "AutoIR_eff", 
                 "CropPrice", "NFertCost", "SeedCost","IrrigCost", "OtherVariableCosts", "FixedCosts"
-]
+],
+
+Position= { "Dakar":  [14.700047543225823, -17.50001290971342 ] , 
+            "Bambey": [15.000134707867867, -16.49997854796095 ], 
+            "Mbacke": [14.80013483323102, -15.900042920979626 ] , 
+            "Fatick_Niakhar": [14.500155792376464, -16.400032192151638],
+            "Foundiougne":  [13.90012496236718, -16.400010734495066 ],
+            "Birkilane":  [14.10010404228193, -15.800000005654653 ],
+            "Kounguel":  [14.00014572838203, -14.80002146332832 ],
+            "Kaolack":  [ 14.100156070240521, -16.10000000565467],
+            "Nioro du Rip":   [13.700156340499975, -15.800032192171074 ],
+            "Kolda":  [12.800198769551196, -14.60000000568494 ],
+            "Medina Yoroufoula":  [13.100156731601537, -14.600032192184925],
+            "Velingrara":  [12.90017777424403, -14.100000005682656 ],
+            "Linguere":  [15.300155213889152, -15.500042920966724 ],
+            "Louga":  [ 15.500103371403704, -16.0000214632902],
+           "Saint Louis":  [16.100133989082607, -16.49997854793152],
+            "Sedhiou":  [12.700198848162987, -15.6000429210294 ],
+            "Koumpentoum":  [14.00017695879087, -14.600032192163923],
+            "Tambacounda 1":  [13.100177630843898, -13.300021463349408],
+            "Tambacounda 2":  [13.800177111914401, -13.700010734497527 ],
+            "Tambacounda 3":  [13.90015620632161, -14.100042921001881 ],
+            "Mbour":  [14.40019742960074, -17.00000000564732 ],
+            "Thies":  [14.800186697639713, -17.000000005637286 ],
+            "Tivaoune":  [ 15.000196887377449, -16.800021463303363],
+            "Bignona":  [ 13.000188156663333, -16.200010734516013],
+            "Oussouye":  [12.50016758003306, -16.499989276855867 ],
+            "Ziguinchor":  [12.500157105519985, -16.00004292103381 ],
+          }
+#a=folium.Map(location=(14.700047543225823, -17.50001290971342))      # afficher la carte
+
+#for ville,coords in Position.items():
+#     folium.Marker(coords,popup=f"<b>{ville}</b><br>{coords}",
+#     tooltip=ville, icon=folium.Icon(icon="cloud")).add_to(a)
+
 
 layout = html.Div([
     dcc.Store(id="memory-yield-table_frst"),  #to save fertilizer application table
@@ -401,42 +435,122 @@ layout = html.Div([
                         labelStyle = {"display": "inline-block","marginRight": 10},
                         value="No_fert",
                       ),
+
+
+
                       html.Div([ # FERTILIZER INPUT TABLE
+                        dbc.Row(
+                        dbc.FormText("1ere Application d'engrais",color="green",className="text-center"),
+                               ),
+                          dbc.Row([
+                            
+                            dbc.Col(
+                                dbc.Label("Type de Fertilisation", className="text-center")
+                            ),
+                            dbc.Col(
+                                dbc.Label("Quantite (kg/ha)", className="text-center", ),
+                            ),
+                            dbc.Col(
+                                dbc.Label("Formule d'engrais ", className="text-center", ),
+                            ),
+                            
+                                ]),
+                             dbc.Row([
+                          dbc.Col(
+                           dcc.Dropdown(
+                              id="typ_fert1",
+                              options=[
+                               {"label":"NPK", "value":"NPK"},
+                               {"label":"Uree","value":"Uree"},
+                               {"label":"DAP","value":"DAP"},
+                            ],
+                         value="NPK",
+                          clearable=False
+                        ) 
+                          ), 
+
+                          dbc.Col(
+                              dcc.Dropdown(
+                        id="Q_1",
+                        options=[
+                          {"label": "50", "value":   50}, # choix des valeurs
+                          {"label": "100", "value": 100},  # essayons avec input mais en changeant les entrees
+                          {"label": "150", "value": 150},
+                          {"label": "200", "value": 200},
+                      #  dbc.Input(type="number", id="Q_1", required="required", ),  
+                                ],    
+                          value=50,
+                          clearable=False,
+                      
+                       ),
+                          ),
+                        dbc.Col(
+                        dcc.Dropdown(
+                        id="Form_ang1",          
+                        options=[
+                          {"label": "15-15-15", "value": "15-15-15"}, # formule d'angrais
+                          {"label": "15-10-10", "value": "15-10-10"},
+                          {"label": "6-10-20", "value": "6-10-20"},
+                          {"label": "46-0-0", "value": "46-0-0"},
+                          {"label": "18-46-0", "value": "18-46-0"},
+                          
+                         
+                        ],
+#                        value="15-15-15",
+                        clearable=False,
+                            )    
+
+                        ) 
+
+                             ]),    
+
+                         dbc.Row(""),   
                         dbc.Row([
-                          # dbc.Col(
-                          #   dbc.Label("No.", className="text-center", ),
-                          # ),
+                           dbc.Col(""),
+                          dbc.Col(
+                           dbc.Label(" N(Kg/ha)", className="text-center", ),
+                          
+                          ),
+                          dbc.Col(
+                            dbc.Label(" P(Kg/ha)", className="text-center", ),
+                             
+                          ),
+                          dbc.Col(
+                            dbc.Label(" K(Kg/ha)", className="text-center", ),
+                          ),
+                        ],),
+
+                        dbc.Row([
+                          
                           dbc.Col(
                             dbc.Label("Jours après semis", className="text-center", ),
                           ),
-                          # dbc.Col(
-                          #   dbc.Label("Depth(cm)", className="text-center", ),
-                          # ),
-                          dbc.Col(
-                            dbc.Label("N (kg/ha)", className="text-center", ),
+                          dbc.Col(                      
+                            dbc.FormGroup([
+                             html.Div(id="N_1", className="text-center")
+                            ],),                         
                           ),
                           dbc.Col(
-                            dbc.Label("P (kg/ha)", className="text-center", ),
+                            dbc.FormGroup([               
+                              html.Div(id="P_1", className="text-center")
+                            ],),
                           ),
                           dbc.Col(
-                            dbc.Label("K (kg/ha)", className="text-center", ),
+                            dbc.FormGroup([
+                            html.Div(id="K_1", className="text-center")
+                            ],),
                           ),
                         ],),
+
+                        
                         dbc.Row([
-                          # dbc.Col(
-                          #   dbc.Label("1st", className="text-center", ),
-                          # ),
+                          
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Input(type="number", id="fert-day1_frst", value=0, min="0", max="365", required="required", ),
                             ],),
                           ),
-                          # dbc.Col(
-                          #   dbc.FormGroup([
-                          #     # dbc.Label("1st", html_for="depth1", ),
-                          #     dbc.Input(type="number", id="depth1", value=0, min="0", step="0.1", required="required", ),
-                          #   ],),
-                          # ),
+                          
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Input(type="number", id="N-amt1_frst", value=0, min="0", step="0.1", required="required", ),
@@ -453,21 +567,119 @@ layout = html.Div([
                             ],),
                           ),
                         ],),
-                        dbc.Row([
-                          # dbc.Col(
-                          #   dbc.Label("2nd", className="text-center", ),
-                          # ),
+                        dbc.Row(
+                        dbc.FormText(" NB: Vous devez remplir le jour de semis et saisir les nombres ci-dessus sur ces cases. " ),
+                               ),
+# pour Ajouter 
+                     dbc.Row("--------------------------------------------------------------------------"),
+
+                      dbc.Row(
+                    dcc.RadioItems(
+                        id="ajout1",          # la fertilisation
+                        options=[
+                          {"label": "Ajouter", "value": "ajout_1"},
+                          {"label": "Non", "value": "No_ajout_1"},
+                        ],
+                        labelStyle = {"display": "inline-block","marginRight": 10},
+                        value="No_ajout_1",
+                      ),
+                             ),
+
+                      html.Div([
+                      dbc.Row([
+                            dbc.Col(
+                                dbc.Label("Type de Fertilisation", className="text-center")
+                            ),
+                            dbc.Col(
+                                dbc.Label("Quantite (Kg/ha)", className="text-center" ),
+                            ),
+                            dbc.Col(
+                                dbc.Label("Formule d'engrais ", className="text-center" ),
+                            ),  
+                             ]),
+                       dbc.Row([
+                          
+                          dbc.Col(""),
+
+                          dbc.Col(
+                           dcc.Dropdown(
+                              id="typ_fert2",
+                              options=[
+                               {"label":"NPK", "value":"NPK"},
+                               {"label":"Uree","value":"Uree"},
+                               {"label":"DAP","value":"DAP"},
+                               {"label":"Sans Fertilisation","value":"Sans_fertilisation"}
+                            ],
+                         value="Sans fertilisation",
+                          clearable=False
+                                        )   
+                                  ),
+                            dbc.Col(
+                              dcc.Dropdown(
+                        id="Q_2",
+                        options=[
+                          {"label": "50", "value":   50}, # choix des valeurs
+                          {"label": "100", "value": 100},  # essayons avec input mais en changeant les entrees
+                          {"label": "150", "value": 150},
+                          {"label": "200", "value": 200},
+                          
+                          
+                        ],
+                        value=0,
+                        clearable=False,
+                      
+                                          ),
+                                     ),
+                           dbc.Col(
+                        dcc.Dropdown(
+                        id="Form_ang2",          
+                        options=[
+                          {"label": "15-15-15", "value": "15-15-15"}, # formule d'angrais
+                          {"label": "15-10-10", "value": "15-10-10"},
+                          {"label": "6-10-20", "value": "6-10-20"},
+                          {"label": "46-0-0", "value": "46-0-0"},
+                          {"label": "18-46-0", "value": "18-46-0"},
+                          
+                         
+                        ],
+                         value="Pas d'angrais",
+                        clearable=False,
+                                      )    
+
+                                    ) 
+
+                          ] ),
+                       dbc.Row([
+                           dbc.Col(""),
+                          dbc.Col(
+                           dbc.Label(" N(Kg/ha)", className="text-center", ),
+                          
+                          ),
+                          dbc.Col(
+                            dbc.Label(" P(Kg/ha)", className="text-center", ),
+                             
+                          ),
+                          dbc.Col(
+                            dbc.Label(" K(Kg/ha)", className="text-center", ),
+                          ),
+                        ],),
+                      dbc.Row([
+                         dbc.Col(
+                            dbc.Label("Jours après semis", className="text-center", ),
+                          ),
+                      
+                      dbc.Col( html.Div(id="N_2"),className="text-center"),
+                      dbc.Col( html.Div(id="P_2"),className="text-center"),
+                      dbc.Col( html.Div(id="K_2"),className="text-center"),
+                            ] ),      
+                    dbc.Row([
+                         
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Input(type="number", id="fert-day2_frst", value=0, min="0", max="365", required="required", ),
                             ],),
                           ),
-                          # dbc.Col(
-                          #   dbc.FormGroup([
-                          #     # dbc.Label("2nd", html_for="depth2", ),
-                          #     dbc.Input(type="number", id="depth2", value=0, min="0", step="0.1", required="required", ),
-                          #   ],),
-                          # ),
+                          
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Input(type="number", id="N-amt2_frst", value=0, min="0", step="0.1", required="required", ),
@@ -484,21 +696,134 @@ layout = html.Div([
                             ],),
                           ),
                         ],),
+
+                      dbc.Row(
+                        dbc.FormText(" NB: Vous devez remplir le jour de semis et saisir les nombres ci-dessus sur ces cases. " ),
+                               ),
+                     dbc.Row("--------------------------------------------------------------------------"),
+                      
+                     
+                     
+                      ],id="aff_1" ,
+                      style={"display":"none"}
+                      ),
+
+                      dbc.Row(
+                        dbc.FormText(" Application d'engrais",color="green",className="text-center"),
+                               ),
+
                         dbc.Row([
-                          # dbc.Col(
-                          #   dbc.Label("3rd", className="text-center", ),
-                          # ),
+                            dbc.Col(
+                                dbc.Label("Type de Fertilisation", className="text-center")
+                            ),
+                            dbc.Col(
+                                dbc.Label("Quantite (kg/ha)", className="text-center", ),
+                            ),
+                            dbc.Col(
+                                dbc.Label("Formule d'engrais ", className="text-center", ),
+                            ),
+                            
+                                ]),
+                        dbc.Row([
+                          dbc.Col(
+                           dcc.Dropdown(
+                              id="typ_fert3",
+                              options=[
+                               {"label":"NPK", "value":"NPK"},
+                               {"label":"Uree","value":"Uree"},
+                               {"label":"DAP","value":"DAP"},
+                               {"label":"Sans Fertilisation","value":"Sans_fertilisation"}
+                            ],
+                         value="Sans fertilisation",
+                          clearable=False
+                        )   
+                          ),
+                          dbc.Col(
+                              dcc.Dropdown(
+                        id="Q_3",
+                        options=[
+                          {"label": "50", "value":   50}, # choix des valeurs
+                          {"label": "100", "value": 100},  # essayons avec input mais en changeant les entrees
+                          {"label": "150", "value": 150},
+                          {"label": "200", "value": 200},
+                          
+                          
+                        ],
+                        value=50,
+                        clearable=False,
+                      
+                       ),
+                          ),
+
+                        dbc.Col(
+                        dcc.Dropdown(
+                        id="Form_ang3",          
+                        options=[
+                          {"label": "15-15-15", "value": "15-15-15"}, # formule d'angrais
+                          {"label": "15-10-10", "value": "15-10-10"},
+                          {"label": "6-10-20", "value": "6-10-20"},
+                          {"label": "46-0-0", "value": "46-0-0"},
+                          {"label": "18-46-0", "value": "18-46-0"},
+                          
+                         
+                        ],
+                         value="Pas d'angrais",
+                        clearable=False,
+                            )    
+
+                        )  
+                               
+                        ]) ,
+
+                        dbc.Row([
+                          dbc.Col(""),
+                          dbc.Col(
+                           dbc.Label(" N(Kg/ha)", className="text-center", ),
+                          
+                          ),
+                          dbc.Col(
+                            dbc.Label(" P(Kg/ha)", className="text-center", ),
+                             
+                          ),
+                          dbc.Col(
+                            dbc.Label(" K(Kg/ha)", className="text-center", ),
+                          ),
+                        ],), 
+
+                      dbc.Row([
+                          
+                         dbc.Col(
+                            dbc.Label("Jours après semis", className="text-center", ),
+                          ),                         
+                          
+                          dbc.Col(
+                            dbc.FormGroup([
+                            html.Div(id="N_3", className="text-center")
+                            ],),
+                        
+                          ),
+                        
+                          dbc.Col(
+                            dbc.FormGroup([                          
+                           html.Div(id="P_3", className="text-center")
+                            ],),
+                          ),
+                        dbc.Col(
+                            dbc.FormGroup([
+                            html.Div(id="K_3", className="text-center") 
+                            ],),
+                          ), 
+
+                        ],),
+    
+                        dbc.Row([
+                         
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Input(type="number", id="fert-day3_frst", value=0, min="0", max="365", required="required", ),
                             ],),
                           ),
-                          # dbc.Col(
-                          #   dbc.FormGroup([
-                          #     # dbc.Label("3rd", html_for="depth3", ),
-                          #     dbc.Input(type="number", id="depth3", value=0, min="0", step="0.1", required="required", ),
-                          #   ],),
-                          # ),
+                         
                           dbc.Col(
                             dbc.FormGroup([
                               dbc.Input(type="number", id="N-amt3_frst", value=0, min="0", step="0.1", required="required", ),
@@ -515,39 +840,38 @@ layout = html.Div([
                             ],),
                           ),
                         ],),
+
+                       dbc.Row(
+                        dbc.FormText(" NB: Vous devez remplir le jour de semis et saisir les nombres ci-dessus sur ces cases. " ),
+                               ),
+                     dbc.Row("--------------------------------------------------------------------------"),
+
                         dbc.Row([
-                          # dbc.Col(
-                          #   dbc.Label("4th", className="text-center", ),
-                          # ),
+                         
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="fert-day4_frst", value=0, min="0", max="365", required="required", ),
+                        #      dbc.Input(type="number", id="fert-day4_frst", value=0, min="0", max="365", required="required", ),
                             ],),
                           ),
-                          # dbc.Col(
-                          #   dbc.FormGroup([
-                          #     # dbc.Label("4th", html_for="depth4", ),
-                          #     dbc.Input(type="number", id="depth4", value=0, min="0", step="0.1", required="required", ),
-                          #   ],),
-                          # ),
+                         
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="N-amt4_frst", value=0, min="0", step="0.1", required="required", ),
+                        #      dbc.Input(type="number", id="N-amt4_frst", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="P-amt4_frst", value=0, min="0", step="0.1", required="required", ),
+                        #      dbc.Input(type="number", id="P-amt4_frst", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                              dbc.Input(type="number", id="K-amt4_frst", value=0, min="0", step="0.1", required="required", ),
+                        #      dbc.Input(type="number", id="K-amt4_frst", value=0, min="0", step="0.1", required="required", ),
                             ],),
                           ),
                         ],),
                       dbc.Row([
-                        dbc.FormText(" L'utilisateur doit déduire la quantité de N de la quantité totale d'engrais. Par exemple, si l'on applique 150 kg/ha de NPK (15-15-15), la quantité de N sera de 150*15/100 = 22,5 N kg/ha."),
+                       # dbc.FormText(" L'utilisateur doit déduire la quantité de N de la quantité totale d'engrais. Par exemple, si l'on applique 150 kg/ha de NPK (15-15-15), la quantité de N sera de 150*15/100 = 22,5 N kg/ha."),
                         ],
                         ),
                       ],
@@ -922,10 +1246,10 @@ layout = html.Div([
                     {"id": "N_3_Kg", "name": "N(Kg/ha)(3)"},
                     {"id": "P_3_Kg", "name": "P(Kg/ha)(3)"},
                     {"id": "K_3_Kg", "name": "K(Kg/ha)(3)"},
-                    {"id": "Fert_4_DOY", "name": "FDOY(4)"},
-                    {"id": "N_4_Kg", "name": "N(Kg/ha)(4)"},
-                    {"id": "P_4_Kg", "name": "P(Kg/ha)(4)"},
-                    {"id": "K_4_Kg", "name": "K(Kg/ha)(4)"},
+                #    {"id": "Fert_4_DOY", "name": "FDOY(4)"},
+                #   {"id": "N_4_Kg", "name": "N(Kg/ha)(4)"},
+                #    {"id": "P_4_Kg", "name": "P(Kg/ha)(4)"},
+                #   {"id": "K_4_Kg", "name": "K(Kg/ha)(4)"},
                     {"id": "P_level", "name": "P extractible"}, # Extractable P"},
                     {"id": "IR_method", "name": "Méthode d'irrigation" }, # Irrigation Method"},
                     {"id": "IR_1_DOY", "name": "IDOY(1)"},
@@ -949,7 +1273,8 @@ layout = html.Div([
                     {"id": "FixedCosts", "name": "Coûts fixes" }, #Fixed Costs"},
                 ]),
                 data=[
-                    dict(**{param: "N/A" for param in sce_col_names}) for i in range(1, 2)
+          #          dict(**{param: "N/A" for param in sce_col_names}) for i in range(1, 2)
+                  #  list("N/A" for param in sublist) for i in range(1, 2) for sublist in sce_col_names
                 ],
                 style_table = {
                     "overflowX": "auto",
@@ -1626,10 +1951,10 @@ def download_scenarios(n_clicks, scenario_table):
               State("N-amt3_frst","value"),
               State("P-amt3_frst","value"),
               State("K-amt3_frst","value"),
-              State("fert-day4_frst","value"),
-              State("N-amt4_frst","value"),
-              State("P-amt4_frst","value"),
-              State("K-amt4_frst","value"),
+            # State("fert-day4_frst","value"),
+            # State("N-amt4_frst","value"),
+            # State("P-amt4_frst","value"),
+            # State("K-amt4_frst","value"),
               State("P_input_frst", "value"),
               State("extr_P_frst", "value"),
               State("irrig_input_frst", "value"),
@@ -1663,7 +1988,7 @@ def make_sce_table(
     fd1, fN1,fP1,fK1, #EJ(7/7/2021) added P and K as well as N
     fd2, fN2,fP2,fK2,
     fd3, fN3,fP3,fK3,
-    fd4, fN4,fP4,fK4,
+  #  fd4, fN4,fP4,fK4,
     p_sim, p_level,  #EJ(7/7/2021) Phosphorous simualtion
     irrig_app,  #EJ(7/7/2021) irrigation option
     irrig_method,  #on reported date
@@ -1743,16 +2068,16 @@ def make_sce_table(
                 fN3 = float(csv_df.N_3_Kg[i]) # float
                 fP3 = float(csv_df.P_3_Kg[i]) # float
                 fK3 = float(csv_df.K_3_Kg[i]) # float
-                fd4 = int(csv_df.Fert_4_DOY[i]) # int
-                fN4 = float(csv_df.N_4_Kg[i]) # float
-                fP4 = float(csv_df.P_4_Kg[i]) # float
-                fK4 = float(csv_df.K_4_Kg[i]) # float
+              #  fd4 = int(csv_df.Fert_4_DOY[i]) # int
+              #  fN4 = float(csv_df.N_4_Kg[i]) # float
+              #  fP4 = float(csv_df.P_4_Kg[i]) # float
+              #  fK4 = float(csv_df.K_4_Kg[i]) # float
 
                 current_fert = pd.DataFrame({
-                    "DAP": [fd1, fd2, fd3, fd4, ],
-                    "NAmount": [fN1, fN2, fN3, fN4, ],
-                    "PAmount": [fP1, fP2, fP3, fP4, ],
-                    "KAmount": [fK1, fK2, fK3, fK4, ],
+                    "DAP": [fd1, fd2, fd3,  ],#fd4,
+                    "NAmount": [fN1, fN2, fN3, ], # fN4,
+                    "PAmount": [fP1, fP2, fP3,  ], #fP4,
+                    "KAmount": [fK1, fK2, fK3,  ],# fK4,
                 })
 
                 # Phosphorous simualtion
@@ -1803,7 +2128,7 @@ def make_sce_table(
                             fd1 == None or fN1 == None  or fP1 == None  or fK1== None 
                         or  fd2 == None or fN2 == None  or fP2 == None  or fK2== None 
                         or  fd3 == None or fN3 == None  or fP3 == None  or fK3== None 
-                        or  fd4 == None or fN4 == None  or fP4 == None  or fK4== None 
+                #        or  fd4 == None or fN4 == None  or fP4 == None  or fK4== None 
                     )
                     or (
                             irrig_method == None 
@@ -1836,13 +2161,13 @@ def make_sce_table(
                         (fd1 < 0 or 365 < fd1) or fN1 < 0 or fP1 < 0 or fK1 < 0
                     or  (fd2 < 0 or 365 < fd2) or fN2 < 0 or fP2 < 0 or fK2 < 0
                     or  (fd3 < 0 or 365 < fd3) or fN3 < 0 or fP3 < 0 or fK3 < 0
-                    or  (fd4 < 0 or 365 < fd4) or fN4 < 0 or fP4 < 0 or fK4 < 0
+              #      or  (fd4 < 0 or 365 < fd4) or fN4 < 0 or fP4 < 0 or fK4 < 0
                 ):
                     if not (
                             fd1 == -99 and fN1 == -99 and fP1 == -99 and fK1 == -99
                         and fd2 == -99 and fN2 == -99 and fP2 == -99 and fK2 == -99
                         and fd3 == -99 and fN3 == -99 and fP3 == -99 and fK3 == -99
-                        and fd4 == -99 and fN4 == -99 and fP4 == -99 and fK4 == -99
+               #         and fd4 == -99 and fN4 == -99 and fP4 == -99 and fK4 == -99
                     ):
                         fert_valid = False
                 else:
@@ -1850,7 +2175,7 @@ def make_sce_table(
                             float(fd1).is_integer() and (fN1*10.0).is_integer() and (fP1*10.0).is_integer() and (fK1*10.0).is_integer()
                         and float(fd2).is_integer() and (fN2*10.0).is_integer() and (fP2*10.0).is_integer() and (fK2*10.0).is_integer()
                         and float(fd3).is_integer() and (fN3*10.0).is_integer() and (fP3*10.0).is_integer() and (fK3*10.0).is_integer()
-                        and float(fd4).is_integer() and (fN4*10.0).is_integer() and (fP4*10.0).is_integer() and (fK4*10.0).is_integer()
+              #          and float(fd4).is_integer() and (fN4*10.0).is_integer() and (fP4*10.0).is_integer() and (fK4*10.0).is_integer()
                     ):
                         fert_valid = False
 
@@ -1970,7 +2295,7 @@ def make_sce_table(
                         "Fert_1_DOY": [-99], "N_1_Kg": [-99], "P_1_Kg": [-99], "K_1_Kg": [-99], 
                         "Fert_2_DOY": [-99], "N_2_Kg": [-99], "P_2_Kg": [-99], "K_2_Kg": [-99], 
                         "Fert_3_DOY": [-99], "N_3_Kg": [-99], "P_3_Kg": [-99], "K_3_Kg": [-99], 
-                        "Fert_4_DOY": [-99], "N_4_Kg": [-99], "P_4_Kg": [-99], "K_4_Kg": [-99], 
+            #            "Fert_4_DOY": [-99], "N_4_Kg": [-99], "P_4_Kg": [-99], "K_4_Kg": [-99], 
                         "P_level": [-99],   #P simulation    EJ(7/72021)
                         "IR_method": [irrig_method],
                         "IR_1_DOY": [ird1], "IR_1_amt": [iramt1],
@@ -2036,7 +2361,7 @@ def make_sce_table(
                         fd1 == None or fN1 == None  or fP1 == None  or fK1== None 
                     or  fd2 == None or fN2 == None  or fP2 == None  or fK2== None 
                     or  fd3 == None or fN3 == None  or fP3 == None  or fK3== None 
-                    or  fd4 == None or fN4 == None  or fP4 == None  or fK4== None 
+          #          or  fd4 == None or fN4 == None  or fP4 == None  or fK4== None 
                 ) 
             )
             or (
@@ -2105,17 +2430,17 @@ def make_sce_table(
         current_fert = pd.DataFrame(columns=["DAP", "FDEP", "NAmount", "PAmount", "KAmount"])
         if fert_app == "Fert":
             current_fert = pd.DataFrame({
-                "DAP": [fd1, fd2, fd3, fd4, ],
-                "NAmount": [fN1, fN2, fN3, fN4, ],
-                "PAmount": [fP1, fP2, fP3, fP4, ],
-                "KAmount": [fK1, fK2, fK3, fK4, ],
+                "DAP": [fd1, fd2, fd3,  ],#fd4,
+                "NAmount": [fN1, fN2, fN3,  ],#fN4,
+                "PAmount": [fP1, fP2, fP3,  ],#fP4,
+                "KAmount": [fK1, fK2, fK3, ], #fK4,
             })
 
             fert_frame =  pd.DataFrame({
                 "Fert_1_DOY": [fd1], "N_1_Kg": [fN1],"P_1_Kg": [fP1],"K_1_Kg": [fK1],
                 "Fert_2_DOY": [fd2], "N_2_Kg": [fN2],"P_2_Kg": [fP2],"K_2_Kg": [fK2],
                 "Fert_3_DOY": [fd3], "N_3_Kg": [fN3],"P_3_Kg": [fP3],"K_3_Kg": [fK3],
-                "Fert_4_DOY": [fd4], "N_4_Kg": [fN4],"P_4_Kg": [fP4],"K_4_Kg": [fK4],
+        #        "Fert_4_DOY": [fd4], "N_4_Kg": [fN4],"P_4_Kg": [fP4],"K_4_Kg": [fK4],
             })
             current_sce.update(fert_frame)
 
@@ -2124,7 +2449,7 @@ def make_sce_table(
                     (fd1 < 0 or 365 < fd1) or fN1 < 0 or fP1 < 0 or fK1 < 0
                 or  (fd2 < 0 or 365 < fd2) or fN2 < 0 or fP2 < 0 or fK2 < 0
                 or  (fd3 < 0 or 365 < fd3) or fN3 < 0 or fP3 < 0 or fK3 < 0
-                or  (fd4 < 0 or 365 < fd4) or fN4 < 0 or fP4 < 0 or fK4 < 0
+        #        or  (fd4 < 0 or 365 < fd4) or fN4 < 0 or fP4 < 0 or fK4 < 0
             ):
                 fert_valid = False
             else:
@@ -2132,7 +2457,7 @@ def make_sce_table(
                         float(fd1).is_integer() and (fN1*10.0).is_integer() and (fP1*10.0).is_integer() and (fK1*10.0).is_integer()
                     and float(fd2).is_integer() and (fN2*10.0).is_integer() and (fP2*10.0).is_integer() and (fK2*10.0).is_integer()
                     and float(fd3).is_integer() and (fN3*10.0).is_integer() and (fP3*10.0).is_integer() and (fK3*10.0).is_integer()
-                    and float(fd4).is_integer() and (fN4*10.0).is_integer() and (fP4*10.0).is_integer() and (fK4*10.0).is_integer()
+        #            and float(fd4).is_integer() and (fN4*10.0).is_integer() and (fP4*10.0).is_integer() and (fK4*10.0).is_integer()
                 ):
                     fert_valid = False
 

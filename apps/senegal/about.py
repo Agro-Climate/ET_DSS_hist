@@ -46,7 +46,7 @@ layout = html.Div(
       html.Div("Kesha Kumshayev, at IRI "),
       html.Div("Adama Faye, Institut Sénégalais de Recherches Agricoles (ISRA), Senegal"),
       html.Div("Mbaye Diop, Institut Sénégalais de Recherches Agricoles (ISRA), Senegal"),
-      html.Div("Abdoulaye Diop, Institut Sénégalais de Recherches Agricoles (ISRA), Senegal"),
+      html.Div("Abdoulaye Diop , Institut Sénégalais de Recherches Agricoles (ISRA), Senegal"),
       ],),
     ],
     className="text-center"

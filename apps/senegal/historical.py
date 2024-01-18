@@ -416,43 +416,44 @@ layout = html.Div([
                         )  
                                
                         ]) , 
-                             
+                          dbc.Row(""),   
                         dbc.Row([
-                          
+                           dbc.Col(""),
                           dbc.Col(
-                            dbc.Label("Jours après semis", className="text-center", ),
-                          ),
-                          
-                          dbc.Col(
-                           dbc.Label(" N(Kg/ha", className="text-center", ),
+                           dbc.Label(" N(Kg/ha)", className="text-center", ),
                           
                           ),
                           dbc.Col(
-                            dbc.Label(" P (Kg/ha)", className="text-center", ),
+                            dbc.Label(" P(Kg/ha)", className="text-center", ),
                              
                           ),
                           dbc.Col(
-                            dbc.Label(" K(Kg/ha", className="text-center", ),
+                            dbc.Label(" K(Kg/ha)", className="text-center", ),
                           ),
                         ],),
+                        
                         dbc.Row([
-                           dbc.Col(""),                                    
+                          dbc.Col(
+                            dbc.Label("Jours après semis", className="text-center" ),
+                          ), 
+                                                             
                           dbc.Col(                      
                             dbc.FormGroup([
-                             html.Div(id="N_1")
+                             html.Div(id="N_1", className="text-center")
                             ],),                         
                           ),
                           dbc.Col(
                             dbc.FormGroup([               
-                              html.Div(id="P_1")
+                              html.Div(id="P_1", className="text-center")
                             ],),
                           ),
                           dbc.Col(
                             dbc.FormGroup([
-                            html.Div(id="K_1")
+                            html.Div(id="K_1", className="text-center")
                             ],),
                           ),
                         ],),
+                        
                         dbc.Row([
                             dbc.Col(
                             dbc.FormGroup([
@@ -476,7 +477,11 @@ layout = html.Div([
                                             ],),                                
                                  ),
                               ], ),
+                              dbc.Row(
+                        dbc.FormText(" NB: Vous devez remplir le jour de semis et saisir les nombres ci-dessus sur ces cases. " ),
+                               ),
 # pour Ajouter 
+                     dbc.Row("--------------------------------------------------------------------------"),
                       dbc.Row(
                     dcc.RadioItems(
                         id="ajout1",          # la fertilisation
@@ -491,25 +496,24 @@ layout = html.Div([
                     html.Div([
                       dbc.Row([
                           
-                            dbc.Col(""),
+                            
                           
                             dbc.Col(
-                                dbc.Label("Fertilisation", className="text-center")
+                                dbc.Label("Type de Fertilisation", className="text-center")
                             ),
                             dbc.Col(
-                                dbc.Label("Quantite", className="text-center" ),
+                                dbc.Label("Quantite (Kg/ha)", className="text-center" ),
                             ),
                             dbc.Col(
-                                dbc.Label("Formule ", className="text-center" ),
+                                dbc.Label("Formule d'engrais ", className="text-center" ),
                             ),
                             
                                
                       ]),
 
                   dbc.Row([
-                          dbc.Col(
-                            dbc.Label("Jours après semis", className="text-center" ),
-                          ),
+                          
+                          dbc.Col(""),
 
                           dbc.Col(
                            dcc.Dropdown(
@@ -559,13 +563,29 @@ layout = html.Div([
                                     ) 
 
                           ] ),
+                      dbc.Row([
+                           dbc.Col(""),
+                          dbc.Col(
+                           dbc.Label(" N(Kg/ha)", className="text-center", ),
+                          
+                          ),
+                          dbc.Col(
+                            dbc.Label(" P(Kg/ha)", className="text-center", ),
+                             
+                          ),
+                          dbc.Col(
+                            dbc.Label(" K(Kg/ha)", className="text-center", ),
+                          ),
+                        ],),
 
                       dbc.Row([
-
-                      dbc.Col(""),
-                      dbc.Col( html.Div(id="N_2")),
-                      dbc.Col( html.Div(id="P_2")),
-                      dbc.Col( html.Div(id="K_2")),
+                         dbc.Col(
+                            dbc.Label("Jours après semis", className="text-center", ),
+                          ),
+                      
+                      dbc.Col( html.Div(id="N_2"),className="text-center"),
+                      dbc.Col( html.Div(id="P_2"),className="text-center"),
+                      dbc.Col( html.Div(id="K_2"),className="text-center"),
                             ] ),
                        dbc.Row([ 
                           dbc.Col(
@@ -588,13 +608,18 @@ layout = html.Div([
                                             ],),
                                  ), 
                               ], ),
+                       dbc.Row(
+                        dbc.FormText(" NB: Vous devez remplir le jour de semis et saisir les nombres ci-dessus sur ces cases. " ),
+                               ),
+                     dbc.Row("--------------------------------------------------------------------------"), 
+
                       ],id="aff_1" ,
                       style={"display":"none"}
                       
                       ),          
 #
                         dbc.Row(
-                        dbc.FormText(" Application d'angrais",color="green",className="text-center"),
+                        dbc.FormText(" Application d'engrais",color="green",className="text-center"),
                                ),
 
                         dbc.Row([
@@ -605,7 +630,7 @@ layout = html.Div([
                                 dbc.Label("Quantite (kg/ha)", className="text-center", ),
                             ),
                             dbc.Col(
-                                dbc.Label("Formule d'angrais ", className="text-center", ),
+                                dbc.Label("Formule d'engrais ", className="text-center", ),
                             ),
                             
                                 ]),
@@ -662,11 +687,7 @@ layout = html.Div([
                         ]) ,
 
                         dbc.Row([
-                          
-                          dbc.Col(
-                            dbc.Label("Jours après semis", className="text-center", ),
-                          ),
-                          
+                          dbc.Col(""),
                           dbc.Col(
                            dbc.Label(" N(Kg/ha)", className="text-center", ),
                           
@@ -682,23 +703,25 @@ layout = html.Div([
 
                         dbc.Row([
                           
-                          dbc.Col(""),
+                         dbc.Col(
+                            dbc.Label("Jours après semis", className="text-center", ),
+                          ),                         
                           
                           dbc.Col(
                             dbc.FormGroup([
-                            html.Div(id="N_3")
+                            html.Div(id="N_3", className="text-center")
                             ],),
                         
                           ),
                         
                           dbc.Col(
                             dbc.FormGroup([                          
-                           html.Div(id="P_3")
+                           html.Div(id="P_3", className="text-center")
                             ],),
                           ),
                         dbc.Col(
                             dbc.FormGroup([
-                            html.Div(id="K_3") 
+                            html.Div(id="K_3", className="text-center") 
                             ],),
                           ), 
 
@@ -727,6 +750,10 @@ layout = html.Div([
                                           ],),
                                  ), 
                                ], ),
+                               dbc.Row(
+                        dbc.FormText(" NB: Vous devez remplir le jour de semis et saisir les nombres ci-dessus sur ces cases. " ),
+                               ),
+                     dbc.Row("--------------------------------------------------------------------------"),
                       
                          
                        
@@ -1259,7 +1286,7 @@ layout = html.Div([
 # dcc.Graph(figure=html.Iframe(srcDoc=a.get_root().render(), width="30%", height="30")), #   # Affichage de la cate
 
         html.Div([
-        #    dbc.Label(" on va mettre la carte ici pour le tester"),
+         #   dbc.Label(" on va mettre la carte ici pour le tester"),
           html.Div( # SIMULATIONS
             html.Div([
               html.Header(
